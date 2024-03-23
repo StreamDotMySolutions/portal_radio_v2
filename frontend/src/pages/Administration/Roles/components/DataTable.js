@@ -5,6 +5,7 @@ import axios from '../../../../libs/axios'
 import PaginatorLink from '../../../../libs/PaginatorLink'
 import CreateButton from '../../../../libs/CreateButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import CreateModal from '../modals/Create'
 
 
 const Index = () => {
@@ -40,7 +41,9 @@ const Index = () => {
 
     return (
         <div>
-            <CreateButton>Create</CreateButton>
+            <CreateButton>
+                <CreateModal />
+            </CreateButton>
             <Table>
                 <thead>
                     <tr>

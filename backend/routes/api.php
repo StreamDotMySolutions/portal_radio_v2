@@ -42,7 +42,7 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::delete('/users/{user}', [UserController::class, 'delete']);
 });
 
-// Manage Rols
+// Manage Roles
 Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     // Roles
     Route::get('/roles', [RoleController::class, 'index']);
