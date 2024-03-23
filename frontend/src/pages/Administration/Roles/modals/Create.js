@@ -23,7 +23,24 @@ export default function CreateModal() {
     }
 
     const handleSubmitClick = () => {
-        console.log('submit to laravel')
+        
+        const formData = new FormData()
+        // get role name entered by user
+        if (store.getValue('name') != null ) {
+            formData.append('name', store.getValue('name'));
+        }
+        // send to Laravel
+        axios({ 
+            method: 'post',
+            url: `${store.url}/roles`,
+            data: formData
+          })
+          .then( response => {
+            console.log(response)
+          })
+          .catch( error => {
+            console.warn(error)
+          })
     }
   
     return (
@@ -39,7 +56,7 @@ export default function CreateModal() {
 
           <Modal.Body>
             <InputText 
-              fieldName='title' 
+              fieldName='name' 
               placeholder='Role name'  
               icon='fa-solid fa-pencil'
               isLoading={isLoading}
