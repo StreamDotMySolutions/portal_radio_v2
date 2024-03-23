@@ -4,12 +4,14 @@ import useStore from '../../../store'
 import axios from '../../../../libs/axios'
 import PaginatorLink from '../../../../libs/PaginatorLink'
 import CreateButton from '../../../../libs/CreateButton'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 const Index = () => {
     const store = useStore()
     const url = store.url + '/roles'
     const [items, setItems] = useState([])
+    
 
     // to get items data
     useEffect( () => 
@@ -44,7 +46,7 @@ const Index = () => {
                     <tr>
                         <th style={{ 'width': '20px'}}>ID</th>
                         <th>Name</th>
-             
+                        <th className='text-center'> <FontAwesomeIcon icon={['fas', 'bolt']} /></th>
                     </tr>
                 </thead>
 
@@ -53,7 +55,7 @@ const Index = () => {
                         <tr key={index}>
                             <td> <span className="badge bg-primary">{item.id}</span></td>
                             <td>{item.name}</td>
-                            
+                            <td  className='text-center' style={{'width':'150px'}}>Edit | Delete </td>
                         </tr>
                     ))}
                 </tbody>

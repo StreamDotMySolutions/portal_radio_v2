@@ -34,7 +34,7 @@ const AdminLayout = () => {
                   <img alt="maintenance" src="img/maintainance.jpg" className="img-fluid" width="50%" />
               </div>
               <Row>
-                <h2 className="text-center mt-3">Laman Web Dalam Penyelengaraan</h2>
+                <h2 className="text-center mt-3">Maintenance mode</h2>
               </Row>
             </Container>
           </>
