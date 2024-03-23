@@ -3,6 +3,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\{
+    RoleController,
     UserController,
     AuthController,
     AccountController,
@@ -44,11 +45,11 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
 // Manage Rols
 Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     // Roles
-    Route::get('/roles', [UserController::class, 'index']);
-    Route::post('/roles', [UserController::class, 'store']);
-    Route::get('/roles/{role}', [UserController::class, 'show']);
-    Route::put('/roles/{role}', [UserController::class, 'update']);
-    Route::delete('/roles/{role}', [UserController::class, 'delete']);
+    Route::get('/roles', [RoleController::class, 'index']);
+    Route::post('/roles', [RoleController::class, 'store']);
+    Route::get('/roles/{role}', [RoleController::class, 'show']);
+    Route::put('/roles/{role}', [RoleController::class, 'update']);
+    Route::delete('/roles/{role}', [RoleController::class, 'delete']);
 });
 
 

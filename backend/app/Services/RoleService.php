@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 class RoleService
 {
 
+    public static function index()
+    {
+        $paginate = Role::query();
+        $roles = $paginate->orderBy('id','DESC')->paginate(2)->withQueryString();     
+        return $roles;
+    }
+
     public static function store(Request $request)
     {
         $role = Role::create([
@@ -26,13 +33,6 @@ class RoleService
         // Role
         $role = Role::where('id',$role->id)->first();
         return $role;
-    }
-
-    public static function index()
-    {
-        $paginate = Role::query();
-        $roles = $paginate->orderBy('id','DESC')->paginate(25)->withQueryString();     
-        return $roles;
     }
 
     public static function delete($role)
