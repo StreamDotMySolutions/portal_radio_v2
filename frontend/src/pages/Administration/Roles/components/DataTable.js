@@ -38,7 +38,6 @@ const Index = () => {
 
     return (
         <div>
-
             <CreateButton>Create</CreateButton>
             <Table>
                 <thead>
