@@ -25,9 +25,13 @@
         )
     
         return  (
-        <Pagination className='mt-3'>
-        {links}
-        </Pagination>
+            <div className="d-flex bd-highlight mb-3">
+                <div className="ms-auto p-2 bd-highlight">
+                    <Pagination className='mt-3'>
+                    {links}
+                    </Pagination>
+                </div>
+            </div>
         )
     }
 

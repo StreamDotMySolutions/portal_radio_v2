@@ -3,6 +3,7 @@ import { Table,Button } from 'react-bootstrap'
 import useStore from '../../../store'
 import axios from '../../../../libs/axios'
 import PaginatorLink from '../../../../libs/PaginatorLink'
+import CreateButton from '../../../../libs/CreateButton'
 
 
 const Index = () => {
@@ -37,13 +38,8 @@ const Index = () => {
 
     return (
         <div>
-            <div className="d-flex bd-highlight mb-3">
-                <div className="ms-auto p-2 bd-highlight">
-                    create
-                </div>
-            </div>
 
-
+            <CreateButton>Create</CreateButton>
             <Table>
                 <thead>
                     <tr>
@@ -63,12 +59,7 @@ const Index = () => {
                     ))}
                 </tbody>
             </Table>
-
-            <div className="d-flex bd-highlight mb-3">
-                <div className="ms-auto p-2 bd-highlight">
-                    <PaginatorLink store={store} items={items} />
-                </div>
-            </div>
+            <PaginatorLink store={store} items={items} />
         </div>
     );
 };
