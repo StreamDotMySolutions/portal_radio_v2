@@ -39,7 +39,16 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::get('/users/{user}', [UserController::class, 'show']);
     Route::put('/users/{user}', [UserController::class, 'update']);
     Route::delete('/users/{user}', [UserController::class, 'delete']);
+});
 
+// Manage Rols
+Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
+    // Roles
+    Route::get('/roles', [UserController::class, 'index']);
+    Route::post('/roles', [UserController::class, 'store']);
+    Route::get('/roles/{role}', [UserController::class, 'show']);
+    Route::put('/roles/{role}', [UserController::class, 'update']);
+    Route::delete('/roles/{role}', [UserController::class, 'delete']);
 });
 
 

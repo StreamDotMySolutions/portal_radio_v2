@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Services\AccountService;
-use App\Http\Requests\UpdateAccountRequest;
+use App\Http\Requests\Account\UpdateRequest;
 
 class AccountController extends Controller
 {
@@ -17,7 +17,7 @@ class AccountController extends Controller
         return response()->json(['account' => $account]);
     }
 
-    public function update(UpdateAccountRequest $request)
+    public function update(UpdateRequest $request)
     {
    
         AccountService::update($request);

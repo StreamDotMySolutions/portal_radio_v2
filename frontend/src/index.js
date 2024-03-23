@@ -21,12 +21,6 @@ import Error404 from "./pages/Error404"
 import Home from "./pages/Home"
 import Dashboard from "./pages/Dashboard"
 
-import Penafian from "./pages/Footer/Penafian"
-import Teknologi from "./pages/Footer/Teknologi"
-import Keselamatan from "./pages/Footer/Keselamatan"
-import Privasi from "./pages/Footer/Privasi"
-
-
 
 import Account from './pages/Account'
 import ResetPassword from './pages/Auth/components/ResetPassword'
@@ -35,6 +29,8 @@ import SignUpForm from './pages/Auth/components/SignUp'
 import EmailPassword from './pages/Auth/components/EmailPassword'
 import Unauthorized from './pages/Auth/components/Unauthorized'
 import SignOut from './pages/Auth/components/SignOut'
+
+import RoleManagement from './pages/Administration/Roles'
 
 library.add(fas)
 
@@ -62,10 +58,10 @@ export default function App() {
                 <Route path="/home" element={<Home />} />
                 <Route path="/account" element={<Account />} />
                 <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/penafian" element={<Penafian />} />
-                <Route path="/teknologi" element={<Teknologi />} />
-                <Route path="/keselamatan" element={<Keselamatan />} />
-                <Route path="/privasi" element={<Privasi />} />
+
+                <Route path="/administration/roles" element={<RoleManagement />} />
+
+                
               </Route>
             </Route>
 

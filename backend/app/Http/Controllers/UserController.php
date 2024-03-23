@@ -3,8 +3,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\UserService;
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\Users\StoreRequest;
+use App\Http\Requests\Users\UpdateRequest;
 use App\Models\User;
 
 class UserController extends Controller
@@ -15,7 +15,7 @@ class UserController extends Controller
         return response()->json(['users' => $users]);
     }
 
-    public function store(StoreUserRequest $request)
+    public function store(StoreRequest $request)
     {
         UserService::store($request);
         return response()->json(['message' => 'User successfully created']);
@@ -40,7 +40,7 @@ class UserController extends Controller
         return response()->json(['user' => $user]);
     }
 
-    public function update(UpdateUserRequest $request, User $user)
+    public function update(UpdateRequest $request, User $user)
     {
         UserService::update($request, $user);
         return response()->json(['message' => 'User successfully updated']);
