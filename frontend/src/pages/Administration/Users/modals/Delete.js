@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Button, Modal, Form} from 'react-bootstrap'
-import { InputText, InputTextarea } from '../../../../libs/FormInput'
+import { appendFormData } from '../../../../libs/FormInput'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
 import HtmlForm from '../components/HtmlForm'
 
-export default function DeleteModal({id}) {
+export default function EditModal({id}) {
     const store = useStore()
     const errors = store.getValue('errors')
    
@@ -24,16 +24,38 @@ export default function DeleteModal({id}) {
       store.emptyData() // empty store data
       setShow(true)
 
+        // load roles
+        axios({ 
+            method: 'get', 
+            url: `${store.url}/users/roles`,
+            })
+        .then( response => { // success 200
+            console.log(response)
+            store.setValue('roles', response.data.roles)
+            })
+        .catch( error => {
+            console.warn(error)
+        })
+
         // fetch data from server using given id
         axios({ 
             method: 'get', 
-            url: `${store.url}/roles/${id}`,
+            url: `${store.url}/users/${id}`,
             })
         .then( response => { // success 200
             //console.log(response)
-            if( response?.data?.role.hasOwnProperty('name') ){
-              store.setValue('name', response?.data?.role?.name )
+            if( response?.data?.user.hasOwnProperty('name') ){
+              store.setValue('name', response?.data?.user?.name )
             }
+
+            if( response?.data?.user.hasOwnProperty('role_id') ){
+              store.setValue('role_id', response?.data?.user?.role_id )
+            }
+
+            if( response?.data?.user.hasOwnProperty('email') ){
+              store.setValue('email', response?.data?.user?.email )
+            }
+
             setIsLoading(false) // animation
             })
         .catch( error => {
@@ -47,11 +69,12 @@ export default function DeleteModal({id}) {
      */
     const handleSubmitClick = () => {
         
-        const formData = new FormData() // data container
-       
-        if (store.getValue('acknowledge') != null ) {  // get role acknowledge entered by user
-            formData.append('acknowledge', store.getValue('acknowledge')); // append to formData
-        }
+        const formData = new FormData();
+        const dataArray = [
+            { key: 'acknowledge', value: store.getValue('acknowledge') },
+        ];
+        
+        appendFormData(formData, dataArray);
 
         // Laravel special
         formData.append('_method', 'delete'); // get|post|put|patch|delete
@@ -59,7 +82,7 @@ export default function DeleteModal({id}) {
         // send to Laravel
         axios({ 
             method: 'post', 
-            url: `${store.url}/roles/${id}`,
+            url: `${store.url}/users/${id}`,
             data: formData
           })
           .then( response => { // success 200
@@ -87,15 +110,14 @@ export default function DeleteModal({id}) {
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
-            <Modal.Title>Delete Role</Modal.Title>
+            <Modal.Title>Delete User</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
-            <HtmlForm isLoading={isLoading} />        
+            <HtmlForm isLoading={true} />
           </Modal.Body>
           
           <Modal.Footer>
-
             <Form.Check
               className='me-4'
               isInvalid={errors?.hasOwnProperty('acknowledge')}

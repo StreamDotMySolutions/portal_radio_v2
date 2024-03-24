@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Http\Requests\Users\StoreRequest;
 use App\Http\Requests\Users\UpdateRequest;
+use App\Http\Requests\Users\DeleteRequest;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 
@@ -55,7 +56,7 @@ class UserController extends Controller
         return response()->json(['message' => 'User successfully updated']);
     }
 
-    public function delete(User $user)
+    public function delete(DeleteRequest $request, User $user)
     {
         UserService::delete($user);
         return response()->json(['message' => 'User successfully deleted']);
