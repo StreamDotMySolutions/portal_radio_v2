@@ -3,7 +3,7 @@ import { Badge,Button,Row,Col,Form, InputGroup } from 'react-bootstrap'
 import { React, useState, useEffect} from 'react'
 import useStore from '../pages/store'
 
-export function InputText({fieldName, placeholder, icon, isLoading}){
+export function InputText({fieldName, placeholder, icon, isLoading, type='text'}){
     const store = useStore()
     const errors = store.getValue('errors')
 
@@ -12,6 +12,7 @@ export function InputText({fieldName, placeholder, icon, isLoading}){
                     <InputGroup.Text><FontAwesomeIcon icon={icon}></FontAwesomeIcon></InputGroup.Text>
                     <Form.Control 
                         placeholder={placeholder}
+                        type={type}
                         value={store.getValue(fieldName) ||  ''}
                         name={fieldName}
                         size='md' 
@@ -55,6 +56,45 @@ export function InputTextarea({fieldName, placeholder, icon, rows, isLoading}){
                           store.setValue(fieldName, e.target.value)                         
                         } }
                     />
+                    {
+                        errors?.hasOwnProperty(fieldName) &&
+                            (
+                                <Form.Control.Feedback type="invalid">   
+                                { errors[fieldName] ? errors[fieldName] : null }
+                                </Form.Control.Feedback>
+                            )
+                    }  
+                </InputGroup>
+            </>)
+}
+
+export function InputSelect({fieldName, placeholder, icon, isLoading, options}){
+    const store = useStore()
+    const errors = store.getValue('errors')
+
+    return(<>
+                <InputGroup>
+                    <InputGroup.Text><FontAwesomeIcon icon={icon}></FontAwesomeIcon></InputGroup.Text>
+                    <Form.Select
+                        name={fieldName}
+                        size='md' 
+                        readOnly={isLoading}
+                        required 
+                        isInvalid={errors?.hasOwnProperty(fieldName)}
+                        onChange={ (e) => { 
+                          store.setValue(fieldName, e.target.value)                         
+                        } }
+                    >
+                        <option>{placeholder}</option>
+                        {options?.map((option,index) => (
+                            <option 
+                                value={option.id}
+                                key={index}
+                                selected={option.id === store.getValue(fieldName)}  
+                            >{option.name}</option>
+                        ))}
+             
+                    </Form.Select>
                     {
                         errors?.hasOwnProperty(fieldName) &&
                             (

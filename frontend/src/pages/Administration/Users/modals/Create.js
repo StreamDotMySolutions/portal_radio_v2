@@ -17,6 +17,20 @@ export default function CreateModal() {
     const handleShowClick = () =>{
       store.emptyData() // empty store data
       setShow(true)
+      
+      // load roles
+      axios({ 
+          method: 'get', 
+          url: `${store.url}/users/roles`,
+          })
+      .then( response => { // success 200
+          console.log(response)
+          store.setValue('roles', response.data.roles)
+          })
+      .catch( error => {
+          console.warn(error)
+      })
+      
     } 
 
     const handleCloseClick = () => {
@@ -68,7 +82,7 @@ export default function CreateModal() {
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
-            <Modal.Title>Create Role</Modal.Title>
+            <Modal.Title>Create User</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>

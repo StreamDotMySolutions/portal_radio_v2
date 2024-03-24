@@ -25,7 +25,7 @@ const Index = () => {
                 } 
             )
             .then( response => { // response block
-                console.log(response)
+                //console.log(response)
                 setItems(response.data.users) // get the data
                 store.setValue('refresh', false ) // reset the refresh state to false
             })
