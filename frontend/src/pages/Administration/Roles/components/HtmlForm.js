@@ -1,7 +1,7 @@
 import React from 'react';
 import { InputText } from '../../../../libs/FormInput';
 
-const FormData = ({isLoading}) => {
+const HtmlForm = ({isLoading}) => {
     return (
         <div>
             <InputText 
@@ -14,4 +14,4 @@ const FormData = ({isLoading}) => {
     );
 };
 
-export default FormData;
+export default HtmlForm;
