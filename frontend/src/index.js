@@ -1,6 +1,4 @@
 /** React Helmet Async - SEO */
-import { HelmetProvider } from 'react-helmet-async';
-
 import ReactDOM from "react-dom/client"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 /** Font Awesome **/
@@ -36,7 +34,7 @@ library.add(fas)
 export default function App() {
 
   return (
-    <HelmetProvider>
+
       <BrowserRouter>
         <Routes>            
           <Route path="*" element={<Error404 />} />
@@ -62,7 +60,7 @@ export default function App() {
             </Route>
         </Routes>
       </BrowserRouter>
-    </HelmetProvider>
+
   );
 }
 const root = ReactDOM.createRoot(document.getElementById('root'));

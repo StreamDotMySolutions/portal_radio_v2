@@ -18,13 +18,14 @@ const Layout = () => {
         break;
 
         case 'user':
-                renderedComponent = <UserLayout />;
+            renderedComponent = <UserLayout />;
         break;
 
 
         default:
             // Render a fallback or handle other cases here
             renderedComponent = <div>Hello world</div>;
+        break;
     }
 
     return (
