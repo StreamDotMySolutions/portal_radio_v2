@@ -8,6 +8,23 @@ use Illuminate\Support\Facades\Hash;
 
 class UserService
 {
+
+    public static function index()
+    {
+           
+        $paginate = User::query()
+                        ->with('profile')
+                        ->with('roles');
+                        // ->whereHas('roles', function($q) use ($role) {
+                        //     $q->whereIn('name', [$role]);
+                        // })
+                        // ->where('is_approved', false);
+        $users = $paginate->orderBy('id','DESC')->paginate(25)->withQueryString();
+
+        return $users;
+    }
+
+
     // 'role' => 'admin',
     // 'email' => 'user@local',
     // 'password' => 'password',
@@ -86,11 +103,6 @@ class UserService
                 User::where('id', $user->id)->update($request->only(['name']));
         }
 
-        // NRIC
-        if ($request->has('nric')) {
-            // if change role
-                User::where('id', $user->id)->update($request->only(['nric']));
-        }
 
         // User Profile
         return UserProfile::where('user_id', $user->id)->update($request->except(['email', 'password','_method','role','user_id']));
@@ -109,40 +121,7 @@ class UserService
         return $user;
     }
 
-    public static function index()
-    {
-        $users = array();
-        if(\Request::has('role')){
-            //\Log::info('role');
-       
-            $role = \Request::query('role');       
-            $paginate = User::query()
-                            ->with('profile.userDepartment')
-                            ->with('roles')
-                            ->whereHas('roles', function($q) use ($role) {
-                                $q->whereIn('name', [$role]);
-                            })  
-                            ->where('is_approved', true);
-            $users = $paginate->orderBy('id','DESC')->paginate(25)->withQueryString();
-        }
 
-        if(\Request::has('is_approved')){
-            //\Log::info('is_approved');
-       
-            $role = 'user';       
-            $paginate = User::query()
-                            ->with('profile.userDepartment')
-                            ->with('roles')
-                            ->whereHas('roles', function($q) use ($role) {
-                                $q->whereIn('name', [$role]);
-                            })
-                            ->where('is_approved', false);
-            $users = $paginate->orderBy('id','DESC')->paginate(25)->withQueryString();
-        }
-        
-       
-        return $users;
-    }
 
     public static function delete($user)
     {

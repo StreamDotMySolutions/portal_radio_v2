@@ -24,8 +24,6 @@ function TopNavbar() {
                   <NavDropdown.Item as={NavLink} to="/administration/users"><FontAwesomeIcon icon="fa-solid fa-user" />{' '}Users</NavDropdown.Item>
                 </NavDropdown>
               </Nav>
-
-              
            <Account />
         </Navbar.Collapse>
       </Container>
