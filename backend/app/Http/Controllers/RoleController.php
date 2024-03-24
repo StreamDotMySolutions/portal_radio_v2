@@ -36,7 +36,7 @@ class RoleController extends Controller
         return response()->json(['message' => 'Role successfully updated']);
     }
 
-    public function delete(Role $role)
+    public function delete(DeleteRequest $request, Role $role)
     {
         RoleService::delete($role);
         return response()->json(['message' => 'Role successfully deleted']);

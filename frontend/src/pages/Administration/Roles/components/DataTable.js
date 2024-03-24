@@ -7,6 +7,7 @@ import CreateButton from '../../../../libs/CreateButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CreateModal from '../modals/Create'
 import EditModal from '../modals/Edit'
+import DeleteModal from '../modals/Delete'
 
 const Index = () => {
     const store = useStore() // store management
@@ -57,7 +58,7 @@ const Index = () => {
                         <tr key={index}>
                             <td> <span className="badge bg-primary">{item.id}</span></td>
                             <td>{item.name}</td>
-                            <td  className='text-center' style={{'width':'150px'}}><EditModal id={item.id} /> | Delete </td>
+                            <td  className='text-center' style={{'width':'150px'}}><EditModal id={item.id} />{' '}<DeleteModal id={item.id} /> </td>
                         </tr>
                     ))}
                 </tbody>

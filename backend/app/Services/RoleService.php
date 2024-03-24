@@ -41,7 +41,7 @@ class RoleService
 
     public static function delete($role)
     {
-        // Delete the role
-        $role->delete();
+        $r = \App\Models\Role::findorFail($role->id);
+        $r->delete();
     }
 }

@@ -79,7 +79,7 @@ export default function EditModal({id}) {
   
     return (
       <>
-        <Button size="sm" variant="primary" onClick={handleShowClick}>
+        <Button size="sm" variant="outline-primary" onClick={handleShowClick}>
           Edit
         </Button>
   
