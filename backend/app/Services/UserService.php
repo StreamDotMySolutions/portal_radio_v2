@@ -58,7 +58,7 @@ class UserService
         
         // Get RoleName
         $role = \App\Models\Role::find($request->input('role_id'));
-        $user->guard_name = 'sanctum';
+        $user->guard_name = 'web';
         $user->assignRole($role->name);
 
         // insert into UserProfile
@@ -86,9 +86,12 @@ class UserService
         } 
 
         // Role
-        if ($request->has('role')) {
-            // if change role
-            $user->syncRoles($request->input('role'));
+        if ($request->has('role_id')) {
+
+            $role = \App\Models\Role::find($request->input('role_id'));
+            $user->syncRoles([]);
+            $user->assignRole($role->name);
+            //$user->syncRoles($role->name);
         }
 
         // Email
@@ -103,20 +106,21 @@ class UserService
                 User::where('id', $user->id)->update($request->only(['name']));
         }
 
-
-        // User Profile
-        return UserProfile::where('user_id', $user->id)->update($request->except(['email', 'password','_method','role','user_id']));
-
     }
 
     public static function show($user){
         // User, Profile
-        $user = User::where('id',$user->id)->with(['profile.userDepartment'])->first();
-
-        // Role
-
-        //\Log::info($user);
-        $user['role'] = $user->roles->pluck('name')[0];
+        if ($user->roles->isNotEmpty()) {
+            // Assign the first role's name to the 'role' key
+            $user['role'] = $user->roles->first()->name;
+            
+            // Assign the first role's id to the 'role_id' key
+            $user['role_id'] = $user->roles->first()->id;
+        } else {
+            // If user has no roles
+            $user['role'] = null;
+            $user['role_id'] = null;
+        }
 
         return $user;
     }

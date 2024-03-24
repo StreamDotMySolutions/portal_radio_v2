@@ -50,6 +50,7 @@ class UserController extends Controller
 
     public function update(UpdateRequest $request, User $user)
     {
+        //\Log::info($request);
         UserService::update($request, $user);
         return response()->json(['message' => 'User successfully updated']);
     }

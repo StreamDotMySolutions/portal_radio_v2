@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Button, Modal} from 'react-bootstrap'
-import { InputText, InputTextarea } from '../../../../libs/FormInput'
+import { InputText, InputTextarea, appendFormData } from '../../../../libs/FormInput'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
 import HtmlForm from '../components/HtmlForm'
@@ -24,16 +24,38 @@ export default function EditModal({id}) {
       store.emptyData() // empty store data
       setShow(true)
 
+        // load roles
+        axios({ 
+            method: 'get', 
+            url: `${store.url}/users/roles`,
+            })
+        .then( response => { // success 200
+            console.log(response)
+            store.setValue('roles', response.data.roles)
+            })
+        .catch( error => {
+            console.warn(error)
+        })
+
         // fetch data from server using given id
         axios({ 
             method: 'get', 
-            url: `${store.url}/roles/${id}`,
+            url: `${store.url}/users/${id}`,
             })
         .then( response => { // success 200
-            //console.log(response)
-            if( response?.data?.role.hasOwnProperty('name') ){
-              store.setValue('name', response?.data?.role?.name )
+            console.log(response)
+            if( response?.data?.user.hasOwnProperty('name') ){
+              store.setValue('name', response?.data?.user?.name )
             }
+
+            if( response?.data?.user.hasOwnProperty('role_id') ){
+              store.setValue('role_id', response?.data?.user?.role_id )
+            }
+
+            if( response?.data?.user.hasOwnProperty('email') ){
+              store.setValue('email', response?.data?.user?.email )
+            }
+
             setIsLoading(false) // animation
             })
         .catch( error => {
@@ -47,18 +69,24 @@ export default function EditModal({id}) {
      */
     const handleSubmitClick = () => {
         
-        const formData = new FormData() // data container
-       
-        if (store.getValue('name') != null ) {  // get role name entered by user
-            formData.append('name', store.getValue('name')); // append to formData
-        }
+        const formData = new FormData();
+        const dataArray = [
+            { key: 'name', value: store.getValue('name') },
+            { key: 'role_id', value: store.getValue('role_id') },
+            { key: 'email', value: store.getValue('email') },
+            { key: 'password', value: store.getValue('password') },
+            { key: 'password_confirmation', value: store.getValue('password_confirmation') },
+        ];
+        
+        appendFormData(formData, dataArray);
+
         // Laravel special
         formData.append('_method', 'put'); // get|post|put|patch|delete
 
         // send to Laravel
         axios({ 
             method: 'post', 
-            url: `${store.url}/roles/${id}`,
+            url: `${store.url}/users/${id}`,
             data: formData
           })
           .then( response => { // success 200
@@ -86,7 +114,7 @@ export default function EditModal({id}) {
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
-            <Modal.Title>Edit Role</Modal.Title>
+            <Modal.Title>Edit User</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>

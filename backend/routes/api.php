@@ -59,7 +59,7 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     // Users
     Route::get('/users', [UserController::class, 'index']);
     Route::post('/users', [UserController::class, 'store']);
-    Route::get('/users/{role}', [UserController::class, 'show']);
-    Route::put('/users/{role}', [UserController::class, 'update']);
-    Route::delete('/users/{role}', [UserController::class, 'delete']);
+    Route::get('/users/{user}', [UserController::class, 'show']);
+    Route::put('/users/{user}', [UserController::class, 'update']);
+    Route::delete('/users/{user}', [UserController::class, 'delete']);
 });

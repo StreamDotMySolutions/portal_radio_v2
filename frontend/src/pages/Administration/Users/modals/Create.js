@@ -24,7 +24,7 @@ export default function CreateModal() {
           url: `${store.url}/users/roles`,
           })
       .then( response => { // success 200
-          console.log(response)
+          //console.log(response)
           store.setValue('roles', response.data.roles)
           })
       .catch( error => {

@@ -18,9 +18,8 @@ class UpdateRequest extends FormRequest
                     // assuming id is pk
                     Rule::unique('users', 'email')->ignore($this->user->id)->whereNull('deleted_at'),
                 ],
-            'password' => 'required_if:password_present,true|min:6',
+            'password' => 'required_if:password_present,true|min:6|confirmed',
             'name' => 'sometimes|required',
-            'address' => 'sometimes|required',
         ];
     }
 }

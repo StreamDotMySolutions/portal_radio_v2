@@ -23,7 +23,10 @@ class RoleService
         // ]);
 
         
-        $role = Role::create(['name' => $request->input('name') ]);
+        $role = Role::create([
+            'name' => $request->input('name') ,
+            'guard_name' => 'web'
+        ]);
         return $role;
     }
 
