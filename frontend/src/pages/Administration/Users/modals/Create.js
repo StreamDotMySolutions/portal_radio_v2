@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Button, Modal} from 'react-bootstrap'
-import { InputText, InputTextarea } from '../../../../libs/FormInput'
+import { InputText, InputTextarea, appendFormData } from '../../../../libs/FormInput'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
 import HtmlForm from '../components/HtmlForm'
@@ -43,28 +43,44 @@ export default function CreateModal() {
      */
     const handleSubmitClick = () => {
         
-        const formData = new FormData() // data container
+        //const formData = new FormData() // data container
        
-        if (store.getValue('name') != null ) {  // get role name entered by user
-            formData.append('name', store.getValue('name')); // append to formData
-        }
+        // if (store.getValue('name') != null ) {  // get role name entered by user
+        //     formData.append('name', store.getValue('name')); // append to formData
+        // }
+
+        // if (store.getValue('email') != null ) {  // get role name entered by user
+        //   formData.append('email', store.getValue('email')); // append to formData
+        // }
+
+        const formData = new FormData();
+        const dataArray = [
+            { key: 'name', value: store.getValue('name') },
+            { key: 'role_id', value: store.getValue('role_id') },
+            { key: 'email', value: store.getValue('email') },
+            { key: 'password', value: store.getValue('password') },
+            { key: 'password_confirmation', value: store.getValue('password_confirmation') },
+        ];
+        
+        appendFormData(formData, dataArray);
+
         // Laravel special
         formData.append('_method', 'post'); // get|post|put|patch|delete
 
         // send to Laravel
         axios({ 
             method: 'post', 
-            url: `${store.url}/roles`,
+            url: `${store.url}/users`,
             data: formData
           })
           .then( response => { // success 200
-            //console.log(response)
+            console.log(response)
             store.setValue('refresh', true) // to force useEffect get new data for index
             setIsLoading(false) // animation
             handleClose() // close the modal
           })
           .catch( error => {
-            //console.warn(error)
+            console.warn(error)
             
             if( error.response?.status == 422 ){ // detect 422 errors by Laravel
               console.log(error.response.data.errors)

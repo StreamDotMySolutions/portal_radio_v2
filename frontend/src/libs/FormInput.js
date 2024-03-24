@@ -3,6 +3,24 @@ import { Badge,Button,Row,Col,Form, InputGroup } from 'react-bootstrap'
 import { React, useState, useEffect} from 'react'
 import useStore from '../pages/store'
 
+export function appendFormData(formData, data) {
+    if (data instanceof Array) {
+        data.forEach(item => {
+            const { key, value } = item;
+            if (value !== null && value !== undefined) {
+                formData.append(key, value);
+            }
+        });
+    } else if (typeof data === 'object') {
+        for (const key in data) {
+            const value = data[key];
+            if (value !== null && value !== undefined) {
+                formData.append(key, value);
+            }
+        }
+    }
+}
+
 export function InputText({fieldName, placeholder, icon, isLoading, type='text'}){
     const store = useStore()
     const errors = store.getValue('errors')

@@ -41,7 +41,6 @@ class UserService
             // If a password is provided, create a user with the provided password.
             $user = User::create([
                 'name' => $request->input('name'),
-                'nric' => $request->input('nric'),
                 'is_approved' => true,
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password')),
@@ -51,19 +50,20 @@ class UserService
             //$randomPassword = Str::random(10); // Generate a random password
             $user = User::create([
                 'name' => $request->input('name'),
-                'nric' => $request->input('nric'),
                 'is_approved' => true,
                 'email' => $request->input('email'),
-                'password' => Hash::make('password'),
+                'password' => Hash::make('password'),// password is password
             ]);
         }
         
-        // Role
-        $user->assignRole($request->input('role'));
+        // Get RoleName
+        $role = \App\Models\Role::find($request->input('role_id'));
+        $user->guard_name = 'sanctum';
+        $user->assignRole($role->name);
 
         // insert into UserProfile
-        $profile = $request->merge(['user_id' => $user->id]);
-        return UserProfile::create($profile->except(['email','password','name','nric']));
+        // $profile = $request->merge(['user_id' => $user->id]);
+        // return UserProfile::create($profile->except(['email','password','name']));
     }
 
     public static function approve($user)

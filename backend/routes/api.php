@@ -36,6 +36,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     // User-related routes
     Route::get('/users', [UserController::class, 'index']);
+    Route::get('/users/roles', [UserController::class, 'roles']);
     Route::post('/users', [UserController::class, 'store']);
     Route::get('/users/{user}', [UserController::class, 'show']);
     Route::put('/users/{user}', [UserController::class, 'update']);

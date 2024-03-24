@@ -10,13 +10,20 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'role' => 'required',
+            'name' => 'required',
+            'role_id' => 'required',
             //'email' => 'required|email|unique:users,email',
             'email' => ['required','email', Rule::unique('users')->whereNull('deleted_at')],
             //'password' => 'required|min:6',
-            'password' => 'required_if:password_present,true|min:6',
-            'name' => 'required',
-            'address' => 'required',         
+            //'password' => 'required_if:password_present,true|min:6',
+            'password' => 'required|min:6|confirmed',    
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'role_id.required' => 'Please select a role.', // Custom error message for role_id field
         ];
     }
 }

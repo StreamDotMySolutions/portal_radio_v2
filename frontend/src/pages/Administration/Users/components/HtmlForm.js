@@ -9,14 +9,14 @@ const HtmlForm = ({isLoading}) => {
         <div>
             <InputText 
                 fieldName='name' 
-                placeholder='User name'  
+                placeholder='Name'  
                 icon='fa-solid fa-user'
                 isLoading={isLoading}
             />
             <br />
 
             <InputSelect 
-                  fieldName='type' 
+                  fieldName='role_id' 
                   options = {store.getValue('roles')}
                   placeholder='Choose a role'  
                   icon='fa-solid fa-person'
@@ -40,11 +40,11 @@ const HtmlForm = ({isLoading}) => {
             />
                         <br />
             <InputText 
-                fieldName='confirm_password' 
+                fieldName='password_confirmation' 
                 placeholder='Confirm Password'  
                 icon='fa-solid fa-lock'
                 isLoading={isLoading}
-                type='confirm_password'
+                type='password'
             />
         </div>
     );

@@ -6,6 +6,7 @@ use App\Services\UserService;
 use App\Http\Requests\Users\StoreRequest;
 use App\Http\Requests\Users\UpdateRequest;
 use App\Models\User;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
@@ -15,8 +16,15 @@ class UserController extends Controller
         return response()->json(['users' => $users]);
     }
 
+    public function roles()
+    {
+        $roles = Role::all();
+        return response()->json(['roles' => $roles]);
+    }
+
     public function store(StoreRequest $request)
     {
+        //\Log::info($request);
         UserService::store($request);
         return response()->json(['message' => 'User successfully created']);
     }
