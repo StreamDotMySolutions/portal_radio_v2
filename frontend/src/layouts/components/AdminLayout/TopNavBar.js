@@ -1,6 +1,7 @@
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import { NavDropdown } from 'react-bootstrap';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { NavLink, useLocation} from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -17,8 +18,14 @@ function TopNavbar() {
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav>
                 <Nav.Link as={NavLink} to="/"> <FontAwesomeIcon icon="fa-solid fa-home" />{' '}Home</Nav.Link>
-                <Nav.Link as={NavLink} to="/administration/roles"> <FontAwesomeIcon icon="fa-solid fa-users" />{' '}Roles</Nav.Link>
+
+                <NavDropdown title="Administration" id="basic-nav-dropdown">
+                  <NavDropdown.Item as={NavLink} to="/administration/roles">Roles</NavDropdown.Item>
+                  <NavDropdown.Item as={NavLink} to="/administration/users">Users</NavDropdown.Item>
+                </NavDropdown>
               </Nav>
+
+              
            <Account />
         </Navbar.Collapse>
       </Container>

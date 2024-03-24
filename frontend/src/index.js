@@ -30,6 +30,7 @@ import EmailPassword from './pages/Auth/components/EmailPassword'
 import Unauthorized from './pages/Auth/components/Unauthorized'
 import SignOut from './pages/Auth/components/SignOut'
 import RoleManagement from './pages/Administration/Roles'
+import UserManagement from './pages/Administration/Users'
 library.add(fas)
 
 export default function App() {
@@ -57,6 +58,7 @@ export default function App() {
                 <Route path="/account" element={<Account />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/administration/roles" element={<RoleManagement />} />
+                <Route path="/administration/users" element={<UserManagement />} />
               </Route>
             </Route>
         </Routes>

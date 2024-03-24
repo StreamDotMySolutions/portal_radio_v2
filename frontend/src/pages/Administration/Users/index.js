@@ -12,7 +12,7 @@ const Index = () => {
             <FontAwesomeIcon icon={['fas', 'home']} /> {/* fas = font awesome solid  */}
           </Badge>
         )},
-        { url: '', label: 'Role Management' }
+        { url: '', label: 'User Management' }
       ];
 
     return(
