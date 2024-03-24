@@ -3,6 +3,7 @@ import { Button, Modal, Form} from 'react-bootstrap'
 import { InputText, InputTextarea } from '../../../../libs/FormInput'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
+import FormData from '../components/FormData'
 
 export default function DeleteModal({id}) {
     const store = useStore()
@@ -90,18 +91,12 @@ export default function DeleteModal({id}) {
           </Modal.Header>
 
           <Modal.Body>
-            <InputText 
-              isLoading={true}
-              fieldName='name' 
-              placeholder='Role name'  
-              icon='fa-solid fa-pencil'
-              //isLoading={isLoading}
-            />
+            <FormData isLoading={isLoading} />        
           </Modal.Body>
           
           <Modal.Footer>
 
-          <Form.Check
+            <Form.Check
               className='me-4'
               isInvalid={errors?.hasOwnProperty('acknowledge')}
               reverse

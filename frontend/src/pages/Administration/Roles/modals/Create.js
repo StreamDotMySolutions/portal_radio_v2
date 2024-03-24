@@ -3,6 +3,7 @@ import { Button, Modal} from 'react-bootstrap'
 import { InputText, InputTextarea } from '../../../../libs/FormInput'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
+import FormData from '../components/FormData'
 
 export default function CreateModal() {
     const store = useStore()
@@ -71,12 +72,7 @@ export default function CreateModal() {
           </Modal.Header>
 
           <Modal.Body>
-            <InputText 
-              fieldName='name' 
-              placeholder='Role name'  
-              icon='fa-solid fa-pencil'
-              isLoading={isLoading}
-            />
+            <FormData isLoading={isLoading} />
           </Modal.Body>
           
           <Modal.Footer>
