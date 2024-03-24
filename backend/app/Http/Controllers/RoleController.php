@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Spatie\Permission\Models\Role;
 use Illuminate\Http\Request;
 use App\Services\RoleService;
 use App\Http\Requests\Roles\StoreRequest;
@@ -18,6 +18,7 @@ class RoleController extends Controller
 
     public function store(StoreRequest $request)
     {
+        //\Log::info($request);
         RoleService::store($request);
         return response()->json(['message' => 'Role successfully created']);
     }
@@ -30,6 +31,7 @@ class RoleController extends Controller
 
     public function update(UpdateRequest $request, Role $role)
     {
+        //\Log::info('update');
         RoleService::update($request, $role);
         return response()->json(['message' => 'Role successfully updated']);
     }

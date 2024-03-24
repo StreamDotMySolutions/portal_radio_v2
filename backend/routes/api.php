@@ -51,6 +51,3 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::put('/roles/{role}', [RoleController::class, 'update']);
     Route::delete('/roles/{role}', [RoleController::class, 'delete']);
 });
-
-
-

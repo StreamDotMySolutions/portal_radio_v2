@@ -22,24 +22,40 @@ export default function CreateModal() {
       handleClose()
     }
 
+
+    /**
+     * When user click submit button
+     */
     const handleSubmitClick = () => {
         
-        const formData = new FormData()
-        // get role name entered by user
-        if (store.getValue('name') != null ) {
-            formData.append('name', store.getValue('name'));
+        const formData = new FormData() // data container
+       
+        if (store.getValue('name') != null ) {  // get role name entered by user
+            formData.append('name', store.getValue('name')); // append to formData
         }
+        // Laravel special
+        formData.append('_method', 'post'); // get|post|put|patch|delete
+
         // send to Laravel
         axios({ 
-            method: 'post',
+            method: 'post', 
             url: `${store.url}/roles`,
             data: formData
           })
-          .then( response => {
-            console.log(response)
+          .then( response => { // success 200
+            //console.log(response)
+            store.setValue('refresh', true) // to force useEffect get new data for index
+            setIsLoading(false) // animation
+            handleClose() // close the modal
           })
           .catch( error => {
-            console.warn(error)
+            //console.warn(error)
+            
+            if( error.response?.status == 422 ){ // detect 422 errors by Laravel
+              console.log(error.response.data.errors)
+              store.setValue('errors', error.response.data.errors ) // set the errors to store
+            }
+            setIsLoading(false) // animation
           })
     }
   

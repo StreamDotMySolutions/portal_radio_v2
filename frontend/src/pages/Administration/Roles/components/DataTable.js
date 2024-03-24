@@ -6,14 +6,13 @@ import PaginatorLink from '../../../../libs/PaginatorLink'
 import CreateButton from '../../../../libs/CreateButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CreateModal from '../modals/Create'
-
+import EditModal from '../modals/Edit'
 
 const Index = () => {
-    const store = useStore()
-    const url = store.url + '/roles'
-    const [items, setItems] = useState([])
+    const store = useStore() // store management
+    const url = store.url + '/roles' // set the index url to /api/roles
+    const [items, setItems] = useState([]) // data placeholder
     
-
     // to get items data
     useEffect( () => 
         {
@@ -25,16 +24,16 @@ const Index = () => {
                 } 
             )
             .then( response => { // response block
-                setItems(response.data.roles) 
-                store.setValue('refresh', false ) 
+                setItems(response.data.roles) // get the data
+                store.setValue('refresh', false ) // reset the refresh state to false
             })
             .catch( error => { // error block
                 console.warn(error) // output to console
             })
       },
         [
-            store.getValue('url'),
-            store.getValue('refresh')
+            store.getValue('url'), // listener when url changed by pagination click
+            store.getValue('refresh') // listener when create / update / delete / search performed
         ] 
 
     ) // useEffect()
@@ -58,7 +57,7 @@ const Index = () => {
                         <tr key={index}>
                             <td> <span className="badge bg-primary">{item.id}</span></td>
                             <td>{item.name}</td>
-                            <td  className='text-center' style={{'width':'150px'}}>Edit | Delete </td>
+                            <td  className='text-center' style={{'width':'150px'}}><EditModal id={item.id} /> | Delete </td>
                         </tr>
                     ))}
                 </tbody>

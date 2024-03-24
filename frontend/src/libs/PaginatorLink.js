@@ -11,17 +11,17 @@
 
         // extract the data from Laravel Paginator JSON
         const links = items?.links?.map( (page,index) => 
-        <>
-        
-        <Pagination.Item
-            key={index} 
-            active={page.active}
-            disabled={page.url === null}
-            onClick={() => handlePaginationClick(page.url)}
-            >
-                <span dangerouslySetInnerHTML={{__html: page.label}} />
-        </Pagination.Item>
-        </>
+                <>
+                
+                <Pagination.Item
+                    key={index} 
+                    active={page.active}
+                    disabled={page.url === null}
+                    onClick={() => handlePaginationClick(page.url)}
+                    >
+                        <span dangerouslySetInnerHTML={{__html: page.label}} />
+                </Pagination.Item>
+                </>
         )
     
         return  (

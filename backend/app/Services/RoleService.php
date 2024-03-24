@@ -1,8 +1,10 @@
 <?php
 namespace App\Services;
 
-use App\Models\Role;
+// use App\Models\Role;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class RoleService
 {
@@ -16,9 +18,11 @@ class RoleService
 
     public static function store(Request $request)
     {
-        $role = Role::create([
-            'name' => $request->input('name'),
-        ]);
+        // $role = Role::create([
+        //     'name' => $request->input('name'),
+        // ]);
+
+        $role = Role::create(['name' => $request->input('name') ]);
         return $role;
     }
 

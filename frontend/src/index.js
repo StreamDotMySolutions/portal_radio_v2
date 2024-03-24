@@ -29,9 +29,7 @@ import SignUpForm from './pages/Auth/components/SignUp'
 import EmailPassword from './pages/Auth/components/EmailPassword'
 import Unauthorized from './pages/Auth/components/Unauthorized'
 import SignOut from './pages/Auth/components/SignOut'
-
 import RoleManagement from './pages/Administration/Roles'
-
 library.add(fas)
 
 export default function App() {
@@ -58,18 +56,13 @@ export default function App() {
                 <Route path="/home" element={<Home />} />
                 <Route path="/account" element={<Account />} />
                 <Route path="/dashboard" element={<Dashboard />} />
-
                 <Route path="/administration/roles" element={<RoleManagement />} />
-
-                
               </Route>
             </Route>
-
         </Routes>
       </BrowserRouter>
     </HelmetProvider>
   );
 }
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<App />);

@@ -9,7 +9,7 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|required',
+            'name' => 'sometimes|required|unique:roles,name',
         ];
     }
 }

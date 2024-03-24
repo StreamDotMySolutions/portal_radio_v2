@@ -41,7 +41,7 @@ class AuthController extends Controller
     public function login(AuthRequest $request)
     {
         // attempt to authenticate
-        $request->authenticate();
+        $request->authenticate(); // check AuthRequest->authenticate
 
         // find user
         $user = User::where('id', Auth::user()->id)
