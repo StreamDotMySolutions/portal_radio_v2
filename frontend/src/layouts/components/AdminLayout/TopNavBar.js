@@ -19,9 +19,9 @@ function TopNavbar() {
               <Nav>
                 <Nav.Link as={NavLink} to="/"> <FontAwesomeIcon icon="fa-solid fa-home" />{' '}Home</Nav.Link>
 
-                <NavDropdown title="Administration" id="basic-nav-dropdown">
-                  <NavDropdown.Item as={NavLink} to="/administration/roles">Roles</NavDropdown.Item>
-                  <NavDropdown.Item as={NavLink} to="/administration/users">Users</NavDropdown.Item>
+                <NavDropdown title={ <span><FontAwesomeIcon icon="fa-solid fa-cog" />{' '}Manage</span> } id="basic-nav-dropdown">
+                  <NavDropdown.Item as={NavLink} to="/administration/roles"><FontAwesomeIcon icon="fa-solid fa-person" />{' '}Roles</NavDropdown.Item>
+                  <NavDropdown.Item as={NavLink} to="/administration/users"><FontAwesomeIcon icon="fa-solid fa-user" />{' '}Users</NavDropdown.Item>
                 </NavDropdown>
               </Nav>
 
