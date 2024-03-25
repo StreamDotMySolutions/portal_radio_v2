@@ -65,7 +65,7 @@ const Index = () => {
         ));
     }
 
-    if(data){
+    if(data.title){
         items.push({ url: `/administration/articles/${data.id}`, label: data.title })
     }
     
