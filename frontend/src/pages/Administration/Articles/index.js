@@ -12,6 +12,7 @@ const Index = () => {
     const store = useStore() // store management
     const url = store.url + '/articles/' + parentId 
     const [ancestor,setAncestor] = useState(null)
+    const [data,setData] = useState([])
 
     // to get items data
 
@@ -27,13 +28,16 @@ const Index = () => {
                         } 
                     )
                     .then( response => { // response block
+                        console.log(response)
                         setAncestor(response.data.article)
+                        setData(response.data.article)
                     })
                     .catch( error => { // error block
                         console.warn(error) // output to console
                     })
                 } else {
                     setAncestor(null)
+                    setData([])
                 }
         },
             [
@@ -55,13 +59,14 @@ const Index = () => {
         { url: '/administration/articles/0', label: 'Article Management' },
     ];
     
-    if(ancestor){
-        items.push({ url: `/administration/articles/${parentId}`, label: ancestor.title });
-        // OR
-        // items = [
-        //     ...items,
-        //     { url: `/administration/articles/${parentId}`, label: ancestor.title },
-        // ];
+    if(data.ancestors){
+        data.ancestors.map((ancestor, index) => (
+            items.push({ url: `/administration/articles/${ancestor.id}`, label: ancestor.title })
+        ));
+    }
+
+    if(data){
+        items.push({ url: `/administration/articles/${data.id}`, label: data.title })
     }
     
 

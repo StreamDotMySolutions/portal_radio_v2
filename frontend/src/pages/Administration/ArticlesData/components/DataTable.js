@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Table,Button } from 'react-bootstrap'
+import { Link, useParams } from 'react-router-dom'
 import useStore from '../../../store'
 import axios from '../../../../libs/axios'
 import PaginatorLink from '../../../../libs/PaginatorLink'
@@ -9,9 +10,11 @@ import CreateModal from '../modals/Create'
 import EditModal from '../modals/Edit'
 import DeleteModal from '../modals/Delete'
 
+
 const Index = () => {
     const store = useStore() // store management
-    const url = store.url + '/articles' // set the index url to /api/articles
+    const { parentId } = useParams() // parentid
+    const url = store.url + '/articles/node/' + parentId // set the index url to /api/articles/node/{parentId}
     const [items, setItems] = useState([]) // data placeholder
     
     // to get items data
@@ -25,6 +28,7 @@ const Index = () => {
                 } 
             )
             .then( response => { // response block
+                //console.log(response)
                 setItems(response.data.articles) // get the data
                 store.setValue('refresh', false ) // reset the refresh state to false
             })
@@ -34,13 +38,17 @@ const Index = () => {
       },
         [
             store.getValue('url'), // listener when url changed by pagination click
-            store.getValue('refresh') // listener when create / update / delete / search performed
+            store.getValue('refresh'), // listener when create / update / delete / search performed
+            parentId // when use navigate to parent
         ] 
 
     ) // useEffect()
 
+
+
     return (
         <div>
+    
             <CreateButton>
                 <CreateModal />
             </CreateButton>
@@ -55,10 +63,16 @@ const Index = () => {
 
                 <tbody>
                     {items?.data?.map((item,index) => (
+                        
                         <tr key={index}>
-                            <td> <span className="badge bg-primary">{item.id}</span></td>
+                            <td><span className="badge bg-primary">{item.id}</span></td>
                             <td>{item.title}</td>
-                            <td className='text-center' style={{'width':'150px'}}><EditModal id={item.id} />{' '}<DeleteModal id={item.id} /> </td>
+                            <td className='text-center' style={{'width':'200px'}}>
+                                {' '}
+                                <EditModal id={item.id} />
+                                {' '}
+                                <DeleteModal id={item.id} /> 
+                            </td>
                         </tr>
                     ))}
                 </tbody>

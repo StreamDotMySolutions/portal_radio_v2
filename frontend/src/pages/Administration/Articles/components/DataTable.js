@@ -76,9 +76,9 @@ const Index = () => {
                                     </Link>
                                 }
                                 { parentId != 0 && 
-                                    <Link to={`/administration/articles/${item.id}`}>
+                                    <Link to={`/administration/articles-data/${item.id}`}>
                                         <Button size='sm' variant='outline-primary'>
-                                            <FontAwesomeIcon icon={['fas', 'pen']} />
+                                            <FontAwesomeIcon icon={['fas', 'database']} />
                                         </Button>
                                     </Link>
                                 }

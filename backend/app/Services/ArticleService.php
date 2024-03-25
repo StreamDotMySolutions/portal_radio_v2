@@ -51,7 +51,7 @@ class ArticleService
 
     public static function show($article)
     {
-        $article = Article::where('id',$article->id)->first();
+        $article = Article::with('ancestors')->where('id',$article->id)->first();
         return $article;
     }
 

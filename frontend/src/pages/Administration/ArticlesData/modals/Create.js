@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { Button, Modal} from 'react-bootstrap'
 import { appendFormData } from '../../../../libs/FormInput'
 import axios from '../../../../libs/axios'
@@ -7,6 +8,7 @@ import HtmlForm from '../components/HtmlForm'
 
 export default function CreateModal() {
     const store = useStore()
+    const { parentId } = useParams() // parentid
     const errors = store.getValue('errors')
    
     const [show, setShow] = useState(false)
@@ -32,6 +34,7 @@ export default function CreateModal() {
         const formData = new FormData();
         const dataArray = [
             { key: 'title', value: store.getValue('title') },
+            { key: 'parent_id', value: parentId },
         ];
         
         appendFormData(formData, dataArray);
@@ -65,7 +68,7 @@ export default function CreateModal() {
     return (
       <>
         <Button variant="primary" onClick={handleShowClick}>
-          Create
+          Create Node
         </Button>
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
