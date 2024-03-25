@@ -50,7 +50,7 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
 
 // Manage Articles
 Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
-    Route::get('/articles', [ArticleController::class, 'index']);
+    Route::get('/articles/node/{parentId}', [ArticleController::class, 'index']);
     Route::post('/articles', [ArticleController::class, 'store']);
     Route::get('/articles/{article}', [ArticleController::class, 'show']);
     Route::put('/articles/{article}', [ArticleController::class, 'update']);

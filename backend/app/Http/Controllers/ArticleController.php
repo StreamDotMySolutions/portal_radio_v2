@@ -4,15 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\ArticleService;
+use App\Models\Article;
 use App\Http\Requests\Articles\StoreRequest;
 use App\Http\Requests\Articles\UpdateRequest;
 use App\Http\Requests\Articles\DeleteRequest;
 
 class ArticleController extends Controller
 {
-    public function index()
+    public function index($parentId)
     {
-        $articles = ArticleService::index();
+        //\Log::info($parentId);
+        $articles = ArticleService::index($parentId);
         return response()->json(['articles' => $articles]);
     }
 

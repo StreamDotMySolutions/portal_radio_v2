@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Kalnoy\Nestedset\NodeTrait;
 
 
-class Category extends Model
+class Article extends Model
 {
     use HasFactory;
     use NodeTrait;

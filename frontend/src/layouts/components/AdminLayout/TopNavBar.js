@@ -23,6 +23,8 @@ function TopNavbar() {
                   <NavDropdown.Item as={NavLink} to="/administration/roles"><FontAwesomeIcon icon="fa-solid fa-person" />{' '}Roles</NavDropdown.Item>
                   <NavDropdown.Item as={NavLink} to="/administration/users"><FontAwesomeIcon icon="fa-solid fa-user" />{' '}Users</NavDropdown.Item>
                 </NavDropdown>
+
+                <Nav.Link as={NavLink} to="/administration/articles/0"> <FontAwesomeIcon icon="fa-solid fa-file" />{' '}Article</Nav.Link>
               </Nav>
            <Account />
         </Navbar.Collapse>

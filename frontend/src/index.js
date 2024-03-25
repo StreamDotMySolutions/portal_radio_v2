@@ -29,6 +29,7 @@ import SignOut from './pages/Auth/components/SignOut'
 /** SIGNED */
 import RoleManagement from './pages/Administration/Roles'
 import UserManagement from './pages/Administration/Users'
+import ArticleManagement from './pages/Administration/Articles'
 library.add(fas)
 
 export default function App() {
@@ -56,6 +57,7 @@ export default function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/administration/roles" element={<RoleManagement />} />
                 <Route path="/administration/users" element={<UserManagement />} />
+                <Route path="/administration/articles/:parentId" element={<ArticleManagement />} />
               </Route>
             </Route>
         </Routes>
