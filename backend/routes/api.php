@@ -7,15 +7,12 @@ use App\Http\Controllers\{
     UserController,
     AuthController,
     AccountController,
+    ArticleController,
 };
 
 Auth::routes();
 
-Route::get('/welcome', function () {
-    return response()->json(['message' => 'hello']);
-});
-
-// Role guest
+// Auth
 Route::group(['middleware' => ['guest']], function () {
     // Auth-related routes
     Route::post('/register', [AuthController::class, 'register'])->name('register');
@@ -25,16 +22,15 @@ Route::group(['middleware' => ['guest']], function () {
     Route::get('/user-departments', [UserDepartmentController::class, 'index']);
 });
 
-// Role user
+// Signed 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/account', [AccountController::class, 'show']);
     Route::put('/account', [AccountController::class, 'update']);
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum')->name('logout');
 });
 
-// Role system|admin 
+// Manage Users
 Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
-    // User-related routes
     Route::get('/users', [UserController::class, 'index']);
     Route::get('/users/roles', [UserController::class, 'roles']);
     Route::post('/users', [UserController::class, 'store']);
@@ -45,7 +41,6 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
 
 // Manage Roles
 Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
-    // Roles
     Route::get('/roles', [RoleController::class, 'index']);
     Route::post('/roles', [RoleController::class, 'store']);
     Route::get('/roles/{role}', [RoleController::class, 'show']);
@@ -53,3 +48,11 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::delete('/roles/{role}', [RoleController::class, 'delete']);
 });
 
+// Manage Articles
+Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
+    Route::get('/articles', [ArticleController::class, 'index']);
+    Route::post('/articles', [ArticleController::class, 'store']);
+    Route::get('/articles/{article}', [ArticleController::class, 'show']);
+    Route::put('/articles/{article}', [ArticleController::class, 'update']);
+    Route::delete('/articles/{article}', [ArticleController::class, 'delete']);
+});

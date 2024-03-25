@@ -18,8 +18,6 @@ import Error404 from "./pages/Error404"
 /** Pages - PUBLIC */
 import Home from "./pages/Home"
 import Dashboard from "./pages/Dashboard"
-
-
 import Account from './pages/Account'
 import ResetPassword from './pages/Auth/components/ResetPassword'
 import SignInForm from './pages/Auth/components/SignIn'
@@ -27,6 +25,8 @@ import SignUpForm from './pages/Auth/components/SignUp'
 import EmailPassword from './pages/Auth/components/EmailPassword'
 import Unauthorized from './pages/Auth/components/Unauthorized'
 import SignOut from './pages/Auth/components/SignOut'
+
+/** SIGNED */
 import RoleManagement from './pages/Administration/Roles'
 import UserManagement from './pages/Administration/Users'
 library.add(fas)
