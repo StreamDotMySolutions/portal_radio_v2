@@ -4,6 +4,7 @@ import { appendFormData } from '../../../../libs/FormInput'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
 import HtmlForm from '../components/HtmlForm'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function EditModal({id}) {
     const store = useStore()
@@ -82,7 +83,7 @@ export default function EditModal({id}) {
     return (
       <>
         <Button size="sm" variant="outline-primary" onClick={handleShowClick}>
-          Edit
+        <FontAwesomeIcon icon={['fas', 'pen-to-square']} />{' '}Edit
         </Button>
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>

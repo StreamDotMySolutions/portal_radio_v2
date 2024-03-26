@@ -5,10 +5,11 @@ import useStore from '../../../store'
 import axios from '../../../../libs/axios'
 import PaginatorLink from '../../../../libs/PaginatorLink'
 import CreateButton from '../../../../libs/CreateButton'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import CreateModal from '../modals/Create'
 import EditModal from '../modals/Edit'
 import DeleteModal from '../modals/Delete'
+import Ordering from './Ordering'
 
 
 const Index = () => {
@@ -55,7 +56,8 @@ const Index = () => {
             <Table>
                 <thead>
                     <tr>
-                        <th style={{ 'width': '20px'}}>ID</th>
+                        <th className='text-center' style={{ 'width': '20px'}}><FontAwesomeIcon icon={['fas', 'hashtag']} /></th>
+                        <th className='text-center'>Ordering</th>
                         <th>Title</th>
                         <th className='text-center'> <FontAwesomeIcon icon={['fas', 'bolt']} /></th>
                     </tr>
@@ -66,8 +68,15 @@ const Index = () => {
                         
                         <tr key={index}>
                             <td><span className="badge bg-primary">{item.id}</span></td>
+                            <td className='text-center' style={{'width':'100px'}}>
+
+                                <Ordering id={item.id} direction='up' disabled={index === 0}/>
+                                {' '}
+                                <Ordering id={item.id} direction='down' disabled={index === items.data.length - 1 }/>
+                            
+                            </td>
                             <td>{item.title}</td>
-                            <td className='text-center' style={{'width':'200px'}}>
+                            <td className='text-center' style={{'width':'300px'}}>
                                 { parentId == 0 && 
                                     <Link to={`/administration/articles/${item.id}`}>
                                         <Button size='sm' variant='outline-info'>
@@ -77,8 +86,8 @@ const Index = () => {
                                 }
                                 { parentId != 0 && 
                                     <Link to={`/administration/articles-data/${item.id}`}>
-                                        <Button size='sm' variant='outline-primary'>
-                                            <FontAwesomeIcon icon={['fas', 'database']} />
+                                        <Button size='sm' variant='outline-success'>
+                                            <FontAwesomeIcon icon={['fas', 'database']} />{' '}Content
                                         </Button>
                                     </Link>
                                 }

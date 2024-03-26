@@ -55,4 +55,7 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::get('/articles/{article}', [ArticleController::class, 'show']);
     Route::put('/articles/{article}', [ArticleController::class, 'update']);
     Route::delete('/articles/{article}', [ArticleController::class, 'delete']);
+
+    // ordering
+    Route::get('/articles/ordering/{article}', [ArticleController::class, 'ordering']);
 });

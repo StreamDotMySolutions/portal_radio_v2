@@ -5,6 +5,7 @@ import { appendFormData } from '../../../../libs/FormInput'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
 import HtmlForm from '../components/HtmlForm'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function CreateModal() {
     const store = useStore()
@@ -68,7 +69,7 @@ export default function CreateModal() {
     return (
       <>
         <Button variant="primary" onClick={handleShowClick}>
-          Create Node
+        <FontAwesomeIcon icon={['fas', 'file']} />{' '}Create Node
         </Button>
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>

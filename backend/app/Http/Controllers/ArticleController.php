@@ -8,6 +8,7 @@ use App\Models\Article;
 use App\Http\Requests\Articles\StoreRequest;
 use App\Http\Requests\Articles\UpdateRequest;
 use App\Http\Requests\Articles\DeleteRequest;
+use App\Http\Requests\Articles\OrderingRequest;
 
 class ArticleController extends Controller
 {
@@ -42,5 +43,19 @@ class ArticleController extends Controller
     {
         ArticleService::delete($article);
         return response()->json(['message' => 'Article successfully deleted']);
+    }
+
+    public function ordering(Article $article, OrderingRequest $request)
+    {
+        // reference https://github.com/lazychaser/laravel-nestedset
+        switch($request->input('direction')){
+            case 'up':
+                $article->up(); // article ordering up
+                break;
+            case 'down':
+                $article->down(); //  // article ordering down
+            break;
+        }
+        
     }
 }
