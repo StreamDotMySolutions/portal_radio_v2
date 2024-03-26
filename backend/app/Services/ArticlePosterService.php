@@ -17,6 +17,15 @@ class ArticlePosterService
                 'article_id' => $request->input('article_id'),
                 'filename' => self::handleStoreFile($request->file('article_poster'), $directory = 'article_poster'),
             ]);
+
+            // delete previous image
+            $article = \App\Models\Article::find( $request->input('article_id') );
+            if($article->articlePoster){
+                \Log::info('deleting prev poster');
+                self::handleDeleteFile($article->articlePoster->filename,'article_poster');
+                $article->articlePoster->delete();
+            }
+
             // Save the PageImage instance to the database
             return $articlePoster->save(); 
         }
