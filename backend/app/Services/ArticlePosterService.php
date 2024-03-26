@@ -21,7 +21,7 @@ class ArticlePosterService
             // delete previous image
             $article = \App\Models\Article::find( $request->input('article_id') );
             if($article->articlePoster){
-                \Log::info('deleting prev poster');
+                //\Log::info('deleting prev poster');
                 self::handleDeleteFile($article->articlePoster->filename,'article_poster');
                 $article->articlePoster->delete();
             }
