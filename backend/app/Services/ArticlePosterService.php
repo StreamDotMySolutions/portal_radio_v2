@@ -8,7 +8,6 @@ use Illuminate\Support\Str;
 
 class ArticlePosterService
 {
-
     public static function store(Request $request)
     {        
         if($request->has('article_poster')){
@@ -18,7 +17,6 @@ class ArticlePosterService
                 'article_id' => $request->input('article_id'),
                 'filename' => self::handleStoreFile($request->file('article_poster'), $directory = 'article_poster'),
             ]);
-
             // Save the PageImage instance to the database
             return $articlePoster->save(); 
         }
@@ -26,8 +24,6 @@ class ArticlePosterService
 
     public static function handleStoreFile($request, $directory)
     {
-        //\Log::info('Poster service triggered');
-
         // Get the uploaded file
         $filename = $request->getClientOriginalName();
         $extension = $request->getClientOriginalExtension();
