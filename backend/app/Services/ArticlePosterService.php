@@ -11,12 +11,6 @@ class ArticlePosterService
     public static function store(Request $request)
     {        
         if($request->has('article_poster')){
-            // Create a new PageImage instance and fill it with request data
-            $articlePoster = new \App\Models\ArticlePoster([
-                'user_id' =>  auth('sanctum')->user()->id,
-                'article_id' => $request->input('article_id'),
-                'filename' => self::handleStoreFile($request->file('article_poster'), $directory = 'article_poster'),
-            ]);
 
             // delete previous image
             $article = \App\Models\Article::find( $request->input('article_id') );
@@ -25,6 +19,13 @@ class ArticlePosterService
                 self::handleDeleteFile($article->articlePoster->filename,'article_poster');
                 $article->articlePoster->delete();
             }
+            
+            // Create a new PageImage instance and fill it with request data
+            $articlePoster = new \App\Models\ArticlePoster([
+                'user_id' =>  auth('sanctum')->user()->id,
+                'article_id' => $request->input('article_id'),
+                'filename' => self::handleStoreFile($request->file('article_poster'), $directory = 'article_poster'),
+            ]);
 
             // Save the PageImage instance to the database
             return $articlePoster->save(); 
