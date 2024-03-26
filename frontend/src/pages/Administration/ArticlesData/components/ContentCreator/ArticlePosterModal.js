@@ -95,7 +95,7 @@ export default function ArticlePosterModal() {
 
         <Col onClick={handleShowClick} className="d-flex justify-content-center border border-3 border-dotted bg-light hover-effect" style={{ height: '250px' }}>
           <p className="text-left m-auto p-3">
-            <img className='img-thumbnail img-fluid' src={`${store.server}/storage/article_poster/${store.getValue('article_poster_image')?.filename}`} alt="Image" />
+            <img style={{'height':'220px'}} className='img-thumbnail img-fluid' src={`${store.server}/storage/article_poster/${store.getValue('article_poster_image')?.filename}`} alt="Image" />
           </p>
         </Col>
         :
