@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Table,Button } from 'react-bootstrap'
+import { Table,Button, Col, Badge } from 'react-bootstrap'
 import { Link, useParams } from 'react-router-dom'
 import useStore from '../../../store'
 import axios from '../../../../libs/axios'
@@ -9,9 +9,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CreateModal from '../modals/Create'
 import EditModal from '../modals/Edit'
 import DeleteModal from '../modals/Delete'
+import ShowModal from '../modals/Show'
+import Ordering from './Ordering'
 
 
-const Index = () => {
+const ContentData = () => {
     const store = useStore() // store management
     const { parentId } = useParams() // parentid
     const url = store.url + '/articles/node/' + parentId // set the index url to /api/articles/node/{parentId}
@@ -47,38 +49,37 @@ const Index = () => {
 
 
     return (
-        <div>
-    
-            <CreateButton>
-                <CreateModal />
-            </CreateButton>
-            <Table>
-                <thead>
-                    <tr>
-                        <th style={{ 'width': '20px'}}>ID</th>
-                        <th>Title</th>
-                        <th className='text-center'> <FontAwesomeIcon icon={['fas', 'bolt']} /></th>
-                    </tr>
-                </thead>
-
-                <tbody>
+            <>
                     {items?.data?.map((item,index) => (
+
                         
-                        <tr key={index}>
-                            <td><span className="badge bg-primary">{item.id}</span></td>
-                            <td>{item.title}</td>
-                            <td className='text-center' style={{'width':'200px'}}>
+                        <Col className="d-flex justify-content-center border border-3 border-dotted bg-light mb-2" style={{ height: '150px' }}>
+                            <p className="text-center m-auto ">
+                                <Badge><h1>{item.title}</h1></Badge>
+                                <hr />
+                                <Ordering id={item.id} direction='up' disabled={index === 0}/>
                                 {' '}
-                                <EditModal id={item.id} />
+                                <Ordering id={item.id} direction='down' disabled={index === items.data.length - 1 }/>
                                 {' '}
-                                <DeleteModal id={item.id} /> 
-                            </td>
-                        </tr>
+                                <ShowModal id={item.id} />{' '}<EditModal id={item.id} />{' '} <DeleteModal id={item.id} /> 
+                            </p>
+                        </Col>
+                        
+                        // <tr key={index}>
+                        //     <td><span className="badge bg-primary">{item.id}</span></td>
+                        //     <td>{item.title}</td>
+                        //     <td className='text-center' style={{'width':'200px'}}>
+                        //         {' '}
+                        //         <EditModal id={item.id} />
+                        //         {' '}
+                        //         <DeleteModal id={item.id} /> 
+                        //     </td>
+                        // </tr>
                     ))}
-                </tbody>
-            </Table>
-            <PaginatorLink store={store} items={items} />
-        </div>
+            
+            {/* <PaginatorLink store={store} items={items} /> */}
+            </>
+       
     );
 };
-export default Index
+export default ContentData

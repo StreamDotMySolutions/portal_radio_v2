@@ -5,10 +5,13 @@ import DescriptionHolder from './ContentCreator/DescriptionHolder';
 import ContentHolder from './ContentCreator/ContentHolder';
 import SettingHolder from './ContentCreator/SettingHolder';
 import './App.css'
+import CreateModal from '../modals/Create';
+import ContentData from './ContentData';
 
 const ContentCreator = () => {
     return (
         <Container>
+
             <Row>
                 <Col>
                     <SettingHolder />
@@ -26,9 +29,13 @@ const ContentCreator = () => {
 
             <Row className='mt-2'>
                 <Col xs={12}>
-                    <ContentHolder />
+                    {/* <ContentHolder /> */}
+                    
+                    <ContentData />
+                    <CreateModal />
                 </Col>
             </Row>
+
         </Container>
     );
 };
