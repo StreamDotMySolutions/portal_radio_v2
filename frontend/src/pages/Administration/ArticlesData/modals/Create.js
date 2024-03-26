@@ -68,7 +68,7 @@ export default function CreateModal() {
     return (
       <>
         <Button variant="primary" onClick={handleShowClick}>
-          Create Node
+          Add Content
         </Button>
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>

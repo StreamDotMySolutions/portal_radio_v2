@@ -51,10 +51,6 @@ const Index = () => {
     
             <CreateButton>
                 <CreateModal />
-                {' '}
-                <CreateModal />
-                {' '}
-                <CreateModal />
             </CreateButton>
             <Table>
                 <thead>

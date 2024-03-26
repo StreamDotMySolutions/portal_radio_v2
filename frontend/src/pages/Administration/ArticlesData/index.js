@@ -6,6 +6,7 @@ import { Link, useParams } from 'react-router-dom'
 import useStore from '../../store'
 import axios from '../../../libs/axios'
 import React, { useState, useEffect } from 'react'
+import ContentCreator from './components/ContentCreator'
 
 const Index = () => {
     const { parentId } = useParams() // parentid
@@ -73,7 +74,8 @@ const Index = () => {
     return(
         <>
             <BreadCrumb items={items} />
-            <DataTable />
+            {/* <DataTable /> */}
+            <ContentCreator />
         </>
     )
 }
