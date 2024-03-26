@@ -14,5 +14,14 @@ class Article extends Model
     use NodeTrait;
  
     protected $guarded = ['id'];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
     
+    public function articlePoster()
+    {
+        return $this->hasOne(ArticlePoster::class)->latest();
+    }
 }

@@ -34,7 +34,7 @@ class ArticleController extends Controller
 
     public function update(UpdateRequest $request, Article $article)
     {
-        //\Log::info('update');
+        //\Log::info($request);
         ArticleService::update($request, $article);
         return response()->json(['message' => 'Article successfully updated']);
     }

@@ -26,8 +26,10 @@ class ArticleService
 
     public static function store(Request $request)
     {        
+        $user =  auth('sanctum')->user();
         $article = Article::create([
             'title' => $request->input('title') ,
+            'user_id' => $user->id
         ]);
 
         // append parent id to node
@@ -51,8 +53,8 @@ class ArticleService
 
     public static function show($article)
     {
-        $article = Article::with('ancestors')->where('id',$article->id)->first();
-        return $article;
+        $data = Article::with(['ancestors','articlePoster'])->where('id',$article->id)->first();
+        return $data;
     }
 
     public static function delete($article)

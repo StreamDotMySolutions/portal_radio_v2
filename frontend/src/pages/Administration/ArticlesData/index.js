@@ -67,7 +67,7 @@ const Index = () => {
     }
 
     if(data){
-        items.push({ url: `/administration/articles/${data.id}`, label: data.title })
+        items.push({ url: ``, label: data.title })
     }
     
 

@@ -124,3 +124,35 @@ export function InputSelect({fieldName, placeholder, icon, isLoading, options}){
                 </InputGroup>
             </>)
 }
+
+export function InputFile({fieldName, placeholder, icon,accept='image/*', isLoading}){
+    const store = useStore()
+    const errors = store.getValue('errors')
+
+    return(<>
+                <InputGroup>
+                    <InputGroup.Text><FontAwesomeIcon icon={icon}></FontAwesomeIcon></InputGroup.Text>
+                    <Form.Control 
+                        placeholder={placeholder}
+                        type={'file'}
+                        //value={store.getValue(fieldName) ||  ''}
+                        name={fieldName}
+                        size='md' 
+                        readOnly={isLoading}
+                        accept={accept}
+                        isInvalid={errors?.hasOwnProperty(fieldName)}
+                        onChange={ (e) => { 
+                          store.setValue(fieldName, e.target.files[0])                         
+                        } }
+                    />
+                    {
+                        errors?.hasOwnProperty(fieldName) &&
+                            (
+                                <Form.Control.Feedback type="invalid">   
+                                { errors[fieldName] ? errors[fieldName] : null }
+                                </Form.Control.Feedback>
+                            )
+                    }  
+                </InputGroup>
+            </>)
+}

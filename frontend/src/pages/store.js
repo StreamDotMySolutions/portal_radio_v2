@@ -2,6 +2,7 @@ import { create } from 'zustand'
 const useStore  = create((set) => ({
 
     url: process.env.REACT_APP_BACKEND_URL,
+    server: process.env.REACT_APP_SERVER_URL,
     
     refresh: false,
     errors: null,
