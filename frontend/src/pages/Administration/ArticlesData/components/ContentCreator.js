@@ -9,7 +9,6 @@ import './App.css'
 const ContentCreator = () => {
     return (
         <Container>
-
             <Row>
                 <Col>
                     <SettingHolder />
@@ -17,7 +16,6 @@ const ContentCreator = () => {
             </Row>
                 
             <Row className='mt-2'>
-          
                 <Col xs={4} >
                     <PosterHolder />
                 </Col>
@@ -34,5 +32,4 @@ const ContentCreator = () => {
         </Container>
     );
 };
-
 export default ContentCreator;
