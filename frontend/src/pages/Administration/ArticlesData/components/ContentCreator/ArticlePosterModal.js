@@ -7,7 +7,6 @@ import useStore from '../../../../store'
 
 export default function ArticlePosterModal() {
     const store = useStore()
-    console.log(store.getValue('article_poster') )
     const { parentId } = useParams() // parentid
     const errors = store.getValue('errors')
    
@@ -17,6 +16,8 @@ export default function ArticlePosterModal() {
     const handleShow = () => setShow(true)
 
     const handleShowClick = () =>{
+      store.setValue('article_poster', null)
+      store.setValue('errors', null)
       //store.emptyData() // empty store data
       setShow(true)
 
@@ -39,7 +40,7 @@ export default function ArticlePosterModal() {
     } 
 
     const handleCloseClick = () => {
-      store.emptyData() 
+      //store.emptyData() 
       handleClose()
     }
 
