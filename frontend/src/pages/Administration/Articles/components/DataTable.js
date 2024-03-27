@@ -76,21 +76,21 @@ const Index = () => {
                             
                             </td>
                             <td>{item.title}</td>
-                            <td className='text-center' style={{'width':'300px'}}>
-                                { parentId == 0 && 
+                            <td className='text-center' style={{'width':'400px'}}>
+                               
                                     <Link to={`/administration/articles/${item.id}`}>
-                                        <Button size='sm' variant='outline-info'>
-                                            <FontAwesomeIcon icon={['fas', 'list']} />
+                                        <Button size='sm' variant='outline-secondary'>
+                                            <FontAwesomeIcon icon={['fas', 'plus']} />{' '}Node
                                         </Button>
                                     </Link>
-                                }
-                                { parentId != 0 && 
+                                {' '}
+                               
                                     <Link to={`/administration/articles-data/${item.id}`}>
                                         <Button size='sm' variant='outline-success'>
-                                            <FontAwesomeIcon icon={['fas', 'database']} />{' '}Content
+                                            <FontAwesomeIcon icon={['fas', 'pen']} />{' '}Content
                                         </Button>
                                     </Link>
-                                }
+                                
                                 {' '}
                                 <EditModal id={item.id} />
                                 {' '}

@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Badge, Button, Col, Modal} from 'react-bootstrap'
-import { InputFile,appendFormData } from '../../../../../libs/FormInput'
-import axios from '../../../../../libs/axios'
-import useStore from '../../../../store'
+import { InputFile,appendFormData } from '../../../../../../libs/FormInput'
+import axios from '../../../../../../libs/axios'
+import useStore from '../../../../../store'
 
 export default function ArticlePosterModal() {
     const store = useStore()

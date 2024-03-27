@@ -51,7 +51,8 @@ export default function Create() {
         // send to Laravel
         axios({ 
             method: 'post', 
-            url: `${store.url}/article-contents`, // POST articleContent
+            //url: `${store.url}/article-contents`, // POST articleContent
+            url: `${store.url}/article-data`, // POST articleData
             data: formData
           })
           .then( response => { // success 200

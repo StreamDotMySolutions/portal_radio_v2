@@ -6,12 +6,13 @@ import { Button, Col, Container, Row } from 'react-bootstrap';
 import SettingHolder from './ContentCreator/SettingHolder';
 import './App.css'
 // import CreateModal from '../modals/Create';
-import ContentData from './ContentData';
+//import ContentData from './ContentData';
+import ContentData from './ContentCreator/ArticleContent/ContentData';
 import DescriptionModal from './ContentCreator/DescriptionModal';
 import useStore from '../../../store';
 import { useParams } from 'react-router-dom'
 import axios from '../../../../libs/axios';
-import ArticlePosterModal from './ContentCreator/ArticlePosterModal';
+import ArticlePosterModal from './ContentCreator/ArticlePoster/ArticlePosterModal';
 // import HtmlModal from './ContentCreator/HtmlModal';
 import CreateContent from './ContentCreator/ArticleContent/Create'
 

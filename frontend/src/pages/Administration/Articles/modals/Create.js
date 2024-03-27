@@ -69,7 +69,7 @@ export default function CreateModal() {
     return (
       <>
         <Button variant="primary" onClick={handleShowClick}>
-        <FontAwesomeIcon icon={['fas', 'file']} />{' '}Create Node
+        <FontAwesomeIcon icon={['fas', 'file']} />{' '}Create
         </Button>
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>

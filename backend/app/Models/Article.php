@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Kalnoy\Nestedset\NodeTrait;
 
-
 class Article extends Model
 {
     use HasFactory;
@@ -18,6 +17,11 @@ class Article extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function articleData()
+    {
+        return $this->hasMany(ArticleData::class);
     }
     
     public function articlePoster()

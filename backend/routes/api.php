@@ -11,6 +11,7 @@ use App\Http\Controllers\{
     ArticlePosterController,
     ArticleContentController,
     ArticleAssetController,
+    ArticleDataController,
 };
 
 Auth::routes();
@@ -63,7 +64,7 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::get('/articles/ordering/{article}', [ArticleController::class, 'ordering']);
 
     // ArticleData
-    Route::get('/articles-data/node/{parentId}', [ArticleController::class, 'articlesData']);
+    //Route::get('/articles-data/node/{parentId}', [ArticleController::class, 'articlesData']);
 
     // ArticlePoster
     Route::post('/articlePosters', [ArticlePosterController::class, 'store']);
@@ -78,4 +79,11 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::get('/article-assets/{article}', [ArticleAssetController::class, 'index']);
     Route::post('/article-assets', [ArticleAssetController::class, 'store']);
     Route::delete('/article-assets/{articleAsset}', [ArticleAssetController::class, 'delete']);
+
+    Route::get('/article-data/node/{parentId}', [ArticleDataController::class, 'index']);
+    Route::get('/article-data/ordering/{articleData}', [ArticleDataController::class, 'ordering']);
+    Route::post('/article-data', [ArticleDataController::class, 'store']);
+    Route::get('/article-data/{articleData}', [ArticleDataController::class, 'show']);
+    Route::put('/article-data/{articleData}', [ArticleDataController::class, 'update']);
+    Route::delete('/article-data/{articleData}', [ArticleDataController::class, 'delete']);
 });
