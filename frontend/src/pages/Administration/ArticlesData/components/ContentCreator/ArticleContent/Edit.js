@@ -31,12 +31,12 @@ export default function EditModal({id}) {
         // fetch data from server using given id
         axios({ 
             method: 'get', 
-            url: `${store.url}/article-contents/${id}`,
+            url: `${store.url}/article-data/${id}`,
             })
         .then( response => { // success 200
             //console.log(response)
-            if( response?.data?.article_content.hasOwnProperty('contents') ){
-              store.setValue('contents', response?.data?.article_content?.contents )
+            if( response?.data?.article_data.hasOwnProperty('contents') ){
+              store.setValue('contents', response?.data?.article_data?.contents )
             }
             setIsLoading(false) // animation
             })
@@ -63,7 +63,7 @@ export default function EditModal({id}) {
         // send to Laravel
         axios({ 
             method: 'post', 
-            url: `${store.url}/article-contents/${id}`,
+            url: `${store.url}/article-data/${id}`,
             data: formData
           })
           .then( response => { // success 200

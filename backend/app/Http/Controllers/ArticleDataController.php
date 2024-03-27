@@ -33,20 +33,20 @@ class ArticleDataController extends Controller
         return response()->json(['message' => 'Article Data successfully created']);
     }
 
-    public function show(ArticleData $article)
+    public function show(ArticleData $articleData)
     {
-        $article = ArticleDataService::show($article);
-        return response()->json(['article' => $article]);
+        $articleData = ArticleDataService::show($articleData);
+        return response()->json(['article_data' => $articleData]);
     }
 
-    public function update(UpdateRequest $request, Article $article)
+    public function update(UpdateRequest $request, ArticleData $articleData)
     {
         //\Log::info($request);
-        ArticleDataService::update($request, $article);
+        ArticleDataService::update($request, $articleData);
         return response()->json(['message' => 'Article successfully updated']);
     }
 
-    public function delete(DeleteRequest $request, Article $articleData)
+    public function delete(DeleteRequest $request, ArticleData $articleData)
     {
         ArticleDataService::delete($articleData);
         return response()->json(['message' => 'Article successfully deleted']);

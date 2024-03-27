@@ -26,12 +26,12 @@ export default function DeleteModal({id}) {
         // fetch data from server using given id
         axios({ 
             method: 'get', 
-            url: `${store.url}/articles/${id}`,
+            url: `${store.url}/article-data/${id}`,
             })
         .then( response => { // success 200
             console.log(response)
-            if( response?.data?.article?.article_content.hasOwnProperty('contents') ){
-              store.setValue('contents', response?.data?.article?.article_content?.contents )
+            if( response?.data?.article_data?.hasOwnProperty('contents') ){
+              store.setValue('contents', response?.data?.article_data?.contents )
             }
             setIsLoading(false) // animation
             })
@@ -58,7 +58,7 @@ export default function DeleteModal({id}) {
         // send to Laravel
         axios({ 
             method: 'post', 
-            url: `${store.url}/articles/${id}`,
+            url: `${store.url}/article-data/${id}`,
             data: formData
           })
           .then( response => { // success 200
