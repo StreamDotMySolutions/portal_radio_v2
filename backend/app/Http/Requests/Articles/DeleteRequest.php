@@ -12,7 +12,6 @@ class DeleteRequest extends FormRequest
        //\Log::info($this->user);
         return [
             'acknowledge' => 'required',
-           
         ];
     }
 }

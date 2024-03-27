@@ -20,14 +20,14 @@ class ArticleContentService
         return $articleContent->save(); 
     }
 
-    public static function update(Request $request, $articleContent)
+    public static function update($request, $articleContent)
     {
-        
+        return ArticleContent::where('id', $articleContent->id)->update($request->except(['_method','id']));
     }
 
 
     public static function delete($articleContent)
     {
-        $articleContent->delete();
+        return $articleContent->delete();
     }
 }

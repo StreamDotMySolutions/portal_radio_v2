@@ -14,6 +14,11 @@ use App\Http\Requests\ArticleContents\OrderingRequest;
 class ArticleContentController extends Controller
 {
 
+    public function show(ArticleContent $articleContent){
+        //\Log::info($articleContent);
+        return response()->json(['article_content' => $articleContent]);    
+    }
+
     public function store(StoreRequest $request)
     {
         /**
@@ -21,11 +26,29 @@ class ArticleContentController extends Controller
          * Article hasOne ArticleContent
          * create ArticleContent
          */
-        \Log::info($request);
+        //\Log::info($request);
         
         $article = ArticleService::store($request); // create Article node based on given parent_id
         ArticleContentService::store($article->id,$request->input('contents'));
         return response()->json(['message' => 'Article Content successfully created']);
+    }
+
+    public function update(UpdateRequest $request, ArticleContent $articleContent)
+    {
+        //\Log::info($request);
+        //\Log::info($articleContent);
+
+        ArticleContentService::update($request,$articleContent);
+        return response()->json(['message' => 'Article Content successfully created']);
+
+    }
+
+    public function delete(ArticleContent $articleContent)
+    {
+     
+        ArticleContentService::delete($articleContent);
+        return response()->json(['message' => 'Article Content successfully deleted']);
+
     }
     
 }

@@ -6,9 +6,13 @@ import axios from '../../../../libs/axios'
 import PaginatorLink from '../../../../libs/PaginatorLink'
 import CreateButton from '../../../../libs/CreateButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import CreateModal from '../modals/Create'
-import EditModal from '../modals/Edit'
-import DeleteModal from '../modals/Delete'
+
+import EditModal from './ContentCreator/ArticleContent/Edit'
+import DeleteModal from './ContentCreator/ArticleContent/Delete'
+
+// import CreateModal from '../modals/Create'
+// import EditModal from '../modals/Edit'
+// import DeleteModal from '../modals/Delete'
 import ShowModal from '../modals/Show'
 import Ordering from './Ordering'
 
@@ -61,12 +65,15 @@ const ContentData = () => {
                                         {' '}
                                         <Ordering id={item.id} direction='down' disabled={index === items.length - 1 }/>
                                         {' '}
-                                        <ShowModal id={item.id} />{' '}<EditModal id={item.id} />{' '} <DeleteModal id={item.id} /> 
+                              
+                                        <EditModal id={item.article_content?.id} />
+                                        {' '} 
+                                        <DeleteModal id={item.id} /> 
                                   
                                     </Col>
                                    <hr />
                                             
-                                    <Col className='p-3 border border-2 border-dashed'>
+                                    <Col className='p-3 border border-2 border-dashed' style={{'backgroundColor': 'lightcyan'}}>
                                         {/* {item.article_content?.contents} */}
                                         {/* Render HTML content */}
                                         <div dangerouslySetInnerHTML={{ __html: item.article_content?.contents }} />
@@ -77,8 +84,6 @@ const ContentData = () => {
                         </div>
                         
                     ))}
-            
-            {/* <PaginatorLink store={store} items={items} /> */}
             </>
        
     );

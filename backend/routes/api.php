@@ -68,5 +68,8 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::post('/articlePosters', [ArticlePosterController::class, 'store']);
 
     // ArticleContent
-    Route::post('/articleContents', [ArticleContentController::class, 'store']);
+    Route::get('/article-contents/{articleContent}', [ArticleContentController::class, 'show']);
+    Route::post('/article-contents', [ArticleContentController::class, 'store']);
+    Route::put('/article-contents/{articleContent}', [ArticleContentController::class, 'update']);
+    Route::delete('/article-contents/{articleContent}', [ArticleContentController::class, 'delete']);
 });
