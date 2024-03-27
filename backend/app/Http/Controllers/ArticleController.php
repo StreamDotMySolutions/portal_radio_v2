@@ -19,11 +19,18 @@ class ArticleController extends Controller
         return response()->json(['articles' => $articles]);
     }
 
+
+    public function articlesData($parentId)
+    {
+        //\Log::info($parentId);
+        $articles = ArticleService::articlesData($parentId);
+        return response()->json(['articles' => $articles]);
+    }
     public function store(StoreRequest $request)
     {
         //\Log::info($request);
         ArticleService::store($request);
-        return response()->json(['message' => 'Role successfully created']);
+        return response()->json(['message' => 'Article successfully created']);
     }
 
     public function show(Article $article)

@@ -23,7 +23,26 @@ class ArticleService
 
         return $articles;
     }
+    
+    public static function articlesData($parentId)
+    {
+        if (!is_null($parentId) && !empty($parentId)) {
+            $paginate = Article::query()->where('parent_id', $parentId);
+        } else {
+            $paginate = Article::query()->where('parent_id', null);;
+        }
+        
 
+        //$articles = $paginate->with(['ancestors','articleContent'])->defaultOrder()->paginate(100)->withQueryString();  
+        
+        // $paginate = Article::query()->where('parent_id', $parentId)->when(!$parentId, function ($query) {
+        //     return $query->whereNull('parent_id');
+        // });
+        
+        $articles = $paginate->with('ancestors','articleContent')->defaultOrder()->get();
+        
+        return $articles;
+    }
     public static function store(Request $request)
     {        
         $user =  auth('sanctum')->user();
@@ -53,12 +72,23 @@ class ArticleService
 
     public static function show($article)
     {
-        $data = Article::with(['ancestors','articlePoster'])->where('id',$article->id)->first();
+        $data = Article::with(['ancestors','articlePoster','articleContent'])->where('id',$article->id)->first();
         return $data;
     }
 
     public static function delete($article)
     {
+
+        // Delete the related ArticlePoster if it exists
+        if ($article->articlePoster) {
+            $article->articlePoster->delete(); // need to call articlePoster service and delete the files
+        }
+
+        // Delete the related ArticleContent if it exists
+        if ($article->articleContent) {
+            $article->articleContent->delete();
+        }
+
         return $article->delete();
     }
 }

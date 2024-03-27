@@ -12,7 +12,6 @@ use App\Http\Requests\ArticlePosters\OrderingRequest;
 
 class ArticlePosterController extends Controller
 {
-  
 
     public function store(StoreRequest $request)
     {
@@ -20,8 +19,6 @@ class ArticlePosterController extends Controller
         ArticlePosterService::store($request);
         return response()->json(['message' => 'Artcile Poster successfully created']);
     }
-
-
 
     public function delete(Request $request, ArticlePoster $articlePoster)
     {

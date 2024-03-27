@@ -29,7 +29,7 @@ const Index = () => {
                         } 
                     )
                     .then( response => { // response block
-                        console.log(response)
+                        //console.log(response)
                         setAncestor(response.data.article)
                         setData(response.data.article)
                     })

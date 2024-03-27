@@ -24,4 +24,9 @@ class Article extends Model
     {
         return $this->hasOne(ArticlePoster::class)->latest();
     }
+
+    public function articleContent()
+    {
+        return $this->hasOne(ArticleContent::class)->latest();
+    }
 }

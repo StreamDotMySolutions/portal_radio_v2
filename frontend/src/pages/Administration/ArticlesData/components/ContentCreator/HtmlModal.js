@@ -1,12 +1,11 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Badge, Button, Col, Modal} from 'react-bootstrap'
-import { appendFormData } from '../../../../libs/FormInput'
-import axios from '../../../../libs/axios'
-import useStore from '../../../store'
-import HtmlForm from '../components/HtmlForm'
+import { InputTextarea, appendFormData } from '../../../../../libs/FormInput'
+import axios from '../../../../../libs/axios'
+import useStore from '../../../../store'
 
-export default function CreateModal() {
+export default function HtmlModal() {
     const store = useStore()
     const { parentId } = useParams() // parentid
     const errors = store.getValue('errors')
@@ -17,7 +16,9 @@ export default function CreateModal() {
     const handleShow = () => setShow(true)
 
     const handleShowClick = () =>{
-      store.emptyData() // empty store data
+      //store.emptyData() // empty store data
+      store.setValue('errors', null)
+      store.setValue('contents', null)
       setShow(true)
     } 
 
@@ -33,8 +34,9 @@ export default function CreateModal() {
     
         const formData = new FormData();
         const dataArray = [
-            { key: 'title', value: store.getValue('title') },
-            { key: 'parent_id', value: parentId },
+            { key: 'title', value: 'HTML' }, // title
+            { key: 'parent_id', value: parentId }, // article_id
+            { key: 'contents', value: store.getValue('contents') }, // article_id
         ];
         
         appendFormData(formData, dataArray);
@@ -45,7 +47,7 @@ export default function CreateModal() {
         // send to Laravel
         axios({ 
             method: 'post', 
-            url: `${store.url}/articles`,
+            url: `${store.url}/articleContents`, // POST articleContent
             data: formData
           })
           .then( response => { // success 200
@@ -68,18 +70,20 @@ export default function CreateModal() {
     return (
       <>
         <Button variant="primary" onClick={handleShowClick}>
-          Add Content
+          HTML
         </Button>
 
-   
-  
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
-            <Modal.Title>Create Content</Modal.Title>
+            <Modal.Title>Create HTML</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
-            <HtmlForm isLoading={isLoading} />
+            <InputTextarea
+              fieldName={'contents'}
+              rows={'15'}
+              icon={'fa fa-code'}
+            />
           </Modal.Body>
           
           <Modal.Footer>

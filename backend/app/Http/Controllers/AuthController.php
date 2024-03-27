@@ -4,17 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 
+use App\Models\User;
+use App\Models\UserProfile;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
-use App\Models\UserProfile;
-
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-
 use Illuminate\Support\Facades\Password;
 
 use App\Http\Requests\Auth\AuthRequest;
@@ -34,7 +32,7 @@ class AuthController extends Controller
             'password' => Hash::make($request->input('password')),
         ]);
 
-        $user->assignRole('user');
+        $user->assignRole('user'); // default role is user
         return response()->json(['message' => 'success']);
     }
 

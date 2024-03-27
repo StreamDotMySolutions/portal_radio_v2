@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Button, Col, Container, Row } from 'react-bootstrap';
 import PosterHolder from './ContentCreator/PosterHolder';
 import DescriptionHolder from './ContentCreator/DescriptionHolder';
 import ContentHolder from './ContentCreator/ContentHolder';
@@ -12,6 +12,7 @@ import useStore from '../../../store';
 import { useParams } from 'react-router-dom'
 import axios from '../../../../libs/axios';
 import ArticlePosterModal from './ContentCreator/ArticlePosterModal';
+import HtmlModal from './ContentCreator/HtmlModal';
 
 const ContentCreator = () => {
     const store=useStore()
@@ -25,7 +26,7 @@ const ContentCreator = () => {
             url: `${store.url}/articles/${parentId}`,
             })
         .then( response => { // success 200
-            console.log(response)
+            //console.log(response)
             if( response?.data?.article.hasOwnProperty('description') ){
               store.setValue('description', response?.data?.article?.description )
             }
@@ -52,7 +53,6 @@ const ContentCreator = () => {
                 
             <Row className='mt-2'>
                 <Col xs={4} >
-                    {/* <PosterHolder /> */}
                     <ArticlePosterModal />
                 </Col>
                 <Col xs={8}>
@@ -61,11 +61,23 @@ const ContentCreator = () => {
             </Row>
 
             <Row className='mt-2'>
-                <Col xs={12}>
-                    {/* <ContentHolder /> */}
-                    
+                <Col>
                     <ContentData />
-                    <CreateModal />
+                </Col>
+            </Row>
+
+            <Row>
+                <Col>
+                {/* <CreateModal /> */}
+                   
+                    <Col className="d-flex justify-content-center border border-3 border-dotted bg-light p-3" >
+                   
+                        <Col className='text-center'>
+                            <HtmlModal />
+                        </Col>
+                
+
+                    </Col>
                 </Col>
             </Row>
 

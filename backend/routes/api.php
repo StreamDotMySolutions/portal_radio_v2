@@ -9,6 +9,7 @@ use App\Http\Controllers\{
     AccountController,
     ArticleController,
     ArticlePosterController,
+    ArticleContentController,
 };
 
 Auth::routes();
@@ -60,5 +61,12 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     // ordering
     Route::get('/articles/ordering/{article}', [ArticleController::class, 'ordering']);
 
+    // ArticleData
+    Route::get('/articles-data/node/{parentId}', [ArticleController::class, 'articlesData']);
+
+    // ArticlePoster
     Route::post('/articlePosters', [ArticlePosterController::class, 'store']);
+
+    // ArticleContent
+    Route::post('/articleContents', [ArticleContentController::class, 'store']);
 });
