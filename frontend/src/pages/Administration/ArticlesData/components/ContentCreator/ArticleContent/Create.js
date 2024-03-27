@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Badge, Button, Col, Modal} from 'react-bootstrap'
+import { Badge, Button, Col, Modal, Tabs, Tab} from 'react-bootstrap'
 import { appendFormData, InputTextarea } from '../../../../../../libs/FormInput'
 import axios from '../../../../../../libs/axios'
 import useStore from '../../../../../store'
+
 
 export default function Create() {
     const store = useStore()
@@ -74,17 +75,29 @@ export default function Create() {
         <FontAwesomeIcon icon={['fas', 'fa-pen-to-square']} />{' '}HTML
         </Button>
 
-        <Modal size={'lg'} show={show} onHide={handleCloseClick}>
+        <Modal size={'xl'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
             <Modal.Title>Create HTML</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
-            <InputTextarea
-              fieldName={'contents'}
-              rows={'15'}
-              icon={'fa fa-code'}
-            />
+
+          <Tabs
+              defaultActiveKey="html"
+              className="mb-3"
+            >
+              <Tab eventKey="html" title="html">
+                  <InputTextarea
+                    fieldName={'contents'}
+                    rows={'15'}
+                    icon={'fa fa-code'}
+                />
+              </Tab>
+              <Tab eventKey="assets" title="assets">
+                Asset
+              </Tab>
+          
+            </Tabs>
           </Modal.Body>
           
           <Modal.Footer>

@@ -10,7 +10,8 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'article_poster' => 'required',
+            //'article_poster' => 'required',
+            'article_poster' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
         ];
     }
 }
