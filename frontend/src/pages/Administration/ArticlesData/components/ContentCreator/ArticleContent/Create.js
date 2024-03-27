@@ -5,6 +5,7 @@ import { Badge, Button, Col, Modal, Tabs, Tab} from 'react-bootstrap'
 import { appendFormData, InputTextarea } from '../../../../../../libs/FormInput'
 import axios from '../../../../../../libs/axios'
 import useStore from '../../../../../store'
+import DataTable from '../ArticleAsset/DataTable'
 
 
 export default function Create() {
@@ -21,6 +22,7 @@ export default function Create() {
       //store.emptyData() // empty store data
       store.setValue('errors', null)
       store.setValue('contents', null)
+      store.setValue('article_asset', null) // asset tab
       setShow(true)
     } 
 
@@ -86,15 +88,23 @@ export default function Create() {
               defaultActiveKey="html"
               className="mb-3"
             >
-              <Tab eventKey="html" title="html">
+              <Tab eventKey="html" title="HTML">
                   <InputTextarea
                     fieldName={'contents'}
                     rows={'15'}
                     icon={'fa fa-code'}
                 />
               </Tab>
-              <Tab eventKey="assets" title="assets">
-                Asset
+              <Tab eventKey="assets" title="ASSETS">
+                <DataTable />
+              </Tab>
+
+              <Tab eventKey="preview" title="PREVIEW">
+                <Col className='p-3 border border-2 border-dashed' style={{'backgroundColor': 'lightcyan'}}>
+                    {/* {item.article_content?.contents} */}
+                    {/* Render HTML content */}
+                    <div dangerouslySetInnerHTML={{ __html: store.getValue('contents')}} />
+                </Col>
               </Tab>
           
             </Tabs>

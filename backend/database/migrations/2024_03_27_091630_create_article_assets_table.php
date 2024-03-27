@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('article_assets', function (Blueprint $table) {
+            $table->id();
             $table->integer('user_id')->nullable();
             $table->integer('article_id')->nullable();
             $table->string('filename')->nullable();

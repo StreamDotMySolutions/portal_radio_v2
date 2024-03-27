@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Button, Modal} from 'react-bootstrap'
+import { Badge, Button, Col, Modal, Tabs, Tab} from 'react-bootstrap'
 import { appendFormData, InputTextarea } from '../../../../../../libs/FormInput'
 import axios from '../../../../../../libs/axios'
 import useStore from '../../../../../store'
-
+import DataTable from '../ArticleAsset/DataTable'
 
 export default function EditModal({id}) {
     const store = useStore()
@@ -24,6 +24,7 @@ export default function EditModal({id}) {
       //store.emptyData() // empty store data
       store.setValue('errors', null)
       store.setValue('contents', null)
+      store.setValue('article_asset', null) // asset tab
 
       setShow(true)
 
@@ -94,11 +95,35 @@ export default function EditModal({id}) {
           </Modal.Header>
 
           <Modal.Body>
-            <InputTextarea
+            {/* <InputTextarea
               fieldName={'contents'}
               rows={'15'}
               icon={'fa fa-code'}
-            />
+            /> */}
+             <Tabs
+              defaultActiveKey="html"
+              className="mb-3"
+            >
+              <Tab eventKey="html" title="HTML">
+                  <InputTextarea
+                    fieldName={'contents'}
+                    rows={'15'}
+                    icon={'fa fa-code'}
+                />
+              </Tab>
+              <Tab eventKey="assets" title="ASSETS">
+                <DataTable />
+              </Tab>
+
+              <Tab eventKey="preview" title="PREVIEW">
+                <Col className='p-3 border border-2 border-dashed' style={{'backgroundColor': 'lightcyan'}}>
+                    {/* {item.article_content?.contents} */}
+                    {/* Render HTML content */}
+                    <div dangerouslySetInnerHTML={{ __html: store.getValue('contents')}} />
+                </Col>
+              </Tab>
+          
+            </Tabs>
           </Modal.Body>
           
           <Modal.Footer>

@@ -10,6 +10,7 @@ use App\Http\Controllers\{
     ArticleController,
     ArticlePosterController,
     ArticleContentController,
+    ArticleAssetController,
 };
 
 Auth::routes();
@@ -72,4 +73,9 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::post('/article-contents', [ArticleContentController::class, 'store']);
     Route::put('/article-contents/{articleContent}', [ArticleContentController::class, 'update']);
     Route::delete('/article-contents/{articleContent}', [ArticleContentController::class, 'delete']);
+
+    // ArticleAsset
+    Route::get('/article-assets/{article}', [ArticleAssetController::class, 'index']);
+    Route::post('/article-assets', [ArticleAssetController::class, 'store']);
+    Route::delete('/article-assets/{articleAsset}', [ArticleAssetController::class, 'delete']);
 });

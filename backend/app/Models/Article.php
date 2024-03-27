@@ -29,4 +29,9 @@ class Article extends Model
     {
         return $this->hasOne(ArticleContent::class)->latest();
     }
+
+    public function articleAssets()
+    {
+        return $this->hasMany(ArticleAssets::class);
+    }
 }
