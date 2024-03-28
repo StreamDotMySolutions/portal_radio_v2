@@ -9,11 +9,12 @@ use App\Models\Article;
 
 class ArticleController extends Controller
 {
-    public function index()
+    public function index($parentId = 0)
     {
-        \Log::info('index');
-        // $articles = ArticleService::index($parentId);
-        // return response()->json(['articles' => $articles]);
+
+        $articles = Article::query()->defaultOrder()->get()->toTree();
+        
+        return response()->json(['articles' => $articles]);
     }
 
 

@@ -32,13 +32,6 @@ class ArticleService
             $paginate = Article::query()->where('parent_id', null);;
         }
         
-
-        //$articles = $paginate->with(['ancestors','articleContent'])->defaultOrder()->paginate(100)->withQueryString();  
-        
-        // $paginate = Article::query()->where('parent_id', $parentId)->when(!$parentId, function ($query) {
-        //     return $query->whereNull('parent_id');
-        // });
-        
         $articles = $paginate->with('ancestors','articleContent')->defaultOrder()->get();
         
         return $articles;
