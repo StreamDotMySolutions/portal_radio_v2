@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom'
 
 const axios = Axios.create({
-    baseURL:  (process.env.REACT_APP_API_URL),
+    baseURL:  (process.env.REACT_APP_BACKEND_URL),
     headers: {
         'X-Requested-With': 'XMLHttpRequest',
     },
