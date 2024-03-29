@@ -156,3 +156,79 @@ export function InputFile({fieldName, placeholder, icon,accept='image/*', isLoad
                 </InputGroup>
             </>)
 }
+
+export function InputRadio({fieldName,label="Active", yesLabel="Yes", noLabel="No"}){
+    const store = useStore()
+    const errors = store.getValue('errors')
+
+    return(
+        <>
+    
+              <Form.Label><h6>{label}</h6></Form.Label>
+              <Row>
+                <Col>
+                  <Form.Check
+                    type="radio"
+                    label={yesLabel}
+                    name={fieldName}
+                    value="1"
+                    isInvalid={errors?.hasOwnProperty(fieldName)}
+                    checked={store.getValue(fieldName) === 1}
+                    onChange={ (e) => { 
+                                store.setValue(fieldName, e.target.checked ? e.target.value : null);                    
+                            }}
+                  />
+                </Col>
+                <Col>
+                  <Form.Check
+                    type="radio"
+                    label={noLabel}
+                    name={fieldName}
+                    isInvalid={errors?.hasOwnProperty(fieldName)}
+                    checked={store.getValue(fieldName) === 0}
+                    onChange={ (e) => { 
+                        store.setValue(fieldName, e.target.checked ? e.target.value : null);                    
+                    }}
+                  />
+                </Col>
+            </Row>
+            {
+            errors?.hasOwnProperty(fieldName) &&
+                (
+                    <Form.Control.Feedback type="invalid">   
+                    { errors[fieldName] ? errors[fieldName] : null }
+                    </Form.Control.Feedback>
+                )
+            }  
+     
+        
+        </>
+    )
+}
+
+export function InputDate({fieldName, icon}){
+    const store = useStore()
+    const errors = store.getValue('errors')
+    
+    return(<>
+    
+    <InputGroup>
+        <InputGroup.Text><FontAwesomeIcon icon={icon}></FontAwesomeIcon></InputGroup.Text>
+        <Form.Control 
+            name={fieldName}
+            type="date" 
+            value={store.getValue(fieldName) ||  ''}
+            isInvalid={errors?.hasOwnProperty(fieldName)}
+        />
+
+        {
+            errors?.hasOwnProperty(fieldName) &&
+                (
+                    <Form.Control.Feedback type="invalid">   
+                    { errors[fieldName] ? errors[fieldName] : null }
+                    </Form.Control.Feedback>
+                )
+         }  
+    </InputGroup>
+    </>)
+}

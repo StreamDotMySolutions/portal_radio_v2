@@ -44,7 +44,16 @@ const ContentCreator = () => {
 
             <Row>
                 <Col>
-                    <ArticleSetting />
+                {/* <CreateModal /> */}
+                   
+                    <Col className="d-flex justify-content-center border border-3 border-dotted bg-light p-3" >
+                   
+                        <Col className='text-center'>
+                            <ArticleSetting />
+                        </Col>
+                
+
+                    </Col>
                 </Col>
             </Row>
                 

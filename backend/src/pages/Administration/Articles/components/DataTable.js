@@ -83,14 +83,23 @@ const Index = () => {
                                         </Button>
                                     </Link>
                                 {' '}
-                               
+                                    { item.descendants.length > 0 ?
                                     <Link to={`/administration/articles-data/${item.id}`}>
                                         <Button 
-                                            disabled={item.descendants.length > 0 }
-                                            size='sm' variant='outline-success'>
+                                            //disabled={item.descendants.length > 0 }
+                                            size='sm' variant='outline-dark'>
+                                            <FontAwesomeIcon icon={['fas', 'cog']} />{' '}Settings
+                                        </Button>
+                                    </Link>
+                                    :
+                                    <Link to={`/administration/articles-data/${item.id}`}>
+                                        <Button 
+                                            //disabled={item.descendants.length > 0 }
+                                            size='sm' variant='outline-primary'>
                                             <FontAwesomeIcon icon={['fas', 'pen']} />{' '}Content
                                         </Button>
                                     </Link>
+                                    }
                                 
                                 {' '}
                                 <EditModal id={item.id} />
