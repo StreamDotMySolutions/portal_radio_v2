@@ -1,20 +1,15 @@
 import React, { useEffect } from 'react';
-import { Button, Col, Container, Row } from 'react-bootstrap';
-// import PosterHolder from './ContentCreator/PosterHolder';
-// import DescriptionHolder from './ContentCreator/DescriptionHolder';
-// import ContentHolder from './ContentCreator/ContentHolder';
-import SettingHolder from './ContentCreator/SettingHolder';
-import './App.css'
-// import CreateModal from '../modals/Create';
-//import ContentData from './ContentData';
+import {Col, Container, Row } from 'react-bootstrap';
 import ContentData from './ContentCreator/ArticleContent/ContentData';
 import DescriptionModal from './ContentCreator/DescriptionModal';
 import useStore from '../../../store';
 import { useParams } from 'react-router-dom'
 import axios from '../../../../libs/axios';
 import ArticlePosterModal from './ContentCreator/ArticlePoster/ArticlePosterModal';
-// import HtmlModal from './ContentCreator/HtmlModal';
 import CreateContent from './ContentCreator/ArticleContent/Create'
+import ArticleSetting from './ContentCreator/ArticleSetting/ArticleSetting';
+
+import './App.css'
 
 const ContentCreator = () => {
     const store=useStore()
@@ -49,7 +44,7 @@ const ContentCreator = () => {
 
             <Row>
                 <Col>
-                    <SettingHolder />
+                    <ArticleSetting />
                 </Col>
             </Row>
                 

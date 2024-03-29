@@ -1,7 +1,7 @@
 import React from 'react';
 import { Badge, Col } from 'react-bootstrap';
 
-function SettingHolder() {
+function ArticleSetting() {
   return (
     <Col className="d-flex border border-3 border-dotted bg-light hover-effect" style={{ height: '50px' }}>
         <p className="text-center m-auto">
@@ -11,4 +11,4 @@ function SettingHolder() {
   );
 }
 
-export default SettingHolder;
+export default ArticleSetting;

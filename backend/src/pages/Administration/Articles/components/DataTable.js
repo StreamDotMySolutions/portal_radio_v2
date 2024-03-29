@@ -11,7 +11,6 @@ import EditModal from '../modals/Edit'
 import DeleteModal from '../modals/Delete'
 import Ordering from './Ordering'
 
-
 const Index = () => {
     const store = useStore() // store management
     const { parentId } = useParams() // parentid
@@ -29,7 +28,7 @@ const Index = () => {
                 } 
             )
             .then( response => { // response block
-                //console.log(response)
+                console.log(response)
                 setItems(response.data.articles) // get the data
                 store.setValue('refresh', false ) // reset the refresh state to false
             })
@@ -80,13 +79,15 @@ const Index = () => {
                                
                                     <Link to={`/administration/articles/${item.id}`}>
                                         <Button size='sm' variant='outline-secondary'>
-                                            <FontAwesomeIcon icon={['fas', 'plus']} />{' '}Node
+                                            <FontAwesomeIcon icon={['fas', 'fa-folder-plus']} />{' '}Node
                                         </Button>
                                     </Link>
                                 {' '}
                                
                                     <Link to={`/administration/articles-data/${item.id}`}>
-                                        <Button size='sm' variant='outline-success'>
+                                        <Button 
+                                            disabled={item.descendants.length > 0 }
+                                            size='sm' variant='outline-success'>
                                             <FontAwesomeIcon icon={['fas', 'pen']} />{' '}Content
                                         </Button>
                                     </Link>

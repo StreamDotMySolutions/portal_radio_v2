@@ -27,14 +27,22 @@ function NavBar() {
   function MenuItem({ title, children }) {
   
     if (children.length == 0) {
-      return <NavDropdown.Item>{title}</NavDropdown.Item>;
+      return ( 
+              <>
+              <NavDropdown.Item>{title}</NavDropdown.Item>
+              </>
+              )
     } else {
       return (
-        <NavDropdown title={title} drop="end" className='ms-2'>
+        <>
+        <NavDropdown title={title} drop="end" className='mr-2'>
           {children.map(child => (
+            <>
             <MenuItem key={child.id} title={child.title} children={child.children} />
+            </>
           ))}
         </NavDropdown>
+        </>
       );
     }
   }
@@ -44,7 +52,10 @@ function Menu({ articles }) {
   return (
     <Nav>
       {articles.map(article => (
+        <>
         <MenuItem key={article.id} title={article.title} children={article.children} />
+        
+        </>
       ))}
     </Nav>
   );
