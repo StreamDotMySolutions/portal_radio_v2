@@ -28,7 +28,7 @@ const Index = () => {
                 } 
             )
             .then( response => { // response block
-                console.log(response)
+                //console.log(response)
                 setItems(response.data.articles) // get the data
                 store.setValue('refresh', false ) // reset the refresh state to false
             })
@@ -37,7 +37,7 @@ const Index = () => {
             })
       },
         [
-            store.getValue('url'), // listener when url changed by pagination click
+            //store.getValue('url'), // listener when url changed by pagination click
             store.getValue('refresh'), // listener when create / update / delete / search performed
             parentId // when use navigate to parent
         ] 
@@ -75,28 +75,29 @@ const Index = () => {
                             
                             </td>
                             <td>{item.title}</td>
-                            <td className='text-center' style={{'width':'400px'}}>
+                            <td className='text-end' style={{'width':'400px'}}>
                                
                                     <Link to={`/administration/articles/${item.id}`}>
                                         <Button size='sm' variant='outline-secondary'>
-                                            <FontAwesomeIcon icon={['fas', 'fa-folder-plus']} />{' '}Node
+                                            <FontAwesomeIcon icon={['fas', 'fa-folder-plus']} />{' '}
                                         </Button>
                                     </Link>
                                 {' '}
                                     { item.descendants.length > 0 ?
-                                    <Link to={`/administration/articles-data/${item.id}`}>
-                                        <Button 
-                                            //disabled={item.descendants.length > 0 }
-                                            size='sm' variant='outline-dark'>
-                                            <FontAwesomeIcon icon={['fas', 'cog']} />{' '}Settings
-                                        </Button>
-                                    </Link>
+                              <></>
+                              // <Link to={`/administration/articles-data/${item.id}`}>
+                                    //     <Button 
+                                    //         //disabled={item.descendants.length > 0 }
+                                    //         size='sm' variant='outline-dark'>
+                                    //         <FontAwesomeIcon icon={['fas', 'folder']} />{' '}HEAD
+                                    //     </Button>
+                                    // </Link>
                                     :
                                     <Link to={`/administration/articles-data/${item.id}`}>
                                         <Button 
                                             //disabled={item.descendants.length > 0 }
                                             size='sm' variant='outline-primary'>
-                                            <FontAwesomeIcon icon={['fas', 'pen']} />{' '}Content
+                                            <FontAwesomeIcon icon={['fas', 'pen']} />{' '}
                                         </Button>
                                     </Link>
                                     }

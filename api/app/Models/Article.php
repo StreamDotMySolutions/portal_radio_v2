@@ -18,16 +18,22 @@ class Article extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    public function articleData()
+    
+    public function articleSetting()
     {
-        return $this->hasMany(ArticleData::class);
+        return $this->hasOne(ArticleSetting::class)->latest();
     }
     
     public function articlePoster()
     {
         return $this->hasOne(ArticlePoster::class)->latest();
     }
+
+    public function articleData()
+    {
+        return $this->hasMany(ArticleData::class);
+    }
+    
 
     public function articleContent()
     {

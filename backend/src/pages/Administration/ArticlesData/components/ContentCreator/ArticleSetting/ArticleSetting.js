@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Form,Badge, Button, Col, Modal, Row} from 'react-bootstrap'
-import { InputDate, InputRadio, InputTextarea,appendFormData } from '../../../../../../libs/FormInput'
+import { InputDate, InputRadio, InputText, InputTextarea,appendFormData } from '../../../../../../libs/FormInput'
 import axios from '../../../../../../libs/axios'
 import useStore from '../../../../../store'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -18,24 +18,34 @@ export default function ArticleSetting() {
 
     const handleShowClick = () =>{
       //store.emptyData() // empty store data
+      store.setValue('errors', null)
+      store.setValue('published_start', null)
+      store.setValue('published_end', null)
+
       setShow(true)
 
-        // // fetch data from server using given id
-        // axios({ 
-        //     method: 'get', 
-        //     url: `${store.url}/articles/${parentId}`,
-        //     })
-        // .then( response => { // success 200
-        //     //console.log(response)
-        //     if( response?.data?.article.hasOwnProperty('description') ){
-        //       store.setValue('description', response?.data?.article?.description )
-        //     }
-        //     setIsLoading(false) // animation
-        //     })
-        // .catch( error => {
-        //     console.warn(error)
-        //     setIsLoading(false) // animation
-        // })
+      // fetch data from server using given id
+      axios({ 
+          method: 'get', 
+          url: `${store.url}/article-settings/${parentId}`,
+          })
+      .then( response => { // success 200
+          console.log(response)
+          if( response?.data?.article_setting.hasOwnProperty('active') ){
+            store.setValue('active', response?.data?.article_setting?.active )
+          }
+          if( response?.data?.article_setting.hasOwnProperty('published_start') ){
+            store.setValue('published_start', response?.data?.article_setting?.published_start )
+          }
+          if( response?.data?.article_setting.hasOwnProperty('published_end') ){
+            store.setValue('published_end', response?.data?.article_setting?.published_end )
+          }
+          setIsLoading(false) // animation
+          })
+      .catch( error => {
+          console.warn(error)
+          setIsLoading(false) // animation
+      })
     } 
 
     const handleCloseClick = () => {
@@ -50,7 +60,9 @@ export default function ArticleSetting() {
     
         const formData = new FormData();
         const dataArray = [
-            { key: 'description', value: store.getValue('description') },
+            { key: 'active', value: store.getValue('active') },
+            { key: 'published_start', value: store.getValue('published_start') },
+            { key: 'published_end', value: store.getValue('published_end') },
         ];
         
         appendFormData(formData, dataArray);
@@ -61,12 +73,12 @@ export default function ArticleSetting() {
         // send to Laravel
         axios({ 
             method: 'post', 
-            url: `${store.url}/articles/${parentId}`,
+            url: `${store.url}/article-settings/${parentId}`,
             data: formData
           })
           .then( response => { // success 200
             //console.log(response)
-            store.setValue('refresh', true) // to force useEffect get new data for index
+            //store.setValue('refresh', true) // to force useEffect get new data for index
             setIsLoading(false) // animation
             handleClose() // close the modal
           })
@@ -92,26 +104,54 @@ export default function ArticleSetting() {
 
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
-            <Modal.Title>Settings</Modal.Title>
+            <Modal.Title><FontAwesomeIcon icon={['fas', 'fa-cog']} />{' '}Settings</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
         
             <Form.Group className='col-2'>
-              <InputRadio fieldName='Active' yesLabel='Yes' noLabel='No' />
+              <InputRadio 
+                fieldName='active' 
+                label='Active'
+                options={[
+                  { label: 'Yes', value: 1 },
+                  { label: 'No', value: 0 }
+                ]}
+                />
             </Form.Group>
             <hr />
             <Form.Group>
               <Form.Label><h6>Publish Date</h6></Form.Label>
               <Row>
                 <Col>
-                  <InputDate fieldName='published_start' />
+                  <InputDate icon='fa-calendar' fieldName='published_start' />
                 </Col>
                 <Col>
-                  <InputDate fieldName='published_end' />
+                  <InputDate  icon='fa-calendar' fieldName='published_end' />
                 </Col>
               </Row>
             </Form.Group>
+            {/* <hr />
+            <Form.Group className='col-4'>
+              <InputRadio 
+                fieldName='type' 
+                label='Content Type'
+                options={[
+                  { label: 'Redirect', value: 'redirect' },
+                  { label: 'Contents', value: 'contents' },
+                ]}
+                />
+            </Form.Group>
+
+            { store.getValue('type') == 'redirect' &&
+              <Col className='mt-2'>
+                <InputText 
+                  fieldName='url'
+                  placeholder='http://somewebsite.com' 
+                  icon='fa-globe'
+                  />
+              </Col>
+            } */}
           
 
           </Modal.Body>

@@ -26,7 +26,7 @@ const ContentData = () => {
     const url = store.url + '/article-data/node/' + parentId // set the index url to /api/articles/node/{parentId}
     const [items, setItems] = useState([]) // data placeholder
     
-    console.log(url)
+    // console.log(url)
     // to get items data
     useEffect( () => 
         {
@@ -38,7 +38,7 @@ const ContentData = () => {
                 } 
             )
             .then( response => { // response block
-                console.log(response)
+                // console.log(response)
                 setItems(response.data.articles) // get the data
                 store.setValue('refresh', false ) // reset the refresh state to false
             })
@@ -47,7 +47,7 @@ const ContentData = () => {
             })
       },
         [
-            store.getValue('url'), // listener when url changed by pagination click
+            //store.getValue('url'), // listener when url changed by pagination click
             store.getValue('refresh'), // listener when create / update / delete / search performed
             parentId // when use navigate to parent
         ] 

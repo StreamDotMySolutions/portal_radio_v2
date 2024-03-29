@@ -12,7 +12,7 @@ class ArticleController extends Controller
     public function index($parentId = 0)
     {
 
-        $articles = Article::query()->defaultOrder()->get()->toTree();
+        $articles = Article::query()->where('parent_id', $parentId)->with(['descendants'])->defaultOrder()->get()->toTree();
         
         return response()->json(['articles' => $articles]);
     }

@@ -1,5 +1,5 @@
 import { Badge } from 'react-bootstrap'
-import DataTable from './components/ContentCreator/ArticleAsset/DataTable'
+//import DataTable from './components/ContentCreator/ArticleAsset/DataTable'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import BreadCrumb from '../../../libs/BreadCrumb'
 import { Link, useParams } from 'react-router-dom'

@@ -42,7 +42,7 @@ const DataTable = () => {
     // upload
     useEffect( () => {
         if(store.getValue('article_asset') !== null && store.getValue('article_asset') !== ''){
-            console.log('upload')
+            //console.log('upload')
 
             const formData = new FormData();
             const dataArray = [
@@ -70,7 +70,7 @@ const DataTable = () => {
                 //console.warn(error)
                 
                 if( error.response?.status == 422 ){ // detect 422 errors by Laravel
-                    console.log(error.response.data.errors)
+                    console.warn(error.response.data.errors)
                     store.setValue('errors', error.response.data.errors ) // set the errors to store
                 }
 
@@ -83,7 +83,7 @@ const DataTable = () => {
     const handleCopyClick = (value) => {
         navigator.clipboard.writeText(value)
             .then(() => {
-                console.log('Text copied to clipboard:', value);
+               // console.log('Text copied to clipboard:', value);
                 // Optionally, you can show a message to the user indicating the successful copy.
             })
             .catch((error) => {

@@ -12,6 +12,7 @@ use App\Http\Controllers\Backend\{
     ArticleContentController,
     ArticleAssetController,
     ArticleDataController,
+    ArticleSettingController,
 };
 
 Auth::routes();
@@ -86,9 +87,8 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::get('/article-data/{articleData}', [ArticleDataController::class, 'show']);
     Route::put('/article-data/{articleData}', [ArticleDataController::class, 'update']);
     Route::delete('/article-data/{articleData}', [ArticleDataController::class, 'delete']);
+
+    // Article Settings
+    Route::get('/article-settings/{article}', [ArticleSettingController::class, 'show']);
+    Route::put('/article-settings/{article}', [ArticleSettingController::class, 'update']);
 });
-
-
-// Route::get('/frontend/articles', function () {
-//     \Log::info('articles');
-// });

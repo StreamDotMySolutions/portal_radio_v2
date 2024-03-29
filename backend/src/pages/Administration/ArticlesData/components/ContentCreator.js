@@ -74,7 +74,7 @@ const ContentCreator = () => {
 
             <Row>
                 <Col>
-                {/* <CreateModal /> */}
+           
                    
                     <Col className="d-flex justify-content-center border border-3 border-dotted bg-light p-3" >
                    
