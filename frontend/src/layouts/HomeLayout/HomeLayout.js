@@ -1,13 +1,17 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import NavBar from './components/NavBar';
-import { Container } from 'react-bootstrap';
+import { Col,Container } from 'react-bootstrap';
+import { Menu1, Menu2 } from './components/Menu';
 
 const HomeLayout = () => {
     return (
         <>
-            <NavBar />
-            <Container>  
+            <Menu1 />
+            <Container className=''> 
+                <Col className="border border-1">
+                    <Menu2 />
+                </Col>
+                
                 <Outlet />
             </Container>
         </>

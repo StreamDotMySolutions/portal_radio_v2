@@ -17,10 +17,11 @@ export default function ArticleSetting() {
     const handleShow = () => setShow(true)
 
     const handleShowClick = () =>{
-      //store.emptyData() // empty store data
-      store.setValue('errors', null)
-      store.setValue('published_start', null)
-      store.setValue('published_end', null)
+      store.emptyData() // empty store data
+      // store.setValue('url', null)
+      // store.setValue('errors', null)
+      // store.setValue('published_start', null)
+      // store.setValue('published_end', null)
 
       setShow(true)
 
@@ -30,10 +31,15 @@ export default function ArticleSetting() {
           url: `${store.url}/article-settings/${parentId}`,
           })
       .then( response => { // success 200
-          console.log(response)
+          //console.log(response)
           if( response?.data?.article_setting.hasOwnProperty('active') ){
             store.setValue('active', response?.data?.article_setting?.active )
           }
+
+          if( response?.data?.article_setting.hasOwnProperty('redirect_url') ){
+            store.setValue('redirect_url', response?.data?.article_setting?.redirect_url )
+          }
+
           if( response?.data?.article_setting.hasOwnProperty('published_start') ){
             store.setValue('published_start', response?.data?.article_setting?.published_start )
           }
@@ -49,7 +55,9 @@ export default function ArticleSetting() {
     } 
 
     const handleCloseClick = () => {
+      store.emptyData()
       handleClose()
+      
     }
 
 
@@ -61,6 +69,7 @@ export default function ArticleSetting() {
         const formData = new FormData();
         const dataArray = [
             { key: 'active', value: store.getValue('active') },
+            { key: 'redirect_url', value: store.getValue('redirect_url') },
             { key: 'published_start', value: store.getValue('published_start') },
             { key: 'published_end', value: store.getValue('published_end') },
         ];
@@ -118,6 +127,17 @@ export default function ArticleSetting() {
                   { label: 'No', value: 0 }
                 ]}
                 />
+            </Form.Group>
+            <hr />
+            <Form.Group>
+              <Form.Label><h6>Redirect Link</h6></Form.Label>
+             
+                  <InputText 
+                    placeholder={'http://somewebsite.com'}
+                    icon='fa-globe' 
+                    fieldName='redirect_url' 
+                  />
+             
             </Form.Group>
             <hr />
             <Form.Group>

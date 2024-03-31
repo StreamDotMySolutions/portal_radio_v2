@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('article_id'); // article
             
             $table->string('layout')->nullable(); // if type = list, choose the layout style
-            $table->string('url')->nullable(); // url 
+            $table->string('redirect_url')->nullable(); // url 
 
             $table->date('published_start')->default(Carbon::now());  // Set default value to current date and time
             $table->date('published_end')->nullable();  // datetime
