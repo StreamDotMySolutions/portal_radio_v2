@@ -15,7 +15,7 @@ function NavBarFetch({id}) {
   useEffect( () => {
     axios(`${url}/articles/${id}`)
     .then( response => {
-      console.log(response)
+      //console.log(response)
       setArticles(response.data.articles)
     })
     .catch( error => {
