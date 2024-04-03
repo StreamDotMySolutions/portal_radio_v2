@@ -13,6 +13,7 @@ use App\Http\Controllers\Backend\{
     ArticleAssetController,
     ArticleDataController,
     ArticleSettingController,
+    BannerController,
 };
 
 Auth::routes();
@@ -91,4 +92,11 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     // Article Settings
     Route::get('/article-settings/{article}', [ArticleSettingController::class, 'show']);
     Route::put('/article-settings/{article}', [ArticleSettingController::class, 'update']);
+
+    
+    // Banner Settings
+    Route::get('/banners', [BannerController::class, 'index']);
+    Route::get('/banners/{banner}', [BannerController::class, 'show']);
+    Route::post('/banners', [BannerController::class, 'store']);
+    Route::put('/banners/{banner}', [BannerController::class, 'update']);
 });

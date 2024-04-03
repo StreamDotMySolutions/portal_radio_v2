@@ -25,6 +25,7 @@ function TopNavbar() {
                 </NavDropdown>
 
                 <Nav.Link as={NavLink} to="/administration/articles/0"> <FontAwesomeIcon icon="fa-solid fa-file" />{' '}Article</Nav.Link>
+                <Nav.Link as={NavLink} to="/administration/banners"> <FontAwesomeIcon icon="fa-solid fa-image" />{' '}Banner</Nav.Link>
               </Nav>
            <Account />
         </Navbar.Collapse>

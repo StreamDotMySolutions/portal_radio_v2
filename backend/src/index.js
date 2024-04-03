@@ -31,6 +31,7 @@ import RoleManagement from './pages/Administration/Roles'
 import UserManagement from './pages/Administration/Users'
 import ArticleManagement from './pages/Administration/Articles'
 import ArticleDataManagement from './pages/Administration/ArticlesData'
+import BannerManagement from './pages/Administration/Banners'
 library.add(fas)
 
 export default function App() {
@@ -60,6 +61,7 @@ export default function App() {
                 <Route path="/administration/users" element={<UserManagement />} />
                 <Route path="/administration/articles/:parentId" element={<ArticleManagement />} />
                 <Route path="/administration/articles-data/:parentId" element={<ArticleDataManagement />} />
+                <Route path="/administration/banners" element={<BannerManagement />} />
               </Route>
             </Route>
         </Routes>

@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { Button, Modal} from 'react-bootstrap'
-import { InputText, InputTextarea } from '../../../../libs/FormInput'
+import { Button, Modal, Form} from 'react-bootstrap'
+import { appendFormData } from '../../../../libs/FormInput'
 import axios from '../../../../libs/axios'
-import useStore from '../../../store' // zustand
+import useStore from '../../../store'
 import HtmlForm from '../components/HtmlForm'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export default function CreateModal() {
+export default function DeleteModal({id}) {
     const store = useStore()
     const errors = store.getValue('errors')
    
@@ -13,16 +14,34 @@ export default function CreateModal() {
     const [isLoading, setIsLoading] = useState(false)
     const handleClose = () => setShow(false)
     const handleShow = () => setShow(true)
+    const handleCloseClick = () => {
+        handleClose()
+    }
 
+    /**
+     * When user click edit, load the data
+     */
     const handleShowClick = () =>{
       store.emptyData() // empty store data
       setShow(true)
+
+        // fetch data from server using given id
+        axios({ 
+            method: 'get', 
+            url: `${store.url}/articles/${id}`,
+            })
+        .then( response => { // success 200
+            //console.log(response)
+            if( response?.data?.article.hasOwnProperty('title') ){
+              store.setValue('title', response?.data?.article?.title )
+            }
+            setIsLoading(false) // animation
+            })
+        .catch( error => {
+            console.warn(error)
+            setIsLoading(false) // animation
+        })
     } 
-
-    const handleCloseClick = () => {
-      handleClose()
-    }
-
 
     /**
      * When user click submit button
@@ -31,16 +50,17 @@ export default function CreateModal() {
         
         const formData = new FormData() // data container
        
-        if (store.getValue('name') != null ) {  // get role name entered by user
-            formData.append('name', store.getValue('name')); // append to formData
+        if (store.getValue('acknowledge') != null ) {  // get role acknowledge entered by user
+            formData.append('acknowledge', store.getValue('acknowledge')); // append to formData
         }
+
         // Laravel special
-        formData.append('_method', 'post'); // get|post|put|patch|delete
+        formData.append('_method', 'delete'); // get|post|put|patch|delete
 
         // send to Laravel
         axios({ 
             method: 'post', 
-            url: `${store.url}/roles`,
+            url: `${store.url}/articles/${id}`,
             data: formData
           })
           .then( response => { // success 200
@@ -53,7 +73,7 @@ export default function CreateModal() {
             //console.warn(error)
             
             if( error.response?.status == 422 ){ // detect 422 errors by Laravel
-              console.log(error.response.data.errors)
+              //console.log(error.response.data.errors)
               store.setValue('errors', error.response.data.errors ) // set the errors to store
             }
             setIsLoading(false) // animation
@@ -62,20 +82,32 @@ export default function CreateModal() {
   
     return (
       <>
-        <Button variant="primary" onClick={handleShowClick}>
-          Create
+        <Button size="sm" variant="outline-danger" onClick={handleShowClick}>
+        <FontAwesomeIcon icon={['fas', 'trash']} />{' '}Delete
         </Button>
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
-            <Modal.Title>Create Role</Modal.Title>
+            <Modal.Title>Delete Article</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
-            <HtmlForm isLoading={isLoading} />
+            <HtmlForm isLoading={isLoading} />        
           </Modal.Body>
           
           <Modal.Footer>
+
+            <Form.Check
+              className='me-4'
+              isInvalid={errors?.hasOwnProperty('acknowledge')}
+              reverse
+              disabled={isLoading}
+              label="acknowledge"
+              type="checkbox"
+              onClick={ () => store.setValue('errors', null) }
+              onChange={ (e) => store.setValue('acknowledge', true) }
+            />
+
             <Button 
               disabled={isLoading}
               variant="secondary" 
@@ -85,9 +117,9 @@ export default function CreateModal() {
 
             <Button 
               disabled={isLoading}
-              variant="primary" 
+              variant="danger" 
               onClick={handleSubmitClick}>
-              Submit
+              Delete
             </Button>
 
           </Modal.Footer>

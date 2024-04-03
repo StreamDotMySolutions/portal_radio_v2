@@ -1,7 +1,7 @@
 import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 //import { useAuthStore } from "../stores/AuthStore"
-import useAuthStore from '../pages/Auth/stores/AuthStore'
+import useAuthStore from '../pages/Auth/stores/AuthStore' // zustand store management
 
 const ProtectedRoute = () => {
 

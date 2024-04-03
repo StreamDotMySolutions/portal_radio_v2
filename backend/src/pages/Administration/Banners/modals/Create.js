@@ -1,12 +1,15 @@
 import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 import { Button, Modal} from 'react-bootstrap'
-import { InputText, InputTextarea } from '../../../../libs/FormInput'
+import { appendFormData } from '../../../../libs/FormInput'
 import axios from '../../../../libs/axios'
-import useStore from '../../../store' // zustand
+import useStore from '../../../store'
 import HtmlForm from '../components/HtmlForm'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function CreateModal() {
     const store = useStore()
+    const { parentId } = useParams() // parentid
     const errors = store.getValue('errors')
    
     const [show, setShow] = useState(false)
@@ -28,24 +31,28 @@ export default function CreateModal() {
      * When user click submit button
      */
     const handleSubmitClick = () => {
+    
+        const formData = new FormData();
+        const dataArray = [
+            { key: 'title', value: store.getValue('title') },
+            { key: 'description', value: store.getValue('description') }, 
+            { key: 'banner', value: store.getValue('banner') },
+        ];
         
-        const formData = new FormData() // data container
-       
-        if (store.getValue('name') != null ) {  // get role name entered by user
-            formData.append('name', store.getValue('name')); // append to formData
-        }
+        appendFormData(formData, dataArray);
+
         // Laravel special
         formData.append('_method', 'post'); // get|post|put|patch|delete
 
         // send to Laravel
         axios({ 
             method: 'post', 
-            url: `${store.url}/roles`,
+            url: `${store.url}/banners`,
             data: formData
           })
           .then( response => { // success 200
             //console.log(response)
-            store.setValue('refresh', true) // to force useEffect get new data for index
+            useStore.setState({ 'refresh':true  }) // to force useEffect get new data for index
             setIsLoading(false) // animation
             handleClose() // close the modal
           })
@@ -63,12 +70,12 @@ export default function CreateModal() {
     return (
       <>
         <Button variant="primary" onClick={handleShowClick}>
-          Create
+          <FontAwesomeIcon icon={['fas', 'file']} />{' '}Create
         </Button>
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
-            <Modal.Title>Create Role</Modal.Title>
+            <Modal.Title>Create Banner</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
