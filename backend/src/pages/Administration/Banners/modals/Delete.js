@@ -28,12 +28,18 @@ export default function DeleteModal({id}) {
         // fetch data from server using given id
         axios({ 
             method: 'get', 
-            url: `${store.url}/articles/${id}`,
+            url: `${store.url}/banners/${id}`,
             })
         .then( response => { // success 200
             //console.log(response)
-            if( response?.data?.article.hasOwnProperty('title') ){
-              store.setValue('title', response?.data?.article?.title )
+            if( response?.data?.banner.hasOwnProperty('title') ){
+              store.setValue('title', response?.data?.banner?.title )
+            }
+            if( response?.data?.banner.hasOwnProperty('description') ){
+              store.setValue('description', response?.data?.banner?.description )
+            }
+            if( response?.data?.banner.hasOwnProperty('filename') ){
+              store.setValue('filename', response?.data?.banner?.filename )
             }
             setIsLoading(false) // animation
             })
@@ -60,7 +66,7 @@ export default function DeleteModal({id}) {
         // send to Laravel
         axios({ 
             method: 'post', 
-            url: `${store.url}/articles/${id}`,
+            url: `${store.url}/banners/${id}`,
             data: formData
           })
           .then( response => { // success 200
@@ -88,7 +94,7 @@ export default function DeleteModal({id}) {
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
-            <Modal.Title>Delete Article</Modal.Title>
+            <Modal.Title>Delete Banner</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>

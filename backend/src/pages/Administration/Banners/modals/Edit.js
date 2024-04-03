@@ -42,6 +42,7 @@ export default function EditModal({id}) {
               store.setValue('filename', response?.data?.banner?.filename )
             }
             setIsLoading(false) // animation
+            store.setValue('refresh', true) // to force useEffect get new data for index
             })
         .catch( error => {
             console.warn(error)

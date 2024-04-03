@@ -54,6 +54,7 @@ export default function CreateModal() {
             //console.log(response)
             useStore.setState({ 'refresh':true  }) // to force useEffect get new data for index
             setIsLoading(false) // animation
+            store.setValue('refresh', true) // to force useEffect get new data for index
             handleClose() // close the modal
           })
           .catch( error => {
