@@ -12,7 +12,7 @@ class BannerController extends Controller
     public function index(){
 
         //$banners = Banner::defaultOrder()->get();
-        $banners = Banner::paginate(10)->withQueryString(); 
+        $banners = Banner::defaultOrder()->paginate(10)->withQueryString(); 
 
         if ($banners->isEmpty()) {
             return response()->json(['message' => 'No banners found'], 404);
@@ -41,6 +41,7 @@ class BannerController extends Controller
                 'user_id' =>  auth('sanctum')->user()->id,
                 'title' => $request->input('title'),
                 'description' => $request->input('description'),
+                'redirect_url' => $request->input('redirect_url'),
                 'filename' => CommonService::handleStoreFile($request->file('banner'), $directory = 'banners'),
             ]);
 
@@ -70,8 +71,36 @@ class BannerController extends Controller
         }
     }
 
-    public function delete(Banner $banner){
-        \Log::info($banner);
+    public function delete(Request $request,Banner $banner){
+
+        $data = $request->validate([
+            'acknowledge' => 'required',
+        ]);
+
+        //\Log::info($banner);
+        CommonService::handleDeleteFile($banner->filename, $directory = 'banners');
+
+        if ( $banner->delete() ) {
+            return response()->json(['message' => 'Banner successfully deleted']);
+        } else {
+            return response()->json(['message' => 'Banner delete failed'], 500);
+        }
+        
+    }
+
+    public function ordering(Banner $banner, Request $request)
+    {
+        \Log::info($request);
+        // reference https://github.com/lazychaser/laravel-nestedset
+        switch($request->input('direction')){
+            case 'up':
+                $banner->up(); // banner ordering up
+                break;
+            case 'down':
+                $banner->down(); //  // banner ordering down
+            break;
+        }
+        
     }
 
 }

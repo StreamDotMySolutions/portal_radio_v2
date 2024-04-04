@@ -28,21 +28,18 @@ export default function DeleteModal({id}) {
         // fetch data from server using given id
         axios({ 
             method: 'get', 
-            url: `${store.url}/banners/${id}`,
+            url: `${store.url}/programmes/${id}`,
             })
         .then( response => { // success 200
             //console.log(response)
-            if( response?.data?.banner.hasOwnProperty('title') ){
-              store.setValue('title', response?.data?.banner?.title )
+            if( response?.data?.programme.hasOwnProperty('title') ){
+              store.setValue('title', response?.data?.programme?.title )
             }
-            if( response?.data?.banner.hasOwnProperty('description') ){
-              store.setValue('description', response?.data?.banner?.description )
+            if( response?.data?.programme.hasOwnProperty('redirect_url') ){
+              store.setValue('redirect_url', response?.data?.programme?.redirect_url )
             }
-            if( response?.data?.banner.hasOwnProperty('redirect_url') ){
-              store.setValue('redirect_url', response?.data?.banner?.redirect_url )
-            }
-            if( response?.data?.banner.hasOwnProperty('filename') ){
-              store.setValue('filename', response?.data?.banner?.filename )
+            if( response?.data?.programme.hasOwnProperty('filename') ){
+              store.setValue('filename', response?.data?.programme?.filename )
             }
             setIsLoading(false) // animation
             })
@@ -69,7 +66,7 @@ export default function DeleteModal({id}) {
         // send to Laravel
         axios({ 
             method: 'post', 
-            url: `${store.url}/banners/${id}`,
+            url: `${store.url}/programmes/${id}`,
             data: formData
           })
           .then( response => { // success 200
@@ -97,7 +94,7 @@ export default function DeleteModal({id}) {
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
-            <Modal.Title>Delete Banner</Modal.Title>
+            <Modal.Title>Delete Programme</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>

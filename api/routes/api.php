@@ -14,6 +14,7 @@ use App\Http\Controllers\Backend\{
     ArticleDataController,
     ArticleSettingController,
     BannerController,
+    ProgrammeController,
 };
 
 Auth::routes();
@@ -99,4 +100,18 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::get('/banners/{banner}', [BannerController::class, 'show']);
     Route::post('/banners', [BannerController::class, 'store']);
     Route::put('/banners/{banner}', [BannerController::class, 'update']);
+    Route::post('/banners', [BannerController::class, 'store']);
+    Route::delete('/banners/{banner}', [BannerController::class, 'delete']);
+    Route::get('/banners/ordering/{banner}', [BannerController::class, 'ordering']);
+
+    // Programmes Settings
+    Route::get('/programmes', [ProgrammeController::class, 'index']);
+    Route::get('/programmes/{programme}', [ProgrammeController::class, 'show']);
+    Route::post('/programmes', [ProgrammeController::class, 'store']);
+    Route::put('/programmes/{programme}', [ProgrammeController::class, 'update']);
+    Route::post('/programmes', [ProgrammeController::class, 'store']);
+    Route::delete('/programmes/{programme}', [ProgrammeController::class, 'delete']);
+    Route::get('/programmes/ordering/{programme}', [ProgrammeController::class, 'ordering']);
+
+
 });

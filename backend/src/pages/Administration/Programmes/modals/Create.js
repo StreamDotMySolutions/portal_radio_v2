@@ -35,9 +35,8 @@ export default function CreateModal() {
         const formData = new FormData();
         const dataArray = [
             { key: 'title', value: store.getValue('title') },
-            { key: 'description', value: store.getValue('description') }, 
             { key: 'redirect_url', value: store.getValue('redirect_url') }, 
-            { key: 'banner', value: store.getValue('banner') },
+            { key: 'programme', value: store.getValue('programme') },
         ];
         
         appendFormData(formData, dataArray);
@@ -48,7 +47,7 @@ export default function CreateModal() {
         // send to Laravel
         axios({ 
             method: 'post', 
-            url: `${store.url}/banners`,
+            url: `${store.url}/programmes`,
             data: formData
           })
           .then( response => { // success 200
@@ -77,7 +76,7 @@ export default function CreateModal() {
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
-            <Modal.Title>Create Banner</Modal.Title>
+            <Modal.Title>Create Programme</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>

@@ -30,6 +30,6 @@ class CommonService
     public static function handleDeleteFile($filename, $directory)
     {
         // delete the file on disk
-        Storage::disk('public')->delete("{$directory}/{$filename}");
+        return Storage::disk('public')->delete("{$directory}/{$filename}");
     }
 }

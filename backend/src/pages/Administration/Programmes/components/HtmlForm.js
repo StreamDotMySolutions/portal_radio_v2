@@ -3,7 +3,6 @@ import { InputText,InputFile } from '../../../../libs/FormInput';
 import { Row,Col, Image, Figure } from 'react-bootstrap';
 import useStore from '../../../store';
 
-
 const HtmlForm = ({isLoading}) => {
     const store = useStore()
     return (
@@ -20,21 +19,12 @@ const HtmlForm = ({isLoading}) => {
             
             <Col className='mb-2'>
                 <InputText 
-                    fieldName='description' 
-                    placeholder='Short Description'  
-                    icon='fa-solid fa-pencil'
-                    isLoading={isLoading}
-                />
-
-            </Col>
-
-            <Col className='mb-2'>
-                <InputText 
                     fieldName='redirect_url' 
-                    placeholder='URL'  
+                    placeholder='https://....'  
                     icon='fa-solid fa-globe'
                     isLoading={isLoading}
                 />
+
             </Col>
             
             <Col className='mb-2'>
@@ -42,14 +32,14 @@ const HtmlForm = ({isLoading}) => {
 
                     <Figure>
                         <Figure.Image
-                            src={`${store.server}/storage/banners/${store.getValue('filename')}`}
+                            src={`${store.server}/storage/programmes/${store.getValue('filename')}`}
                         />
                     </Figure>
                           
                 :
                     <InputFile
-                        fieldName='banner' 
-                        placeholder='Choose banner'  
+                        fieldName='programme' 
+                        placeholder='Choose image'  
                         icon='fa-solid fa-image'
                         isLoading={isLoading}
                     />

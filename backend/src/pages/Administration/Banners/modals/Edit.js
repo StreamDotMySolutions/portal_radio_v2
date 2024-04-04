@@ -38,6 +38,9 @@ export default function EditModal({id}) {
             if( response?.data?.banner.hasOwnProperty('description') ){
               store.setValue('description', response?.data?.banner?.description )
             }
+            if( response?.data?.banner.hasOwnProperty('redirect_url') ){
+              store.setValue('redirect_url', response?.data?.banner?.redirect_url )
+            }
             if( response?.data?.banner.hasOwnProperty('filename') ){
               store.setValue('filename', response?.data?.banner?.filename )
             }
@@ -58,7 +61,8 @@ export default function EditModal({id}) {
       const formData = new FormData();
       const dataArray = [
         { key: 'title', value: store.getValue('title') },
-        { key: 'description', value: store.getValue('description') }, ,
+        { key: 'description', value: store.getValue('description') }, 
+        { key: 'redirect_url', value: store.getValue('redirect_url') }, 
       ];
       
       appendFormData(formData, dataArray);
