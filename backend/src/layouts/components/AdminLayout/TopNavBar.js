@@ -19,14 +19,20 @@ function TopNavbar() {
               <Nav>
                 <Nav.Link as={NavLink} to="/"> <FontAwesomeIcon icon="fa-solid fa-home" />{' '}Home</Nav.Link>
 
-                <NavDropdown title={ <span><FontAwesomeIcon icon="fa-solid fa-cog" />{' '}Manage</span> } id="basic-nav-dropdown">
+                <NavDropdown title={ <span><FontAwesomeIcon icon="fa-solid fa-cog" />{' '}System</span> } id="basic-nav-dropdown">
                   <NavDropdown.Item as={NavLink} to="/administration/roles"><FontAwesomeIcon icon="fa-solid fa-person" />{' '}Roles</NavDropdown.Item>
                   <NavDropdown.Item as={NavLink} to="/administration/users"><FontAwesomeIcon icon="fa-solid fa-user" />{' '}Users</NavDropdown.Item>
                 </NavDropdown>
 
+                <NavDropdown title={ <span><FontAwesomeIcon icon="fa-solid fa-cog" />{' '}Frontpage</span> } id="basic-nav-dropdown">
+                  <NavDropdown.Item as={NavLink} to="/administration/banners"><FontAwesomeIcon icon="fa-solid fa-image" />{' '}Carausel</NavDropdown.Item>
+                  <NavDropdown.Item as={NavLink} to="/administration/programmes"><FontAwesomeIcon icon="fa-solid fa-list" />{' '}Programme</NavDropdown.Item>
+                  <NavDropdown.Item as={NavLink} to="/administration/videos"><FontAwesomeIcon icon="fa-solid fa-video" />{' '}Video</NavDropdown.Item>
+                </NavDropdown>
+
+
                 <Nav.Link as={NavLink} to="/administration/articles/0"> <FontAwesomeIcon icon="fa-solid fa-file" />{' '}Article</Nav.Link>
-                <Nav.Link as={NavLink} to="/administration/banners"> <FontAwesomeIcon icon="fa-solid fa-image" />{' '}Banner</Nav.Link>
-                <Nav.Link as={NavLink} to="/administration/programmes"> <FontAwesomeIcon icon="fa-solid fa-image" />{' '}Programme</Nav.Link>
+         
               </Nav>
            <Account />
         </Navbar.Collapse>

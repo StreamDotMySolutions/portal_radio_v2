@@ -33,6 +33,7 @@ import ArticleManagement from './pages/Administration/Articles'
 import ArticleDataManagement from './pages/Administration/ArticlesData'
 import BannerManagement from './pages/Administration/Banners'
 import ProgrammeManagement from './pages/Administration/Programmes'
+import VideoManagement from './pages/Administration/Videos'
 library.add(fas)
 
 export default function App() {
@@ -64,6 +65,7 @@ export default function App() {
                 <Route path="/administration/articles-data/:parentId" element={<ArticleDataManagement />} />
                 <Route path="/administration/banners" element={<BannerManagement />} />
                 <Route path="/administration/programmes" element={<ProgrammeManagement />} />
+                <Route path="/administration/videos" element={<VideoManagement />} />
               </Route>
             </Route>
         </Routes>
