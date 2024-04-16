@@ -28,21 +28,19 @@ export default function EditModal({id}) {
         // fetch data from server using given id
         axios({ 
             method: 'get', 
-            url: `${store.url}/programmes/${id}`,
+            url: `${store.url}/videos/${id}`,
             })
         .then( response => { // success 200
-            //console.log(response)
-            if( response?.data?.programme.hasOwnProperty('title') ){
-              store.setValue('title', response?.data?.programme?.title )
+            console.log(response)
+            if( response?.data?.video.hasOwnProperty('title') ){
+              store.setValue('title', response?.data?.video?.title )
             }
-            if( response?.data?.programme.hasOwnProperty('redirect_url') ){
-              store.setValue('redirect_url', response?.data?.programme?.redirect_url )
+            if( response?.data?.video.hasOwnProperty('redirect_url') ){
+              store.setValue('redirect_url', response?.data?.video?.redirect_url )
             }
-            if( response?.data?.programme.hasOwnProperty('filename') ){
-              store.setValue('filename', response?.data?.programme?.filename )
-            }
+
             setIsLoading(false) // animation
-            store.setValue('refresh', true) // to force useEffect get new data for index
+            store.setValue('refresh_videos', true) // to force useEffect get new data for index
             })
         .catch( error => {
             console.warn(error)
@@ -58,7 +56,7 @@ export default function EditModal({id}) {
       const formData = new FormData();
       const dataArray = [
         { key: 'title', value: store.getValue('title') },
-        { key: 'url', value: store.getValue('url') }, 
+        { key: 'redirect_url', value: store.getValue('redirect_url') }, 
       ];
       
       appendFormData(formData, dataArray);
@@ -68,12 +66,12 @@ export default function EditModal({id}) {
         // send to Laravel
         axios({ 
             method: 'post', 
-            url: `${store.url}/programmes/${id}`,
+            url: `${store.url}/videos/${id}`,
             data: formData
           })
           .then( response => { // success 200
             //console.log(response)
-            store.setValue('refresh', true) // to force useEffect get new data for index
+            store.setValue('refresh_videos', true) // to force useEffect get new data for index
             setIsLoading(false) // animation
             handleClose() // close the modal
           })
@@ -96,11 +94,14 @@ export default function EditModal({id}) {
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
-            <Modal.Title>Edit Programme</Modal.Title>
+            <Modal.Title>Edit Video</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
             <HtmlForm isLoading={isLoading} />
+            <br />
+            <FontAwesomeIcon icon={['fas', 'video']} />{' '}<a href={store.getValue('redirect_url')} target="_blank">Watch</a>
+           
           </Modal.Body>
           
           <Modal.Footer>

@@ -71,7 +71,7 @@ export default function DeleteModal({id}) {
           })
           .then( response => { // success 200
             //console.log(response)
-            store.setValue('refresh', true) // to force useEffect get new data for index
+            store.setValue('refresh_programmes', true) // to force useEffect get new data for index
             setIsLoading(false) // animation
             handleClose() // close the modal
           })

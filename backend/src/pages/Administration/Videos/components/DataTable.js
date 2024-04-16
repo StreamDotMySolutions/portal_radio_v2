@@ -14,7 +14,7 @@ import Ordering from './Ordering'
 const Index = () => {
     const store = useStore() // store management
     const { parentId } = useParams() // parentid
-    const url = store.url + '/programmes' // set the index url to /api/articles/node/{parentId}
+    const url = store.url + '/videos' // set the index url to /api/articles/node/{parentId}
     const [items, setItems] = useState([]) // data placeholder
     
     // to get items data
@@ -29,8 +29,8 @@ const Index = () => {
             )
             .then( response => { // response block
                 //console.log(response)
-                setItems(response.data.programmes) // get the data
-                store.setValue('refresh', false ) // reset the refresh state to false
+                setItems(response.data.videos) // get the data
+                store.setValue('refresh_videos', false ) // reset the refresh state to false
             })
             .catch( error => { // error block
                 console.warn(error) // output to console
@@ -38,7 +38,7 @@ const Index = () => {
       },
         [
             //store.getValue('url'), // listener when url changed by pagination click
-            store.getValue('refresh'), // listener when create / update / delete / search performed
+            store.getValue('refresh_videos'), // listener when create / update / delete / search performed
             parentId // when use navigate to parent
         ] 
 

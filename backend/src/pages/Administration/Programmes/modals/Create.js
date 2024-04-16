@@ -52,9 +52,9 @@ export default function CreateModal() {
           })
           .then( response => { // success 200
             //console.log(response)
-            useStore.setState({ 'refresh':true  }) // to force useEffect get new data for index
+           
             setIsLoading(false) // animation
-            store.setValue('refresh', true) // to force useEffect get new data for index
+            store.setValue('refresh_programmes', true) // to force useEffect get new data for index
             handleClose() // close the modal
           })
           .catch( error => {

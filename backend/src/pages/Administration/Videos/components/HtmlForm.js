@@ -27,25 +27,7 @@ const HtmlForm = ({isLoading}) => {
 
             </Col>
             
-            <Col className='mb-2'>
-                {store.getValue('filename') ? 
-
-                    <Figure>
-                        <Figure.Image
-                            src={`${store.server}/storage/programmes/${store.getValue('filename')}`}
-                        />
-                    </Figure>
-                          
-                :
-                    <InputFile
-                        fieldName='programme' 
-                        placeholder='Choose image'  
-                        icon='fa-solid fa-image'
-                        isLoading={isLoading}
-                    />
-                }
-            </Col>
-        
+    
         </>
     );
 };

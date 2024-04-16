@@ -15,6 +15,7 @@ use App\Http\Controllers\Backend\{
     ArticleSettingController,
     BannerController,
     ProgrammeController,
+    VideoController,
 };
 
 Auth::routes();
@@ -112,6 +113,15 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::post('/programmes', [ProgrammeController::class, 'store']);
     Route::delete('/programmes/{programme}', [ProgrammeController::class, 'delete']);
     Route::get('/programmes/ordering/{programme}', [ProgrammeController::class, 'ordering']);
+
+    // Videos Settings
+    Route::get('/videos', [VideoController::class, 'index']);
+    Route::get('/videos/{video}', [VideoController::class, 'show']);
+    Route::post('/videos', [VideoController::class, 'store']);
+    Route::put('/videos/{video}', [VideoController::class, 'update']);
+    Route::post('/videos', [VideoController::class, 'store']);
+    Route::delete('/videos/{video}', [VideoController::class, 'delete']);
+    Route::get('/videos/ordering/{video}', [VideoController::class, 'ordering']);
 
 
 });

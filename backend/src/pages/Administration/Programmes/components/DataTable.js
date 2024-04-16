@@ -30,7 +30,7 @@ const Index = () => {
             .then( response => { // response block
                 //console.log(response)
                 setItems(response.data.programmes) // get the data
-                store.setValue('refresh', false ) // reset the refresh state to false
+                store.setValue('refresh_programmes', false ) // reset the refresh state to false
             })
             .catch( error => { // error block
                 console.warn(error) // output to console
@@ -38,7 +38,7 @@ const Index = () => {
       },
         [
             //store.getValue('url'), // listener when url changed by pagination click
-            store.getValue('refresh'), // listener when create / update / delete / search performed
+            store.getValue('refresh_programmes'), // listener when create / update / delete / search performed
             parentId // when use navigate to parent
         ] 
 

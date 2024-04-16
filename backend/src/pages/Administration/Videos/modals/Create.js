@@ -36,7 +36,7 @@ export default function CreateModal() {
         const dataArray = [
             { key: 'title', value: store.getValue('title') },
             { key: 'redirect_url', value: store.getValue('redirect_url') }, 
-            { key: 'programme', value: store.getValue('programme') },
+
         ];
         
         appendFormData(formData, dataArray);
@@ -47,14 +47,14 @@ export default function CreateModal() {
         // send to Laravel
         axios({ 
             method: 'post', 
-            url: `${store.url}/programmes`,
+            url: `${store.url}/videos`,
             data: formData
           })
           .then( response => { // success 200
             //console.log(response)
-            useStore.setState({ 'refresh':true  }) // to force useEffect get new data for index
+        
             setIsLoading(false) // animation
-            store.setValue('refresh', true) // to force useEffect get new data for index
+            store.setValue('refresh_videos', true) // to force useEffect get new data for index
             handleClose() // close the modal
           })
           .catch( error => {
@@ -76,7 +76,7 @@ export default function CreateModal() {
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
-            <Modal.Title>Create Programme</Modal.Title>
+            <Modal.Title>Create Video</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
