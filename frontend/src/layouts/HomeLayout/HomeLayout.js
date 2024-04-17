@@ -3,21 +3,12 @@ import { Outlet } from 'react-router-dom';
 import { Col,Container,Row,Carausel,Image } from 'react-bootstrap';
 import Carousel from 'react-bootstrap/Carousel';
 import { Menu1, Menu2 } from './components/Menu';
+import HomeBanner from './components/HomeBanner';
+import HomeProgramme from './components/HomeProgramme';
+import HomeVideo from './components/HomeVideo';
 
 const HomeLayout = () => {
 
-    const images = [];
-    for (let i = 0; i < 8; i++) {
-        images.push(
-            <li key={i} style={{ display: 'inline-block', marginRight: '10px' }}>
-                <Image
-                    className="d-block rounded"
-                    src="https://via.placeholder.com/150x100"
-                    alt={`Slide ${i + 1}`}
-                />
-            </li>
-        );
-    }
     
     return (
         <>
@@ -29,47 +20,17 @@ const HomeLayout = () => {
 
                 <Col  style={{'minHeight': '10px'}}></Col>
 
-                <Carousel>
-                    <Carousel.Item>
-                        <Image
-                            className="d-block w-100"
-                            src="https://via.placeholder.com/800x400" // Placeholder image URL
-                            alt="First slide"
-                        />
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <Image
-                            className="d-block w-100"
-                            src="https://via.placeholder.com/800x400" // Placeholder image URL
-                            alt="Second slide"
-                        />
-                    </Carousel.Item>
-                    <Carousel.Item>
-                        <Image
-                            className="d-block w-100"
-                            src="https://via.placeholder.com/800x400" // Placeholder image URL
-                            alt="Third slide"
-                        />
-                    </Carousel.Item>
-                </Carousel>
+                <HomeBanner />
+                
                 <Col style={{'minHeight': '20px'}}></Col>
                 
-                <Col>
-                    <ul className='text-center' style={{ listStyleType: 'none', padding: 0 }}>
-                        {images}
-                    </ul>
-                </Col>
+                <HomeProgramme />
 
                 <Col  style={{'minHeight': '10px'}}></Col>
                 
                 <Col className="border border-1" style={{'minHeight': '300px'}}>
-                    {/* <Outlet /> */}
-                    <Row>
-                        <Col className='bg-secondary m-4 rounded ' style={{'minHeight': '300px'}}></Col>
-                        <Col className='bg-secondary m-4 rounded'  style={{'minHeight': '300px'}}></Col>
-                        <Col className='bg-secondary m-4 rounded'  style={{'minHeight': '300px'}}></Col>
-                        <Col className='bg-secondary m-4 rounded'  style={{'minHeight': '300px'}}></Col>
-                    </Row>
+               
+                <HomeVideo />
                 
                 </Col>
                 <Col  style={{'minHeight': '20px'}}></Col>

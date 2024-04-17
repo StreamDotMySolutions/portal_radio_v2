@@ -50,7 +50,7 @@ export function Menu2() {
     
     axios(`${url}/articles/50`)
     .then( response => {
-      console.log(response)
+      //console.log(response)
       setMenu(response.data.articles)
     })
 
