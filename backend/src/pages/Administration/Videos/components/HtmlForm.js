@@ -26,6 +26,26 @@ const HtmlForm = ({isLoading}) => {
                 />
 
             </Col>
+
+             
+            <Col className='mb-2'>
+                {store.getValue('filename') ? 
+
+                    <Figure>
+                        <Figure.Image
+                            src={`${store.server}/storage/videos/${store.getValue('filename')}`}
+                        />
+                    </Figure>
+                          
+                :
+                    <InputFile
+                        fieldName='poster' 
+                        placeholder='Choose image'  
+                        icon='fa-solid fa-image'
+                        isLoading={isLoading}
+                    />
+                }
+            </Col>
             
     
         </>

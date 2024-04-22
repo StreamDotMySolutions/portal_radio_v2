@@ -1,36 +1,65 @@
-import  { useEffect, useState } from 'react'
-import { Image, Col, Row, Placeholder } from 'react-bootstrap'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react';
+import { Image, Col, Row, Modal, Button } from 'react-bootstrap';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
+import YouTube from 'react-youtube';
 
 const HomeVideo = () => {
+    const [showModal, setShowModal] = useState(false);
+    const [videoUrl, setVideoUrl] = useState('');
+    const [items, setItems] = useState([]);
+    const url = process.env.REACT_APP_API_URL;
+    const serverUrl = process.env.REACT_APP_SERVER_URL;
 
-    const url = process.env.REACT_APP_API_URL
-    const serverUrl = process.env.REACT_APP_SERVER_URL
-    const [items,setItems] = useState([])
+    const handleClose = () => setShowModal(false);
+    const handleShow = (url) => {
+        setVideoUrl(url);
+        setShowModal(true);
+    };
 
-    useEffect( () => {
-    
+    useEffect(() => {
         axios(`${url}/home-videos`)
-        .then( response => {
-          //console.log(response)
-          setItems(response.data.items)
-        })
-    
-      },[])
+            .then((response) => {
+                setItems(response.data.items);
+            });
+    }, []);
 
     const videoItems = () => {
-
-        return items.map( (item, index) => (
-            <Col className='bg-secondary m-4 rounded ' style={{'minHeight': '300px'}}></Col>
-        ))
-    }
-
+        return items.map((item, index) => (
+            <Col key={index} xs={12} sm={6} md={3} className='d-flex justify-content-center' style={{ minHeight: '300px' }}>
+                <Image
+                    style={{ width: '300px', cursor: 'pointer' }}
+                    className="d-block rounded"
+                    src={`${serverUrl}/storage/videos/${item.filename}`}
+                    alt={item.description}
+                    onClick={() => handleShow(item.redirect_url)}
+                />
+            </Col>
+        ));
+    };
 
     return (
-        <Row>
-            {videoItems()}
-        </Row>
+        <div>
+            <Row>
+                {videoItems()}
+            </Row>
+            <Modal size={'lg'} show={showModal} onHide={handleClose} className='bg-dark'>
+                <Modal.Header closeButton>
+                    <Modal.Title>YouTube Video</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className='text-center'>
+                    <div className="embed-responsive embed-responsive-16by9">
+                
+                        <YouTube videoId={videoUrl} className="embed-responsive-item" opts={{ playerVars: { autoplay: 1 } }} />
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </div>
     );
 };
 

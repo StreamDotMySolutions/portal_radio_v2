@@ -39,6 +39,10 @@ export default function EditModal({id}) {
               store.setValue('redirect_url', response?.data?.video?.redirect_url )
             }
 
+            if( response?.data?.video.hasOwnProperty('filename') ){
+              store.setValue('filename', response?.data?.video?.filename )
+            }
+
             setIsLoading(false) // animation
             store.setValue('refresh_videos', true) // to force useEffect get new data for index
             })

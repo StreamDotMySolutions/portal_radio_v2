@@ -15,6 +15,7 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->integer('user_id');
             $table->string('title')->nullable();
+            $table->string('filename')->nullable();
             $table->text('redirect_url')->nullable();
             $table->timestamps();
             $table->nestedSet(); // Kalnoy nestedset

@@ -36,6 +36,7 @@ export default function CreateModal() {
         const dataArray = [
             { key: 'title', value: store.getValue('title') },
             { key: 'redirect_url', value: store.getValue('redirect_url') }, 
+            { key: 'poster', value: store.getValue('poster') }, 
 
         ];
         

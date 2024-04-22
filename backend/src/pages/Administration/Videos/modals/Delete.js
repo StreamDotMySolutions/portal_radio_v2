@@ -39,6 +39,10 @@ export default function DeleteModal({id}) {
               store.setValue('redirect_url', response?.data?.video?.redirect_url )
             }
 
+            if( response?.data?.video.hasOwnProperty('filename') ){
+              store.setValue('filename', response?.data?.video?.filename )
+            }
+
             setIsLoading(false) // animation
             })
         .catch( error => {

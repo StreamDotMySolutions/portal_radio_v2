@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use Illuminate\Http\Request;
 use App\Models\Video;
+use App\Services\CommonService;
 
 
 class VideoController extends Controller
@@ -23,7 +24,8 @@ class VideoController extends Controller
         // validation
         $request->validate([
             'title' => 'required',
-            'redirect_url' => 'required|url',
+            'redirect_url' => 'required',
+            'poster' => 'required|image|mimes:jpeg,png,jpg,gif'
         ]);
 
      
@@ -32,6 +34,7 @@ class VideoController extends Controller
             'user_id' =>  auth('sanctum')->user()->id,
             'title' => $request->input('title'),
             'redirect_url' => $request->input('redirect_url'),
+            'filename' => CommonService::handleStoreFile($request->file('poster'), $directory = 'videos'),
         ]);
 
         if (!$video) {
@@ -47,7 +50,7 @@ class VideoController extends Controller
         // validation
         $data = $request->validate([
             'title' => 'sometimes',
-            'redirect_url' => 'sometimes|url',
+            'redirect_url' => 'sometimes',
         ]);
 
         $video = Video::where('id', $video->id)->update($request->except(['_method','id']));
@@ -65,6 +68,8 @@ class VideoController extends Controller
         $data = $request->validate([
             'acknowledge' => 'required',
         ]);
+
+        CommonService::handleDeleteFile($video->filename, $directory = 'videos');
 
 
         if ( $video->delete() ) {
