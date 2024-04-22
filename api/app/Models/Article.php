@@ -34,7 +34,6 @@ class Article extends Model
         return $this->hasMany(ArticleData::class);
     }
     
-
     public function articleContent()
     {
         return $this->hasOne(ArticleContent::class)->latest();

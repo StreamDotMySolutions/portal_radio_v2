@@ -31,7 +31,7 @@ export default function App() {
           </Route>
 
           <Route element={<ContentLayout />}>
-              <Route path="/content" element={<Home />} />
+              <Route path="/contents/:id" element={<Home />} />
           </Route>
 
           

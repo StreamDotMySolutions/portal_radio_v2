@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use Illuminate\Http\Request;
 use App\Services\ArticleService;
 use App\Models\Article;
+use App\Models\ArticleData;
 
 
 class ArticleController extends Controller
@@ -20,9 +21,12 @@ class ArticleController extends Controller
 
     public function show(Article $article)
     {
-        $article = ArticleService::show($article);
-        return response()->json(['article' => $article]);
-    }
+        $items = ArticleData::query()->where('article_id', $article->id)->defaultOrder()->get();
 
+        return response()->json([
+            'title' => $article->title,
+            'items' => $items
+        ]);
+    }
 
 }

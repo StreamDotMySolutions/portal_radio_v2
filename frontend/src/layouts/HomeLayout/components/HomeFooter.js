@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Image, Col, Row, Modal, Button } from 'react-bootstrap';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const HomeFooter = () => {
 
@@ -22,7 +23,12 @@ const HomeFooter = () => {
 
       const footerItems = () => {
         return items.map((item, index) => (
-            <li key={index}><strong>{item.title}</strong></li>
+            <li key={index}>
+                <strong>
+                    <Link to={`/contents/${item.id}`}>{item.title}</Link>
+                </strong>
+            </li>
+        
         ));
     };
 
@@ -37,7 +43,7 @@ const HomeFooter = () => {
             <img className='mb-2' src="https://via.placeholder.com/180x50" alt="Placeholder Image" width="180" height="50" />
         </Col>
         <Col className='m-2'>
-        <ul style={{'list-style-type':'none'}}>
+        <ul style={{'listStyleType':'none'}}>
             {footerItems()}
         </ul>
 
