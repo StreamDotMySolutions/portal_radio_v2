@@ -9,6 +9,7 @@ import { fas } from '@fortawesome/free-solid-svg-icons'
 /** Layouts */
 import Layout from './layouts/Default';
 import HomeLayout from "./layouts/HomeLayout/HomeLayout";
+import ContentLayout from "./layouts/ContentLayout/ContentLayout";
 
 /** Error */
 import Error404 from "./pages/Error404"
@@ -24,10 +25,16 @@ export default function App() {
       <BrowserRouter basename="/">
         <Routes>            
           <Route path="*" element={<Error404 />} />
+          
           <Route element={<HomeLayout />}>
-              <Route index element={<Home />} />
-              <Route path="/home" element={<Home />} />
+              <Route index  />
           </Route>
+
+          <Route element={<ContentLayout />}>
+              <Route path="/content" element={<Home />} />
+          </Route>
+
+          
         </Routes>
       </BrowserRouter>
   );

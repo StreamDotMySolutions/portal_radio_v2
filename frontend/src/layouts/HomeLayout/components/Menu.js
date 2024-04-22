@@ -14,7 +14,7 @@ export function Menu1() {
         <Navbar.Brand href="#home">RTM Korporat</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <NavDropdown  title="Mengenai Kami">   
+          <NavDropdown title="Mengenai Kami">   
             <NavBarFetch id={51} />
           </NavDropdown>
 
