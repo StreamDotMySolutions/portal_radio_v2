@@ -5,13 +5,16 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import NavBarFetch from './NavBarFetch';
+import { Link, NavLink } from 'react-router-dom';
 
 export function Menu1() {
 
   return (
+    
     <Navbar expand="lg" className="bg-body-tertiary">
+      
       <Container>
-        <Navbar.Brand href="#home">RTM Korporat</Navbar.Brand>
+        <Navbar.Brand as={Link} to="/">RTM Korporat</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <NavDropdown title="Mengenai Kami">   
@@ -71,13 +74,20 @@ export function Menu2() {
     if (!children || children.length === 0) {
       //return <NavDropdown.Item>{truncatedTitle}</NavDropdown.Item>;
     
-      const link = data?.article_setting?.redirect_url ?  data?.article_setting?.redirect_url : `show/${data?.id}`
+      const link = data?.article_setting?.redirect_url ? data?.article_setting?.redirect_url : `/contents/${data?.id}`
 
       return (
+        // <Nav.Item>
+        //   <Nav.Link href={link}>{truncatedTitle}</Nav.Link>
+        // </Nav.Item>
+
         <Nav.Item>
-          <Nav.Link href={link}>{truncatedTitle}</Nav.Link>
+          <NavLink activeClassName="active" to={link} className="nav-link">{truncatedTitle}</NavLink>
         </Nav.Item>
-      )
+      // <NavDropdown.Item as={NavLink} to={link} activeClassName="active">
+      // {truncatedTitle}
+      // </NavDropdown.Item>
+            )
     } else {
       return (
         <NavDropdown title={truncatedTitle} drop="down" className='mr-2'>
@@ -92,6 +102,9 @@ export function Menu2() {
   function Menu({ articles }) {
     return (
       <>
+        <Nav.Item>
+          <NavLink activeClassName="active" to="/" className="nav-link">UTAMA</NavLink>
+        </Nav.Item> 
         {articles.map(article => (
           <MenuItem key={article.id} data={article} title={article.title} children={article.descendants} />
         ))}

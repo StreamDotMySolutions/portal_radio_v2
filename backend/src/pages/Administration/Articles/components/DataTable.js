@@ -74,7 +74,9 @@ const Index = () => {
                                 <Ordering id={item.id} direction='down' disabled={index === items.data.length - 1 }/>
                             
                             </td>
-                            <td>{item.title}</td>
+                            <td>
+                                <Link to={`/administration/articles/${item.id}`}>{item.title}</Link>
+                            </td>
                             <td className='text-end' style={{'width':'400px'}}>
                                
                                     <Link to={`/administration/articles/${item.id}`}>

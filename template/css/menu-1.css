@@ -1,0 +1,65 @@
+/* styles.css */
+
+/* Navbar */
+.navbar {
+    background-color: #171717;
+}
+
+.navbar-brand img {
+    margin-left: 20px;
+}
+
+.navbar-toggler-icon {
+    color: white;
+}
+
+.nav-link {
+    color: white;
+}
+
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu {
+    min-width: 280px;
+}
+
+.dropdown-menu .container {
+    padding: 0;
+}
+
+.dropdown-menu .container .row {
+    margin: 0;
+}
+
+.dropdown-menu .container .row .col-md-12 {
+    padding: 10px;
+}
+
+.dropdown-menu .nav-link img {
+    width: 10px;
+    height: 10px;
+    margin-right: 5px;
+}
+
+.dropdown-menu .nav-item.border-bottom {
+    margin-top: -10px;
+}
+
+.dropdown-menu .nav-item:last-child {
+    border-bottom: none;
+}
+
+.dropdown-menu .nav-item:last-child a {
+    margin-bottom: 10px;
+}
+
+.dropdown-menu .nav-link:hover {
+    color: #ffa525;
+}
+
+/* Footer Social Icons */
+.navbar-nav.ml-auto li {
+    margin-left: 10px;
+}

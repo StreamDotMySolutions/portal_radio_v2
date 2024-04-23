@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Image, Col, Row, Modal, Button } from 'react-bootstrap';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, NavLink  } from 'react-router-dom';
 
 const HomeFooter = () => {
 
@@ -24,9 +24,19 @@ const HomeFooter = () => {
       const footerItems = () => {
         return items.map((item, index) => (
             <li key={index}>
-                <strong>
-                    <Link to={`/contents/${item.id}`}>{item.title}</Link>
-                </strong>
+               
+                    <NavLink 
+                        to={`/contents/${item.id}`} 
+                        //activeClassName="active"
+                        style={({ isActive, isPending, isTransitioning }) => {
+                            return {
+                              fontWeight: isActive ? "bold" : "",
+                              color: isPending ? "red" : "black",
+                              viewTransitionName: isTransitioning ? "slide" : "",
+                            };
+                          }}
+                        >{item.title}</NavLink>
+              
             </li>
         
         ));
