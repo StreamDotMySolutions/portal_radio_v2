@@ -10,15 +10,32 @@ const HomeLayout = () => {
 
     return (
         <>
-            <Menu1 />
+   
             <Container > 
+
+                <Col className="border border-1 rounded mb-2 text-center">
+                    <Menu1 />
+                </Col>
+
                 <Col className="border border-1 rounded">
                     <Menu2 />
                 </Col>
                 <Col  style={{'minHeight': '10px'}}></Col>
-                <HomeBanner />
+                
+                
+                <Col className="border border-1 rounded mb-2 ">
+                    <HomeBanner />
+                </Col>
+
+
                 <Col style={{'minHeight': '20px'}}></Col>   
-                <HomeProgramme />
+              
+
+                <Col className="border border-1 rounded mb-2 ">
+                    <HomeProgramme />
+                </Col>
+
+                
                 <Col  style={{'minHeight': '10px'}}></Col>
                 <Col className="border border-1" style={{'minHeight': '300px'}}>
                     <HomeVideo />

@@ -10,8 +10,12 @@ const HomeLayout = () => {
 
     return (
         <>
-            <Menu1 />
+  
             <Container > 
+                <Col className="border border-1 rounded mb-2 text-center">
+                    <Menu1 />
+                </Col>
+
                 <Col className="border border-1 rounded">
                     <Menu2 />
                 </Col>

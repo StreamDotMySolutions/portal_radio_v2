@@ -1,0 +1,80 @@
+/* adds some margin below the link sets  */
+#navbardiatas.navbar .dropdown-menu div[class*="col"] {
+   margin-bottom:1rem;
+}
+
+#navbardiatas.navbar .dropdown-menu {
+  border:none;
+  background-color:black!important;
+}
+
+#navbardiatas.navbar-dark .navbar-nav .nav-link {
+    color: white;
+font-family: 'Open Sans', sans-serif;
+}
+
+
+/* breakpoint and up - mega dropdown styles */
+@media screen and (min-width: 992px) {
+  
+  /* remove the padding from the navbar so the dropdown hover state is not broken */
+#navbardiatas.navbar {
+  padding-top:0px;
+  padding-bottom:0px;
+}
+
+/* remove the padding from the nav-item and add some margin to give some breathing room on hovers */
+#navbardiatas.navbar .nav-item {
+  padding:.5rem .5rem;
+  margin:0 .25rem;
+}
+
+/* makes the dropdown full width  */
+
+#navbardiatas.navbar .dropdown-menu {
+
+  
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 900px;
+  border-radius:15px;
+  font-size:12px;
+  margin-top:-15px
+  
+  
+}
+  
+ 
+#menupengguna{
+margin-left:-35em;
+}
+
+#terkini{
+margin-left:-25em;
+}
+
+
+  
+#navbardiatas.navbar .dropdown-menu {
+    border: 1px solid rgba(0,0,0,.15);
+    background-color: #fff;
+  }
+  
+ 
+
+
+  
+  /* shows the dropdown menu on hover */
+#navbardiatas.navbar .dropdown:hover .dropdown-menu, .navbar .dropdown .dropdown-menu:hover {
+  display:block;
+  visibility: visible;
+  opacity: 1;
+  transition: visibility 0s, opacity 0.3s linear;
+}
+  
+#navbardiatas.navbar .dropdown-menu {
+    border: 1px solid rgba(0,0,0,.15);
+    background-color: #fff;
+  }
+
+}

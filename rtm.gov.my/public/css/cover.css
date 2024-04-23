@@ -1,0 +1,18 @@
+.cover {
+  background-image: url(mediacity.jpg);
+  background-size : cover;
+  height : 50vh;
+  margin-top:-7rem;
+
+}
+
+.coverbreadcrumb{
+  height : 50vh;
+
+  }
+.coverbreadcrumb h1 {
+  color : #fff;
+  
+  padding-top: 15vh;
+}
+
