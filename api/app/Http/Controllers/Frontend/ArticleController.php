@@ -13,9 +13,15 @@ class ArticleController extends Controller
     public function index($parentId = 0)
     {
 
+        $parent = Article::where('id', $parentId)->first();
         $articles = Article::query()->where('parent_id', $parentId)->with(['articleSetting','descendants.articleSetting'])->defaultOrder()->get()->toTree();
         
-        return response()->json(['articles' => $articles]);
+        return response()->json([
+        
+            'title' => $parent->title,
+            'articles' => $articles
+        
+        ]);
     }
 
 
