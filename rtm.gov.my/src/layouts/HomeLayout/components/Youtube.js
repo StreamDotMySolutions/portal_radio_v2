@@ -1,17 +1,47 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import VideoBox from './VideoBox';
+import axios from 'axios';
 
 const Youtube = () => {
+    const [showModal, setShowModal] = useState(false);
+    const [videoUrl, setVideoUrl] = useState('');
+    const [items, setItems] = useState([]);
+    const url = process.env.REACT_APP_API_URL;
+    const serverUrl = process.env.REACT_APP_SERVER_URL;
+
+    const handleClose = () => setShowModal(false);
+    const handleShow = (url) => {
+        setVideoUrl(url);
+        setShowModal(true);
+    };
+
+    useEffect(() => {
+        axios(`${url}/home-videos`)
+            .then((response) => {
+                //console.log(response)
+                setItems(response.data.items);
+            });
+    }, []);
+
+    const videoItems = () => {
+        return items.map((item, index) => (
+            <Col key={index} className='col-12 col-md-3 mb-4'>
+                <VideoBox 
+                    modal={item.id} 
+                    id={item.redirect_url} 
+                    filename={`${serverUrl}/storage/videos/${item.filename}`}
+                    />
+            </Col>
+        ));
+    };
+
     return (
         <>
-        <div className="container-fluid" style={{ padding: '50px', background: 'linear-gradient(180deg, #103875 0%, #2f57ce 100%)' }}>
-        <Row>
-            <Col className='col-12 col-md-3 mb-4'><VideoBox modal="1" videoSrc="https://www.youtube.com/embed/9JviWN280sQ?autoplay=1&mute=1&playsinline=1&playlist=9JviWN280sQ&loop=1&controls=0&disablekb=1&showinfo=0" /></Col>
-            <Col className='col-12 col-md-3 mb-4'><VideoBox modal="2" videoSrc="https://www.youtube.com/embed/xr4P6mvpCQc?autoplay=1&mute=1&playsinline=1&playlist=xr4P6mvpCQc&loop=1&controls=0&disablekb=1&showinfo=0" /></Col>
-            <Col className='col-12 col-md-3 mb-4'><VideoBox modal="3" videoSrc="https://www.youtube.com/embed/Pm5Aoppsq9E?autoplay=1&mute=1&playsinline=1&playlist=Pm5Aoppsq9E&loop=1&controls=0&disablekb=1&showinfo=0" /></Col>
-            <Col className='col-12 col-md-3 mb-4'><VideoBox modal="4" videoSrc="https://www.youtube.com/embed/x-JLzHEimFc?autoplay=1&mute=1&playsinline=1&playlist=x-JLzHEimFc&loop=1&controls=0&disablekb=1&showinfo=0" /></Col>
-        </Row>
+        <div className="container-fluid d-md-block d-none" style={{ padding: '50px', background: 'linear-gradient(180deg, #103875 0%, #2f57ce 100%)' }}>
+            <Row>
+                {videoItems()}
+            </Row>
         </div>
         </>
     );

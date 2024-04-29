@@ -1,17 +1,18 @@
 import React from 'react';
 
-const VideoBox = ({modal, videoSrc}) => {
+const VideoBox = ({modal,id,filename}) => {
   //const videoSrc = "https://www.youtube.com/embed/9JviWN280sQ?autoplay=1&mute=1&playsinline=1&playlist=9JviWN280sQ&loop=1&controls=0&disablekb=1&showinfo=0";
-
+const videoSrc = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&playsinline=1&loop=1&controls=0&disablekb=1&showinfo=0`
   return (
           <section className="wrap">
             <div className="video-bg">
-              <iframe
+              <img src={filename} style={{'height':'400px'}} />
+              {/* <iframe
                 src={videoSrc}
                 frameBorder="0"
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
-              ></iframe>
+              ></iframe> */}
             </div>
             <div className="content">
               <div className="container">

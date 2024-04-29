@@ -20,22 +20,24 @@ const HtmlForm = ({isLoading}) => {
             <Col className='mb-2'>
                 <InputText 
                     fieldName='redirect_url' 
-                    placeholder='https://....'  
-                    icon='fa-solid fa-globe'
+                    placeholder='Youtube Video ID'  
+                    icon='fa-solid fa-hashtag'
                     isLoading={isLoading}
                 />
 
             </Col>
 
-             
+             <hr />
             <Col className='mb-2'>
                 {store.getValue('filename') ? 
-
+                    <>
+                    <h2>Poster Image</h2>
                     <Figure>
                         <Figure.Image
                             src={`${store.server}/storage/videos/${store.getValue('filename')}`}
                         />
                     </Figure>
+                    </>
                           
                 :
                     <InputFile

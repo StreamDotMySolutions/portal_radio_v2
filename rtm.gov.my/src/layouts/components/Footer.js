@@ -1,11 +1,12 @@
 import React from 'react';
+import LoadFooter from './LoadFooter';
 
 const Footer = () => {
     return (
         <footer className="footer">
             <div className="container bottom_border" style={{ marginTop: "20px" }}>
                 <div className="row">
-                    <div className="col-sm-6 col-md-3 col-12 col">
+                    <div className="col-sm-6 col-md-3 d-md-block d-none">
                         <ul className="footer_ul_amrc">
                             <li><a href="http://www.mampu.gov.my/ms/"><img className="img-fluid" src="/asset/footer/mampu.png" alt="Mampu Logo" /></a></li>
                             <li><a href="https://www.malaysia.gov.my/portal/index"><img className="img-fluid" src="/asset/footer/mygov2.png" alt="MyGov Logo" /></a></li>
@@ -14,17 +15,7 @@ const Footer = () => {
                         </ul>
                     </div>
 
-                    <div className="col-sm-6 col-md-3 col-12 col">
-                        <ul className="footer_ul_amrc">
-                            <li><a href="#">Dasar Keselematan</a></li>
-                            <li><a href="#">Penafian</a></li>
-                            <li><a href="#">Dasar Privasi</a></li>
-                            <li><a href="#">Latar Belakang</a></li>
-                            <li><a href="#">Peta Laman</a></li>
-                            <li><a href="#">Jabatan/Agensi</a></li>
-                            <li><a href="#">Permohonan Maklumat</a></li>
-                        </ul>
-                    </div>
+                    <LoadFooter id={65} />
 
                     <div className="col-sm-6 col-md-3 col-12 col">
                         <p className="mb10">Radio Televisyen Malaysia<br />
@@ -50,7 +41,7 @@ const Footer = () => {
             <div className="container">
                 <div className="row">
                     <div className="col-md-12 d-flex justify-content-center">
-                        <p style={{ marginTop: "0.5rem" }}>Hak Cipta Terpelihara @ 2023 RADIO TELEVISYEN MALAYSIA</p>
+                        <p style={{ marginTop: "0.5rem" }}>Hak Cipta Terpelihara @ {new Date().getFullYear()} RADIO TELEVISYEN MALAYSIA</p>
                     </div>
                 </div>
             </div>

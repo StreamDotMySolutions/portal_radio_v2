@@ -93,7 +93,7 @@ export default function EditModal({id}) {
     return (
       <>
         <Button size="sm" variant="outline-primary" onClick={handleShowClick}>
-        <FontAwesomeIcon icon={['fas', 'pen-to-square']} />{' '}Edit
+          <FontAwesomeIcon icon={['fas', 'pen-to-square']} />{' '}Edit
         </Button>
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
@@ -103,9 +103,6 @@ export default function EditModal({id}) {
 
           <Modal.Body>
             <HtmlForm isLoading={isLoading} />
-            <br />
-            <FontAwesomeIcon icon={['fas', 'video']} />{' '}<a href={store.getValue('redirect_url')} target="_blank">Watch</a>
-           
           </Modal.Body>
           
           <Modal.Footer>

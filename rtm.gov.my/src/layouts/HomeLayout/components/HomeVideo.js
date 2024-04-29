@@ -49,7 +49,6 @@ const HomeVideo = () => {
                 </Modal.Header>
                 <Modal.Body className='text-center'>
                     <div className="embed-responsive embed-responsive-16by9">
-                
                         <YouTube videoId={videoUrl} className="embed-responsive-item" opts={{ playerVars: { autoplay: 1 } }} />
                     </div>
                 </Modal.Body>
