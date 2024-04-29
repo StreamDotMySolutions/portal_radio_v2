@@ -1,10 +1,19 @@
 import React from 'react';
 import LoadMenu from './LoadMenu';
+import { Link } from 'react-router-dom';
 
 const Menu1 = () => {
     return (
         <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: "#171717" }} id="navbardiatas">
-            <a className="navbar-brand" href="#"><img className="img-responsive" style={{ marginLeft: "20px" }} src="/img/logortmbaharu2.png" alt="Logo"/></a>
+            <Link to="/" className="navbar-brand">
+                <img 
+                    className="img-responsive" 
+                    style={{ marginLeft: "20px" }} 
+                    src="/img/logortmbaharu2.png" 
+                    alt="Logo"
+                />
+            </Link>
+
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbaratas" aria-controls="navbaratas" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
             </button>

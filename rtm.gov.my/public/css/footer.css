@@ -35,3 +35,8 @@ footer p { font-size:16px; color:#CCC; padding-bottom:0px; margin-bottom:8px;}
 .social_footer_ul li a { color:#CCC; border:1px solid #CCC; padding:8px;border-radius:50%;}
 .social_footer_ul li i {  width:20px; height:20px; text-align:center;}
 
+.active {
+	/* Your active styles here */
+	font-weight: bold; /* for example */
+  }
+
