@@ -25,16 +25,8 @@ export default function App() {
       <BrowserRouter basename="/">
         <Routes>            
           <Route path="*" element={<Error404 />} />
-          
-          <Route element={<HomeLayout />}>
-              <Route index  />
-          </Route>
-
-          <Route element={<ContentLayout />}>
-              <Route path="/contents/:id" element={<Home />} />
-          </Route>
-
-          
+          <Route index element={<HomeLayout />}  />
+          <Route path="/contents/:id" element={<ContentLayout />}/>
         </Routes>
       </BrowserRouter>
   );

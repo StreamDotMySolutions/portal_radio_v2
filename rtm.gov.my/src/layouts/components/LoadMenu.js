@@ -29,7 +29,7 @@ function LoadMenu({id}) {
   const items = () => {
     return articles.map(article => (
       <li key={article.id} className="nav-item border-bottom">
-        <a className="nav-link" href="#">{article.title}</a>
+        <Link to={`/contents/${article.id}`} className="nav-link">{article.title}</Link>
       </li>
     ));
   };

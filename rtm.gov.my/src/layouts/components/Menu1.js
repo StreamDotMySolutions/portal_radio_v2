@@ -11,7 +11,6 @@ const Menu1 = () => {
 
             <div className="collapse navbar-collapse" id="navbaratas">
 
-        
                 <ul className="navbar-nav ml-auto">
                     <LoadMenu id={51}/>
                     <LoadMenu id={52}/>

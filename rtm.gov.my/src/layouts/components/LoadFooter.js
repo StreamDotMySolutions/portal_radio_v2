@@ -29,7 +29,7 @@ function LoadFooter({id}) {
   const items = () => {
     return articles.map(article => (
       <li key={article.id} >
-        <a href="#">{article.title}</a>
+        <Link to={`/contents/${article.id}`}>{article.title}</Link>
       </li>
     ));
   };

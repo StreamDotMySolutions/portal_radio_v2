@@ -21,19 +21,19 @@ export function Menu1() {
               <NavBarFetch id={51} />
             </NavDropdown>
 
-            <NavDropdown  title="Pengumuman">   
+            <NavDropdown title="Pengumuman">   
               <NavBarFetch id={52} />
             </NavDropdown>
 
-            <NavDropdown  title="WARGA RTM">   
+            <NavDropdown title="WARGA RTM">   
               <NavBarFetch id={53} />
             </NavDropdown>
 
-            <NavDropdown  title="SWASTA/AWAM">   
+            <NavDropdown title="SWASTA/AWAM">   
               <NavBarFetch id={54} />
             </NavDropdown>
 
-            <NavDropdown  title="MAKLUMBALAS">   
+            <NavDropdown title="MAKLUMBALAS">   
               <NavBarFetch id={55} />
             </NavDropdown>
 
