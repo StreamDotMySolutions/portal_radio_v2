@@ -13,7 +13,7 @@ function TopNavbar() {
   return (
     <Navbar fixed="top"  bg="light" data-bs-theme="light">
       <Container className="justify-content-center">
-        <Navbar.Brand as={NavLink} to="/"><img style={{ 'height':'50px' }}  src="/backend/img/logo.png" /></Navbar.Brand>
+        <Navbar.Brand as={NavLink} to="/">CMS</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav>
