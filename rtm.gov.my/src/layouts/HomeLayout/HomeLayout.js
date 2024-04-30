@@ -15,42 +15,42 @@ const HomeLayout = () => {
 
     return (
         <>
-            <div class="d-none d-md-block" id="menu-desktop">
+            <div className="d-none d-md-block" id="menu-desktop">
                 <Menu1 />
                 <Menu2 />
             </div>
             
-            <div class="d-md-none" id="menu-mobile">
+            <div className="d-md-none" id="menu-mobile">
                 <Menu3 />
             </div>
        
             <BannerCarousel />
               
 
-            <div class="d-none d-md-block" id="banner-desktop">
+            <div className="d-none d-md-block" id="banner-desktop">
                 <BannerProgramme />
             </div>
             
-            <div class="d-md-none" id="banner-mobile">
+            <div className="d-md-none" id="banner-mobile">
                 <BannerProgramme2 />
             </div>
 
-            <div class="d-none d-md-block" id="youtube-desktop">
+            <div className="d-none d-md-block" id="youtube-desktop">
                 <Youtube />
             </div>
             
-            <div class="d-md-none" id="youtube-mobile">
+            <div className="d-md-none" id="youtube-mobile">
                
             </div>
 
 
 
             
-            <div class="d-none d-md-block" id="footer-desktop">
+            <div className="d-none d-md-block" id="footer-desktop">
                 <Footer />
             </div>
             
-            <div class="d-md-none" id="footer-mobile">
+            <div className="d-md-none" id="footer-mobile">
                 <Footer2 />
             </div>
         </>

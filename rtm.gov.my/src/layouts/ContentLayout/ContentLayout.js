@@ -5,28 +5,27 @@ import PageContent from './components/PageContent';
 import Menu3 from '../components/Menu3';
 import Footer2 from '../components/Footer2';
 
-
 const ContentLayout = () => {
 
     return (
         <>
-            <div class="d-none d-md-block" id="menu-desktop">
+            <div className="d-none d-md-block" id="menu-desktop">
                 <Menu1 />
                 <Menu2 />
             </div>
             
-            <div class="d-md-none" id="menu-mobile">
+            <div className="d-md-none" id="menu-mobile">
                 <Menu3 />
             </div>
        
   
             <PageContent />
 
-            <div class="d-none d-md-block" id="footer-desktop">
+            <div className="d-none d-md-block" id="footer-desktop">
                 <Footer />
             </div>
             
-            <div class="d-md-none" id="footer-mobile">
+            <div className="d-md-none" id="footer-mobile">
                 <Footer2 />
             </div>
 

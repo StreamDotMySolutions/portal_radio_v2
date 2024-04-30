@@ -22,7 +22,9 @@ function LoadFooter({ id }) {
   const items = () => {
     return articles.map(article => (
       <li key={article.id}>
-        <NavLink to={`/contents/${article.id}`} activeClassName="active">
+        <NavLink to={`/contents/${article.id}`} 
+          //activeClassName="active"
+        >
           {article.title}
         </NavLink>
       </li>
