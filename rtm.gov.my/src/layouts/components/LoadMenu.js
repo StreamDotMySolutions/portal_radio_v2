@@ -28,8 +28,17 @@ function LoadMenu({id}) {
 
   const items = () => {
     return articles.map(article => (
-      <li key={article.id} className="nav-item border-bottom">
-        <Link to={`/contents/${article.id}`} className="nav-link">{article.title}</Link>
+      <li key={article.id} className="nav-item ml-2">
+        <NavLink 
+          activeStyle={{ textDecoration: "underline" }}
+          activeClassName="active"
+          to={`/contents/${article.id}`} 
+          //className="nav-link"
+        >
+          {article.title}
+          { /* Conditionally render the icon only when the NavLink is active */ }
+          {({ isActive }) => isActive && <i className="fas fa-check-circle"></i>}
+        </NavLink>
       </li>
     ));
   };

@@ -37,6 +37,13 @@ footer p { font-size:16px; color:#CCC; padding-bottom:0px; margin-bottom:8px;}
 
 .active {
 	/* Your active styles here */
+	font-family: 'Open Sans', sans-serif;
 	font-weight: bold; /* for example */
+	text-decoration: underline;
+	color: white;
   }
 
+.navbar-nav a,
+.navbar-nav .nav-link {
+color: white; /* Set the color to white */
+}

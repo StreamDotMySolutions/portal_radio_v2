@@ -3,7 +3,7 @@ import { Col, Row } from 'react-bootstrap';
 import VideoBox from './VideoBox';
 import axios from 'axios';
 
-const Youtube = () => {
+const Youtube2 = () => {
     const [showModal, setShowModal] = useState(false);
     const [videoUrl, setVideoUrl] = useState('');
     const [items, setItems] = useState([]);
@@ -26,7 +26,7 @@ const Youtube = () => {
 
     const videoItems = () => {
         return items.map((item, index) => (
-            <Col key={index} className='col-12 col-md-3 mb-4'>
+            <Col key={index} className='col-6 mb-4'>
                 <VideoBox 
                     modal={item.id} 
                     id={item.redirect_url} 
@@ -47,4 +47,4 @@ const Youtube = () => {
     );
 };
 
-export default Youtube;
+export default Youtube2;
