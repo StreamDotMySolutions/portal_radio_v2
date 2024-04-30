@@ -18,6 +18,10 @@ use App\Http\Controllers\Backend\{
     VideoController,
 };
 
+Route::get('/', function () {
+    return 'API Server';
+});
+
 Auth::routes();
 
 // Auth
