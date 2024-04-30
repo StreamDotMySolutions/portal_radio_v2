@@ -34,7 +34,7 @@ axios.interceptors.response.use(
     if (error.response.status === 401 || error.response.status === 403 || error.response.status === 419 ) {
       // Redirect to your login page or another route
       //console.log('401 ,419 or 403')
-      window.location.href = '/unauthorized';
+      window.location.href = '/backend/sign-in';
     }
 
     return Promise.reject(error);
