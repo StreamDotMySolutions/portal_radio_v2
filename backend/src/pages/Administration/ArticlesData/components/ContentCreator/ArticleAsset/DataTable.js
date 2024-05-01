@@ -141,7 +141,7 @@ const DataTable = () => {
                                 {item.filename && /\.(jpg|gif|png)$/.test(item.filename) ? (
                                     <img
                                         className='img-fluid rounded'
-                                        src={`${store.server}/storage/article_assets/${item.filename}`}
+                                        src={`/storage/article_assets/${item.filename}`}
                                         alt="Image"
                                     />
                                 ) : (
