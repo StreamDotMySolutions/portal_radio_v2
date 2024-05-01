@@ -1,8 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import LoadMenu from './LoadMenu';
 import { Link } from 'react-router-dom';
 
 const Menu1 = () => {
+    const url = process.env.REACT_APP_API_URL;
+    const serverUrl = process.env.REACT_APP_SERVER_URL;
+    const [items, setItems] = useState([]);
+    
+  useEffect(() => {
+    axios(`${url}/home-menu`)
+        .then((response) => {
+            //console.log(response)
+            setItems(response.data.items);
+        }).catch( error => {
+            console.warn(error)
+        })
+}, []);
+
+const menuItems = () => {
+    return items.map((item, index) => (
+        <span key={index}>
+            <LoadMenu id={item.id}/>
+        </span>
+    ));
+};
     return (
         <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: "#171717" }} id="navbardiatas">
             <Link to="/" className="navbar-brand">
@@ -21,15 +43,9 @@ const Menu1 = () => {
             <div className="collapse navbar-collapse" id="navbaratas">
 
                 <ul className="navbar-nav ml-auto">
-                    <LoadMenu id={51}/>
-                    <LoadMenu id={52}/>
-                    <LoadMenu id={53}/>
-                    <LoadMenu id={54}/>
-                    <LoadMenu id={55}/>
+                    {menuItems()}
                 </ul>
 
-
-                
                 <ul className="navbar-nav ml-auto">
                     <li><a style={{ color: "white" }} href="https://www.tiktok.com/@radiotelevisyenmalaysia?" className="nav-link font-weight-bold text-uppercase"><img src="/img/tiktok-xxl.png" className="img-fluid" alt="TikTok Logo" /></a></li>
                     <li><a style={{ color: "white" }} href="https://twitter.com/rtm_malaysia?lang=en" className="nav-link font-weight-bold text-uppercase"><img src="/img/twitter.svg" className="img-fluid" alt="Twitter Logo" /></a></li>
