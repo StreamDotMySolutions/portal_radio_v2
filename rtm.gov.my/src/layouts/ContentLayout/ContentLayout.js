@@ -18,7 +18,6 @@ const ContentLayout = () => {
                 <Menu3 />
             </div>
        
-  
             <PageContent />
 
             <div className="d-none d-md-block" id="footer-desktop">

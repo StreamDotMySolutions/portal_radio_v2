@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
+
 const BannerProgramme = () => {
 
-  const [showModal, setShowModal] = useState(false);
-  const [videoUrl, setVideoUrl] = useState('');
+
   const [items, setItems] = useState([]);
   const url = process.env.REACT_APP_API_URL;
   const serverUrl = process.env.REACT_APP_SERVER_URL;
