@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Menu2 = () => {
     return (
@@ -11,7 +12,7 @@ const Menu2 = () => {
                 <ul className="navbar-nav mx-auto">
 
                     <li className="nav-item">
-                        <a className="nav-link" href="#">UTAMA</a>
+                        <Link className="nav-link" to="/">UTAMA</Link>
                     </li>
 
                     <li className="nav-item dropdown">

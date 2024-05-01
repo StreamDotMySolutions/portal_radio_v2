@@ -7,6 +7,7 @@ const Menu1 = () => {
     const url = process.env.REACT_APP_API_URL;
     const serverUrl = process.env.REACT_APP_SERVER_URL;
     const [items, setItems] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
         
     useEffect(() => {
         axios(`${url}/home-menu`)
@@ -15,7 +16,9 @@ const Menu1 = () => {
                 setItems(response.data.items);
             }).catch( error => {
                 console.warn(error)
-            })
+            }).finally(() => {
+                setIsLoading(false);
+            });
     }, []);
 
     const menuItems = () => {
@@ -44,7 +47,7 @@ const Menu1 = () => {
             <div className="collapse navbar-collapse" id="navbaratas">
 
                 <ul className="navbar-nav ml-auto">
-                    {menuItems()}
+                    {isLoading === false } {menuItems()}
                 </ul>
 
                 <ul className="navbar-nav ml-auto">

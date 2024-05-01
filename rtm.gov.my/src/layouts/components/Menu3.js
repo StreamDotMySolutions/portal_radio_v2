@@ -1,8 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import LoadMenu from './LoadMenu';
 import { Link } from 'react-router-dom';
 
 const Menu3 = () => {
+    const url = process.env.REACT_APP_API_URL;
+    const serverUrl = process.env.REACT_APP_SERVER_URL;
+    const [items, setItems] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+        
+    useEffect(() => {
+        axios(`${url}/home-menu`)
+            .then((response) => {
+                //console.log(response)
+                setItems(response.data.items);
+            }).catch( error => {
+                console.warn(error)
+            }).finally(() => {
+                setIsLoading(false);
+            });
+    }, []);
+
+    const menuItems = () => {
+        return items.map((item, index) => (
+            <span key={index}>
+                <LoadMenu id={item.id}/>
+            </span>
+        ));
+    };
     return (
         <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: "#171717" }} id="navbardiatas">
             <Link to="/" className="navbar-brand">
@@ -23,11 +48,7 @@ const Menu3 = () => {
                 <div className='row'>
                     <div className='col'>
                         <ul className="navbar-nav ml-auto">
-                            <LoadMenu id={51}/>
-                            <LoadMenu id={52}/>
-                            <LoadMenu id={53}/>
-                            <LoadMenu id={54}/>
-                            <LoadMenu id={55}/>
+                            {isLoading === false } {menuItems()}
                         </ul>
                     </div>
                     <div className='col'>
