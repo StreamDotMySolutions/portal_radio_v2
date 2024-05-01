@@ -153,14 +153,14 @@ const DataTable = () => {
                             </td>
                             <td className="align-middle">
                                 <Form.Control 
-                                    value={`${store.server}/storage/article_assets/${item.filename}`} 
+                                    value={`/storage/article_assets/${item.filename}`} 
                                     style={{'backgroundColor':'lightCyan'}}
                                 />
                             </td>
                             <td className="align-middle text-center" style={{width:"200px"}}>
                                 <Button 
                                     size='sm' 
-                                    onClick={() => handleCopyClick(`${store.server}/storage/article_assets/${item.filename}`)}
+                                    onClick={() => handleCopyClick(`/storage/article_assets/${item.filename}`)}
                                     variant='outline-primary'>
                                     <FontAwesomeIcon icon={['fas', 'copy']} />
                                 </Button>
