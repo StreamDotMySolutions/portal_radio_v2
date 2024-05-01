@@ -132,10 +132,23 @@ const DataTable = () => {
                             <td><span className="badge bg-primary">{item.id}</span></td>
                  
                             <td>
-                               <img     
-                                    
+                               {/* <img     
                                     className='img-fluid rounded' 
-                                    src={`${store.server}/storage/article_assets/${item.filename}`} alt="Image" />
+                                    src={`${store.server}/storage/article_assets/${item.filename}`} 
+                                    alt="Image" 
+                                /> */}
+
+                                {item.filename && /\.(jpg|gif|png)$/.test(item.filename) ? (
+                                    <img
+                                        className='img-fluid rounded'
+                                        src={`${store.server}/storage/article_assets/${item.filename}`}
+                                        alt="Image"
+                                    />
+                                ) : (
+                                    // Render something else if the filename extension is not jpg, gif, or png
+                                    <div>Not an image</div>
+                                )}
+
        
                             </td>
                             <td className="align-middle">
@@ -144,10 +157,10 @@ const DataTable = () => {
                                     style={{'backgroundColor':'lightCyan'}}
                                 />
                             </td>
-                            <td className="align-middle text-center">
+                            <td className="align-middle text-center" style={{width:"200px"}}>
                                 <Button 
                                     size='sm' 
-                                    onClick={() => handleCopyClick(`<img class="img-fluid" src="${store.server}/storage/article_assets/${item.filename}" />`)}
+                                    onClick={() => handleCopyClick(`${store.server}/storage/article_assets/${item.filename}`)}
                                     variant='outline-primary'>
                                     <FontAwesomeIcon icon={['fas', 'copy']} />
                                 </Button>
