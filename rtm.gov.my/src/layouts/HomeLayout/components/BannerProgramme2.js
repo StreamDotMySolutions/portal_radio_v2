@@ -1,56 +1,50 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const BannerProgramme2 = () => {
-  return (
+  const [items, setItems] = useState([]);
+  const url = process.env.REACT_APP_API_URL;
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
+
+  useEffect(() => {
+      axios(`${url}/home-programmes`)
+          .then((response) => {
+              //console.log(response)
+              setItems(response.data.items);
+          });
+  }, []);
+
+  const programmeItems = () => {
+    // Group items into sets of three
+    const groupedItems = [];
+    for (let i = 0; i < items.length; i += 3) {
+      groupedItems.push(items.slice(i, i + 3));
+    }
+    
+    return groupedItems.map((group, groupIndex) => (
+      <div className="row" key={groupIndex}>
+        {group.map((item, index) => (
+          <div className='col' key={index}>
+            <Link className="nav-link" to="https://rtmklik.rtm.gov.my/">
+              <img 
+                style={{ borderRadius: '15px' }} 
+                className="img-fluid" 
+                src={`${serverUrl}/storage/programmes/${item.filename}`} 
+                alt={item.title} />
+            </Link>
+          </div>
+        ))}
+      </div>
+    ));
+  };
+
+return (
  <>
     <div className="row shadow-sm" style={{ backgroundColor: '#2a197f', padding: '30px' }}>    
-
-      <div className='col'>
-        <a className="nav-link" href="https://rtmklik.rtm.gov.my/">
-          <img style={{ borderRadius: '15px' }} className="img-fluid" src="/asset/IconTv/rtmkliklogopetak.jpg" alt="RTM Klik Baharu" />
-        </a>
-      
-        <a className="nav-link" href="https://rtmklik.rtm.gov.my/live/tv1">
-          <img style={{ borderRadius: '15px' }} className="img-fluid" src="/asset/IconTv/tv1.jpg" alt="TV1" />
-        </a>
-      
-        <a className="nav-link" href="https://rtmklik.rtm.gov.my/live/tv2">
-          <img style={{ borderRadius: '15px' }} className="img-fluid" src="/asset/IconTv/tv2.jpg" alt="TV2" />
-        </a>
-      </div>    
-      
-      <div className='col'>
-        <a className="nav-link" href="https://rtmklik.rtm.gov.my/live/okey">
-          <img style={{ borderRadius: '15px' }} className="img-fluid" src="/asset/IconTv/okey.jpg" alt="Okey" />
-        </a>
-      
-        <a className="nav-link" href="https://rtmklik.rtm.gov.my/live/beritartm">
-          <img style={{ borderRadius: '15px' }} className="img-fluid" src="/asset/IconTv/berita-rtm.png" alt="Berita RTM" />
-        </a>
-      
-      
-        <a className="nav-link" href="https://berita.rtm.gov.my/">
-          <img style={{ borderRadius: '15px' }} className="img-fluid" src="/asset/IconTv/portal-berita.jpg" alt="Portal Berita" />
-        </a>
-      </div>    
-
-      <div className='col'>
-        <a className="nav-link" href="https://rtmklik.rtm.gov.my/live/sukanrtm">
-          <img style={{ borderRadius: '15px' }} className="img-fluid" src="/asset/IconTv/sukanrtmbaharu.jpg" alt="Sukan RTM Baharu" />
-        </a>
-      
-      
-        <a className="nav-link" href="https://rtmklik.rtm.gov.my/live/tv6">
-          <img style={{ borderRadius: '15px' }} className="img-fluid" src="/asset/IconTv/tv6.jpg" alt="TV6" />
-        </a>
-      
-      
-        <a className="nav-link" href="https://rtmklik.rtm.gov.my/live/dewanrakyat">
-          <img style={{ borderRadius: '15px' }} className="img-fluid" src="/asset/IconTv/dewanrakyatbaharu.jpg" alt="Dewan Rakyat Baharu" />
-        </a>
-      </div>    
+      {programmeItems()}    
     </div>
-    </>
+  </>
   );
 }
 
