@@ -1,11 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 import LoadFooter from './LoadFooter';
 
 const Footer = () => {
+    const url = process.env.REACT_APP_API_URL;
+    const serverUrl = process.env.REACT_APP_SERVER_URL;
+    const [footerID, setFooterID] = useState();
+    const [isLoading, setIsLoading] = useState(true);
+        
+    useEffect(() => {
+        axios(`${url}/home-footer`)
+            .then((response) => {
+                setFooterID(response.data.id);
+            })
+            .catch(error => {
+                console.warn(error);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+    }, []);
+
     return (
         <footer className="footer">
             <div className="container bottom_border" style={{ marginTop: "20px" }}>
                 <div className="row">
+
                     <div className="col-sm-6 col-md-3 d-md-block d-none">
                         <ul className="footer_ul_amrc">
                             <li><a href="http://www.mampu.gov.my/ms/"><img className="img-fluid" src="/asset/footer/mampu.png" alt="Mampu Logo" /></a></li>
@@ -15,7 +36,13 @@ const Footer = () => {
                         </ul>
                     </div>
 
-                    <LoadFooter id={65} />
+
+                    {/* Conditionally render LoadFooter if footerID is available */}
+                    {isLoading ? (
+                        <div>Loading...</div>
+                    ) : (
+                        footerID && <LoadFooter id={footerID} />
+                    )}
 
                     <div className="col-sm-6 col-md-3 col-12 col">
                         <p className="mb10">Radio Televisyen Malaysia<br />

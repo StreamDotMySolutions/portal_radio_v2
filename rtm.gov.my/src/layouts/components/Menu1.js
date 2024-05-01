@@ -7,24 +7,25 @@ const Menu1 = () => {
     const url = process.env.REACT_APP_API_URL;
     const serverUrl = process.env.REACT_APP_SERVER_URL;
     const [items, setItems] = useState([]);
-    
-  useEffect(() => {
-    axios(`${url}/home-menu`)
-        .then((response) => {
-            //console.log(response)
-            setItems(response.data.items);
-        }).catch( error => {
-            console.warn(error)
-        })
-}, []);
+        
+    useEffect(() => {
+        axios(`${url}/home-menu`)
+            .then((response) => {
+                //console.log(response)
+                setItems(response.data.items);
+            }).catch( error => {
+                console.warn(error)
+            })
+    }, []);
 
-const menuItems = () => {
-    return items.map((item, index) => (
-        <span key={index}>
-            <LoadMenu id={item.id}/>
-        </span>
-    ));
-};
+    const menuItems = () => {
+        return items.map((item, index) => (
+            <span key={index}>
+                <LoadMenu id={item.id}/>
+            </span>
+        ));
+    };
+    
     return (
         <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: "#171717" }} id="navbardiatas">
             <Link to="/" className="navbar-brand">

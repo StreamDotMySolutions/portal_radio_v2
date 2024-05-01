@@ -1,13 +1,38 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 import LoadFooter from './LoadFooter';
 
 const Footer2 = () => {
+    const url = process.env.REACT_APP_API_URL;
+    const serverUrl = process.env.REACT_APP_SERVER_URL;
+    const [footerID, setFooterID] = useState();
+    const [isLoading, setIsLoading] = useState(true);
+        
+    useEffect(() => {
+        axios(`${url}/home-footer`)
+            .then((response) => {
+                setFooterID(response.data.id);
+            })
+            .catch(error => {
+                console.warn(error);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
+    }, []);
+
     return (
         <footer className="footer">
             <div className="container bottom_border" style={{ marginTop: "20px" }}>
                 <div className='row'>
                     <div className='col'>
-                        <LoadFooter id={65} />
+                        {/* Conditionally render LoadFooter if footerID is available */}
+                        {isLoading ? (
+                            <div>Loading...</div>
+                        ) : (
+                            footerID && <LoadFooter id={footerID} />
+                        )}
                     </div>
                     <div className='col'>
                         <p className="mb10">Radio Televisyen Malaysia<br />
