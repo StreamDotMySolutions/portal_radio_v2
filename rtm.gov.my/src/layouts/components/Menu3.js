@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import LoadMenu from './LoadMenu';
-import { Link } from 'react-router-dom';
+import LoadMenu1 from './LoadMenu1';
+import { NavLink,Link } from 'react-router-dom';
 
 const Menu3 = () => {
     const url = process.env.REACT_APP_API_URL;
     const serverUrl = process.env.REACT_APP_SERVER_URL;
     const [items, setItems] = useState([]);
+    const [menu1Items, setMenu1Items] = useState([]);
+    const [menu2Items, setMenu2Items] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
         
     useEffect(() => {
-        axios(`${url}/home-menu`)
+        axios(`${url}/home-menu-1`)
             .then((response) => {
                 //console.log(response)
-                setItems(response.data.items);
+                setMenu1Items(response.data.items);
             }).catch( error => {
                 console.warn(error)
             }).finally(() => {
@@ -21,12 +23,70 @@ const Menu3 = () => {
             });
     }, []);
 
-    const menuItems = () => {
-        return items.map((item, index) => (
+    const menuItems1 = () => {
+        return menu1Items.map((item, index) => (
             <span key={index}>
-                <LoadMenu id={item.id}/>
+                <LoadMenu1 id={item.id}/>
             </span>
         ));
+    };
+
+    useEffect(() => {
+        axios(`${url}/home-menu-2`)
+            .then((response) => {
+                //console.log(response)
+                setMenu2Items(response.data.items);
+            }).catch( error => {
+                console.warn(error)
+            }).finally(() => {
+                setIsLoading(false);
+            });
+    }, []);
+
+
+    const menuItems2 = () => {
+        return menu2Items.map((item, index) => {
+            if (item.descendants && item.descendants.length > 0) {
+                return (
+                    <li key={index} className="nav-item dropdown">
+                        <a className="nav-link dropdown-toggle" href="#" id={`navbarDropdown${item.title}`} role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {item.title}
+                        </a>
+                        <div className="dropdown-menu" aria-labelledby={`navbarDropdown${item.title}`} style={{ marginTop: "-10px" }}>
+                            {item.descendants.map((descendant, idx) => (
+                                <>
+                                {descendant.article_setting && descendant.article_setting.redirect_url ? (
+                                    <NavLink key={idx} to={descendant.article_setting.redirect_url} className="nav-link ml-3">
+                                        {descendant.title}
+                                    </NavLink>
+                                    ) : (
+                                    <NavLink key={idx}  to={`/contents/${descendant.id}`} className="nav-link">
+                                        {descendant.title}
+                                    </NavLink>
+                                )}
+                                </>
+                            ))}
+                        </div>
+                    </li>
+                );
+            } else {
+                return (
+                    <li key={index} className="nav-item">
+                  
+                        {item.article_setting && item.article_setting.redirect_url ? (
+                            <NavLink to={item.article_setting.redirect_url} className="nav-link">
+                                {item.title}
+                            </NavLink>
+                            ) : (
+                            <NavLink to={`/contents/${item.id}`} className="nav-link">
+                                {item.title}
+                            </NavLink>
+                        )}
+
+                    </li>
+                );
+            }
+        });
     };
     return (
         <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: "#171717" }} id="navbardiatas">
@@ -48,56 +108,12 @@ const Menu3 = () => {
                 <div className='row'>
                     <div className='col'>
                         <ul className="navbar-nav ml-auto">
-                            {isLoading === false } {menuItems()}
+                            {isLoading === false } {menuItems1()}
                         </ul>
                     </div>
                     <div className='col'>
                         <ul className="navbar-nav mx-auto">
-
-                            <li className="nav-item d-none d-md-block">
-                                <a className="nav-link" href="#">UTAMA</a>
-                            </li>
-
-                            <li className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownTV" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    TV
-                                </a>
-                                <div className="dropdown-menu" aria-labelledby="navbarDropdownTV" style={{ marginTop: "-10px" }}>
-                                    <a className="dropdown-item" href="#">TV1</a>
-                                    <a className="dropdown-item" href="#">TV2</a>
-                                    <a className="dropdown-item" href="#">TV OKEY</a>
-                                </div>
-                            </li>
-
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">RADIO</a>
-                            </li>
-
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">PENCAPAIAN</a>
-                            </li>
-
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">AKTIVITI</a>
-                            </li>
-
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">RATE CARD RTM</a>
-                            </li>
-
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">GALERI</a>
-                            </li>
-
-                            <li className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownDir" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    DIREKTORI
-                                </a>
-                                <div className="dropdown-menu" aria-labelledby="navbarDropdownDir" style={{ marginTop: "-10px" }}>
-                                    <a className="dropdown-item" href="#">DIREKTORI ANGKASAPURI</a>
-                                    <a className="dropdown-item" href="#">DIREKTORI NEGERI</a>
-                                </div>
-                            </li>
+                            {isLoading === false } {menuItems2()}
                         </ul>
                     </div>
                 </div>

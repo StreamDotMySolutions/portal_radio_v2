@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import LoadMenu from './LoadMenu';
+import LoadMenu from './LoadMenu1';
 import { Link } from 'react-router-dom';
 
 const Menu1 = () => {
@@ -10,7 +10,7 @@ const Menu1 = () => {
     const [isLoading, setIsLoading] = useState(true);
         
     useEffect(() => {
-        axios(`${url}/home-menu`)
+        axios(`${url}/home-menu-1`)
             .then((response) => {
                 //console.log(response)
                 setItems(response.data.items);

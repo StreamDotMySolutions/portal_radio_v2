@@ -127,12 +127,12 @@ const SignInForm = () => {
             </button>
             {' '}
             
-            <span className='fs-6 ms-4'>
+            {/* <span className='fs-6 ms-4'>
       
                 <Link className='ms-3' to='/password/email'><FontAwesomeIcon icon="fa-solid fa-question" />{' '}Forgot password</Link>
                 
                 <Link className='ms-3' to='/sign-up'><FontAwesomeIcon icon="fa-solid fa-pencil" />{' '}Register</Link>
-            </span>     
+            </span>      */}
           </div>
 
           <div className='mt-4 pt-2' >

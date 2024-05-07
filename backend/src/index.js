@@ -46,11 +46,11 @@ export default function App() {
         
             <Route element={<AuthLayout />}>
               <Route path="/sign-in" element={<SignInForm />} />
-              <Route path="/sign-up" element={<SignUpForm />} />
+              {/* <Route path="/sign-up" element={<SignUpForm />} /> */}
               <Route path="/sign-out" element={<SignOut />} />
               <Route path="/unauthorized" element={<Unauthorized />} />
-              <Route path="/password/email" element={<EmailPassword />} />
-              <Route path="/password/reset/:token" element={<ResetPassword />} />
+              {/* <Route path="/password/email" element={<EmailPassword />} />
+              <Route path="/password/reset/:token" element={<ResetPassword />} /> */}
             </Route>
 
             <Route element={<Layout />}>
