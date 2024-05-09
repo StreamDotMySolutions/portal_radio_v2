@@ -37,6 +37,28 @@ function LoadMenu1({id}) {
     }
   }
 
+  function truncateTitleWithBreaks(title, wordLimit) {
+    const words = title.split(' ');
+  
+    if (words.length > wordLimit) {
+      let truncatedTitle = '';
+      for (let i = 0; i < words.length; i++) {
+        truncatedTitle += words[i];
+        if ((i + 1) % wordLimit === 0 && i !== words.length - 1) {
+          truncatedTitle += ' <br /> ';
+        } else {
+          truncatedTitle += ' ';
+        }
+      }
+      return truncatedTitle.trim(); // Remove trailing whitespace
+    } else {
+      return title;
+    }
+  }
+  
+
+  
+
   // const items = () => {
   //   if (articles.length === 0) {
   //     return null; // or any default content you want to render when there are no articles
@@ -99,6 +121,8 @@ function LoadMenu1({id}) {
     for (let i = 0; i < articles.length; i += 8) {
       groupedArticles.push(articles.slice(i, i + 8));
     }
+
+
   
     return groupedArticles.map((group, index) => (
       <div key={index} className={`col-md-3 ${index === 1 ? 'ml-5' : 'mr-5'}`}>
@@ -106,13 +130,15 @@ function LoadMenu1({id}) {
         <ul className="nav flex-column">
           {group.map((article, idx) => (
             <li key={article.id} className="nav-item">
-  <NavLink
-    to={article.article_setting && article.article_setting.redirect_url ? article.article_setting.redirect_url : `/contents/${article.id}`}
-    className="dropdown-item text-justify"
-  >
-    {truncateTitle(article.title, 5)}
-  </NavLink>
-</li>
+              <NavLink
+                to={article.article_setting && article.article_setting.redirect_url ? article.article_setting.redirect_url : `/contents/${article.id}`}
+                className="dropdown-item text-justify"
+              >
+
+                  <span dangerouslySetInnerHTML={{ __html: truncateTitleWithBreaks(article.title, 3) }} />
+
+              </NavLink>
+            </li>
           ))}
         </ul>
       </div>
