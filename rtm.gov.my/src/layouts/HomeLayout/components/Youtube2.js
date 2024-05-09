@@ -26,7 +26,7 @@ const Youtube2 = () => {
 
     const videoItems = () => {
         return items.map((item, index) => (
-            <Col key={index} className='col-6 mb-4'>
+            <Col key={index} className='col-12 mb-4'>
                 <VideoBox 
                     modal={item.id} 
                     id={item.redirect_url} 
