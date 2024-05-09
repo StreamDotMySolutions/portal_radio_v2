@@ -40,7 +40,7 @@ const HomeLayout = () => {
             </div>
             
             <div className="d-md-none" id="youtube-mobile">
-               
+               <Youtube2 />
             </div>
 
 
