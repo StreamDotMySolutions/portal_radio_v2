@@ -91,11 +91,11 @@ function LoadMenu1({id}) {
     }
   
     return groupedArticles.map((group, index) => (
-      <div key={index} className="col-md-6">
+      <div key={index} className={`col-md-3 ${index === 1 ? 'ml-5' : 'mr-5'}`}>
         {/* <span style={{ color: "#ffa525", minWidth: "320px" }}>{title}</span> */}
         <ul className="nav flex-column">
           {group.map((article, idx) => (
-            <li key={article.id} className={`nav-item ${idx !== group.length - 1 && idx > 8 ? 'border-right' : ''}`}>
+            <li key={article.id} className="nav-item">
               <NavLink
                 to={article.article_setting && article.article_setting.redirect_url ? article.article_setting.redirect_url : `/contents/${article.id}`}
                 className="dropdown-item"
@@ -132,10 +132,12 @@ function LoadMenu1({id}) {
             )}
           </a>
 
-          <div className="dropdown-menu" style={articles.length < 8 ? { minWidth: '320px' } : {}}>
+          <div className="dropdown-menu" style={articles.length < 8 ? { minWidth: '220px' } : {  minWidth: '500px' }}>
         
-            <div className='row ml-2'>  
-              {items()}
+            <div className='container'>
+              <div className='row'>  
+                {items()}
+              </div>
             </div>
           
           </div>
