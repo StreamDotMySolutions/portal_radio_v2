@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import LoadMenu1 from './LoadMenu1';
 import { NavLink,Link } from 'react-router-dom';
+import LoadMenu3 from './LoadMenu3';
 
 const Menu3 = () => {
     const url = process.env.REACT_APP_API_URL;
@@ -26,7 +26,7 @@ const Menu3 = () => {
     const menuItems1 = () => {
         return menu1Items.map((item, index) => (
             <span key={index}>
-                <LoadMenu1 id={item.id}/>
+                <LoadMenu3 id={item.id}/>
             </span>
         ));
     };
