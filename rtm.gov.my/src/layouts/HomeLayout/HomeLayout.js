@@ -9,6 +9,7 @@ import Youtube from './components/Youtube';
 import Youtube2 from './components/Youtube2';
 import Footer from '../components/Footer';
 import Footer2 from '../components/Footer2';
+import Youtube3 from './components/Youtube3';
 
 
 const HomeLayout = () => {
@@ -40,7 +41,7 @@ const HomeLayout = () => {
             </div>
             
             <div className="d-md-none" id="youtube-mobile">
-               <Youtube2 />
+               <Youtube3 />
             </div>
 
 
