@@ -28,41 +28,57 @@ function LoadMenu1({id}) {
   },[])
 
   const items = () => {
+    if (articles.length === 0) {
+      return null; // or any default content you want to render when there are no articles
+    }
+  
     return articles.map(article => (
       <li key={article.id} className="nav-item ml-2">
-
-      {article.article_setting && article.article_setting.redirect_url ? (
-        <NavLink to={article.article_setting.redirect_url} className="nav-link">
-          {article.title}
-        </NavLink>
-      ) : (
-        <NavLink to={`/contents/${article.id}`} className="nav-link">
-          {article.title}
-        </NavLink>
-      )}
-
+        {article.article_setting && article.article_setting.redirect_url ? (
+          <NavLink to={article.article_setting.redirect_url} className="nav-link">
+            {article.title}
+          </NavLink>
+        ) : (
+          <NavLink to={`/contents/${article.id}`} className="nav-link">
+            {article.title}
+          </NavLink>
+        )}
       </li>
     ));
   };
   
-  return (
-    <>
-      <li className="nav-item dropdown">
-        <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">
-          {loading ? ( // Render spinner if loading is true
-            <Spinner animation="grow"  size="sm"  />
-          ) : (
-            title // Render title if not loading
-          )}
-        </a>
-        <div className="dropdown-menu" aria-labelledby="navbarDropdown" style={{ minWidth: "280px" }}>
-          <ul className="nav flex-column">
-            {items()}
-          </ul>
-        </div>
+  if (articles.length === 0) {
+    return (
+      <>
+      <li className='nav-item'>
+        <NavLink className="nav-link" to={`/contents/${id}`}>{title}</NavLink>
       </li>
-    </>
-  );
+      </>
+    )
+  }
+
+  
+  if (articles.length > 0) {
+  
+    return (
+      <>
+        <li className="nav-item dropdown">
+          <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">
+            {loading ? ( // Render spinner if loading is true
+              <Spinner animation="grow"  size="sm"  />
+            ) : (
+              title // Render title if not loading
+            )}
+          </a>
+          <div className="dropdown-menu" aria-labelledby="navbarDropdown" style={{ minWidth: "280px" }}>
+            <ul className="nav flex-column">
+              {items()}
+            </ul>
+          </div>
+        </li>
+      </>
+    );
+  }
 }
 
 export default LoadMenu1;

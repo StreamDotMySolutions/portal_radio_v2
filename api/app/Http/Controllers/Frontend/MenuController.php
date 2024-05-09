@@ -28,7 +28,11 @@ class MenuController extends Controller
 
         // make sure create a content title = footer
         $parent = Article::where('title', 'MENU-1')->first();
-        $items = Article::query()->select('id')->where('parent_id', $parent->id)->defaultOrder()->get();
+        $items = Article::query()
+                    ->where('parent_id', $parent->id)
+                    ->with(['descendants'])
+                    ->defaultOrder()
+                    ->get();
         
         return response()->json([
             'items' => $items
