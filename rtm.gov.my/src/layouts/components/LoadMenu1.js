@@ -27,6 +27,16 @@ function LoadMenu1({id}) {
     })
   },[])
 
+  function truncateTitle(title, wordLimit) {
+    const words = title.split(' ');
+    
+    if (words.length > wordLimit) {
+      return words.slice(0, wordLimit).join(' ') + '...';
+    } else {
+      return title;
+    }
+  }
+
   // const items = () => {
   //   if (articles.length === 0) {
   //     return null; // or any default content you want to render when there are no articles
@@ -92,15 +102,17 @@ function LoadMenu1({id}) {
   
     return groupedArticles.map((group, index) => (
       <div key={index} className={`col-md-3 ${index === 1 ? 'ml-5' : 'mr-5'}`}>
-        {/* <span style={{ color: "#ffa525", minWidth: "320px" }}>{title}</span> */}
+
         <ul className="nav flex-column">
           {group.map((article, idx) => (
             <li key={article.id} className="nav-item">
-              <NavLink
-                to={article.article_setting && article.article_setting.redirect_url ? article.article_setting.redirect_url : `/contents/${article.id}`}
-                className="dropdown-item"
-              >{article.title}</NavLink>
-            </li>
+  <NavLink
+    to={article.article_setting && article.article_setting.redirect_url ? article.article_setting.redirect_url : `/contents/${article.id}`}
+    className="dropdown-item text-justify"
+  >
+    {truncateTitle(article.title, 5)}
+  </NavLink>
+</li>
           ))}
         </ul>
       </div>
