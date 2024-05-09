@@ -170,7 +170,7 @@ function LoadMenu3({id}) {
             )}
           </a>
 
-          <div className="dropdown-menu" style={articles.length < 8 ? { minWidth: '220px' } : {  minWidth: '500px' }}>
+          <div className="dropdown-menu">
         
             <div className='container'>
               <div className='row'>  
