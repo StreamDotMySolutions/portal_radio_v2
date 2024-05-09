@@ -132,7 +132,7 @@ function LoadMenu1({id}) {
             )}
           </a>
 
-          <div className={articles.length < 8 ? "dropdown-menu" : "dropdown-menu"} style={articles.length < 8 ? { minWidth: '320px' } : {}}>
+          <div className={articles.length < 7 ? "dropdown-menu" : "dropdown-menu"} style={articles.length < 7 ? { minWidth: '320px' } : {}}>
         
   
             <div className='row ml-2'>  
