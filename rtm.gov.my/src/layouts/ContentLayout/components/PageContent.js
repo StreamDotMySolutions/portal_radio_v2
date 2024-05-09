@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import { Spinner } from 'react-bootstrap';
-
+import './style.css'
 
 
 const PageContent = () => {
@@ -33,7 +33,9 @@ const PageContent = () => {
     };
 
     return (
+        
         <div className="container-fluid">
+            
             <div className="row">
                 <div className="col-md-1"></div>
 
@@ -42,24 +44,29 @@ const PageContent = () => {
                     <ul className="breadcrumb" style={{ "marginTop": "40px" }}>
                         <li><Link to="/">Utama</Link></li>
                         {loading ? (
-                            <li><Spinner animation="grow" size="sm" /></li> // Show spinner while loading
+                            <li>
+                                
+                                <Spinner animation="grow" size="sm" />
+                            </li> // Show spinner while loading
                         ) : (
                             <li>{title}</li> // Show title when loaded
                         )}
                     </ul>
 
                     {loading ? (
-                            <Spinner animation="grow" size="sm" /> // Show spinner while loading
+                           <span>loading ...</span>// Show spinner while loading
                         ) : (
                             <h1>{title}</h1> // Show title when loaded
                         )}
 
                     <div className="container-fluid" style={{ "marginTop": "4rem" }}>
                         {loading ? (
-                            <Spinner animation="grow" size="sm" /> // Show spinner while loading
+                            <></>
                         ) : (
                             <>{contentItems()}</>
                         )}
+
+                       
                     </div>
 
                     <div className="container-fluid" style={{ "marginTop": "2rem" }}>
