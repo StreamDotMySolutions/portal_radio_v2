@@ -26,7 +26,7 @@ const BannerProgramme2 = () => {
       <div className="row" key={groupIndex}>
         {group.map((item, index) => (
           <div className='col' key={index}>
-            <Link className="nav-link" to="https://rtmklik.rtm.gov.my/">
+             <Link className="nav-link" to={item.redirect_url}>
               <img 
                 style={{ borderRadius: '15px' }} 
                 className="img-fluid" 
