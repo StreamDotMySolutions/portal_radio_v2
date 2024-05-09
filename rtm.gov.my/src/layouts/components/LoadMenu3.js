@@ -59,25 +59,25 @@ function LoadMenu3({id}) {
 
   
 
-  const items = () => {
-    if (articles.length === 0) {
-      return null; // or any default content you want to render when there are no articles
-    }
+  // const items = () => {
+  //   if (articles.length === 0) {
+  //     return null; // or any default content you want to render when there are no articles
+  //   }
   
-    return articles.map(article => (
-      <li key={article.id} className="nav-item ml-2">
-        {article.article_setting && article.article_setting.redirect_url ? (
-          <NavLink to={article.article_setting.redirect_url} className="nav-link">
-            {article.title}
-          </NavLink>
-        ) : (
-          <NavLink to={`/contents/${article.id}`} className="nav-link">
-            {article.title}
-          </NavLink>
-        )}
-      </li>
-    ));
-  };
+  //   return articles.map(article => (
+  //     <li key={article.id} className="nav-item ml-2">
+  //       {article.article_setting && article.article_setting.redirect_url ? (
+  //         <NavLink to={article.article_setting.redirect_url} className="nav-link">
+  //           {article.title}
+  //         </NavLink>
+  //       ) : (
+  //         <NavLink to={`/contents/${article.id}`} className="nav-link">
+  //           {article.title}
+  //         </NavLink>
+  //       )}
+  //     </li>
+  //   ));
+  // };
 
   // const items = () => {
   //   if (articles.length === 0) {
@@ -112,38 +112,38 @@ function LoadMenu3({id}) {
   // };
   
 
-  // const items = () => {
-  //   if (articles.length === 0) {
-  //     return null; // or any default content you want to render when there are no articles
-  //   }
+  const items = () => {
+    if (articles.length === 0) {
+      return null; // or any default content you want to render when there are no articles
+    }
   
-  //   const groupedArticles = [];
-  //   for (let i = 0; i < articles.length; i += 8) {
-  //     groupedArticles.push(articles.slice(i, i + 8));
-  //   }
+    const groupedArticles = [];
+    for (let i = 0; i < articles.length; i += 8) {
+      groupedArticles.push(articles.slice(i, i + 8));
+    }
 
 
   
-  //   return groupedArticles.map((group, index) => (
-  //     <div key={index} className={`col-md-3 ${index === 1 ? 'ml-5' : 'mr-5'}`}>
+    return groupedArticles.map((group, index) => (
+     
 
-  //       <ul className="nav flex-column">
-  //         {group.map((article, idx) => (
-  //           <li key={article.id} className="nav-item">
-  //             <NavLink
-  //               to={article.article_setting && article.article_setting.redirect_url ? article.article_setting.redirect_url : `/contents/${article.id}`}
-  //               className="dropdown-item text-justify"
-  //             >
+        <ul className="nav flex-column">
+          {group.map((article, idx) => (
+            <li key={article.id} className="nav-item">
+              <NavLink
+                to={article.article_setting && article.article_setting.redirect_url ? article.article_setting.redirect_url : `/contents/${article.id}`}
+                className="dropdown-item text-justify"
+              >
 
-  //                 <span dangerouslySetInnerHTML={{ __html: truncateTitleWithBreaks(article.title, 3) }} />
+                  <span dangerouslySetInnerHTML={{ __html: truncateTitleWithBreaks(article.title, 3) }} />
 
-  //             </NavLink>
-  //           </li>
-  //         ))}
-  //       </ul>
-  //     </div>
-  //   ));
-  // };
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      
+    ));
+  };
   
   
   if (articles.length === 0) {
