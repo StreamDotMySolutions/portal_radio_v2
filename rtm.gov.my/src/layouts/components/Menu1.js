@@ -48,7 +48,38 @@ const Menu1 = () => {
 
                 <ul className="navbar-nav ml-auto">
                     {isLoading === false } {menuItems()}
+
+{/* 
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            TERKINI
+                        </a>
+
+                        <div class="dropdown-menu">
+
+                                        <div class="col-md-4 border-right" >
+                                            <span style={{"color":"#ffa525"}}>Pengumuman</span>
+                                            <ul class="nav flex-column ">
+
+
+
+                                                <li class="nav-item border-bottom">
+                                                    <a class="nav-link" href="#">MAKLUMAN KEPADA SEMUA SYARIKAT PEMBEKAL PROGRAM TV RTM 11 Februari 2023</a>
+                                                </li>
+
+
+
+
+
+                                            </ul>
+                                            <a href="#"><span class="float-right" style={{"color":"#ffa525"}}>Papar Semua</span></a>
+                                        </div>
+                       
+                        </div>
+                    </li>     */}
                 </ul>
+                
+         
 
                 <ul className="navbar-nav ml-auto">
                     <li><a style={{ color: "white" }} href="https://www.tiktok.com/@radiotelevisyenmalaysia?" className="nav-link font-weight-bold text-uppercase"><img src="/img/tiktok-xxl.png" className="img-fluid" alt="TikTok Logo" /></a></li>
