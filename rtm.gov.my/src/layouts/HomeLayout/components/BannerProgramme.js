@@ -23,7 +23,7 @@ const BannerProgramme = () => {
       return items.map((item, index) => (
       
           <li className="nav-item" key={index}>
-            <Link className="nav-link" to="https://rtmklik.rtm.gov.my/">
+            <Link className="nav-link" to={item.redirect_url}>
               <img 
                 style={{ borderRadius: '15px' }} 
                 className="img-fluid" 
