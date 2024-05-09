@@ -82,13 +82,17 @@ class ProgrammeController extends Controller
 
     public function ordering(Programme $programme, Request $request)
     {
+        //\Log::info($request);
         // reference https://github.com/lazychaser/laravel-nestedset
         switch($request->input('direction')){
             case 'up':
                 $programme->up(); // programme ordering up
+                return response()->json(['message' => 'Programme Up']);
+                //\Log::info('up executed');
                 break;
             case 'down':
                 $programme->down(); //  // programme ordering down
+                return response()->json(['message' => 'Programme Down']);
             break;
         }
         

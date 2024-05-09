@@ -14,7 +14,8 @@ const Ordering = ({id,direction, disabled=false}) => {
         axios(`${store.url}/programmes/ordering/${id}?direction=${direction}`)
         .then( response => {
             //console.log(response)
-            store.setValue('refresh', true) // trigger DataTable useEffect()
+            //store.setValue('refresh', true) // trigger DataTable useEffect()
+            store.setValue('refresh_programmes', true) // to force useEffect get new data for index
         })
         .catch( error => {
             console.warn(error)

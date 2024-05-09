@@ -90,7 +90,7 @@ class BannerController extends Controller
 
     public function ordering(Banner $banner, Request $request)
     {
-        \Log::info($request);
+        //\Log::info($request);
         // reference https://github.com/lazychaser/laravel-nestedset
         switch($request->input('direction')){
             case 'up':
