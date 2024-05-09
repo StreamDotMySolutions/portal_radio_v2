@@ -6,7 +6,10 @@ const VideoBox = ({ modal, id, filename }) => {
   return (
     <section className="wrap">
       <div className="video-bg">
-        <img src={filename} alt="Video Background" />
+        <img 
+          style={{ width: '100%', height: '100%', cursor: 'pointer' }}
+          src={filename} 
+          alt="Video Background" />
       </div>
       <div className="content">
         <div className="container">
