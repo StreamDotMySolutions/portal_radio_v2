@@ -27,10 +27,24 @@ class ArticleController extends Controller
 
     public function show(Article $article)
     {
-        $items = ArticleData::query()->where('article_id', $article->id)->defaultOrder()->get();
+
+        // find depth of given $article
+        $result = Article::withDepth()->find($article->id);
+        $depth = $result->depth;
+        \Log::info($depth);
+        
+        // get the ancestors
+        $ancestors = Article::withDepth()->having('depth', '=', ($depth - 1))->defaultOrder()->ancestorsOf($article->id);
+
+        // get the items based on $article->id from ArticleData table
+        $items = ArticleData::query()
+                                ->where('article_id', $article->id)
+                                ->defaultOrder()
+                                ->get();
 
         return response()->json([
             'title' => $article->title,
+            'ancestors' => $ancestors,
             'items' => $items
         ]);
     }
