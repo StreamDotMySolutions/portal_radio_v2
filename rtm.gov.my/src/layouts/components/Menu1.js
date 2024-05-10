@@ -48,39 +48,8 @@ const Menu1 = () => {
 
                 <ul className="navbar-nav ml-auto">
                     {isLoading === false } {menuItems()}
-
-{/* 
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            TERKINI
-                        </a>
-
-                        <div class="dropdown-menu">
-
-                                        <div class="col-md-4 border-right" >
-                                            <span style={{"color":"#ffa525"}}>Pengumuman</span>
-                                            <ul class="nav flex-column ">
-
-
-
-                                                <li class="nav-item border-bottom">
-                                                    <a class="nav-link" href="#">MAKLUMAN KEPADA SEMUA SYARIKAT PEMBEKAL PROGRAM TV RTM 11 Februari 2023</a>
-                                                </li>
-
-
-
-
-
-                                            </ul>
-                                            <a href="#"><span class="float-right" style={{"color":"#ffa525"}}>Papar Semua</span></a>
-                                        </div>
-                       
-                        </div>
-                    </li>     */}
                 </ul>
                 
-         
-
                 <ul className="navbar-nav ml-auto">
                     <li><a style={{ color: "white" }} href="https://www.tiktok.com/@radiotelevisyenmalaysia?" className="nav-link font-weight-bold text-uppercase"><img src="/img/tiktok-xxl.png" className="img-fluid" alt="TikTok Logo" /></a></li>
                     <li><a style={{ color: "white" }} href="https://twitter.com/rtm_malaysia?lang=en" className="nav-link font-weight-bold text-uppercase"><img src="/img/twitter.svg" className="img-fluid" alt="Twitter Logo" /></a></li>
@@ -88,6 +57,7 @@ const Menu1 = () => {
                     <li><a style={{ color: "white" }} href="https://www.instagram.com/rtm_malaysia/" className="nav-link font-weight-bold text-uppercase"><img src="/img/instagram.svg" className="img-fluid" alt="Instagram Logo" /></a></li>
                     <li><a style={{ color: "white" }} href="https://www.youtube.com/channel/UCF4KdUqyxJ5Cb0NTGhZXt9g" className="nav-link font-weight-bold text-uppercase"><img src="/img/youtube.png" className="img-fluid" alt="YouTube Logo" /></a></li>
                 </ul>
+                
             </div>
         </nav>
     );
