@@ -43,9 +43,15 @@ export default function ArticleSetting() {
           if( response?.data?.article_setting.hasOwnProperty('published_start') ){
             store.setValue('published_start', response?.data?.article_setting?.published_start )
           }
+
           if( response?.data?.article_setting.hasOwnProperty('published_end') ){
             store.setValue('published_end', response?.data?.article_setting?.published_end )
           }
+
+          if( response?.data?.article_setting.hasOwnProperty('listing_type') ){
+            store.setValue('listing_type', response?.data?.article_setting?.listing_type )
+          }
+
           setIsLoading(false) // animation
           })
       .catch( error => {
@@ -72,6 +78,7 @@ export default function ArticleSetting() {
             { key: 'redirect_url', value: store.getValue('redirect_url') },
             { key: 'published_start', value: store.getValue('published_start') },
             { key: 'published_end', value: store.getValue('published_end') },
+            { key: 'listing_type', value: store.getValue('listing_type') },
         ];
         
         appendFormData(formData, dataArray);
@@ -150,6 +157,18 @@ export default function ArticleSetting() {
                   <InputDate  icon='fa-calendar' fieldName='published_end' />
                 </Col>
               </Row>
+            </Form.Group>
+            <hr />
+            <Form.Group className='col-7'>
+              <InputRadio 
+                fieldName='listing_type' 
+                label='Listing Type'
+                options={[
+                  { label: 'Default', value: 'default' },
+                  { label: 'With Poster', value: 'poster' },
+                  { label: 'Without Poster', value: 'without_poster' }
+                ]}
+                />
             </Form.Group>
             {/* <hr />
             <Form.Group className='col-4'>

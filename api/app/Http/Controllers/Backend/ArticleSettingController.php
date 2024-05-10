@@ -11,12 +11,14 @@ class ArticleSettingController extends Controller
 
     public function update(Request $request,Article $article)
     {
+        //\Log::info($request);
         // validation
         $data = $request->validate([
             'active' => 'required',
             'redirect_url' => 'sometimes|url',
             'published_start' => 'sometimes|date',
             'published_end' => 'sometimes|date',
+            'listing_type' => 'sometimes|string',
         ]);
 
          // Merge article_id with the rest of the data
@@ -25,6 +27,7 @@ class ArticleSettingController extends Controller
                                     'article_id' => $article->id
                                     ]);
 
+                                    \Log::info($data);
         // Update an existing record if it already exists, or create a new one
         $articleSetting = ArticleSetting::updateOrCreate(
             ['article_id' => $article->id], // Conditions to find the record

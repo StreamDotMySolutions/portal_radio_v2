@@ -75,7 +75,7 @@ const Index = () => {
                             
                             </td>
                             <td>
-                                <Link to={`/administration/articles/${item.id}`}>{item.title}</Link>
+                                <Link to={`/administration/articles/${item.id}`}>{item.title}</Link>    
                             </td>
                             <td className='text-end' style={{'width':'400px'}}>
                                
@@ -85,16 +85,7 @@ const Index = () => {
                                         </Button>
                                     </Link>
                                 {' '}
-                                    { item.descendants.length > 0 ?
-                              <></>
-                              // <Link to={`/administration/articles-data/${item.id}`}>
-                                    //     <Button 
-                                    //         //disabled={item.descendants.length > 0 }
-                                    //         size='sm' variant='outline-dark'>
-                                    //         <FontAwesomeIcon icon={['fas', 'folder']} />{' '}HEAD
-                                    //     </Button>
-                                    // </Link>
-                                    :
+                                   
                                     <Link to={`/administration/articles-data/${item.id}`}>
                                         <Button 
                                             //disabled={item.descendants.length > 0 }
@@ -102,7 +93,7 @@ const Index = () => {
                                             <FontAwesomeIcon icon={['fas', 'pen']} />{' '}
                                         </Button>
                                     </Link>
-                                    }
+                                    
                                 
                                 {' '}
                                 <EditModal id={item.id} />

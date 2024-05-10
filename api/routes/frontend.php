@@ -12,6 +12,7 @@ use App\Http\Controllers\Frontend\{
 };
 
 Route::get('/articles/{article}', [ArticleController::class, 'index']);
+Route::get('/listings/{article}', [ArticleController::class, 'listings']);
 Route::get('/show/{article}', [ArticleController::class, 'show']);
 Route::get('/home-footer', [FooterController::class, 'index']);
 Route::get('/home-menu', [MenuController::class, 'index']);

@@ -32,7 +32,7 @@ const PageContent = () => {
     const breadcrumbs = () => {
         return ancestors.map((item, index) => (
             <li>
-                   <Link to={`/listings/${item.id}`}>{item.title}</Link>
+                <Link to={`/listings/${item.id}`}>{item.title}</Link>
             </li>
         ));
     }

@@ -13,13 +13,34 @@ class ArticleController extends Controller
     public function index($parentId = 0)
     {
 
-        $parent = Article::where('id', $parentId)->first();
+        $parent = Article::where('id', $parentId)->with(['articleSetting'])->first();
         $articles = Article::query()->where('parent_id', $parentId)->with(['articleSetting','descendants.articleSetting'])->defaultOrder()->get()->toTree();
         
         return response()->json([
         
             'title' => $parent->title,
-            'articles' => $articles
+            'settings' => $parent->articleSetting, 
+            'articles' => $articles,
+        
+        ]);
+    }
+
+    public function listings($parentId = 0)
+    {
+
+        $parent = Article::where('id', $parentId)->with(['articleSetting'])->first();
+        $articles = Article::query()
+                        ->where('parent_id', $parentId)
+                        ->with(['articleSetting','descendants.articleSetting'])
+                        ->defaultOrder()
+                        ->paginate(10);
+
+        
+        return response()->json([
+        
+            'title' => $parent->title,
+            'settings' => $parent->articleSetting, 
+            'articles' => $articles,
         
         ]);
     }
@@ -31,16 +52,17 @@ class ArticleController extends Controller
         // find depth of given $article
         $result = Article::withDepth()->find($article->id);
         $depth = $result->depth;
-        \Log::info($depth);
+        //\Log::info($depth);
         
         // get the ancestors
+        // $depth minus 1 is to get ancestor 1 step above
         $ancestors = Article::withDepth()->having('depth', '=', ($depth - 1))->defaultOrder()->ancestorsOf($article->id);
 
         // get the items based on $article->id from ArticleData table
         $items = ArticleData::query()
-                                ->where('article_id', $article->id)
-                                ->defaultOrder()
-                                ->get();
+                            ->where('article_id', $article->id)
+                            ->defaultOrder()
+                            ->get();
 
         return response()->json([
             'title' => $article->title,
