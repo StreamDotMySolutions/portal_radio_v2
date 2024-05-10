@@ -97,6 +97,7 @@ const PageContent = () => {
                         )}
                     </ul>
 
+                    <div className="" style={{ "minHeight": "300px" }}>
                     {loading ? (
                            <span>loading ...</span>
                         ) : (
@@ -105,6 +106,7 @@ const PageContent = () => {
                                 {layout}
                             </>
                         )}
+                    </div>
 
                     <div className="container-fluid" style={{ "marginTop": "2rem" }}></div>
 
