@@ -106,6 +106,7 @@ const PageContent = () => {
 
                     <div className="container-fluid" style={{ "marginTop": "2rem" }}></div>
 
+                    { settings?.listing_type !== 'single_article' &&
                     <div className="pagination-container float-right" style={{ marginBottom: '6rem' }}>
                         <nav>
                             <ul className="pagination">
@@ -113,6 +114,8 @@ const PageContent = () => {
                             </ul>
                         </nav>
                     </div>
+                    }
+
                 </div>
                 <div className="col-md-1"></div>
             </div>
