@@ -171,7 +171,8 @@ export default function ArticleSetting() {
                 options={[
                   { label: 'Default', value: 'default' },
                   { label: 'With Poster', value: 'poster' },
-                  { label: 'Without Poster', value: 'without_poster' }
+                  { label: 'Without Poster', value: 'without_poster' },
+                  { label: 'Single Article', value: 'single_article' }
                 ]}
                 />
             </Form.Group>

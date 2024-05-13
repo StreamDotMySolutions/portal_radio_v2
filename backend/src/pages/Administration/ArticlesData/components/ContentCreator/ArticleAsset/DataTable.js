@@ -16,6 +16,9 @@ const DataTable = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
     const [items, setItems] = useState([]) // data placeholder
+
+    const serverUrl = process.env.REACT_APP_SERVER_URL;
+    const path = `${serverUrl}/storage/article_assets`
     
     // to get items data
     useEffect( () => 
@@ -141,7 +144,7 @@ const DataTable = () => {
                                 {item.filename && /\.(jpg|gif|png)$/.test(item.filename) ? (
                                     <img
                                         className='img-fluid rounded'
-                                        src={`/storage/article_assets/${item.filename}`}
+                                        src={`${path}/${item.filename}`}
                                         alt="Image"
                                     />
                                 ) : (
@@ -158,13 +161,13 @@ const DataTable = () => {
                                 />
                             </td>
                             <td className="align-middle text-center" style={{width:"200px"}}>
-                                <Button 
+                                {/* <Button 
                                     size='sm' 
                                     onClick={() => handleCopyClick(`/storage/article_assets/${item.filename}`)}
                                     variant='outline-primary'>
                                     <FontAwesomeIcon icon={['fas', 'copy']} />
                                 </Button>
-                                {' '}
+                                {' '} */}
                                 <Button 
                                     size='sm' 
                                     onClick={() => handleDeleteClick(item.id)}

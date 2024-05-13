@@ -5,8 +5,8 @@ import { Spinner } from 'react-bootstrap';
 import './style.css'
 
 
-const PageContent = () => {
-    const { id } = useParams(); // parentid
+const PageContent = ({id}) => {
+    //const { id } = useParams(); // parentid
     const [items, setItems] = useState([]);
     const [ancestors, setAncestors] = useState([]);
     const [title, setTitle] = useState('');

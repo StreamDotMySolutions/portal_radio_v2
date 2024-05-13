@@ -6,6 +6,7 @@ import WithPosterListing from './WithPosterListing';
 import WithoutPosterListing from './WithoutPosterListing';
 import DefaultListing from './DefaultListing';
 import './style.css'
+import SingleArticle from '../SingleArticle';
 
 const PageContent = () => {
     const { id } = useParams(); // parentid
@@ -64,6 +65,10 @@ const PageContent = () => {
         case 'without_poster':
             layout = <WithoutPosterListing items={items} />;
             break;
+
+        case 'single_article':
+            layout = <SingleArticle id={id} />;
+        break;    
 
         case 'default':
         default:

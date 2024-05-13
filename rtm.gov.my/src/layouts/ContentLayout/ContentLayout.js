@@ -4,8 +4,10 @@ import Footer from '../components/Footer';
 import PageContent from './components/PageContent';
 import Menu3 from '../components/Menu3';
 import Footer2 from '../components/Footer2';
+import { useParams } from 'react-router-dom';
 
 const ContentLayout = () => {
+    const { id } = useParams(); // parentid
 
     return (
         <>
@@ -18,7 +20,7 @@ const ContentLayout = () => {
                 <Menu3 />
             </div>
        
-            <PageContent />
+            <PageContent id={id} />
 
             <div className="d-none d-md-block" id="footer-desktop">
                 <Footer />
