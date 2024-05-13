@@ -17,72 +17,63 @@ const PageContent = () => {
     const serverUrl = process.env.REACT_APP_SERVER_URL;
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [page, setPage] = useState();
     const [links, setLinks] = useState([]);
-    const [paginate, setPaginate] = useState(`${url}/listings/${id}?page=1`);
+    const [paginate, setPaginate] = useState('');
+
 
     useEffect(() => {
-
-        axios(paginate)
+        setLoading(true); // Set loading to true when fetching new data
+        let apiUrl = paginate ? paginate : `${url}/listings/${id}?page=1`;
+        axios.get(apiUrl)
             .then(response => {
-
-                console.log(response)
-                // console.log(paginate)
                 setTitle(response.data.title); // title
                 setSettings(response.data.settings); // settings
                 setItems(response.data.articles.data); // article data
                 setLinks(response.data.articles.links); // paginator links
                 setCurrentPage(response.data.articles.current_page); // current_page for pagination
-
                 setLoading(false); // Set loading to false when data is fetched
             })
             .catch(error => {
                 console.warn(error);
                 setLoading(false); // Set loading to false on error as well
             });
-    }, [id,paginate]); // refresh data when id or page changes
+    }, [id, paginate]); // refresh data when id or page changes
+    
+    const handlePaginationClick = (url) => {
+        // Handle click event and set the page to the clicked item's url
+        setPaginate(url);
+    };
+    
 
     const paginatorItems = () => {
-        const handleClick = (url) => {
-            // Handle click event and set the page to the clicked item's url
-            setPaginate(url);
-        };
-    
         return links.map((item, index) => (
-            <li key={index} className={currentPage == item.label ? "active" : ""} onClick={() => handleClick(item.url)}>
+            <li key={index} className={currentPage === item.label ? "active" : ""} onClick={() => handlePaginationClick(item.url)}>
                 <span style={index === 0 || index === links.length - 1 ? { backgroundColor: '#202938', color: 'white' } : null}>
                     {index === 0 ? '<' : index === links.length - 1 ? '>' : item.label}
                 </span>
             </li>
         ));
     };
-    
-    
-    
-    
+
     let layout;
     switch (settings?.listing_type) {
         case 'poster':
-            layout = <WithPosterListing  items={items} />;
-        break;
+            layout = <WithPosterListing items={items} />;
+            break;
 
         case 'without_poster':
-            layout = <WithoutPosterListing  items={items} />;
-        break;
+            layout = <WithoutPosterListing items={items} />;
+            break;
 
         case 'default':
-            layout =  <DefaultListing items={items} />;
-        break;
-  
         default:
             layout = <DefaultListing items={items} />;
-        break;
+            break;
     }
 
     return (
-        
         <div className="container-fluid">
-            {page}
+     
             <div className="row">
                 <div className="col-md-1"></div>
                 <div className="col-md-10">
@@ -91,15 +82,15 @@ const PageContent = () => {
                         {loading ? (
                             <li>
                                 <Spinner animation="grow" size="sm" />
-                            </li> 
+                            </li>
                         ) : (
-                            <li>{title}</li> 
+                            <li>{title}</li>
                         )}
                     </ul>
 
                     <div className="" style={{ "minHeight": "300px" }}>
-                    {loading ? (
-                           <span>loading ...</span>
+                        {loading ? (
+                            <span>loading ...</span>
                         ) : (
                             <>
                                 <h1>{title}</h1>
@@ -117,14 +108,11 @@ const PageContent = () => {
                             </ul>
                         </nav>
                     </div>
-                    
-
                 </div>
-
                 <div className="col-md-1"></div>
-
             </div>
         </div>
     );
 };
+
 export default PageContent;
