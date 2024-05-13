@@ -82,18 +82,24 @@ function LoadMenu1({id}) {
 
         <ul className="nav flex-column">
           {group.map((article, idx) => (
-            <li key={article.id} className="nav-item">
+            <li key={idx} className="nav-item">
               <NavLink
-                to={article.article_setting && article.article_setting.redirect_url ? article.article_setting.redirect_url : `/contents/${article.id}`}
+                to={
+                  article.article_setting && article.article_setting.redirect_url
+                    ? article.article_setting.redirect_url
+                    : article.article_setting && article.article_setting.listing_type === 'single_article'
+                    ? `/contents/${article.id}`
+                    : `/listings/${article.id}`
+                }
                 className="dropdown-item text-justify"
               >
-
-                  <span dangerouslySetInnerHTML={{ __html: truncateTitleWithBreaks(article.title, 3) }} />
-
+                <span dangerouslySetInnerHTML={{ __html: truncateTitleWithBreaks(article.title, 3) }} />
               </NavLink>
             </li>
           ))}
         </ul>
+
+
       </div>
     ));
   };
