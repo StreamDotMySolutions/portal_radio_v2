@@ -12,7 +12,7 @@ const WithPosterListing = ({items}) => {
     const contentItems = () => {
         return items.map((item, index) => (
 
-        <tr>
+        <tr key={index}> 
             <td style={{ width: '300px', verticalAlign: 'middle' }}>
                 {item.article_poster ?
                     <img className='img-fluid img-thumbnail' src={`${path}/${item.article_poster.filename}`} />
