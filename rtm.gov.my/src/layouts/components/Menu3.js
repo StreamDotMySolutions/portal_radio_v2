@@ -48,7 +48,7 @@ const Menu3 = () => {
     // 2. check ArticleSetting.listing_type
     const menuItems2 = () => {
         return menu2Items.map((item, index) => {
-            console.log(item)
+            //console.log(item)
             if(item.article_setting  && item.article_setting.active == 1 ){
 
                 if (item.descendants && item.descendants.length > 0) {
