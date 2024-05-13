@@ -15,7 +15,7 @@ class ArticleSettingController extends Controller
         // validation
         $data = $request->validate([
             'active' => 'required',
-            'redirect_url' => 'sometimes|url',
+            'redirect_url' => 'sometimes',
             'published_start' => 'sometimes|date',
             'published_end' => 'sometimes|date',
             'listing_type' => 'sometimes|string',

@@ -52,7 +52,7 @@ class ArticleService
             'article_id' => $article->id,
             'active' => FALSE,
             'show_children' => TRUE,
-            'listing_type' => 'default'
+            'listing_type' => 'single_article'
             
         );
 
