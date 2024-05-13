@@ -24,10 +24,13 @@ const ContentCreator = () => {
             })
         .then( response => { // success 200
             //console.log(response)
+        
+            store.setValue('description', '' )
             if( response?.data?.article.hasOwnProperty('description') ){
               store.setValue('description', response?.data?.article?.description )
             }
 
+            store.setValue('article_poster_image', '');
             if (response?.data?.article?.hasOwnProperty('article_poster') && response.data.article.article_poster !== null) {
                 store.setValue('article_poster_image', response.data.article.article_poster);
             }

@@ -8,6 +8,7 @@ const WithoutPosterListing = ({items}) => {
 
             <tr>
                 <td>
+       
                     <Link style={{textDecoration: "none", color:"#333333"}} to={`/contents/${item.id}`}>{item.title}</Link>
                 </td>
             </tr>

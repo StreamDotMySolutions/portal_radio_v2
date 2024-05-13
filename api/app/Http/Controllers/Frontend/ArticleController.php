@@ -31,7 +31,7 @@ class ArticleController extends Controller
         $parent = Article::where('id', $parentId)->with(['articleSetting'])->first();
         $articles = Article::query()
                         ->where('parent_id', $parentId)
-                        ->with(['articleSetting','descendants.articleSetting'])
+                        ->with(['articlePoster','articleSetting','descendants.articleSetting'])
                         ->defaultOrder()
                         ->paginate(10);
 

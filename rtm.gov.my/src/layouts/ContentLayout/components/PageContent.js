@@ -17,7 +17,7 @@ const PageContent = () => {
     useEffect(() => {
         axios(`${url}/show/${id}`)
             .then(response => {
-                console.log(response)
+                //console.log(response)
                 setTitle(response.data.title);
                 setItems(response.data.items);
                 setAncestors(response.data.ancestors);

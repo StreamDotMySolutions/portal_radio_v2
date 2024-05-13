@@ -26,7 +26,7 @@ const PageContent = () => {
         axios(paginate)
             .then(response => {
 
-                // console.log(response)
+                console.log(response)
                 // console.log(paginate)
                 setTitle(response.data.title); // title
                 setSettings(response.data.settings); // settings
