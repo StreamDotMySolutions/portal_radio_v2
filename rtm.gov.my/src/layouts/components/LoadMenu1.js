@@ -24,7 +24,7 @@ function LoadMenu1({id}) {
   useEffect(() => {
     axios(`${url}/articles/${id}`)
     .then(response => {
-      console.log(response.data)
+      //console.log(response.data)
       setTitle(response.data.title)
       setArticles(response.data.articles)
       setSettings(response.data.settings)

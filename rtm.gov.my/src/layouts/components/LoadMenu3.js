@@ -57,6 +57,39 @@ function LoadMenu3({id}) {
   }
   
 
+  // const items = () => {
+  //   if (articles.length === 0) {
+  //     return null; // or any default content you want to render when there are no articles
+  //   }
+  
+  //   const groupedArticles = [];
+  //   for (let i = 0; i < articles.length; i += 8) {
+  //     groupedArticles.push(articles.slice(i, i + 8));
+  //   }
+
+
+  
+  //   return groupedArticles.map((group, index) => (
+     
+
+  //       <ul key={index} className="nav flex-column">
+  //         {group.map((article, idx) => (
+  //           <li key={article.id} className="nav-item">
+  //             <NavLink
+  //               to={article.article_setting && article.article_setting.redirect_url ? article.article_setting.redirect_url : `/contents/${article.id}`}
+  //               className="dropdown-item text-justify"
+  //             >
+
+  //                 <span dangerouslySetInnerHTML={{ __html: truncateTitleWithBreaks(article.title, 3) }} />
+
+  //             </NavLink>
+  //           </li>
+  //         ))}
+  //       </ul>
+      
+  //   ));
+  // };
+
   const items = () => {
     if (articles.length === 0) {
       return null; // or any default content you want to render when there are no articles
@@ -67,26 +100,33 @@ function LoadMenu3({id}) {
       groupedArticles.push(articles.slice(i, i + 8));
     }
 
-
-  
     return groupedArticles.map((group, index) => (
-     
+      <div key={index} className={`col-md-3 ${index === 1 ? 'ml-5' : 'mr-5'}`}>
 
-        <ul key={index} className="nav flex-column">
+        <ul className="nav flex-column">
           {group.map((article, idx) => (
-            <li key={article.id} className="nav-item">
-              <NavLink
-                to={article.article_setting && article.article_setting.redirect_url ? article.article_setting.redirect_url : `/contents/${article.id}`}
-                className="dropdown-item text-justify"
-              >
-
+            <li key={idx} className="nav-item">
+              {article.article_setting && article.article_setting.active === 1 && ( // Check if active is 1
+                <NavLink
+                  to={
+                    article.article_setting.redirect_url
+                      ? article.article_setting.redirect_url
+                      : article.article_setting.listing_type === 'single_article'
+                      ? `/contents/${article.id}`
+                      : `/listings/${article.id}`
+                  }
+                  className="dropdown-item text-justify"
+                >
                   <span dangerouslySetInnerHTML={{ __html: truncateTitleWithBreaks(article.title, 3) }} />
-
-              </NavLink>
+                </NavLink>
+              )}
             </li>
           ))}
         </ul>
-      
+
+
+
+      </div>
     ));
   };
   

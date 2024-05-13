@@ -44,48 +44,65 @@ const Menu3 = () => {
     }, []);
 
 
+    // 1. check ArticleSetting.active
+    // 2. check ArticleSetting.listing_type
     const menuItems2 = () => {
         return menu2Items.map((item, index) => {
-            if (item.descendants && item.descendants.length > 0) {
-                return (
-                    <li key={index} className="nav-item dropdown">
-                        <a className="nav-link dropdown-toggle" href="#" id={`navbarDropdown${item.title}`} role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {item.title}
-                        </a>
-                        <div className="dropdown-menu" aria-labelledby={`navbarDropdown${item.title}`} style={{ marginTop: "-10px" }}>
-                            {item.descendants.map((descendant, idx) => (
-                                <>
-                                {descendant.article_setting && descendant.article_setting.redirect_url ? (
-                                    <NavLink key={idx} to={descendant.article_setting.redirect_url} className="nav-link ml-3">
-                                        {descendant.title}
-                                    </NavLink>
-                                    ) : (
-                                    <NavLink key={idx}  to={`/contents/${descendant.id}`} className="nav-link">
-                                        {descendant.title}
-                                    </NavLink>
-                                )}
-                                </>
-                            ))}
-                        </div>
-                    </li>
-                );
-            } else {
-                return (
-                    <li key={index} className="nav-item">
-                  
-                        {item.article_setting && item.article_setting.redirect_url ? (
-                            <NavLink to={item.article_setting.redirect_url} className="nav-link">
-                                {item.title}
-                            </NavLink>
-                            ) : (
-                            <NavLink to={`/contents/${item.id}`} className="nav-link">
-                                {item.title}
-                            </NavLink>
-                        )}
+            console.log(item)
+            if(item.article_setting  && item.article_setting.active == 1 ){
 
-                    </li>
-                );
-            }
+                if (item.descendants && item.descendants.length > 0) {
+                    return (
+                        <li key={index} className="nav-item dropdown">
+                            <a className="nav-link dropdown-toggle" href="#" id={`navbarDropdown${item.title}`} role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                {item.title}
+                            </a>
+                            <div className="dropdown-menu" aria-labelledby={`navbarDropdown${item.title}`} style={{ marginTop: "-10px" }}>
+                                {item.descendants.map((descendant, idx) => (
+                                    <>
+                                    {descendant.article_setting && descendant.article_setting.redirect_url ? (
+                                        <NavLink key={idx} to={descendant.article_setting.redirect_url} className="nav-link ml-3">
+                                            {descendant.title}
+                                        </NavLink>
+                                        ) : (
+                                        <>
+                                        {descendant.article_setting && descendant.article_setting.listing_type == 'single_article' ?
+                                            <NavLink key={idx}  to={`/contents/${descendant.id}`} className="nav-link">
+                                                {descendant.title}
+                                            </NavLink>
+                                            :
+                                            <NavLink key={idx}  to={`/listings/${descendant.id}`} className="nav-link">
+                                                {descendant.title}
+                                            </NavLink>
+                                        }    
+                                        </>
+                                      
+                                    )}
+                                    </>
+                                ))}
+                            </div>
+                        </li>
+                    );
+                } else {
+                    return (
+                        <li key={index} className="nav-item">
+                      
+                            {item.article_setting && item.article_setting.redirect_url ? (
+                                <NavLink to={item.article_setting.redirect_url} className="nav-link">
+                                    {item.title}
+                                </NavLink>
+                                ) : (
+                                <NavLink to={`/contents/${item.id}`} className="nav-link">
+                                    {item.title}
+                                </NavLink>
+                            )}
+    
+                        </li>
+                    );
+                }
+
+            } // active.check
+            
         });
     };
     return (
