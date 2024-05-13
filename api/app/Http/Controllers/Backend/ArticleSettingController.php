@@ -28,7 +28,7 @@ class ArticleSettingController extends Controller
                                     'article_id' => $article->id
                             ]);
 
-                                    \Log::info($data);
+        //\Log::info($data);
         // Update an existing record if it already exists, or create a new one
         $articleSetting = ArticleSetting::updateOrCreate(
             ['article_id' => $article->id], // Conditions to find the record

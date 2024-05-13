@@ -2,6 +2,7 @@
 namespace App\Services;
 
 use App\Models\Article;
+use App\Models\ArticleSetting;
 use Illuminate\Http\Request;
 
 class ArticleService
@@ -43,6 +44,24 @@ class ArticleService
             'title' => $request->input('title') ,
             'user_id' => $user->id
         ]);
+
+        // populate default settings
+        $settings = array(
+
+            'user_id' => auth('sanctum')->user()->id,
+            'article_id' => $article->id,
+            'active' => FALSE,
+            'show_children' => TRUE,
+            'listing_type' => 'default'
+            
+        );
+
+        // ArticleSetting
+        $articleSetting = ArticleSetting::updateOrCreate(
+            ['article_id' => $article->id], // Conditions to find the record
+            $settings // Data to update or create
+        );
+
 
         // append parent id to node
         
