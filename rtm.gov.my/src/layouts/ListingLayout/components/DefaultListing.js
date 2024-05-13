@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+const DefaultListing = ({ items, page }) => {
+    // Calculate the starting index of the current page
+    const startIndex = page === 1 ? 1 : (page - 1) * 10 + 1;
 
-const DefaultListing = ({items}) => {
 
+    // Generate content items
     const contentItems = () => {
         return items.map((item, index) => (
             <li key={index}>
@@ -13,11 +16,9 @@ const DefaultListing = ({items}) => {
     };
 
     return (
-   
-        <ol>
+        <ol start={startIndex}>
             {contentItems()}
         </ol>
-   
     );
 };
 

@@ -74,7 +74,7 @@ const PageContent = () => {
 
         case 'default':
         default:
-            layout = <DefaultListing items={items} />;
+            layout = <DefaultListing items={items} page={currentPage}/>;
             break;
     }
 
