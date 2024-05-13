@@ -64,9 +64,6 @@ function LoadMenu1({id}) {
     }
   }
   
-
-  
-
   const items = () => {
     if (articles.length === 0) {
       return null; // or any default content you want to render when there are no articles
@@ -83,21 +80,24 @@ function LoadMenu1({id}) {
         <ul className="nav flex-column">
           {group.map((article, idx) => (
             <li key={idx} className="nav-item">
-              <NavLink
-                to={
-                  article.article_setting && article.article_setting.redirect_url
-                    ? article.article_setting.redirect_url
-                    : article.article_setting && article.article_setting.listing_type === 'single_article'
-                    ? `/contents/${article.id}`
-                    : `/listings/${article.id}`
-                }
-                className="dropdown-item text-justify"
-              >
-                <span dangerouslySetInnerHTML={{ __html: truncateTitleWithBreaks(article.title, 3) }} />
-              </NavLink>
+              {article.article_setting && article.article_setting.active === 1 && ( // Check if active is 1
+                <NavLink
+                  to={
+                    article.article_setting.redirect_url
+                      ? article.article_setting.redirect_url
+                      : article.article_setting.listing_type === 'single_article'
+                      ? `/contents/${article.id}`
+                      : `/listings/${article.id}`
+                  }
+                  className="dropdown-item text-justify"
+                >
+                  <span dangerouslySetInnerHTML={{ __html: truncateTitleWithBreaks(article.title, 3) }} />
+                </NavLink>
+              )}
             </li>
           ))}
         </ul>
+
 
 
       </div>
