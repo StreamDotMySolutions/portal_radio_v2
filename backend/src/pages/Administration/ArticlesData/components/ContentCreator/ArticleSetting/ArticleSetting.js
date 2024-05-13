@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Form,Badge, Button, Col, Modal, Row} from 'react-bootstrap'
-import { InputDate, InputRadio, InputText, InputTextarea,appendFormData } from '../../../../../../libs/FormInput'
+import { InputCheckbox, InputDate, InputRadio, InputText, InputTextarea,appendFormData } from '../../../../../../libs/FormInput'
 import axios from '../../../../../../libs/axios'
 import useStore from '../../../../../store'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -52,6 +52,10 @@ export default function ArticleSetting() {
             store.setValue('listing_type', response?.data?.article_setting?.listing_type )
           }
 
+          if( response?.data?.article_setting.hasOwnProperty('show_children') ){
+            store.setValue('show_children', response?.data?.article_setting?.show_children )
+          }
+
           setIsLoading(false) // animation
           })
       .catch( error => {
@@ -79,6 +83,7 @@ export default function ArticleSetting() {
             { key: 'published_start', value: store.getValue('published_start') },
             { key: 'published_end', value: store.getValue('published_end') },
             { key: 'listing_type', value: store.getValue('listing_type') },
+            { key: 'show_children', value: store.getValue('show_children') },
         ];
         
         appendFormData(formData, dataArray);
@@ -167,6 +172,18 @@ export default function ArticleSetting() {
                   { label: 'Default', value: 'default' },
                   { label: 'With Poster', value: 'poster' },
                   { label: 'Without Poster', value: 'without_poster' }
+                ]}
+                />
+            </Form.Group>
+
+            <hr />
+            <Form.Group className='col-5'>
+              <InputRadio 
+                fieldName='show_children' 
+                label='Show Children ( Drowpdown Menu )'
+                options={[
+                  { label: 'Yes', value: 1 },
+                  { label: 'No', value: 0 },
                 ]}
                 />
             </Form.Group>

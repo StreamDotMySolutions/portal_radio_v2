@@ -193,6 +193,42 @@ export function InputRadio({fieldName,label,options=[]}){
     )
 }
 
+export function InputCheckbox({fieldName,label="Active", yesLabel="Yes"}){
+    const store = useStore()
+    const errors = store.getValue('errors')
+
+    return(
+        <>
+         <Form>
+            <Form.Group>
+                <Form.Label><h6>{label}</h6></Form.Label>
+                <Row>
+                    <Col>
+                        <Form.Check
+                            type="checkbox"
+                            label={yesLabel}
+                            name={fieldName}
+                            value="1"
+                            isInvalid={errors?.hasOwnProperty(fieldName)}
+                            checked={store.getValue(fieldName) == 1}
+                            onChange={(e) => { 
+                                store.setValue(fieldName, '1');
+                            }}
+                        />
+                    </Col>
+                    
+                </Row>
+                {errors?.hasOwnProperty(fieldName) && (
+                    <span className='text-danger'>   
+                        {errors[fieldName] ? errors[fieldName] : null}
+                    </span>
+                )}
+                </Form.Group>
+            </Form>
+        </>
+    )
+}
+
 export function InputRadioBoolean({fieldName,icon,label="Active", yesLabel="Yes", noLabel="No"}){
     const store = useStore()
     const errors = store.getValue('errors')

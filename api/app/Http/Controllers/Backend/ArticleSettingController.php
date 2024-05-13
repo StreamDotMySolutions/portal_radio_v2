@@ -19,13 +19,14 @@ class ArticleSettingController extends Controller
             'published_start' => 'sometimes|date',
             'published_end' => 'sometimes|date',
             'listing_type' => 'sometimes|string',
+            'show_children' => 'sometimes|boolean',
         ]);
 
          // Merge article_id with the rest of the data
         $data = array_merge($data, [
                                     'user_id' => auth('sanctum')->user()->id,
                                     'article_id' => $article->id
-                                    ]);
+                            ]);
 
                                     \Log::info($data);
         // Update an existing record if it already exists, or create a new one
