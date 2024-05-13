@@ -48,9 +48,11 @@ const PageContent = () => {
 
     const paginatorItems = () => {
         return links.map((item, index) => (
-            <li key={index} className={currentPage === item.label ? "active" : ""} onClick={() => handlePaginationClick(item.url)}>
+        
+            <li key={index} className={currentPage == item.label ? "active" : ""} onClick={() => handlePaginationClick(item.url)}>
                 <span style={index === 0 || index === links.length - 1 ? { backgroundColor: '#202938', color: 'white' } : null}>
                     {index === 0 ? '<' : index === links.length - 1 ? '>' : item.label}
+                    
                 </span>
             </li>
         ));
