@@ -22,10 +22,23 @@ const Menu1 = () => {
     }, []);
 
     const menuItems = () => {
+        // 1. check ArticleSetting
+        // 2. check active | true or false
+        // 3. check redirect_url
+        // 4. check listing_type
+        // 5. check show_children
         return items.map((item, index) => (
-            <span key={index}>
-                <LoadMenu id={item.id}/>
-            </span>
+            <>
+            {item.article_setting && item.article_setting.active == 1 && // check active
+
+                <>
+                    <span key={index}>
+                        <LoadMenu id={item.id}/>
+                    </span>
+                </>
+
+            } 
+            </>
         ));
     };
     

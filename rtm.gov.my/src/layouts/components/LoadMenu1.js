@@ -9,17 +9,25 @@ import Spinner from 'react-bootstrap/Spinner'; // Import Spinner component
 
 function LoadMenu1({id}) {
 
+  // 1. check ArticleSetting
+  // 2. check active | true or false
+  // 3. check redirect_url
+  // 4. check listing_type
+  // 5. check show_children
+
   const url = process.env.REACT_APP_API_URL
   const [title, setTitle] = useState('')
   const [articles, setArticles] = useState([])
+  const [settings, setSettings] = useState([])
   const [loading, setLoading] = useState(true); // State to track loading status
 
   useEffect(() => {
     axios(`${url}/articles/${id}`)
     .then(response => {
-      //console.log(response.data)
+      console.log(response.data)
       setTitle(response.data.title)
       setArticles(response.data.articles)
+      setSettings(response.data.settings)
       setLoading(false); // Set loading to false when data is fetched
     })
     .catch(error => {
@@ -92,11 +100,18 @@ function LoadMenu1({id}) {
   
   
   if (articles.length === 0) {
+    // 1. check redirect_url
+
     return (
       <>
-      <li className='nav-item'>
-        <NavLink className="nav-link" to={`/contents/${id}`}>{title}</NavLink>
-      </li>
+        
+        <li className='nav-item'>
+          {settings.redirect_url ?
+            <NavLink className="nav-link" to={`${settings.redirect_url}`}>{title}</NavLink>
+          :
+            <NavLink className="nav-link" to={`/contents/${id}`}>{title}</NavLink>
+          }
+        </li>
       </>
     )
   }
