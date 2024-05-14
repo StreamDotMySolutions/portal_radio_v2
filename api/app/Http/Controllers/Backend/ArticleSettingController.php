@@ -17,7 +17,7 @@ class ArticleSettingController extends Controller
             'active' => 'required',
             'redirect_url' => 'sometimes',
             'published_start' => 'sometimes|date',
-            'published_end' => 'sometimes|date',
+            'published_end' => 'sometimes|date|after_or_equal:published_start',
             'listing_type' => 'sometimes|string',
             'show_children' => 'sometimes|boolean',
         ]);

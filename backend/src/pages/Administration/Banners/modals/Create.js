@@ -38,6 +38,9 @@ export default function CreateModal() {
             { key: 'description', value: store.getValue('description') }, 
             { key: 'redirect_url', value: store.getValue('redirect_url') }, 
             { key: 'banner', value: store.getValue('banner') },
+            { key: 'active', value: store.getValue('active') },
+            { key: 'published_start', value: store.getValue('published_start') },
+            { key: 'published_end', value: store.getValue('published_end') },
         ];
         
         appendFormData(formData, dataArray);

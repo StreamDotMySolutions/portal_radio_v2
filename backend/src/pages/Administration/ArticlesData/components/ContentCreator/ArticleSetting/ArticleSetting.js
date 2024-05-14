@@ -138,6 +138,7 @@ export default function ArticleSetting() {
                   { label: 'Yes', value: 1 },
                   { label: 'No', value: 0 }
                 ]}
+                
                 />
             </Form.Group>
             <hr />

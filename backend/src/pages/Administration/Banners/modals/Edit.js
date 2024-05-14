@@ -44,6 +44,18 @@ export default function EditModal({id}) {
             if( response?.data?.banner.hasOwnProperty('filename') ){
               store.setValue('filename', response?.data?.banner?.filename )
             }
+
+            if( response?.data?.banner.hasOwnProperty('active') ){
+              store.setValue('active', response?.data?.banner?.active )
+            }
+
+            if( response?.data?.banner.hasOwnProperty('published_start') ){
+              store.setValue('published_start', response?.data?.banner?.published_start )
+            }
+
+            if( response?.data?.banner.hasOwnProperty('published_end') ){
+              store.setValue('published_end', response?.data?.banner?.published_end )
+            }
             setIsLoading(false) // animation
             store.setValue('refresh', true) // to force useEffect get new data for index
             })
@@ -63,6 +75,9 @@ export default function EditModal({id}) {
         { key: 'title', value: store.getValue('title') },
         { key: 'description', value: store.getValue('description') }, 
         { key: 'redirect_url', value: store.getValue('redirect_url') }, 
+        { key: 'active', value: store.getValue('active') },
+        { key: 'published_start', value: store.getValue('published_start') },
+        { key: 'published_end', value: store.getValue('published_end') },
       ];
       
       appendFormData(formData, dataArray);

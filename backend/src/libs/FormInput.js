@@ -186,9 +186,18 @@ export function InputRadio({fieldName,label,options=[]}){
                         </Col>
                     
                     ))}
+                   
                     </Row>
                 </Form.Group>
             </Form>    
+            {
+                        errors?.hasOwnProperty(fieldName) &&
+                            (
+                                <span className='text-danger'>
+                                    { errors[fieldName] ? errors[fieldName] : null }
+                                </span>
+                            )
+                    }
         </>
     )
 }

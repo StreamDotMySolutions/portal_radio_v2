@@ -57,6 +57,7 @@ const Index = () => {
                     <tr>
                         <th className='text-center' style={{ 'width': '20px'}}><FontAwesomeIcon icon={['fas', 'hashtag']} /></th>
                         <th className='text-center'>Ordering</th>
+                        <th className='text-center' style={{ 'width': '100px'}}>Active ?</th>
                         <th>Title</th>
                         <th className='text-center' style={{'width':'200px'}}> <FontAwesomeIcon icon={['fas', 'bolt']} /></th>
                     </tr>
@@ -67,6 +68,7 @@ const Index = () => {
                         
                         <tr key={index}>
                             <td><span className="badge bg-primary">{item.id}</span></td>
+                           
                             <td className='text-center' style={{'width':'100px'}}>
 
                                 <Ordering id={item.id} direction='up' disabled={index === 0}/>
@@ -74,6 +76,7 @@ const Index = () => {
                                 <Ordering id={item.id} direction='down' disabled={index === items.data.length - 1 }/>
                             
                             </td>
+                            <td className='text-center'>{item.active == 1 ? <FontAwesomeIcon icon={['fas', 'check']} /> : <FontAwesomeIcon className='text-danger' icon={['fas', 'stop']} />  }</td>
                             <td>{item.title}</td>
                             <td className='text-end' >
                                

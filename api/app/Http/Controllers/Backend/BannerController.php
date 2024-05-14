@@ -29,10 +29,12 @@ class BannerController extends Controller
     public function store(Request $request){
         // validation
         $request->validate([
-            'title' => 'required',
-            'description' => 'required',
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'active' => 'required|boolean',
+            'published_start' => 'sometimes|date',
+            'published_end' => 'sometimes|date|after_or_equal:published_start',
             'banner' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
-
         ]);
 
         if($request->has('banner')){
@@ -55,10 +57,16 @@ class BannerController extends Controller
 
     public function update(Request $request,Banner $banner)
     {
+
+        //\Log::info($request);
         // validation
         $data = $request->validate([
-            'title' => 'sometimes',
-            'description' => 'sometimes',
+            'title' => 'sometimes|string',
+            'description' => 'sometimes|string',
+            'active' => 'sometimes|boolean',
+            'published_start' => 'sometimes|date',
+            'published_end' => 'sometimes|date|after_or_equal:published_start',
+            //'banner' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         $banner = Banner::where('id', $banner->id)->update($request->except(['_method','id']));
