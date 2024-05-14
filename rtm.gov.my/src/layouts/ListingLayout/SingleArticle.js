@@ -39,7 +39,7 @@ const SingleArticle = ({id}) => {
 
     // Define a function to check if content should be rendered based on the day
     const shouldRenderContent = () => {
-        if (settings.published_start !== null) {
+        if (settings.published_start) {
             // Get the current date
             const currentDate = new Date();
             // Get the published start date from settings.published_start
@@ -50,7 +50,7 @@ const SingleArticle = ({id}) => {
                 return false;
             }
         }
-        if (settings.published_end !== null) {
+        if (settings.published_end) {
             // Get the current date
             const currentDate = new Date();
             // Get the published end date from settings.published_end

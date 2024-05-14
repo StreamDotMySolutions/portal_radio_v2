@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use Illuminate\Http\Request;
 use App\Services\ArticleService;
 use App\Models\Article;
+use App\Models\ArticleSetting;
 use App\Models\ArticleData;
 
 
@@ -50,10 +51,16 @@ class ArticleController extends Controller
     public function show(Article $article)
     {
 
+        // check publish
+        // $isPublished = ArticleSetting::isPublished($article->id);
+        // \Log::info($isPublished);
+
         // find depth of given $article
         $result = Article::withDepth()->find($article->id);
         $depth = $result->depth;
         //\Log::info($depth);
+
+        $settings = ArticleSetting::where('article_id',$article->id)->first();
         
         // get the ancestors
         // $depth minus 1 is to get ancestor 1 step above
@@ -67,6 +74,7 @@ class ArticleController extends Controller
 
         return response()->json([
             'title' => $article->title,
+            'settings' => $settings,
             'ancestors' => $ancestors,
             'items' => $items
         ]);
