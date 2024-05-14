@@ -44,24 +44,33 @@ const WithPosterListing = ({items}) => {
                             <div className="card-body">
                                 <div className="row">
                                     <div className="col-md-4">
-                                        {item.article_poster ? (
-                                            <img
-                                                className="img-fluid img-thumbnail"
-                                                src={`${path}/${item.article_poster.filename}`}
-                                                alt={item.title}
-                                            />
-                                        ) : (
-                                            <img
-                                                className="img-fluid img-thumbnail"
-                                                src={PlaceholderImage}
-                                                alt="Placeholder"
-                                            />
-                                        )}
+                                        <Link to={`/contents/${item.id}`}>
+                                            {item.article_poster ? (
+                                                <img
+                                                    className="img-fluid img-thumbnail"
+                                                    src={`${path}/${item.article_poster.filename}`}
+                                                    alt={item.title}
+                                                />
+                                            ) : (
+                                                <img
+                                                    className="img-fluid img-thumbnail"
+                                                    src={PlaceholderImage}
+                                                    alt="Placeholder"
+                                                />
+                                            )}
+                                        </Link>
                                     </div>
                                     <div className="col-md-8">
-                                        <h5 className="card-title">{item.title}</h5>
+                                        <h5 className="card-title">
+                                            <Link
+                                                to={`/contents/${item.id}`}
+                                            
+                                            >
+                                                {item.title}
+                                            </Link>
+                                        </h5>
                                         <p className="card-text">{item.description}</p>
-                                        <Button
+                                        {/* <Button
                                             style={{ backgroundColor: 'orange', color: 'black', fontWeight: 'normal' }}
                                             className="float-right"
                                         >
@@ -71,7 +80,7 @@ const WithPosterListing = ({items}) => {
                                             >
                                                 {item.title} &raquo;
                                             </Link>
-                                        </Button>
+                                        </Button> */}
                                     </div>
                                 </div>
                             </div>
