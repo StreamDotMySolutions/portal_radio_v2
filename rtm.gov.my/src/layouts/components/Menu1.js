@@ -28,17 +28,11 @@ const Menu1 = () => {
         // 4. check listing_type
         // 5. check show_children
         return items.map((item, index) => (
-            <>
+            <span  key={index}>
             {item.article_setting && item.article_setting.active == 1 && // check active
-
-                <>
-                    <span key={index}>
-                        <LoadMenu id={item.id}/>
-                    </span>
-                </>
-
+                    <LoadMenu  key={index} id={item.id}/>
             } 
-            </>
+            </span>
         ));
     };
     
@@ -49,7 +43,7 @@ const Menu1 = () => {
                     className="img-responsive" 
                     style={{ marginLeft: "20px" }} 
                     src="/img/logortmbaharu2.png" 
-                    alt="Logo"
+                    alt="Logo RTM"
                 />
             </Link>
 

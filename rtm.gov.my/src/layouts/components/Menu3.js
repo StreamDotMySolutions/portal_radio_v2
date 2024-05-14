@@ -51,7 +51,22 @@ const Menu3 = () => {
             //console.log(item)
             if(item.article_setting  && item.article_setting.active == 1 ){
 
+           
+
                 if (item.descendants && item.descendants.length > 0) {
+
+                    if(item.article_setting.listing_type != 'single_article'){
+
+                        return (
+                            <>
+                                <NavLink to={`/listings/${item.id}`} className="nav-link">
+                                    {item.title}
+                                </NavLink>
+                                
+                            </>
+                        )
+                    }
+
                     return (
                         <li key={index} className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle" href="#" id={`navbarDropdown${item.title}`} role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -92,9 +107,21 @@ const Menu3 = () => {
                                     {item.title}
                                 </NavLink>
                                 ) : (
+                                // <NavLink to={`/contents/${item.id}`} className="nav-link">
+                                //     {item.title}
+                                // </NavLink>
+                                <>
+                                {item.article_setting && item.article_setting.listing_type == 'single_article' ?
                                 <NavLink to={`/contents/${item.id}`} className="nav-link">
                                     {item.title}
                                 </NavLink>
+                                :
+                                <NavLink to={`/listings/${item.id}`} className="nav-link">
+                                    {item.title}
+                                </NavLink>
+                                }
+                                </>
+                              
                             )}
     
                         </li>
