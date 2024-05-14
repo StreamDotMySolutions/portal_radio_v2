@@ -32,8 +32,9 @@ class ArticleController extends Controller
         $articles = Article::query()
                         ->where('parent_id', $parentId)
                         ->with(['articlePoster','articleSetting','descendants.articleSetting'])
+                        ->orderBy('id', 'DESC')
                         ->defaultOrder()
-                        ->paginate(10);
+                        ->paginate(6);
 
         
         return response()->json([
