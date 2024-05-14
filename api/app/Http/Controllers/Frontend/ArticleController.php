@@ -64,7 +64,7 @@ class ArticleController extends Controller
         
         // get the ancestors
         // $depth minus 1 is to get ancestor 1 step above
-        $ancestors = Article::withDepth()->having('depth', '=', ($depth - 0))->defaultOrder()->ancestorsOf($article->id);
+        $ancestors = Article::withDepth()->having('depth', '=', ($depth - 1))->defaultOrder()->ancestorsOf($article->id);
 
         // get the items based on $article->id from ArticleData table
         $items = ArticleData::query()
