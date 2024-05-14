@@ -100,7 +100,7 @@ const PageContent = () => {
                             <span>loading ...</span>
                         ) : (
                             <>
-                                <h1>{title}</h1>
+                                <h2>{title}</h2>
                                 {layout}
                             </>
                         )}

@@ -69,7 +69,7 @@ const PageContent = ({id}) => {
                     {loading ? (
                            <span>loading ...</span>// Show spinner while loading
                         ) : (
-                            <h1>{title}</h1> // Show title when loaded
+                            <h2>{title}</h2> // Show title when loaded
                         )}
 
                     <div className="container-fluid" style={{ "marginTop": "4rem" }}>

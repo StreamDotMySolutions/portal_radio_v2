@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link, useParams } from 'react-router-dom';
-import { Spinner } from 'react-bootstrap';
+
 
 const SingleArticle = ({id}) => {
     //const { id } = useParams(); // parentid
     const [items, setItems] = useState([]);
-    const [ancestors, setAncestors] = useState([]);
-    const [title, setTitle] = useState('');
     const [loading, setLoading] = useState(true);
     const url = process.env.REACT_APP_API_URL;
     const serverUrl = process.env.REACT_APP_SERVER_URL;
