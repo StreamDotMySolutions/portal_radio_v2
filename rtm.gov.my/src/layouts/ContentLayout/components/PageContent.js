@@ -9,6 +9,7 @@ const PageContent = ({id}) => {
     //const { id } = useParams(); // parentid
     const [items, setItems] = useState([]);
     const [ancestors, setAncestors] = useState([]);
+    const [settings, setSettings] = useState([]);
     const [title, setTitle] = useState('');
     const [loading, setLoading] = useState(true);
     const url = process.env.REACT_APP_API_URL;
@@ -17,9 +18,10 @@ const PageContent = ({id}) => {
     useEffect(() => {
         axios(`${url}/show/${id}`)
             .then(response => {
-                //console.log(response)
+                console.log(response)
                 setTitle(response.data.title);
                 setItems(response.data.items);
+                setSettings(response.data.settings);
                 setAncestors(response.data.ancestors);
                 setLoading(false); // Set loading to false when data is fetched
             })
@@ -42,6 +44,39 @@ const PageContent = ({id}) => {
             <div className='mb-2' key={index} dangerouslySetInnerHTML={{ __html: item.contents }} />
         ));
     };
+
+    const today = new Date();
+    const currentDay = today.getDay(); // Gets the current day (0 for Sunday, 1 for Monday, ..., 6 for Saturday)
+
+    // Define a function to check if content should be rendered based on the day
+    const shouldRenderContent = () => {
+        if (settings.published_start !== null) {
+            // Get the current date
+            const currentDate = new Date();
+            // Get the published start date from settings.published_start
+            const publishedStartDate = new Date(settings.published_start);
+            // Compare the current date to the published start date
+            if (currentDate < publishedStartDate) {
+                // If current date is before published start date, return false
+                return false;
+            }
+        }
+        if (settings.published_end !== null) {
+            // Get the current date
+            const currentDate = new Date();
+            // Get the published end date from settings.published_end
+            const publishedEndDate = new Date(settings.published_end);
+            // Compare the current date to the published end date
+            if (currentDate > publishedEndDate) {
+                // If current date is after published end date, return false
+                return false;
+            }
+        }
+        // If published start date is null or current date is after published start date, return true
+        return true;
+    };
+    
+    
 
     return (
         
@@ -66,20 +101,16 @@ const PageContent = ({id}) => {
 
         
 
-                    {loading ? (
-                           <span>loading ...</span>// Show spinner while loading
+                    <div className="container-fluid" style={{ marginTop: '4rem' }}>
+                        {shouldRenderContent() ? (
+                            <>
+                                {/* Render contentItems if shouldRenderContent returns true */}
+                                {contentItems()}
+                            </>
                         ) : (
-                            <h2>{title}</h2> // Show title when loaded
-                        )}
-
-                    <div className="container-fluid" style={{ "marginTop": "4rem" }}>
-                        {loading ? (
+                            // Render nothing if shouldRenderContent returns false
                             <></>
-                        ) : (
-                            <>{contentItems()}</>
                         )}
-
-                       
                     </div>
 
                     <div className="container-fluid" style={{ "marginTop": "2rem" }}>
