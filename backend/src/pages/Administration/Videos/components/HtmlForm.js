@@ -1,5 +1,5 @@
 import React from 'react';
-import { InputText,InputFile } from '../../../../libs/FormInput';
+import { InputText,InputFile, InputTextarea } from '../../../../libs/FormInput';
 import { Row,Col, Image, Figure } from 'react-bootstrap';
 import useStore from '../../../store';
 
@@ -17,12 +17,14 @@ const HtmlForm = ({isLoading}) => {
                 />
 
             </Col>
-            
+        </Row>
+        <Row>    
             <Col className='mb-2'>
-                <InputText 
-                    fieldName='redirect_url' 
-                    placeholder='Youtube Video ID'  
+                <InputTextarea
+                    fieldName='embed_code' 
+                    placeholder='Youtube Video Embed Code'  
                     icon='fa-solid fa-hashtag'
+                    rows={3}
                     isLoading={isLoading}
                 />
 
@@ -51,14 +53,14 @@ const HtmlForm = ({isLoading}) => {
             </Col>
 
             <Col xs={12}>
-                {store.getValue('redirect_url') ?
+                {store.getValue('embed_code') ?
                     <>
                         <h2>Youtube Video</h2>
                         <iframe 
                             width="750px"
                             height={(750 * 9) / 16} // Calculate height for 16:9 aspect ratio
                             className="embed-responsive embed-responsive-16by9" 
-                            src={`https://www.youtube.com/embed/${store.getValue('redirect_url')}`} 
+                            src={`https://www.youtube.com/embed/${store.getValue('embed_code')}`} 
                             //title="Old World - Announcement Trailer | 4X Turn-Based Strategy Game" 
                             frameborder="0" 
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 

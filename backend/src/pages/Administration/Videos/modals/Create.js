@@ -35,7 +35,7 @@ export default function CreateModal() {
         const formData = new FormData();
         const dataArray = [
             { key: 'title', value: store.getValue('title') },
-            { key: 'redirect_url', value: store.getValue('redirect_url') }, 
+            { key: 'embed_code', value: store.getValue('embed_code') }, 
             { key: 'poster', value: store.getValue('poster') }, 
 
         ];

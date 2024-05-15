@@ -35,8 +35,8 @@ export default function EditModal({id}) {
             if( response?.data?.video.hasOwnProperty('title') ){
               store.setValue('title', response?.data?.video?.title )
             }
-            if( response?.data?.video.hasOwnProperty('redirect_url') ){
-              store.setValue('redirect_url', response?.data?.video?.redirect_url )
+            if( response?.data?.video.hasOwnProperty('embed_code') ){
+              store.setValue('embed_code', response?.data?.video?.embed_code )
             }
 
             if( response?.data?.video.hasOwnProperty('filename') ){
@@ -60,7 +60,7 @@ export default function EditModal({id}) {
       const formData = new FormData();
       const dataArray = [
         { key: 'title', value: store.getValue('title') },
-        { key: 'redirect_url', value: store.getValue('redirect_url') }, 
+        { key: 'embed_code', value: store.getValue('embed_code') }, 
       ];
       
       appendFormData(formData, dataArray);

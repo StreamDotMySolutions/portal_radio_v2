@@ -1,7 +1,7 @@
 import React from 'react';
 
-const VideoBox = ({ modal, id, filename }) => {
-  const videoSrc = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&playsinline=1&loop=1&controls=0&disablekb=1&showinfo=0`;
+const VideoBox = ({ modal, embedCode, filename }) => {
+  //const videoSrc = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&playsinline=1&loop=1&controls=0&disablekb=1&showinfo=0`;
 
   return (
     <section className="wrap">
@@ -22,7 +22,7 @@ const VideoBox = ({ modal, id, filename }) => {
                   className="video-btn border-0"
                   style={{ backgroundColor: 'transparent' }}
                   data-toggle="modal"
-                  data-src={videoSrc}
+                  data-src={embedCode}
                   data-target={`#modal_${modal}`}
                 >
                   <img className="img-fluid" src="/img/play.png" alt="Play Button" />
@@ -47,13 +47,21 @@ const VideoBox = ({ modal, id, filename }) => {
                       >
                         <span aria-hidden="true">&times;</span>
                       </button>
-                      <div className="embed-responsive embed-responsive-16by9">
-                        <iframe
-                          className="embed-responsive-item"
-                          src={videoSrc}
-                          title="YouTube Video"
-                          allowFullScreen
-                        ></iframe>
+                      <div className="text-dark embed-responsive embed-responsive-16by9">
+            
+                          <iframe 
+                            width="750px"
+                            height={(750 * 9) / 16} // Calculate height for 16:9 aspect ratio
+                            className="embed-responsive embed-responsive-16by9" 
+                            src={`https://www.youtube.com/embed/${embedCode}`} 
+                            //title="Old World - Announcement Trailer | 4X Turn-Based Strategy Game" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            referrerpolicy="strict-origin-when-cross-origin" 
+                            allowfullscreen>
+
+                        </iframe>
+               
                       </div>
                     </div>
                   </div>

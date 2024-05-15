@@ -24,7 +24,7 @@ class VideoController extends Controller
         // validation
         $request->validate([
             'title' => 'required',
-            'redirect_url' => 'required',
+            'embed_code' => 'required',
             'poster' => 'required|image|mimes:jpeg,png,jpg,gif'
         ]);
 
@@ -33,7 +33,7 @@ class VideoController extends Controller
         $video = Video::create([
             'user_id' =>  auth('sanctum')->user()->id,
             'title' => $request->input('title'),
-            'redirect_url' => $request->input('redirect_url'),
+            'embed_code' => $request->input('embed_code'),
             'filename' => CommonService::handleStoreFile($request->file('poster'), $directory = 'videos'),
         ]);
 
@@ -50,7 +50,7 @@ class VideoController extends Controller
         // validation
         $data = $request->validate([
             'title' => 'sometimes',
-            'redirect_url' => 'sometimes',
+            'embed_code' => 'sometimes',
         ]);
 
         $video = Video::where('id', $video->id)->update($request->except(['_method','id']));
