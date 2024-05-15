@@ -19,34 +19,46 @@ const BannerCarousel = () => {
 
     const carouselItems = () => {
 
-        return banners.map( (banner, index) => (
+        if (!banners || banners.length === 0) {
+            // Return some default content or a message indicating no banners available
+            return <div></div>;
+        } 
 
-           
-            <div className={`carousel-item ${index === 0 ? 'active' : ''}`} key={index}>
-                <Link to={banner.redirect_url}>
-                    <img src={`${serverUrl}/storage/banners/${banner.filename}`} />
-                </Link>
-            </div>
-           
 
-        ))
+        if (banners.length > 0) {
+            return banners.map( (banner, index) => (
+
+                <div className={`carousel-item ${index === 0 ? 'active' : ''}`} key={index}>
+                    <Link to={banner?.redirect_url}>
+                        <img src={`${serverUrl}/storage/banners/${banner?.filename}`} />
+                    </Link>
+                </div>
+            
+            ))
+        }
+    
+
+      
     }
-    return (
-        <div id="demo" className="carousel slide" data-ride="carousel">
-            <div className="carousel-inner">
-                {carouselItems()}
-            </div>
 
-            <a className="carousel-control-prev" href="#demo" role="button" data-slide="prev">
-                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span className="sr-only">Previous</span>
-            </a>
-            <a className="carousel-control-next" href="#demo" role="button" data-slide="next">
-                <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                <span className="sr-only">Next</span>
-            </a>
-        </div>
-    );
+    if (banners.length > 0){
+        return (
+            <div id="demo" className="carousel slide" data-ride="carousel">
+                <div className="carousel-inner">
+                    {carouselItems()}
+                </div>
+
+                <a className="carousel-control-prev" href="#demo" role="button" data-slide="prev">
+                    <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span className="sr-only">Previous</span>
+                </a>
+                <a className="carousel-control-next" href="#demo" role="button" data-slide="next">
+                    <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span className="sr-only">Next</span>
+                </a>
+            </div>
+        );
+    }
 };
 
 export default BannerCarousel;

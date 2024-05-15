@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use Illuminate\Http\Request;
 use App\Models\Banner;
+use Carbon\Carbon;
 
 
 class BannerController extends Controller
@@ -14,17 +15,32 @@ class BannerController extends Controller
         //$banners = Banner::query()->defaultOrder()->get()->toTree();
     
         
-        $currentDate = now()->toDateString(); // Get the current date in 'Y-m-d' format
+        //$currentDate = now()->toDateString(); // Get the current date in 'Y-m-d' format
+        $currentDate = Carbon::now();
 
-        $banners = Banner::where('active', 1)
-            // ->where(function ($query) use ($currentDate) {
-            //     $query->whereNull('published_start')->orWhereDate('published_start', '>=', $currentDate);
-            // })
-            // ->where(function ($query) use ($currentDate) {
-            //     $query->whereNull('published_end')->orWhereDate('published_end', '<=', $currentDate);
-            // })
+        $banners = Banner::query()
+            ->where('active', 1)
             ->defaultOrder()
-            ->get();
+            ->get()
+            ->map(function ($banner) use ($currentDate) {
+              
+                //\Log::info($banner->published_end);
+                    if ($banner->published_end != null) {
+                        //\Log::info('publsihed_end not null');
+                        $publishedEndDateTime = Carbon::parse($banner->published_end);
+                        if($publishedEndDateTime->timestamp >= $currentDate->timestamp){
+                            //\Log::info('valid');
+                            return $banner;
+                        }
+                    } else {
+                        //\Log::info('valid');
+                        return $banner;
+                    }
+                });
+    
+    //\Log::info($test->filter()); // Filter out null values
+
+          
         
         return response()->json(['banners' => $banners]);
     }

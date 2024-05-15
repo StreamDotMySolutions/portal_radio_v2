@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use Illuminate\Http\Request;
 use App\Models\Banner;
 use App\Services\CommonService;
+use Carbon\Carbon;
 
 class BannerController extends Controller
 {
@@ -44,6 +45,9 @@ class BannerController extends Controller
                 'title' => $request->input('title'),
                 'description' => $request->input('description'),
                 'redirect_url' => $request->input('redirect_url'),
+                'active' => $request->input('active'),
+                'published_start' => $request->input('published_start') ?? Carbon::now(),
+                'published_end' => $request->input('published_end'),
                 'filename' => CommonService::handleStoreFile($request->file('banner'), $directory = 'banners'),
             ]);
 
