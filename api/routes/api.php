@@ -16,6 +16,7 @@ use App\Http\Controllers\Backend\{
     BannerController,
     ProgrammeController,
     VideoController,
+    DirectoryController,
 };
 
 Route::get('/', function () {
@@ -128,4 +129,9 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::get('/videos/ordering/{video}', [VideoController::class, 'ordering']);
 
 
+});
+
+// Directory
+Route::group(['middleware' => ['guest']], function () {
+    Route::post('/directories', [DirectoryController::class, 'store']);
 });
