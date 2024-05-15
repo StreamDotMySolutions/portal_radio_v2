@@ -31,12 +31,15 @@ function LoadMenu2({id}) {
     return articles.map(article => (
       <li key={article.id} className="nav-item">
 
+  
+      
+
       {article.article_setting && article.article_setting.redirect_url ? (
         <NavLink to={article.article_setting.redirect_url} className="nav-link">
           {article.title}
         </NavLink>
       ) : (
-        <NavLink to={`/contents/${article.id}`} className="nav-link">
+        <NavLink to={`/listings/${article.id}`} className="nav-link">
           {article.title}
         </NavLink>
       )}
@@ -53,7 +56,7 @@ function LoadMenu2({id}) {
                    
 
                     <li className="nav-item">
-                        <Link className="nav-link" to="/">SUTAMA</Link>
+                        <Link className="nav-link" to="/">UTAMA</Link>
                     </li>
 
                   

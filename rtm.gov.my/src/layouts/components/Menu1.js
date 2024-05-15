@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import LoadMenu from './LoadMenu1';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const Menu1 = () => {
     const url = process.env.REACT_APP_API_URL;
@@ -22,16 +22,35 @@ const Menu1 = () => {
     }, []);
 
     const menuItems = () => {
+
         // 1. check ArticleSetting
         // 2. check active | true or false
-        // 3. check redirect_url
-        // 4. check listing_type
-        // 5. check show_children
+        // 3. check show_children | yes or no
+        // 4. check listing_type | single_article or listing
+    
         return items.map((item, index) => (
-            <span  key={index}>
-            {item.article_setting && item.article_setting.active == 1 && // check active
-                    <LoadMenu  key={index} id={item.id}/>
-            } 
+            <span key={index}>
+               
+                {item.article_setting && item.article_setting.active == 1 && // check active
+
+                    <>
+                    {item.article_setting.show_children && item.article_setting.show_children == 1 ?
+                        <LoadMenu key={index} id={item.id}/>
+                        :
+                        <>
+                            <li key={index} className="nav-item">
+                     
+                                <NavLink to={`/listings/${item.id}`} className="nav-link">
+                                    {item.title}
+                                </NavLink>
+                            
+                            </li>
+                        </>
+                    }
+                    </>
+                } 
+
+                
             </span>
         ));
     };

@@ -85,8 +85,6 @@ function LoadMenu1({id}) {
                   to={
                     article.article_setting.redirect_url
                       ? article.article_setting.redirect_url
-                      : article.article_setting.listing_type === 'single_article'
-                      ? `/contents/${article.id}`
                       : `/listings/${article.id}`
                   }
                   className="dropdown-item text-justify"

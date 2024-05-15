@@ -40,7 +40,7 @@ const Menu2 = () => {
                                                 {descendant.title}
                                             </NavLink>
                                             ) : (
-                                            <NavLink key={idx}  to={`/contents/${descendant.id}`} className="nav-link">
+                                            <NavLink key={idx}  to={`/listings/${descendant.id}`} className="nav-link">
                                                 {descendant.title}
                                             </NavLink>
                                         )}
@@ -58,7 +58,7 @@ const Menu2 = () => {
                                         {item.title}
                                     </NavLink>
                                     ) : (
-                                    <NavLink to={`/contents/${item.id}`} className="nav-link">
+                                    <NavLink to={`/listings/${item.id}`} className="nav-link">
                                         {item.title}
                                     </NavLink>
                                 )}
@@ -98,6 +98,9 @@ const Menu2 = () => {
 
             <div className="collapse navbar-collapse" id="navbarbawah">
                 <ul className="navbar-nav mx-auto">
+                    <li className="nav-item">
+                        <NavLink className="nav-link" to="/">UTAMA</NavLink>
+                    </li>
                    {menuItems()}
                 </ul>
             </div>
