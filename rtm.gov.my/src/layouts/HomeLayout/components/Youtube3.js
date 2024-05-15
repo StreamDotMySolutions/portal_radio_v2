@@ -30,7 +30,7 @@ const Youtube3 = () => {
                     className="img-fluid"
                     src={`${serverUrl}/storage/videos/${item.filename}`}
                     style={{ width: '100%', height: '100%', cursor: 'pointer' }}
-                    onClick={() => handleShow(`https://www.youtube.com/embed/${item.redirect_url}?autoplay=1&mute=1&playsinline=1&loop=1&controls=0&disablekb=1&showinfo=0`)}
+                    onClick={() => handleShow(`https://www.youtube.com/embed/${item.embed_code}`)}
                 />
             </Col>
         ));

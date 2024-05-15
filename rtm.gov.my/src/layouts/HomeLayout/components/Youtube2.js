@@ -29,7 +29,7 @@ const Youtube2 = () => {
             <Col key={index} className='col-12 mb-4'>
                 <VideoBox 
                     modal={item.id} 
-                    id={item.redirect_url} 
+                    embedCode={item.embed_code} 
                     filename={`${serverUrl}/storage/videos/${item.filename}`}
                     />
             </Col>
