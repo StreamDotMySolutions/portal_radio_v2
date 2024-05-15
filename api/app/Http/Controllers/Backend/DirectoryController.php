@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Backend;
 use Illuminate\Http\Request;
 
 
-class AccountController extends Controller
+class DirectoryController extends Controller
 {
     public function store(Request $request)
     {
