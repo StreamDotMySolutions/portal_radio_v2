@@ -36,9 +36,9 @@ class DirectoryController extends Controller
     public function displayDirectoryStructure()
     {
         $rootDirectories = Directory::whereIsRoot()->get();
-        $structure = $this->buildDirectoryStructure($rootDirectories);
-
-        return response()->json(['directory_structure' => $structure]);
+        echo $structure = $this->buildDirectoryStructure($rootDirectories);
+        
+       //return response()->json(['directory_structure' => $structure]);
     }
 
     private function buildDirectoryStructure($directories, $level = 0)
@@ -46,7 +46,7 @@ class DirectoryController extends Controller
         $result = '';
 
         foreach ($directories as $directory) {
-            $indent = str_repeat(' ', $level * 4); // 4 spaces per level
+            $indent = str_repeat('|__', $level * 4); // 4 spaces per level
             $result .= $indent . $directory->name . PHP_EOL;
             
             if ($directory->children()->count() > 0) {
