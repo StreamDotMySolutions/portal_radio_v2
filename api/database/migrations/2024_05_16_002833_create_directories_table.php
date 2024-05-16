@@ -9,11 +9,21 @@ class CreateDirectoriesTable extends Migration
     public function up()
     {
         Schema::create('directories', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
             $table->id();
-            $table->string('name');
-            $table->string('type');
-            $table->string('occupation');
-            $table->string('email');
+           
+            $table->string('type')->nullable();
+
+            $table->string('photo')->nullable();
+            $table->string('name')->nullable();
+            $table->string('occupation')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('address')->nullable();
+            $table->string('facebook')->nullable();
+            $table->string('instagram')->nullable();
+            $table->string('twitter')->nullable();
+           
             $table->timestamps();
             NestedSet::columns($table);
         });

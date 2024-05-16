@@ -24,10 +24,17 @@ class DirectoryController extends Controller
                 foreach ($sheet['data'] as $row) {
                     // Create an entry for each row of spreadsheet data
                     $category = Directory::create([
-                        'name' => $row['A'] ?? $data['name'],        // Use the 'A' field for name
+                        'name' => $row['C'] ?? $data['name'],        
                         'type' => $data['type'],
-                        'occupation' => $row['B'],  // Use the 'B' field for occupation
-                        'email' => $row['C']        // Use the 'C' field for email
+
+                        'photo' => $row['B'],  
+                        'occupation' => $row['D'],
+                        'email' => $row['E'],
+                        'phone' => $row['F'],
+                        'address' => $row['G'],
+                        'facebook' => $row['I'],
+                        'instagram' => $row['J'],
+                        'twitter' => $row['K']        
                     ]);
 
                     if ($parent) {
