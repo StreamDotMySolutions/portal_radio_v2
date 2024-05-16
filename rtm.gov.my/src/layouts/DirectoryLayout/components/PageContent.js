@@ -22,7 +22,7 @@ const PageContent = ({id}) => {
     useEffect(() => {
         axios(`${url}/directories/${id}`)
             .then(response => {
-                //console.log(response)
+                console.log(response)
                 setItems(response.data.items.data)
                 setDepartments(response.data.departments.data)
                 setStaffs(response.data.staffs.data)
@@ -44,14 +44,8 @@ const PageContent = ({id}) => {
         ));
     }
 
-    const contentItems = () => {
-        // return items.map((item, index) => (
-        //     <li key={index}>
-        //         <Link to={`/directories/${item.id}`}>
-        //             {item.name.toUpperCase()}
-        //         </Link>
-        //     </li>
-        // ));
+    const departmentItems = () => {
+
         if( departments.length > 0 ){
             return departments.map((item, index) => (
                 <li key={index}>
@@ -62,6 +56,9 @@ const PageContent = ({id}) => {
             ));
         }
 
+    };
+
+    const staffItems = () => {
         if( staffs.length > 0 ){
             return staffs.map((item, index) => (
                 <li key={index}>
@@ -72,7 +69,7 @@ const PageContent = ({id}) => {
             ));
         }
  
-    };
+    }
 
  
 
@@ -99,12 +96,24 @@ const PageContent = ({id}) => {
                         )}
                     </ul>
 
+                    {staffs.length > 0 && 
+                        <>
+                            <h1>STAFF</h1>
+                            {staffItems()} 
+                        </>
+                    }
+                    <hr />
+
+                    {departments.length > 0 && 
+                        <>
+                            <h1>JABATAN</h1>
+                            {departmentItems()} 
+                        </>
+                    }
                     
-                    {staffs.length > 0 && <h1>STAFF</h1> }
+             
                  
-                    <ul>
-                        {contentItems()}
-                    </ul>
+                  
                
 
                     <div  style={{ "marginTop": "2rem" }}></div>
