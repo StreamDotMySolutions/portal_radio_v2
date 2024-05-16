@@ -32,4 +32,29 @@ class DirectoryController extends Controller
         }
     }
 
+    // New method to display the directory structure
+    public function displayDirectoryStructure()
+    {
+        $rootDirectories = Directory::whereIsRoot()->get();
+        $structure = $this->buildDirectoryStructure($rootDirectories);
+
+        return response()->json(['directory_structure' => $structure]);
+    }
+
+    private function buildDirectoryStructure($directories, $level = 0)
+    {
+        $result = '';
+
+        foreach ($directories as $directory) {
+            $indent = str_repeat(' ', $level * 4); // 4 spaces per level
+            $result .= $indent . $directory->name . PHP_EOL;
+            
+            if ($directory->children()->count() > 0) {
+                $result .= $this->buildDirectoryStructure($directory->children, $level + 1);
+            }
+        }
+
+        return $result;
+    }
+
 }
