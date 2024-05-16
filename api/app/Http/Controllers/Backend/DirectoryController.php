@@ -24,18 +24,18 @@ class DirectoryController extends Controller
                 foreach ($sheet['data'] as $row) {
                     // Create an entry for each row of spreadsheet data
                     $category = Directory::create([
-                        'name' => $row['C'] ?? $data['name'],        
+                        'name' => $row['C'] ?? $data['name'],        // Use 'C' if available, otherwise use $data['name']
                         'type' => $data['type'],
-
-                        'photo' => $row['B'],  
-                        'occupation' => $row['D'],
-                        'email' => $row['E'],
-                        'phone' => $row['F'],
-                        'address' => $row['G'],
-                        'facebook' => $row['I'],
-                        'instagram' => $row['J'],
-                        'twitter' => $row['K']        
+                        'photo' => $row['B'] ?? null,                // Use 'B' if available, otherwise use null
+                        'occupation' => $row['D'] ?? null,           // Use 'D' if available, otherwise use null
+                        'email' => $row['E'] ?? null,                // Use 'E' if available, otherwise use null
+                        'phone' => $row['F'] ?? null,                // Use 'F' if available, otherwise use null
+                        'address' => $row['G'] ?? null,              // Use 'G' if available, otherwise use null
+                        'facebook' => $row['I'] ?? null,             // Use 'I' if available, otherwise use null
+                        'instagram' => $row['J'] ?? null,            // Use 'J' if available, otherwise use null
+                        'twitter' => $row['K'] ?? null               // Use 'K' if available, otherwise use null
                     ]);
+                    
 
                     if ($parent) {
                         $category->appendToNode($parent)->save();
