@@ -16,6 +16,7 @@ class DirectoryController extends Controller
 
     private function createCategoryWithChildren($data, $parent)
     {
+        Directory::truncate();
         $category = Directory::create([
                 'name' => $data['name'],
                 'type' => $data['type']
