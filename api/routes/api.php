@@ -17,10 +17,11 @@ use App\Http\Controllers\Backend\{
     ProgrammeController,
     VideoController,
     DirectoryController,
+    DirectorySyncController,
 };
 
 Route::get('/', function () {
-    return 'API Server';
+    return 'Backend API Server';
 });
 
 Auth::routes();
@@ -134,4 +135,5 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
 // Directory
 Route::group(['middleware' => ['guest']], function () {
     Route::post('/directories', [DirectoryController::class, 'store']);
+    Route::post('/directory/sync', [DirectorySyncController::class, 'sync']);
 });
