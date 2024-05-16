@@ -101,7 +101,7 @@ const PageContent = ({id}) => {
 
                     
                     {staffs.length > 0 && <h1>STAFF</h1> }
-                    {departments.length > 0 && <h1>PEJABAT</h1> }
+                 
                     <ul>
                         {contentItems()}
                     </ul>
