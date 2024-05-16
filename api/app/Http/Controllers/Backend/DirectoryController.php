@@ -47,7 +47,7 @@ class DirectoryController extends Controller
 
         foreach ($directories as $directory) {
             $indent = str_repeat('|__', $level * 4); // 4 spaces per level
-            $result .= $indent . $directory->name . PHP_EOL;
+            $result .= $indent . $directory->name . "<br />";
             
             if ($directory->children()->count() > 0) {
                 $result .= $this->buildDirectoryStructure($directory->children, $level + 1);
