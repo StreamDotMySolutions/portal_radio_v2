@@ -91,6 +91,21 @@ class DirectoryController extends Controller
        //return response()->json(['directory_structure' => $structure]);
     }
 
+    // private function buildDirectoryStructure($directories, $level = 0)
+    // {
+    //     $result = '';
+
+    //     foreach ($directories as $directory) {
+    //         $indent = str_repeat('|__', $level * 4); // 4 spaces per level
+    //         $result .= $indent . $directory->name . "<br />";
+            
+    //         if ($directory->children()->count() > 0) {
+    //             $result .= $this->buildDirectoryStructure($directory->children, $level + 1);
+    //         }
+    //     }
+
+    //     return $result;
+    // }
     private function buildDirectoryStructure($directories, $level = 0)
     {
         $result = '';
@@ -99,6 +114,12 @@ class DirectoryController extends Controller
             $indent = str_repeat('|__', $level * 4); // 4 spaces per level
             $result .= $indent . $directory->name . "<br />";
             
+            // List the contents under the current node
+            foreach ($directory->children as $child) {
+                $result .= str_repeat('|__', ($level + 1) * 4) . $child->name . "<br />";
+            }
+
+            // Recursively call for each child node
             if ($directory->children()->count() > 0) {
                 $result .= $this->buildDirectoryStructure($directory->children, $level + 1);
             }
@@ -106,5 +127,6 @@ class DirectoryController extends Controller
 
         return $result;
     }
+
 
 }
