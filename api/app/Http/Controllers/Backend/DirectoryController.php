@@ -16,7 +16,10 @@ class DirectoryController extends Controller
 
     private function createCategoryWithChildren($data, $parent)
     {
-        $category = Directory::create(['name' => $data['name']]);
+        $category = Directory::create([
+                'name' => $data['name'],
+                'type' => $data['type']
+            ]);
 
         if ($parent) {
             $category->appendToNode($parent)->save();
