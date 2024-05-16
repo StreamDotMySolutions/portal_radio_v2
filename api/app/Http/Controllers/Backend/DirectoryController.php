@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use Illuminate\Http\Request;
-
+use App\Models\Directory;
 
 class DirectoryController extends Controller
 {
@@ -16,7 +16,7 @@ class DirectoryController extends Controller
 
     private function createCategoryWithChildren($data, $parent)
     {
-        $category = Category::create(['name' => $data['name']]);
+        $category = Directory::create(['name' => $data['name']]);
 
         if ($parent) {
             $category->appendToNode($parent)->save();
