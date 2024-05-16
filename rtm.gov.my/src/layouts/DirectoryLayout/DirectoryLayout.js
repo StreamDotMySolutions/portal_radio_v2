@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 const DirectoryLayout = () => {
     const { id } = useParams(); // parentid
     // Set id to 0 if it's undefined
-    const parentId = id === undefined ? 0 : id;
+    const parentId = id === undefined ? 1 : id;
 
     return (
         <>
