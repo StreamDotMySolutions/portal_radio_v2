@@ -15,24 +15,65 @@ class DirectoryController extends Controller
         return response()->json(['message' => 'Payload received']);
     }
 
-    private function createCategoryWithChildren($data, $parent)
+
+    private function createCategoryWithChildren($data, $parent = null)
     {
-     
-        $category = Directory::create([
+        // Check if it's a spreadsheet and has sheets
+        if ($data['type'] == 'spreadsheet' && !empty($data['sheets'])) {
+            foreach ($data['sheets'] as $sheet) {
+                foreach ($sheet['data'] as $row) {
+                    // Create an entry for each row of spreadsheet data
+                    $category = Directory::create([
+                        'name' => $row['A'] ?? $data['name'],        // Use the 'A' field for name
+                        'type' => $data['type'],
+                        'occupation' => $row['B'],  // Use the 'B' field for occupation
+                        'email' => $row['C']        // Use the 'C' field for email
+                    ]);
+
+                    if ($parent) {
+                        $category->appendToNode($parent)->save();
+                    }
+                }
+            }
+        } else {
+            // Create the directory entry for non-spreadsheet types
+            $category = Directory::create([
                 'name' => $data['name'],
                 'type' => $data['type']
             ]);
 
-        if ($parent) {
-            $category->appendToNode($parent)->save();
-        }
+            if ($parent) {
+                $category->appendToNode($parent)->save();
+            }
 
-        if (!empty($data['children'])) {
-            foreach ($data['children'] as $childData) {
-                $this->createCategoryWithChildren($childData, $category);
+            // Recursively handle children
+            if (!empty($data['children'])) {
+                foreach ($data['children'] as $childData) {
+                    $this->createCategoryWithChildren($childData, $category);
+                }
             }
         }
     }
+
+
+    // private function createCategoryWithChildren($data, $parent)
+    // {
+     
+    //     $category = Directory::create([
+    //             'name' => $data['name'],
+    //             'type' => $data['type']
+    //         ]);
+
+    //     if ($parent) {
+    //         $category->appendToNode($parent)->save();
+    //     }
+
+    //     if (!empty($data['children'])) {
+    //         foreach ($data['children'] as $childData) {
+    //             $this->createCategoryWithChildren($childData, $category);
+    //         }
+    //     }
+    // }
 
     // New method to display the directory structure
     public function displayDirectoryStructure()

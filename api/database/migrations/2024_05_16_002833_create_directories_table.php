@@ -12,6 +12,8 @@ class CreateDirectoriesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('type');
+            $table->string('occupation');
+            $table->string('email');
             $table->timestamps();
             NestedSet::columns($table);
         });
