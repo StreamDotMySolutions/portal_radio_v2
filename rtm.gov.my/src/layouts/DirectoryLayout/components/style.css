@@ -1,0 +1,16 @@
+
+.glow {
+  height: 10px;
+  width: 200px;
+  background-color: #6c757d; /* Bootstrap secondary color */
+  animation: glow-animation 1s infinite alternate;
+}
+
+@keyframes glow-animation {
+  0% {
+    box-shadow: 0 0 5px #FFF;
+  }
+  100% {
+    box-shadow: 0 0 20px #6c757d;
+  }
+}

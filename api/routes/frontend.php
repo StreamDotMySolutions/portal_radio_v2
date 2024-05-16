@@ -9,6 +9,7 @@ use App\Http\Controllers\Frontend\{
     ProgrammeController,
     VideoController,
     FooterController,
+    DirectoryController,
 };
 
 Route::get('/articles/{article}', [ArticleController::class, 'index']);
@@ -21,3 +22,4 @@ Route::get('/home-menu-2', [MenuController::class, 'menu2']);
 Route::get('/home-banners', [BannerController::class, 'index']);
 Route::get('/home-programmes', [ProgrammeController::class, 'index']);
 Route::get('/home-videos', [VideoController::class, 'index']);
+Route::get('/directories/{id}', [DirectoryController::class, 'index']);

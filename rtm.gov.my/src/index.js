@@ -17,6 +17,7 @@ import Error404 from "./pages/Error404"
 
 /** Pages - PUBLIC */
 import Home from "./pages/Home"
+import DirectoryLayout from "./layouts/DirectoryLayout/DirectoryLayout";
 
 
 library.add(fas)
@@ -30,6 +31,9 @@ export default function App() {
           <Route index element={<HomeLayout />}  />
           <Route path="/contents/:id" element={<ContentLayout />}/>
           <Route path="/listings/:id" element={<ListingLayout />}/>
+
+          <Route path="/directories" element={<DirectoryLayout />}/>
+          <Route path="/directories/:id" element={<DirectoryLayout />}/>
         </Routes>
       </BrowserRouter>
   );
