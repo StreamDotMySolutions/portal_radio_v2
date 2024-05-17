@@ -51,12 +51,10 @@ class ArticleController extends Controller
                         ->paginate(6);
 
         $ancestors = Article::query()
-                        //->select(['name','id'])
                         ->where('id', $parentId)
                         ->with(['ancestors'])
-                        ->first();                
-
-        
+                        ->first();      
+                        
         return response()->json([
         
             'title' => $parent->title,
@@ -71,26 +69,32 @@ class ArticleController extends Controller
     public function show(Article $article)
     {
 
-        // check publish
-        // $isPublished = ArticleSetting::isPublished($article->id);
-        // \Log::info($isPublished);
+        $items = [];
+        $ancestors = [];
+        $settings = null;
 
         // find depth of given $article
-        $result = Article::withDepth()->find($article->id);
-        $depth = $result->depth;
-        //\Log::info($depth);
-
+        // $result = Article::withDepth()->find($article->id);
+        // $depth = $result->depth;
+        // $ancestors = Article::withDepth()->having('depth', '=', ($depth - 1))->defaultOrder()->ancestorsOf($article->id);
+        $ancestors = Article::query()
+                        ->where('id', $article->id)
+                        ->with(['ancestors'])
+                        ->first();    
+    
+        // settings
         $settings = ArticleSetting::where('article_id',$article->id)->first();
-        
-        // get the ancestors
-        // $depth minus 1 is to get ancestor 1 step above
-        $ancestors = Article::withDepth()->having('depth', '=', ($depth - 1))->defaultOrder()->ancestorsOf($article->id);
 
-        // get the items based on $article->id from ArticleData table
-        $items = ArticleData::query()
-                            ->where('article_id', $article->id)
-                            ->defaultOrder()
-                            ->get();
+
+        if($settings->active == 1){
+            // get the items based on $article->id from ArticleData table
+            $items = ArticleData::query()
+            ->where('article_id', $article->id)
+            ->defaultOrder()
+            ->get();
+        }
+      
+
 
         return response()->json([
             'title' => $article->title,

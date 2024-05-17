@@ -44,8 +44,6 @@ const Index = () => {
 
     ) // useEffect()
 
-
-
     return (
         <div>
     
@@ -76,7 +74,7 @@ const Index = () => {
                                 <Ordering id={item.id} direction='down' disabled={index === items.data.length - 1 }/>
                             
                             </td>
-                            <td className='text-center'>{item.active == 1 ? <FontAwesomeIcon icon={['fas', 'check']} /> : <FontAwesomeIcon className='text-danger' icon={['fas', 'stop']} />  }</td>
+                            <td className='text-center'>{item.active == 1 ? <FontAwesomeIcon className='text-success'  icon={['fas', 'check']} /> : <FontAwesomeIcon className='text-danger' icon={['fas', 'stop']} />  }</td>
                             <td>{item.title}</td>
                             <td className='text-end' >
                                

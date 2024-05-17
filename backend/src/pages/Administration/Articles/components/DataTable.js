@@ -28,7 +28,7 @@ const Index = () => {
                 } 
             )
             .then( response => { // response block
-                //console.log(response)
+                console.log(response)
                 setItems(response.data.articles) // get the data
                 store.setValue('refresh', false ) // reset the refresh state to false
             })
@@ -57,6 +57,7 @@ const Index = () => {
                     <tr>
                         <th className='text-center' style={{ 'width': '20px'}}><FontAwesomeIcon icon={['fas', 'hashtag']} /></th>
                         <th className='text-center'>Ordering</th>
+                        <th className='text-center' style={{ 'width': '100px'}}>Active ?</th>
                         <th>Title</th>
                         <th className='text-center'> <FontAwesomeIcon icon={['fas', 'bolt']} /></th>
                     </tr>
@@ -74,6 +75,7 @@ const Index = () => {
                                 <Ordering id={item.id} direction='down' disabled={index === items.data.length - 1 }/>
                             
                             </td>
+                            <td className='text-center'>{item.article_setting.active == 1 ? <FontAwesomeIcon className='text-success'  icon={['fas', 'check']} /> : <FontAwesomeIcon className='text-danger' icon={['fas', 'stop']} />  }</td>
                             <td>
                                 <Link to={`/administration/articles/${item.id}`}>{item.title}</Link>    
                             </td>
