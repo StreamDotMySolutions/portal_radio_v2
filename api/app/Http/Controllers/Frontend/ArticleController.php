@@ -7,6 +7,7 @@ use App\Services\ArticleService;
 use App\Models\Article;
 use App\Models\ArticleSetting;
 use App\Models\ArticleData;
+use Carbon\Carbon;
 
 
 class ArticleController extends Controller
@@ -30,12 +31,30 @@ class ArticleController extends Controller
     {
 
         $parent = Article::where('id', $parentId)->with(['articleSetting'])->first();
+
         $articles = Article::query()
                         ->where('parent_id', $parentId)
+                        ->whereHas('articleSetting', function ($query) {
+                            $query->where('active', 1)
+                                  ->where(function ($query) {
+                                      $query->whereNull('published_start')
+                                            ->orWhere('published_start', '<=', Carbon::now());
+                                  })
+                                  ->where(function ($query) {
+                                    $query->whereNull('published_end')
+                                          ->orWhere('published_end', '>=', Carbon::now());
+                                  });
+                        })
                         ->with(['articlePoster','articleSetting','descendants.articleSetting'])
                         ->orderBy('id', 'DESC')
                         ->defaultOrder()
                         ->paginate(6);
+
+        $ancestors = Article::query()
+                        //->select(['name','id'])
+                        ->where('id', $parentId)
+                        ->with(['ancestors'])
+                        ->first();                
 
         
         return response()->json([
@@ -43,6 +62,7 @@ class ArticleController extends Controller
             'title' => $parent->title,
             'settings' => $parent->articleSetting, 
             'articles' => $articles,
+            'ancestors' => $ancestors
         
         ]);
     }
