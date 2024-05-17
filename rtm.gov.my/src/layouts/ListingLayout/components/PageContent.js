@@ -12,6 +12,7 @@ const PageContent = () => {
     const { id } = useParams(); // parentid
     const [items, setItems] = useState([]);
     const [settings, setSettings] = useState([]);
+    const [ancestors, setAncestors] = useState([]);
     const [title, setTitle] = useState('');
     const [loading, setLoading] = useState(true);
     const url = process.env.REACT_APP_API_URL;
@@ -27,8 +28,10 @@ const PageContent = () => {
         let apiUrl = paginate ? paginate : `${url}/listings/${id}?page=1`;
         axios.get(apiUrl)
             .then(response => {
+                //console.log(response)
                 setTitle(response.data.title); // title
                 setSettings(response.data.settings); // settings
+                setAncestors(response.data.ancestors.ancestors); // ancestors
                 setItems(response.data.articles.data); // article data
                 setLinks(response.data.articles.links); // paginator links
                 setCurrentPage(response.data.articles.current_page); // current_page for pagination
@@ -43,6 +46,17 @@ const PageContent = () => {
     const handlePaginationClick = (url) => {
         // Handle click event and set the page to the clicked item's url
         setPaginate(url);
+    };
+    
+    const breadcrumbItems = () => {
+        if (ancestors.length > 0) {
+            return ancestors.map((ancestor, index) => (
+                <li key={ancestor.id}>
+                    <Link to={`/listings/${ancestor.id}`}>{ancestor.title}</Link>
+                </li>
+            ));
+        }
+        return null; // In case there are no ancestors, return null
     };
     
 
@@ -78,51 +92,76 @@ const PageContent = () => {
             break;
     }
 
-    return (
-        <div className="container-fluid">
-     
-            <div className="row">
-                <div className="col-md-1"></div>
-                <div className="col-md-10">
-                    <ul className="breadcrumb" style={{ "marginTop": "40px" }}>
-                        <li><Link to="/">Utama</Link></li>
-                        {loading ? (
-                            <li>
-                                <Spinner animation="grow" size="sm" />
-                            </li>
-                        ) : (
-                            <li>{title}</li>
-                        )}
-                    </ul>
-
-                    <div className="" style={{ "minHeight": "300px" }}>
-                        {loading ? (
-                            <span>loading ...</span>
-                        ) : (
-                            <>
-                                <h2>{title}</h2>
-                                {layout}
-                            </>
-                        )}
+    if(settings?.active == 1 ){
+        return (
+            <div className="container-fluid">
+         
+                <div className="row">
+                    <div className="col-md-1"></div>
+                    <div className="col-md-10">
+                        <ul className="breadcrumb" style={{ "marginTop": "40px" }}>
+                            <li><Link to="/">Utama</Link></li>
+                            {loading ? (
+                                <li>
+                                    <Spinner animation="grow" size="sm" />
+                                </li>
+                            ) : (
+                                <li>{breadcrumbItems()}</li>
+                            )}
+                               <li>{title.toUpperCase()}</li>
+                        </ul>
+    
+                        <div className="" style={{ "minHeight": "300px" }}>
+                            {loading ? (
+                                <span>loading ...</span>
+                            ) : (
+                                <>
+                                    <h2>{title}</h2>
+                                    {layout}
+                                </>
+                            )}
+                        </div>
+    
+                        <div className="container-fluid" style={{ "marginTop": "2rem" }}></div>
+    
+                        { settings?.listing_type !== 'single_article' &&
+                        <div className="pagination-container float-right" style={{ marginBottom: '6rem' }}>
+                            <nav>
+                                <ul className="pagination">
+                                    {paginatorItems()}
+                                 
+                                </ul>
+                            </nav>
+                        </div>
+                        }
+    
                     </div>
-
-                    <div className="container-fluid" style={{ "marginTop": "2rem" }}></div>
-
-                    { settings?.listing_type !== 'single_article' &&
-                    <div className="pagination-container float-right" style={{ marginBottom: '6rem' }}>
-                        <nav>
-                            <ul className="pagination">
-                                {paginatorItems()}
-                            </ul>
-                        </nav>
-                    </div>
-                    }
-
+                    <div className="col-md-1"></div>
                 </div>
-                <div className="col-md-1"></div>
             </div>
+        );
+    }
+
+    return (
+        <div className='container-fluid text-center text-danger'>
+            <ul className="breadcrumb" style={{ "marginTop": "40px" }}>
+                    <li><Link to="/">Utama</Link></li>
+                    {loading ? (
+                        <li>
+                            <Spinner animation="grow" size="sm" />
+                        </li>
+                    ) : (
+                        <li>{breadcrumbItems()}</li>
+                    )}
+                       
+                </ul>
+                <div  style={{minHeight: '200px', marginTop: '5REM'}}>
+                    <h3>Content not available</h3>
+                </div>
         </div>
-    );
+    )
+
+ 
 };
 
 export default PageContent;
