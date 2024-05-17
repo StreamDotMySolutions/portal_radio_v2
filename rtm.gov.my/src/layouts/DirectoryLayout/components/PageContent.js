@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './style.css'
+import StaffListing from './StaffListing';
 
 
 const PageContent = ({id}) => {
@@ -65,24 +66,16 @@ const PageContent = ({id}) => {
 
     };
 
-    const staffItems = () => {
-        if( staffs.length > 0 ){
-            return staffs.map((item, index) => (
-                <li key={index}  className="list-group-item  border-0">
-                    <Link to={`/directories/${item.id}`}>
-                        <h3 id="linkdirektori">
-                            <FontAwesomeIcon 
-                                icon={'fa-solid fa-person'} 
-                                className='text-dark mr-2'>
-                            </FontAwesomeIcon>
-                            {item.name.toUpperCase()}
-                        </h3>
-                    </Link>
-                </li>
-            ));
-        }
- 
-    }
+    const HeadingLink = () => {
+        return (
+           
+                <h3 style={{ marginTop: '2rem', backgroundColor: 'rgb(6, 57, 112)', color: 'white', padding: '1rem' }}>
+                    {title}
+                </h3>
+           
+        );
+    };
+
 
  
 
@@ -109,14 +102,9 @@ const PageContent = ({id}) => {
                         )}
                     </ul>
 
-                    {staffs.length > 0 && 
-                        <>
-                            <h1>STAFF ( {title} )</h1>
-                            <ul className="directory-staffs list-group border border-1" >
-                                {staffItems()} 
-                            </ul>
-                        </>
-                    }
+                    <HeadingLink />
+
+                    <StaffListing items={staffs} />
                     <hr />
 
                     {departments.length > 0 && 
