@@ -1,8 +1,48 @@
 
-#gambardirektorilist{
-    max-width: 140px;
-    margin: 0 auto;
-    border-radius: 300px;
-    border: 1px solid #e4e4e4;
-	}
+ul.directory-staffs {
+  padding: 10px 16px;
+  list-style: none;
+  background-color: white;
+}
+ul.directory-staffs li {
+  display: inline;
+  font-size: 18px;
+  color: white;
+}
+ul.directory-staffs li+li:before {
+  padding: 8px;
+  color: white;
+  content: "/\00a0";
+}
+ul.directory-staffs li a {
+  color: #ffa525;
+  text-decoration: none;
+}
+ul.directory-staffs li a:hover {
+  color: black;
+  text-decoration: underline;
+}
 
+ul.directory-department {
+  padding: 10px 16px;
+  list-style: none;
+  background-color: white;
+}
+ul.directory-department li {
+  display: inline;
+  font-size: 18px;
+  color: white;
+}
+ul.directory-department li+li:before {
+  padding: 8px;
+  color: white;
+  content: "/\00a0";
+}
+ul.directory-department li a {
+  color: blue;
+  text-decoration: none;
+}
+ul.directory-department li a:hover {
+  color: black;
+  text-decoration: underline;
+}

@@ -1,11 +1,0 @@
---2024-05-14 11:24:32--  https://fonts.googleapis.com/css2?family=Open+Sans:wght@600
-Resolving fonts.googleapis.com (fonts.googleapis.com)... 172.217.26.74, 2404:6800:4001:810::200a
-Connecting to fonts.googleapis.com (fonts.googleapis.com)|172.217.26.74|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: unspecified [text/css]
-Saving to: ‘css2?family=Open+Sans:wght@600’
-
-css2?family=Open+Sans:wght@600              [<=>                                                                           ]       0  --.-KB/s               css2?family=Open+Sans:wght@600              [ <=>                                                                          ]     243  --.-KB/s    in 0s      
-
-2024-05-14 11:24:32 (38.2 MB/s) - ‘css2?family=Open+Sans:wght@600’ saved [243]
-

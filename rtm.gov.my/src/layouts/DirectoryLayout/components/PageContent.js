@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import { Spinner } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './style.css'
 
 
@@ -48,9 +49,15 @@ const PageContent = ({id}) => {
 
         if( departments.length > 0 ){
             return departments.map((item, index) => (
-                <li key={index}>
+                <li key={index} className="list-group-item  border-0">
                     <Link to={`/directories/${item.id}`}>
-                        {item.name.toUpperCase()}
+                        <h3 id="linkdirektori">
+                            <FontAwesomeIcon 
+                                icon={'fa-solid fa-building'} 
+                                className='text-dark mr-2'>
+                            </FontAwesomeIcon>
+                            {item.name.toUpperCase()}
+                        </h3>
                     </Link>
                 </li>
             ));
@@ -61,9 +68,15 @@ const PageContent = ({id}) => {
     const staffItems = () => {
         if( staffs.length > 0 ){
             return staffs.map((item, index) => (
-                <li key={index}>
+                <li key={index}  className="list-group-item  border-0">
                     <Link to={`/directories/${item.id}`}>
-                        {item.name.toUpperCase()}
+                        <h3 id="linkdirektori">
+                            <FontAwesomeIcon 
+                                icon={'fa-solid fa-person'} 
+                                className='text-dark mr-2'>
+                            </FontAwesomeIcon>
+                            {item.name.toUpperCase()}
+                        </h3>
                     </Link>
                 </li>
             ));
@@ -82,7 +95,7 @@ const PageContent = ({id}) => {
 
                 <div className="col-md-10">
 
-                    <ul className="breadcrumb" style={{ "marginTop": "40px" }}>
+                    <ul className="breadcrumb2" style={{ "marginTop": "40px" }}>
                         <li><Link to="/">Utama</Link></li>
                         
                         {breadcrumbs()}
@@ -98,8 +111,10 @@ const PageContent = ({id}) => {
 
                     {staffs.length > 0 && 
                         <>
-                            <h1>STAFF</h1>
-                            {staffItems()} 
+                            <h1>STAFF ( {title} )</h1>
+                            <ul className="directory-staffs list-group border border-1" >
+                                {staffItems()} 
+                            </ul>
                         </>
                     }
                     <hr />
@@ -107,15 +122,12 @@ const PageContent = ({id}) => {
                     {departments.length > 0 && 
                         <>
                             <h1>JABATAN</h1>
-                            {departmentItems()} 
+                            <ul className="directory-department list-group border border-1" >
+                                {departmentItems()} 
+                            </ul>
                         </>
                     }
                     
-             
-                 
-                  
-               
-
                     <div  style={{ "marginTop": "2rem" }}></div>
                 </div>
             </div>
