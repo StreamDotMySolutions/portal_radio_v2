@@ -24,7 +24,7 @@ const ShowStaffContent = () => {
     useEffect(() => {
         axios(`${url}/directories/${id}/show`)
             .then(response => {
-                console.log(response)
+                //console.log(response)
                 setStaff(response.data.staff)
                 setAncestors(response.data.ancestors.ancestors)
                 setTitle(response.data.title.name)

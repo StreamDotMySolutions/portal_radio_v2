@@ -24,7 +24,7 @@ const PageContent = ({id}) => {
     useEffect(() => {
         axios(`${url}/directories/${id}`)
             .then(response => {
-                console.log(response)
+                //console.log(response)
                 setItems(response.data.items.data)
                 setDepartments(response.data.departments.data)
                 setStaffs(response.data.staffs.data)
