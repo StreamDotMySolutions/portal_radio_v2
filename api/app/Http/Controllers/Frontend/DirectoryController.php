@@ -11,7 +11,7 @@ class DirectoryController extends Controller
     public function index($id = null)
     {
 
-        \Log::info($id);
+        //\Log::info($id);
         $ancestors = [];
         $title = null;
 
@@ -58,5 +58,25 @@ class DirectoryController extends Controller
             
             ]);
     }
+
+    public function show(Directory $directory){
+
+        $title = Directory::where('id',$directory->id)->select(['name'])->first();
+
+        $ancestors = Directory::query()
+                //->select(['name','id'])
+                ->where('id', $directory->id)
+                ->with(['ancestors'])
+                ->first();
+
+        return response()->json([
+                    'title' => $title,
+                    'ancestors' => $ancestors,
+                    'staff' => $directory,
+                ]);
+
+    }
+
+
 
 }

@@ -5,8 +5,9 @@ import PageContent from './components/PageContent';
 import Menu3 from '../components/Menu3';
 import Footer2 from '../components/Footer2';
 import { useParams } from 'react-router-dom';
+import ShowStaffContent from './components/ShowStaffContent';
 
-const DirectoryLayout = () => {
+const ShowStaffLayout = () => {
     const { id } = useParams(); // parentid
     // Set id to 0 if it's undefined
     const parentId = id === undefined ? 1 : id;
@@ -22,7 +23,7 @@ const DirectoryLayout = () => {
                 <Menu3 />
             </div>
        
-            <PageContent id={parentId} />
+            <ShowStaffContent />
 
             <div className="d-none d-md-block" id="footer-desktop">
                 <Footer />
@@ -35,4 +36,4 @@ const DirectoryLayout = () => {
         </>
     );
 };
-export default DirectoryLayout;
+export default ShowStaffLayout;

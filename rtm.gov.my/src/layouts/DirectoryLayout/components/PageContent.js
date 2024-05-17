@@ -77,9 +77,6 @@ const PageContent = ({id}) => {
     };
 
 
- 
-
-
     return (
         
         <div className="container-fluid">

@@ -9,7 +9,7 @@ class DirectoryController extends Controller
 {
     public function store(Request $request)
     {
-        \Log::info($request);
+        //\Log::info($request);
         Directory::truncate();
         $this->createCategoryWithChildren($request, null);
         return response()->json(['message' => 'Payload received']);
