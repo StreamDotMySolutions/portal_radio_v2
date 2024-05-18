@@ -7,6 +7,44 @@ use App\Models\Directory;
 
 class DirectoryController extends Controller
 {
+
+    public function index($id = null)
+    {
+
+        //\Log::info($id);
+        $ancestors = [];
+        $title = null;
+
+        if($id == 0 || $id == null ){
+            $items = Directory::query()
+                        ->whereIsRoot()
+                        ->defaultOrder()
+                        ->paginate(6);
+        } else {
+            $ancestors = Directory::query()
+                        ->where('id', $id)
+                        ->with(['ancestors'])
+                        ->first();
+
+            $items = Directory::query()
+                        ->where('parent_id', $id)
+                        ->defaultOrder()
+                        ->paginate(50);
+
+  
+
+            $title = Directory::where('id',$id)->select(['name'])->first();
+        }
+  
+        
+        return response()->json([
+            
+                'title' => $title,
+                'ancestors' => $ancestors,
+                'items' => $items,     
+            ]);
+    }
+
     public function store(Request $request)
     {
         //\Log::info($request);

@@ -22,10 +22,9 @@ class DirectoryController extends Controller
                         ->paginate(6);
         } else {
             $ancestors = Directory::query()
-                                    //->select(['name','id'])
-                                    ->where('id', $id)
-                                    ->with(['ancestors'])
-                                    ->first();
+                        ->where('id', $id)
+                        ->with(['ancestors'])
+                        ->first();
 
             $items = Directory::query()
                         ->where('parent_id', $id)
@@ -74,9 +73,5 @@ class DirectoryController extends Controller
                     'ancestors' => $ancestors,
                     'staff' => $directory,
                 ]);
-
     }
-
-
-
 }

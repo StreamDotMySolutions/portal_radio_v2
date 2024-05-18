@@ -135,7 +135,7 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
 // Directory
 Route::group(['middleware' => ['guest']], function () {
     Route::get('/directories', [DirectoryController::class, 'displayDirectoryStructure']);
+    Route::get('/directories/{id}', [DirectoryController::class, 'index']);
     Route::post('/directories', [DirectoryController::class, 'store']);
-
     Route::post('/directory/sync', [DirectorySyncController::class, 'sync']);
 });
