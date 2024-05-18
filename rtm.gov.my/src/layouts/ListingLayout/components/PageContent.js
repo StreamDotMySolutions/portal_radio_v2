@@ -5,8 +5,8 @@ import { Spinner } from 'react-bootstrap';
 import WithPosterListing from './WithPosterListing';
 import WithoutPosterListing from './WithoutPosterListing';
 import DefaultListing from './DefaultListing';
-import './style.css'
 import SingleArticle from '../SingleArticle';
+import './style.css'
 
 const PageContent = () => {
     const { id } = useParams(); // parentid
@@ -129,7 +129,6 @@ const PageContent = () => {
                             <nav>
                                 <ul className="pagination">
                                     {paginatorItems()}
-                                 
                                 </ul>
                             </nav>
                         </div>

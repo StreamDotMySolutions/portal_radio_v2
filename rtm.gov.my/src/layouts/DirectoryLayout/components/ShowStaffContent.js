@@ -24,7 +24,7 @@ const ShowStaffContent = () => {
     useEffect(() => {
         axios(`${url}/directories/${id}/show`)
             .then(response => {
-                //console.log(response)
+                console.log(response)
                 setStaff(response.data.staff)
                 setAncestors(response.data.ancestors.ancestors)
                 setTitle(response.data.title.name)
@@ -82,7 +82,7 @@ const ShowStaffContent = () => {
                     <HeadingLink />
 
                     {staff ? 
-                        <div className="container" id="containerdirektori">
+                        <div className="container" id="containerdirektori" style={{ marginTop: '2rem', backgroundColor: 'rgb(6, 57, 112)', color: 'white', padding: '1rem' }}>
                             <div className="row">
                                 <h3></h3>
                                 <hr />
@@ -91,7 +91,7 @@ const ShowStaffContent = () => {
                                         <div className="col-lg-4 justify-content-center">
                                             <Image 
                                                 id="gambardirektoripegawai" 
-                                                className="img-fluid"
+                                                className="img-fluid rounded"
                                                 src={`https://www.rtm.gov.my${staff?.photo}`} 
                                             
                                             />
@@ -115,6 +115,7 @@ const ShowStaffContent = () => {
                                                     <br />
                                                 
                                                     <h5 id="kalertulisan">MEDIA SOSIAL</h5>
+                                          
                                                     {staff.facebook && (
                                                         <a target="_blank" href={staff.facebook}><img src="/img/facebook.svg" alt="Facebook" /></a>
                                                     )}

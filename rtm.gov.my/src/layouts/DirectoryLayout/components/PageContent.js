@@ -70,12 +70,11 @@ const PageContent = ({id}) => {
         return (
            
                 <h3 style={{ marginTop: '2rem', backgroundColor: 'rgb(6, 57, 112)', color: 'white', padding: '1rem' }}>
-                    {title}
+                    {title.toUpperCase()}
                 </h3>
            
         );
     };
-
 
     return (
         
