@@ -24,7 +24,7 @@ const ShowStaffContent = () => {
     useEffect(() => {
         axios(`${url}/directories/${id}/show`)
             .then(response => {
-                console.log(response)
+                //console.log(response)
                 setStaff(response.data.staff)
                 setAncestors(response.data.ancestors.ancestors)
                 setTitle(response.data.title.name)
@@ -49,7 +49,7 @@ const ShowStaffContent = () => {
     const HeadingLink = () => {
         return (
            
-                <h3 style={{ marginTop: '2rem', backgroundColor: 'rgb(6, 57, 112)', color: 'white', padding: '1rem' }}>
+                <h3 style={{  backgroundColor: 'rgb(6, 57, 112)', color: 'white', padding: '1rem' }}>
                     {title}
                 </h3>
            
@@ -79,12 +79,12 @@ const ShowStaffContent = () => {
                         )}
                     </ul>
 
-                    <HeadingLink />
+                    
 
                     {staff ? 
                         <div className="container" id="containerdirektori" style={{ marginTop: '2rem', backgroundColor: 'rgb(6, 57, 112)', color: 'white', padding: '1rem' }}>
                             <div className="row">
-                                <h3></h3>
+                                <HeadingLink />
                                 <hr />
                                 <div className="container" id="containerdirektori">
                                     <div className="row">
