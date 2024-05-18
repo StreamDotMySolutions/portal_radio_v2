@@ -114,19 +114,23 @@ const ShowStaffContent = () => {
                                                     <p id="kalertulisan">{staff.phone}</p>
                                                     <br />
                                                 
-                                                    <h5 id="kalertulisan">MEDIA SOSIAL</h5>
-                                          
-                                                    {staff.facebook && (
-                                                        <a target="_blank" href={staff.facebook}><img src="/img/facebook.svg" alt="Facebook" /></a>
+                                                    {(staff.facebook || staff.instagram || staff.twitter) && (
+                                                        <div>
+                                                            <h5 id="kalertulisan">MEDIA SOSIAL</h5>
+                                                            {staff.facebook && (
+                                                                <a target="_blank" href={staff.facebook}><img src="/img/facebook.svg" alt="Facebook" /></a>
+                                                            )}
+                                                            {' '}
+                                                            {staff.instagram && (
+                                                                <a target="_blank" href={staff.instagram}><img src="/img/instagram.svg" alt="Instagram" /></a>
+                                                            )}
+                                                            {' '}
+                                                            {staff.twitter && (
+                                                                <a target="_blank" href={staff.twitter}><img src="/img/twitter.png" alt="Twitter" /></a>
+                                                            )}
+                                                        </div>
                                                     )}
-                                                    {' '}
-                                                    {staff.instagram && (
-                                                        <a target="_blank" href={staff.instagram}><img src="/img/instagram.svg" alt="Instagram" /></a>
-                                                    )}
-                                                    {' '}
-                                                    {staff.twitter && (
-                                                        <a target="_blank" href={staff.twitter}><img src="/img/twitter.png" alt="Twitter" /></a>
-                                                    )}
+
                                                 </div>
                                             </div>
                                         </div>
