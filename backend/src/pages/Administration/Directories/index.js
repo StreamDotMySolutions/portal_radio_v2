@@ -3,9 +3,10 @@ import axios from '../../../libs/axios'
 import React, { useState, useEffect } from 'react'
 import useStore from '../../store'
 
-import BreadCrumb from './components/BreadCrumb'
 import Data from './components/Data'
 import Pagination from './components/Pagination'
+import { Breadcrumb,BreadcrumbItem } from 'react-bootstrap'
+import BreadCrumbMenu from './components/BreadCrumbMenu'
 
 const Index = () => {
 
@@ -22,22 +23,23 @@ const Index = () => {
             axios(url)
             .then( response => { // response block
                 console.log(response)
-                setTitle(response.title)
-                setAncestors(response.data.ancestors.ancestors)
-                setData(response.data.item.data)
-                setLinks(response.data.item.links)
+                setTitle(response.data.title)
+                setAncestors(response.data.ancestors)
+                setData(response.data.items.data)
+                setLinks(response.data.items.links)
             })
             .catch( error => { // error block
                 console.warn(error) // output to console
             })
         },[parentId] 
       ) // useEffect()
+
    
     return(
         <>
-            <BreadCrumb items={ancestors} />
-            <Data />
-            <Pagination />
+            <BreadCrumbMenu items={ancestors} />
+            <Data items={data} />
+            <Pagination items={links} />
         </>
     )
 }
