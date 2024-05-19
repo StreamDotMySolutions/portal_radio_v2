@@ -59,7 +59,7 @@ const Index = () => {
                         <th className='text-center'>Ordering</th>
                         <th className='text-center' style={{ 'width': '100px'}}>Active ?</th>
                         <th>Title</th>
-                        <th className='text-center'> <FontAwesomeIcon icon={['fas', 'bolt']} /></th>
+                        <th  style={{ 'width': '230px'}} className='text-center'> <FontAwesomeIcon icon={['fas', 'bolt']} /></th>
                     </tr>
                 </thead>
 
@@ -84,7 +84,7 @@ const Index = () => {
                                 }
                                 <Link to={`/administration/articles/${item.id}`}>{item.title}</Link>    
                             </td>
-                            <td className='text-end' style={{'width':'400px'}}>
+                            <td className='text-center'>
                                
                                     <Link to={`/administration/articles/${item.id}`}>
                                         <Button size='sm' variant='outline-secondary'>
