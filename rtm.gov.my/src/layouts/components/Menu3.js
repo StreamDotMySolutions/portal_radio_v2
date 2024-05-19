@@ -82,7 +82,7 @@ const Menu3 = () => {
                                         ) : (
                                         <>
                                         {descendant.article_setting && descendant.article_setting.listing_type == 'single_article' ?
-                                            <NavLink key={idx}  to={`/contents/${descendant.id}`} className="nav-link">
+                                            <NavLink key={idx}  to={`/listings/${descendant.id}`} className="nav-link">
                                                 {descendant.title}
                                             </NavLink>
                                             :
@@ -112,7 +112,7 @@ const Menu3 = () => {
                                 // </NavLink>
                                 <>
                                 {item.article_setting && item.article_setting.listing_type == 'single_article' ?
-                                <NavLink to={`/contents/${item.id}`} className="nav-link">
+                                <NavLink to={`/listings/${item.id}`} className="nav-link">
                                     {item.title}
                                 </NavLink>
                                 :
