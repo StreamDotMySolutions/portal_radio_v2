@@ -31,7 +31,7 @@ const BannerCarousel = () => {
             
                 return (
                     <div className={`carousel-item ${index === 0 ? 'active' : ''}`} key={index}>
-                        {banner.filename && 
+                        {banner?.filename && 
                             <Link to={banner.redirect_url}>
                                 <img src={`${serverUrl}/storage/banners/${banner.filename}`} alt={`Banner ${index}`} />
                             </Link>
