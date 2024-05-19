@@ -24,24 +24,19 @@ class BannerController extends Controller
             ->get()
             ->map(function ($banner) use ($currentDate) {
               
-                //\Log::info($banner->published_end);
                     if ($banner->published_end != null) {
-                        //\Log::info('publsihed_end not null');
+            
                         $publishedEndDateTime = Carbon::parse($banner->published_end);
+
                         if($publishedEndDateTime->timestamp >= $currentDate->timestamp){
-                            //\Log::info('valid');
-                            return $banner;
+                       
+                            return $banner; // only return if publsihed_end >= currentDate
                         }
                     } else {
-                        //\Log::info('valid');
-                        return $banner;
+                        return $banner; // if published_end null, return as it is
                     }
                 })
-                ->filter();
-    
-    //\Log::info($test->filter()); // Filter out null values
-
-          
+                ->filter(); // remove empty array
         
         return response()->json(['banners' => $banners]);
     }

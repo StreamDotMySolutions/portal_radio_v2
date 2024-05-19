@@ -28,7 +28,7 @@ const Index = () => {
                 } 
             )
             .then( response => { // response block
-                console.log(response)
+                //console.log(response)
                 setItems(response.data.articles) // get the data
                 store.setValue('refresh', false ) // reset the refresh state to false
             })
@@ -77,13 +77,18 @@ const Index = () => {
                             </td>
                             <td className='text-center'>{item.article_setting.active == 1 ? <FontAwesomeIcon className='text-success'  icon={['fas', 'check']} /> : <FontAwesomeIcon className='text-danger' icon={['fas', 'stop']} />  }</td>
                             <td>
+                                {item.descendants && item.descendants.length > 0 ?
+                                    <FontAwesomeIcon className='me-2 text-warning' icon={['fas', 'fa-folder']} /> 
+                                :
+                                    <FontAwesomeIcon className='me-2 text-secondary' icon={['fas', 'fa-file']} />
+                                }
                                 <Link to={`/administration/articles/${item.id}`}>{item.title}</Link>    
                             </td>
                             <td className='text-end' style={{'width':'400px'}}>
                                
                                     <Link to={`/administration/articles/${item.id}`}>
                                         <Button size='sm' variant='outline-secondary'>
-                                            <FontAwesomeIcon icon={['fas', 'fa-folder-plus']} />{' '}
+                                            <FontAwesomeIcon className='text-info'  icon={['fas', 'fa-folder-plus']} />{' '}
                                         </Button>
                                     </Link>
                                 {' '}
