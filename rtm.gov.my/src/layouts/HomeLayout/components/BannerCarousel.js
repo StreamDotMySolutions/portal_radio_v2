@@ -26,15 +26,22 @@ const BannerCarousel = () => {
 
 
         if (banners.length > 0) {
-            return banners.map( (banner, index) => (
-
-                <div className={`carousel-item ${index === 0 ? 'active' : ''}`} key={index}>
-                    <Link to={banner?.redirect_url}>
-                        <img src={`${serverUrl}/storage/banners/${banner?.filename}`} />
-                    </Link>
-                </div>
+            return banners.map((banner, index) => {
+                // Condition checks
+                if (!banner || !banner.redirect_url || !banner.filename) {
+                    // Skip rendering this banner if any of the conditions are not met
+                    return null;
+                }
             
-            ))
+                return (
+                    <div className={`carousel-item ${index === 0 ? 'active' : ''}`} key={index}>
+                        <Link to={banner.redirect_url}>
+                            <img src={`${serverUrl}/storage/banners/${banner.filename}`} alt={`Banner ${index}`} />
+                        </Link>
+                    </div>
+                );
+            });
+            
         }
     
 
