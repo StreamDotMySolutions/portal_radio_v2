@@ -48,7 +48,8 @@ const BannerCarousel = () => {
       
     }
 
-    if (banners.length > 0){
+    if (banners && banners.length > 0){
+        
         return (
             <div id="demo" className="carousel slide" data-ride="carousel">
                 <div className="carousel-inner">
