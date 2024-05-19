@@ -28,7 +28,7 @@ const BannerCarousel = () => {
         if (banners.length > 0) {
             return banners.map((banner, index) => {
                 // Condition checks
-                if (!banner || !banner.redirect_url || !banner.filename) {
+                if (!banner.filename) {
                     // Skip rendering this banner if any of the conditions are not met
                     return null;
                 }
@@ -48,7 +48,7 @@ const BannerCarousel = () => {
       
     }
 
-    if (banners && banners.length > 0){
+    if (banners.length > 0){
         
         return (
             <div id="demo" className="carousel slide" data-ride="carousel">
