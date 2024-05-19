@@ -1,16 +1,15 @@
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import axios from '../../../libs/axios'
 import React, { useState, useEffect } from 'react'
-import useStore from '../../store'
+import useStore from './store' // global store
 
 import Data from './components/Data'
-import Pagination from './components/Pagination'
-import { Breadcrumb,BreadcrumbItem } from 'react-bootstrap'
 import BreadCrumbMenu from './components/BreadCrumbMenu'
+import PaginationLinks from './components/PaginationLinks'
 
 const Index = () => {
 
-  const { parentId } = useParams() // parentid
+    const { parentId } = useParams() // parentid
     const store = useStore() // store management
     const url = store.url + '/directories/' + parentId 
 
@@ -19,10 +18,18 @@ const Index = () => {
     const [data,setData] = useState([])
     const [links,setLinks] = useState([])
 
-        useEffect( () => {  
-            axios(url)
+        // detect parentId change
+        useEffect( () => {
+            //console.log('parent id updated')
+            store.setValue('url',  store.url + '/directories/' + parentId )
+        },[parentId])
+
+        // pagination change
+        useEffect( () => {
+            //console.log('updated')
+            axios(store.getValue('url') ? store.getValue('url') : url)
             .then( response => { // response block
-                console.log(response)
+                //console.log(response)
                 setTitle(response.data.title)
                 setAncestors(response.data.ancestors)
                 setData(response.data.items.data)
@@ -31,7 +38,13 @@ const Index = () => {
             .catch( error => { // error block
                 console.warn(error) // output to console
             })
-        },[parentId] 
+            .finally(
+                store.setValue('refresh', false) // modal
+            )
+        },  [
+                store.getValue('refresh'), // modal
+                store.getValue('url') // pagination
+            ] 
       ) // useEffect()
 
    
@@ -39,7 +52,7 @@ const Index = () => {
         <>
             <BreadCrumbMenu items={ancestors} />
             <Data items={data} />
-            <Pagination items={links} />
+            <PaginationLinks items={links} />
         </>
     )
 }

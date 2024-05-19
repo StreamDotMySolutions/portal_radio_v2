@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Badge, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
@@ -12,9 +13,16 @@ const Data = ({items}) => {
                 <tr key={index}>
                     <td><Badge>{item.id}</Badge></td>
                     <td>
+
+                        {item.type === 'folder' && 
+                            <FontAwesomeIcon className='me-2 text-warning' icon={['fas', 'fa-folder']} /> 
+                        }
+                        {item.type === 'spreadsheet' && 
+                            <FontAwesomeIcon className='me-2 text-secondary' icon={['fas', 'fa-user']} /> 
+                        }
                         {item.descendants && item.descendants.length > 0 ? (
                             <Link to={`/administration/directories/${item.id}`}>
-                                <strong>{item.name.toUpperCase()}</strong>
+                                {item.name.toUpperCase()}
                             </Link>
                         ) : (
                             item.name.toUpperCase()

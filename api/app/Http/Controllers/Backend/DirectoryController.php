@@ -18,7 +18,7 @@ class DirectoryController extends Controller
                         ->whereIsRoot()
                         ->with(['descendants'])
                         ->defaultOrder()
-                        ->paginate(6);
+                        ->paginate(2);
         } else {
 
             $node = Directory::find($id);
@@ -33,7 +33,7 @@ class DirectoryController extends Controller
                         ->where('parent_id', $id)
                         ->with(['descendants'])
                         ->defaultOrder()
-                        ->paginate(50);
+                        ->paginate(2);
 
             //$title = Directory::where('id',$id)->select(['name'])->first();
             $title = Directory::where('id', $id)->value('name');
