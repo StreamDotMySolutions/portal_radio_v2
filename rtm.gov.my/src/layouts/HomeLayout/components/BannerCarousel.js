@@ -11,7 +11,7 @@ const BannerCarousel = () => {
     useEffect( () => {
         axios(`${url}/home-banners`)
         .then( response => {
-          //console.log(response)
+          console.log(response)
           setBanners(response.data.banners)
         })
     

@@ -13,7 +13,7 @@ class BannerController extends Controller
     {
 
         //$banners = Banner::query()->defaultOrder()->get()->toTree();
-    
+        $banners = [];
         
         //$currentDate = now()->toDateString(); // Get the current date in 'Y-m-d' format
         $currentDate = Carbon::now();
