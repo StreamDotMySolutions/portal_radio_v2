@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pagination } from 'react-bootstrap';
+import { Pagination, Row } from 'react-bootstrap';
 import useStore from '../store' // global store
 
 const PaginationLinks = ({items}) => {
@@ -34,9 +34,18 @@ const PaginationLinks = ({items}) => {
 
 
     return (
-        <Pagination>
-            {paginationItems()}
-        </Pagination>
+
+        <div className="d-flex bd-highlight mb-3">
+            <div className="ms-auto p-2 bd-highlight">
+                <Row>
+                    <Pagination >
+                        {paginationItems()}
+                    </Pagination>
+                </Row>
+            </div>
+        </div>
+
+   
     );
 };
 
