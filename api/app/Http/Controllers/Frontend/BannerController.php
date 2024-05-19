@@ -36,7 +36,8 @@ class BannerController extends Controller
                         //\Log::info('valid');
                         return $banner;
                     }
-                });
+                })
+                ->filter();
     
     //\Log::info($test->filter()); // Filter out null values
 
