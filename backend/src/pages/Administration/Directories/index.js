@@ -12,8 +12,6 @@ const Index = () => {
     const { parentId } = useParams() // parentid
     const store = useStore() // store management
     const url = store.url + '/directories/' + parentId 
-
-    const [title,setTitle] = useState('')
     const [ancestors,setAncestors] = useState([])
     const [data,setData] = useState([])
     const [links,setLinks] = useState([])
@@ -26,11 +24,10 @@ const Index = () => {
 
         // pagination change / data table change
         useEffect( () => {
-            //console.log('updated')
-            axios(store.getValue('url') ? store.getValue('url') : url)
+         
+            axios(store.getValue('url') ? store.getValue('url') : url) // use default url, then if store.url present, use that
             .then( response => { // response block
                 //console.log(response)
-                setTitle(response.data.title)
                 setAncestors(response.data.ancestors)
                 setData(response.data.items.data)
                 setLinks(response.data.items.links)
@@ -39,10 +36,10 @@ const Index = () => {
                 console.warn(error) // output to console
             })
             .finally(
-                store.setValue('refresh', false) // modal
+                store.setValue('refresh', false) // reset refresh to false
             )
         },  [
-                store.getValue('refresh'), // modal
+                store.getValue('refresh'), // modal actions , ordering 
                 store.getValue('url') // pagination
             ] 
       ) // useEffect()

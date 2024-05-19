@@ -152,64 +152,49 @@ export default function ArticleSetting() {
                   />
              
             </Form.Group>
-            <hr />
-            <Form.Group>
-              <Form.Label><h6>Publish Date</h6></Form.Label>
-              <Row>
-                <Col>
-                  <InputDate icon='fa-calendar' fieldName='published_start' />
-                </Col>
-                <Col>
-                  <InputDate  icon='fa-calendar' fieldName='published_end' />
-                </Col>
-              </Row>
-            </Form.Group>
-            <hr />
-            <Form.Group className='col-7'>
-              <InputRadio 
-                fieldName='listing_type' 
-                label='Listing Type'
-                options={[
-                  { label: 'Default', value: 'default' },
-                  { label: 'With Poster', value: 'poster' },
-                  { label: 'Without Poster', value: 'without_poster' },
-                  { label: 'Single Article', value: 'single_article' }
-                ]}
-                />
-            </Form.Group>
-
-            <hr />
-            <Form.Group className='col-5'>
-              <InputRadio 
-                fieldName='show_children' 
-                label='Show Children ( Drowpdown Menu )'
-                options={[
-                  { label: 'Yes', value: 1 },
-                  { label: 'No', value: 0 },
-                ]}
-                />
-            </Form.Group>
-            {/* <hr />
-            <Form.Group className='col-4'>
-              <InputRadio 
-                fieldName='type' 
-                label='Content Type'
-                options={[
-                  { label: 'Redirect', value: 'redirect' },
-                  { label: 'Contents', value: 'contents' },
-                ]}
-                />
-            </Form.Group>
-
-            { store.getValue('type') == 'redirect' &&
-              <Col className='mt-2'>
-                <InputText 
-                  fieldName='url'
-                  placeholder='http://somewebsite.com' 
-                  icon='fa-globe'
+            
+            {/** Don't show id redirect_url is present */}
+            {!store.getValue('redirect_url') &&  (
+              <>
+              <Form.Group>
+                <Form.Label><h6>Publish Date</h6></Form.Label>
+                <Row>
+                  <Col>
+                    <InputDate icon='fa-calendar' fieldName='published_start' />
+                  </Col>
+                  <Col>
+                    <InputDate  icon='fa-calendar' fieldName='published_end' />
+                  </Col>
+                </Row>
+              </Form.Group>
+              <hr />
+              <Form.Group className='col-7'>
+                <InputRadio 
+                  fieldName='listing_type' 
+                  label='Listing Type'
+                  options={[
+                    { label: 'Default', value: 'default' },
+                    { label: 'With Poster', value: 'poster' },
+                    { label: 'Without Poster', value: 'without_poster' },
+                    { label: 'Single Article', value: 'single_article' }
+                  ]}
                   />
-              </Col>
-            } */}
+              </Form.Group>
+
+              <hr />
+              <Form.Group className='col-5'>
+                <InputRadio 
+                  fieldName='show_children' 
+                  label='Show Children ( Drowpdown Menu )'
+                  options={[
+                    { label: 'Yes', value: 1 },
+                    { label: 'No', value: 0 },
+                  ]}
+                  />
+              </Form.Group>
+              </>
+            )}
+            
           
 
           </Modal.Body>
