@@ -96,15 +96,15 @@ function LoadMenu3({id}) {
     }
   
     const groupedArticles = [];
-    for (let i = 0; i < articles.length; i += 8) {
-      groupedArticles.push(articles.slice(i, i + 8));
+    for (let i = 0; i < articles.length; i += 100) {
+      groupedArticles.push(articles.slice(i, i + 100));
     }
 
     return groupedArticles.map((group, index) => (
       <div key={index} className={`col-md-3 ${index === 1 ? 'ml-5' : 'mr-5'}`}>
 
         <ul className="nav flex-column">
-          {group.map((article, idx) => (
+          {articles.map((article, idx) => (
             <li key={idx} className="nav-item">
               {article.article_setting && article.article_setting.active === 1 && ( // Check if active is 1
                 <NavLink
