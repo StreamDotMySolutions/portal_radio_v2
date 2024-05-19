@@ -2,6 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Badge, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import Ordering from './Ordering'
 
 const Data = ({items}) => {
 
@@ -12,6 +13,13 @@ const Data = ({items}) => {
             return items.map((item, index) => (
                 <tr key={index}>
                     <td><Badge>{item.id}</Badge></td>
+                    <td className='text-center' style={{'width':'100px'}}>
+
+                        <Ordering id={item.id} direction='up' disabled={index === 0}/>
+                        {' '}
+                        <Ordering id={item.id} direction='down' disabled={index === items.length - 1 }/>
+
+                    </td>
                     <td>
 
                         {item.type === 'folder' && 
@@ -40,6 +48,7 @@ const Data = ({items}) => {
                 <thead>
                     <tr>
                         <th style={{width: '15px'}}>ID</th>
+                        <th>ORDERING</th>
                         <th>NAME</th>
                     </tr>
                 </thead>

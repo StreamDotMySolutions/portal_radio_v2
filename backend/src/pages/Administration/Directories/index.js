@@ -24,7 +24,7 @@ const Index = () => {
             store.setValue('url',  store.url + '/directories/' + parentId )
         },[parentId])
 
-        // pagination change
+        // pagination change / data table change
         useEffect( () => {
             //console.log('updated')
             axios(store.getValue('url') ? store.getValue('url') : url)

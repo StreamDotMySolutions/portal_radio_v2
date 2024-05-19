@@ -5,14 +5,6 @@ import { Link } from 'react-router-dom';
 
 const BreadCrumbMenu = ({items}) => {
 
-    const handleLinkClick = (url) => {
-        //useStore.setState({url: url}) // update the url state in store
-        //store.setValue('url',url)
-        //console.log(url)
-    }
-
-
-
     const contentItems = () => {
         if (items?.length > 0) {
             return items.map((item, index) => {
@@ -23,7 +15,6 @@ const BreadCrumbMenu = ({items}) => {
                             item.name.toUpperCase()
                         ) : (
                             <Link 
-                                //onClick={handleLinkClick(item.id)}
                                 to={`/administration/directories/${item.id}`}
                             >
                                 {item.name.toUpperCase()}

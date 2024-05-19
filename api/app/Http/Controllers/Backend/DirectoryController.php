@@ -147,4 +147,18 @@ class DirectoryController extends Controller
         return $result;
     }
 
+    public function ordering(Directory $directory, Request $request)
+    {
+        // reference https://github.com/lazychaser/laravel-nestedset
+        switch($request->input('direction')){
+            case 'up':
+                $directory->up(); // directory ordering up
+                break;
+            case 'down':
+                $directory->down(); //  // directory ordering down
+            break;
+        }
+        
+    }
+
 }
