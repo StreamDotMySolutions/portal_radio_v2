@@ -152,7 +152,9 @@ export default function ArticleSetting() {
                   />
              
             </Form.Group>
-            
+
+            <hr />
+
             {/** Don't show id redirect_url is present */}
             {!store.getValue('redirect_url') &&  (
               <>
@@ -181,17 +183,23 @@ export default function ArticleSetting() {
                   />
               </Form.Group>
 
-              <hr />
-              <Form.Group className='col-5'>
-                <InputRadio 
-                  fieldName='show_children' 
-                  label='Show Children ( Drowpdown Menu )'
-                  options={[
-                    { label: 'Yes', value: 1 },
-                    { label: 'No', value: 0 },
-                  ]}
-                  />
-              </Form.Group>
+                  
+              { store.getValue('listing_type') != 'single_article' && (
+              <>
+                <hr />
+                <Form.Group className='col-5'>
+                  <InputRadio 
+                    fieldName='show_children' 
+                    label='Show Children ( Drowpdown Menu )'
+                    options={[
+                      { label: 'Yes', value: 1 },
+                      { label: 'No', value: 0 },
+                    ]}
+                    />
+                </Form.Group>
+              </>
+              )}
+              
               </>
             )}
             
