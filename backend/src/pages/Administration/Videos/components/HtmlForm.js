@@ -24,17 +24,18 @@ const HtmlForm = ({isLoading}) => {
                     fieldName='embed_code' 
                     placeholder='Youtube Video Embed Code'  
                     icon='fa-solid fa-hashtag'
-                    rows={3}
+                    rows={1}
                     isLoading={isLoading}
                 />
 
             </Col>
 
-             <hr />
-            <Col className='mb-2'>
+            <hr /> 
+            <h2>Poster Image</h2>
+            <Col className='mb-2 border border-1 rounded mb-3 m-2 p-2'>
                 {store.getValue('filename') ? 
                     <>
-                    <h2>Poster Image</h2>
+                   
                     <Figure>
                         <Figure.Image
                             src={`${store.server}/storage/videos/${store.getValue('filename')}`}
@@ -51,11 +52,12 @@ const HtmlForm = ({isLoading}) => {
                     />
                 }
             </Col>
-
-            <Col xs={12}>
+            
+            <h2>Youtube Video</h2>
+            <Col className='mb-2 border border-1 rounded m-2 p-2 bg-dark' >
                 {store.getValue('embed_code') ?
                     <>
-                        <h2>Youtube Video</h2>
+                        
                         <iframe 
                             width="750px"
                             height={(750 * 9) / 16} // Calculate height for 16:9 aspect ratio
