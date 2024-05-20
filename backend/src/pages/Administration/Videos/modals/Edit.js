@@ -31,7 +31,7 @@ export default function EditModal({id}) {
             url: `${store.url}/videos/${id}`,
             })
         .then( response => { // success 200
-            console.log(response)
+            //console.log(response)
             if( response?.data?.video.hasOwnProperty('title') ){
               store.setValue('title', response?.data?.video?.title )
             }
