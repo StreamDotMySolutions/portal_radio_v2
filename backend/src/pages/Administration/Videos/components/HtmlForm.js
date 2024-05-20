@@ -1,10 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { InputText,InputFile, InputTextarea } from '../../../../libs/FormInput';
 import { Row,Col, Image, Figure } from 'react-bootstrap';
 import useStore from '../../../store';
 
 const HtmlForm = ({isLoading}) => {
     const store = useStore()
+
+    const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
+
+    //console.log(store.getValue('poster'))
+    if(store.getValue('poster')) {
+        const file = store.getValue('poster')
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImagePreviewUrl(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     return (
         <>
          <h2>Metadata</h2>
@@ -37,20 +52,58 @@ const HtmlForm = ({isLoading}) => {
                 {store.getValue('filename') ? 
                     <>
                    
-                    <Figure>
-                        <Figure.Image
-                            src={`${store.server}/storage/videos/${store.getValue('filename')}`}
-                        />
-                    </Figure>
-                    </>
-                          
-                :
+             
+
+                    <Row>
+                        <Col className='text-center p-4'>
+                            <h5>Current Image</h5>
+                            <Figure>
+                                <Figure.Image
+                                    src={`${store.server}/storage/videos/${store.getValue('filename')}`}
+                                />
+                            </Figure>
+                        </Col>
+                        <Col className='text-center p-4'>
+                        {imagePreviewUrl && (<>
+                            <h5>New Image</h5>    
+                            <Figure>
+                                <Figure.Image
+                                    src={imagePreviewUrl}
+                                />
+                            </Figure>
+                            </>)}
+                        </Col>
+                    </Row>
+
+
                     <InputFile
                         fieldName='poster' 
                         placeholder='Choose image'  
                         icon='fa-solid fa-image'
                         isLoading={isLoading}
                     />
+                    </>
+                          
+                :
+                <>
+                         {imagePreviewUrl && (
+                     
+                            <Figure>
+                                 <Figure.Image
+                                     src={imagePreviewUrl}
+                                 />
+                             </Figure>
+                        )}
+
+                        <InputFile
+                            
+                            fieldName='poster' 
+                            placeholder='Choose image'  
+                            icon='fa-solid fa-image'
+                            isLoading={isLoading}
+                        />
+                </>
+                   
                 }
             </Col>
             

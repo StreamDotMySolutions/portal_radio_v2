@@ -61,6 +61,7 @@ export default function EditModal({id}) {
       const dataArray = [
         { key: 'title', value: store.getValue('title') },
         { key: 'embed_code', value: store.getValue('embed_code') }, 
+        { key: 'poster', value: store.getValue('poster') }, 
       ];
       
       appendFormData(formData, dataArray);
