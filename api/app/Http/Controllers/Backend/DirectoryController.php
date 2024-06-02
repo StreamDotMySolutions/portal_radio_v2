@@ -13,6 +13,8 @@ class DirectoryController extends Controller
         $ancestors = [];
         $title = null;
 
+        //\Log::info('test');
+
         if($id == 0 || $id == null ){
             $items = Directory::query()
                         ->whereIsRoot()
@@ -52,6 +54,7 @@ class DirectoryController extends Controller
         //\Log::info($request);
         Directory::where('name', $root)->delete();
         $node = Directory::create(['name' => $root,'type' => 'folder']);
+        $node->saveAsRoot();
         $this->createCategoryWithChildren($request, $node);
         return response()->json(['message' => 'Payload received']);
     }

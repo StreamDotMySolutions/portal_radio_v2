@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the root node
-ROOT_NODE="negeri"
+ROOT_NODE="angkasapuri"
 
 # Define the API endpoint
 API_ENDPOINT="http://localhost:8000/api/directories/${ROOT_NODE}"
