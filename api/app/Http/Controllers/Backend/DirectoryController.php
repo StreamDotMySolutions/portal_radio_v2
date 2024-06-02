@@ -47,12 +47,43 @@ class DirectoryController extends Controller
             ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $root)
     {
-        //\Log::info($request);
-        Directory::truncate();
-        $this->createCategoryWithChildren($request, Directory::where('name','negeri')->first());
+        // Find the 'angkasapuri' node
+        $node = Directory::where('name', $root)->first();
+    
+        if ($node) {
+            // Delete all children under the 'angkasapuri' node
+            $this->deleteChildrenRecursively($angkasapuriNode);
+        }
+    
+        // Create categories with children from the request data, starting with the 'angkasapuri' node
+        $this->createCategoryWithChildren($request->all(), $node);
+    
         return response()->json(['message' => 'Payload received']);
+    }
+    
+    public function deleteChildren($nodeId)
+    {
+        $node = Directory::find($nodeId);
+    
+        if ($node) {
+            $this->deleteChildrenRecursively($node);
+        }
+    
+        return response()->json(['message' => 'Children deleted']);
+    }
+    
+    private function deleteChildrenRecursively($node)
+    {
+        // Get all children of the current node
+        $children = $node->children()->get();
+    
+        // Recursively delete each child
+        foreach ($children as $child) {
+            $this->deleteChildrenRecursively($child);
+            $child->delete();
+        }
     }
 
 

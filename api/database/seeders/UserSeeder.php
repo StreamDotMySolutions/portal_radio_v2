@@ -13,6 +13,7 @@ use App\Models\UserDepartment;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
+
 class UserSeeder extends Seeder
 {
     public function run()
