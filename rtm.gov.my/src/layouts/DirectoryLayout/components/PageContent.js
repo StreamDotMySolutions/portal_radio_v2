@@ -108,6 +108,7 @@ const PageContent = ({id}) => {
 
                     <ul className="breadcrumb2" style={{ "marginTop": "40px" }}>
                         <li><Link to="/">Utama</Link></li>
+                        <li><Link to="/directories">Direktori</Link></li>
                         
                         {breadcrumbs()}
                         
