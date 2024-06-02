@@ -55,8 +55,8 @@ class DirectoryController extends Controller
     {
         //\Log::info($root);
         Directory::where('name', $root)->delete();
-        $node = Directory::create(['name' => $root,'type' => 'folder']);
-        $node->saveAsRoot();
+        //$node = Directory::create(['name' => $root,'type' => 'folder']);
+        //$node->saveAsRoot();
         $this->createCategoryWithChildren($request, null);
         return response()->json(['message' => 'Payload received']);
     }
