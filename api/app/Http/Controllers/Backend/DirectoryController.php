@@ -47,54 +47,13 @@ class DirectoryController extends Controller
             ]);
     }
 
-    public function sync(Request $request)
-    {
-
-    
-        // Create categories with children from the request data, starting with the 'angkasapuri' node
-        $this->createCategoryWithChildren($request->all(), null);
-    
-        return response()->json(['message' => 'Payload received']);
-    }
-
-
     public function store(Request $request, $root)
     {
-        // Find the 'angkasapuri' node
-        $node = Directory::where('name', $root)->first();
-    
-        if ($node) {
-            // Delete all children under the 'angkasapuri' node
-            $this->deleteChildrenRecursively($node);
-        }
-    
-        // Create categories with children from the request data, starting with the 'angkasapuri' node
-        $this->createCategoryWithChildren($request->all(), $node);
-    
+        //\Log::info($request);
+        Directory::where('name', $root)->delete();
+        $node = Directory::create(['name' => $root,'type' => 'folder']);
+        $this->createCategoryWithChildren($request, $node);
         return response()->json(['message' => 'Payload received']);
-    }
-    
-    public function deleteChildren($nodeId)
-    {
-        $node = Directory::find($nodeId);
-    
-        if ($node) {
-            $this->deleteChildrenRecursively($node);
-        }
-    
-        return response()->json(['message' => 'Children deleted']);
-    }
-    
-    private function deleteChildrenRecursively($node)
-    {
-        // Get all children of the current node
-        $children = $node->children()->get();
-    
-        // Recursively delete each child
-        foreach ($children as $child) {
-            $this->deleteChildrenRecursively($child);
-            $child->delete();
-        }
     }
 
 

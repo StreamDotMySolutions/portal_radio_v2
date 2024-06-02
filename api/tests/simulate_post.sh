@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Define the root node
-ROOT_NODE="angkasapuri"
+ROOT_NODE="negeri"
 
 # Define the API endpoint
-API_ENDPOINT="http://portal.muzikfmrtm.com:8080/api/directories/${ROOT_NODE}"
+API_ENDPOINT="http://localhost:8000/api/directories/${ROOT_NODE}"
 
 # Define the JSON payload
 JSON_PAYLOAD=$(cat <<EOF
