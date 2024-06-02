@@ -24,7 +24,7 @@ const PageContent = ({id}) => {
     useEffect(() => {
         axios(`${url}/directories/${id}`)
             .then(response => {
-                //console.log(response)
+                console.log(response)
                 setItems(response.data.items.data)
                 setDepartments(response.data.departments.data)
                 setStaffs(response.data.staffs.data)
@@ -39,16 +39,18 @@ const PageContent = ({id}) => {
     }, [id]);
 
     const breadcrumbs = () => {
-        return ancestors.map((item, index) => (
-            <li key={index}>
-                <Link to={`/directories/${item.id}`}>{item.name.toUpperCase()}</Link>
-            </li>
-        ));
+        if( ancestors?.length > 0 ){
+            return ancestors.map((item, index) => (
+                <li key={index}>
+                    <Link to={`/directories/${item.id}`}>{item.name.toUpperCase()}</Link>
+                </li>
+            ));
+        }
     }
 
     const departmentItems = () => {
 
-        if( departments.length > 0 ){
+        if( departments?.length > 0 ){
             return departments.map((item, index) => (
                 <li key={index} className="list-group-item  border-0">
                     <Link to={`/directories/${item.id}`}>
@@ -66,11 +68,31 @@ const PageContent = ({id}) => {
 
     };
 
+    const rootItems = () => {
+
+        if( items?.length > 0 ){
+            return items.map((item, index) => (
+                <li key={index} className="list-group-item  border-0">
+                    <Link to={`/directories/${item.id}`}>
+                        <h3 id="linkdirektori">
+                            <FontAwesomeIcon 
+                                icon={'fa-solid fa-globe'} 
+                                className='text-dark mr-2'>
+                            </FontAwesomeIcon>
+                            {item.name.toUpperCase()}
+                        </h3>
+                    </Link>
+                </li>
+            ));
+        }
+
+    };
+
     const HeadingLink = () => {
         return (
            
                 <h3 style={{ marginTop: '2rem', backgroundColor: 'rgb(6, 57, 112)', color: 'white', padding: '1rem' }}>
-                    {title.toUpperCase()}
+                    {title ? title.toUpperCase() : 'DIREKTORI'} 
                 </h3>
            
         );
@@ -88,6 +110,7 @@ const PageContent = ({id}) => {
                         <li><Link to="/">Utama</Link></li>
                         
                         {breadcrumbs()}
+                        
 
                         {loading ? (
                             <li>
@@ -100,14 +123,24 @@ const PageContent = ({id}) => {
 
                     <HeadingLink />
 
-                    <StaffListing items={staffs} />
+                    {staffs?.length > 0 && <StaffListing items={staffs} />}
                     <hr />
 
-                    {departments.length > 0 && 
+                    {departments?.length > 0 && 
                         <>
                             <h1>JABATAN</h1>
                             <ul className="directory-department list-group border border-1" >
                                 {departmentItems()} 
+                            </ul>
+                        </>
+                    }
+
+                    
+                    {items?.length > 0 && 
+                        <>
+                           
+                            <ul className="directory-department list-group border border-1" >
+                                {rootItems()} 
                             </ul>
                         </>
                     }

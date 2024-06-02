@@ -21,6 +21,8 @@ class DirectoryController extends Controller
                         ->with(['descendants'])
                         ->defaultOrder()
                         ->paginate(3);
+
+            \Log::info('root');            
         } else {
 
             $node = Directory::find($id);
