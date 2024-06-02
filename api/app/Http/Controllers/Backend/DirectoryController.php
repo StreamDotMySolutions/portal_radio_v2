@@ -47,6 +47,17 @@ class DirectoryController extends Controller
             ]);
     }
 
+    public function sync(Request $request)
+    {
+
+    
+        // Create categories with children from the request data, starting with the 'angkasapuri' node
+        $this->createCategoryWithChildren($request->all(), null);
+    
+        return response()->json(['message' => 'Payload received']);
+    }
+
+
     public function store(Request $request, $root)
     {
         // Find the 'angkasapuri' node
