@@ -51,7 +51,7 @@ class DirectoryController extends Controller
     {
         //\Log::info($request);
         Directory::truncate();
-        $this->createCategoryWithChildren($request, 'angkasapuri');
+        $this->createCategoryWithChildren($request, Directory::where('name','angkasapuri')->first());
         return response()->json(['message' => 'Payload received']);
     }
 
