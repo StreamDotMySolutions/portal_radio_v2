@@ -11,14 +11,14 @@ class DirectoryController extends Controller
     public function index($id = null)
     {
 
-        \Log::info($id);
+        //\Log::info($id);
         $ancestors = [];
         $departments = [];
         $title = null;
         $staffs=[];
 
         if($id == 'null'){
-            \Log::info('is null');
+            //\Log::info('is null');
             $items = Directory::query()
                         ->whereIsRoot()
                         ->defaultOrder()
