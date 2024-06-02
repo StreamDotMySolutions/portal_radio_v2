@@ -52,10 +52,10 @@ class DirectoryController extends Controller
     public function store(Request $request, $root)
     {
         \Log::info($root);
-        Directory::where('name', $root)->delete();
-        $node = Directory::create(['name' => $root,'type' => 'folder']);
-        $node->saveAsRoot();
-        $this->createCategoryWithChildren($request, $node);
+        //Directory::where('name', $root)->delete();
+        //$node = Directory::create(['name' => $root,'type' => 'folder']);
+        //$node->saveAsRoot();
+        $this->createCategoryWithChildren($request, null);
         return response()->json(['message' => 'Payload received']);
     }
 
