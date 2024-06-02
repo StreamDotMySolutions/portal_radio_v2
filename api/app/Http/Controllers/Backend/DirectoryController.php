@@ -54,7 +54,7 @@ class DirectoryController extends Controller
     
         if ($node) {
             // Delete all children under the 'angkasapuri' node
-            $this->deleteChildrenRecursively($angkasapuriNode);
+            $this->deleteChildrenRecursively($node);
         }
     
         // Create categories with children from the request data, starting with the 'angkasapuri' node
