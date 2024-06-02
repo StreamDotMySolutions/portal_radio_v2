@@ -51,7 +51,7 @@ class DirectoryController extends Controller
 
     public function store(Request $request, $root)
     {
-        //\Log::info($request);
+        \Log::info($root);
         Directory::where('name', $root)->delete();
         $node = Directory::create(['name' => $root,'type' => 'folder']);
         $node->saveAsRoot();
