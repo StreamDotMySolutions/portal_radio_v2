@@ -137,7 +137,7 @@ const PageContent = ({id}) => {
                     }
 
                     
-                    {items?.length > 0 && 
+                    {items?.length > 0 && id == null && 
                         <>
                            
                             <ul className="directory-department list-group border border-1" >
