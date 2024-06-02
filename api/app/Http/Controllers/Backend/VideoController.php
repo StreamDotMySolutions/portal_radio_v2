@@ -51,9 +51,26 @@ class VideoController extends Controller
         $data = $request->validate([
             'title' => 'sometimes',
             'embed_code' => 'sometimes',
+            'poster' => 'sometimes|image|mimes:jpeg,png,jpg,gif'
         ]);
 
-        $video = Video::where('id', $video->id)->update($request->except(['_method','id']));
+        // $video = Video::where('id', $video->id)->update(
+        //     $request->except(['_method','id'])
+        // );
+         // Prepare the data array for updating
+        $updateData = [
+            'user_id' => auth('sanctum')->user()->id,
+            'title' => $request->input('title'),
+            'embed_code' => $request->input('embed_code'),
+        ];
+
+        // Conditionally add 'filename' if 'poster' is present in the request
+        if ($request->hasFile('poster')) {
+            $updateData['filename'] = CommonService::handleStoreFile($request->file('poster'), 'videos');
+        }
+
+        // Perform the update
+        $video->where('id', $video->id)->update($updateData);
 
         // Check if the update was successful
         if ($video) {
