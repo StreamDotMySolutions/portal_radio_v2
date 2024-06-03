@@ -23,7 +23,7 @@ class DirectoryController extends Controller
                         ->whereIsRoot()
                         ->defaultOrder()
                         ->paginate(6);
-            \Log::info($items);
+            //\Log::info($items);
         } else {
             $ancestors = Directory::query()
                         ->where('id', $id)
@@ -38,7 +38,8 @@ class DirectoryController extends Controller
             $departments = Directory::query()
                         ->where('parent_id', $id)
                         ->where('type', 'folder')
-                        ->defaultOrder()
+                        //->defaultOrder()
+                        ->orderBy('name', 'desc')
                         ->paginate(50);
 
             $staffs = Directory::query()
