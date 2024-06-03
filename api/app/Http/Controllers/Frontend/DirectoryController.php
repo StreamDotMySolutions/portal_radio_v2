@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use Illuminate\Http\Request;
 use App\Models\Directory;
+use Illuminate\Support\Facades\DB;
 
 
 class DirectoryController extends Controller
@@ -39,7 +40,8 @@ class DirectoryController extends Controller
                         ->where('parent_id', $id)
                         ->where('type', 'folder')
                         //->defaultOrder()
-                        ->orderBy('name', 'ASC')
+                        //->orderBy('name', 'ASC')
+                        ->orderBy(DB::raw('CAST(SUBSTRING_INDEX(name, "_", 1) AS UNSIGNED)'), 'asc')
                         ->paginate(50);
 
             $staffs = Directory::query()
