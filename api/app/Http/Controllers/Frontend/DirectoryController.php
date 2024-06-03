@@ -39,7 +39,7 @@ class DirectoryController extends Controller
                         ->where('parent_id', $id)
                         ->where('type', 'folder')
                         //->defaultOrder()
-                        ->orderBy('name', 'desc')
+                        ->orderBy('name', 'ASC')
                         ->paginate(50);
 
             $staffs = Directory::query()
