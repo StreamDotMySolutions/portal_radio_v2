@@ -42,7 +42,6 @@ class DirectoryController extends Controller
                         $ancestors->getCollection()->transform(function ($item)  {
                             // Remove the prefix before the double underscore
                             $item->name = substr($item->name, strpos($item->name, '__') + 2);
-                            
                             return $item;
                         });
 
