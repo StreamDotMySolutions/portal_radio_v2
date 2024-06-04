@@ -37,12 +37,22 @@ const ShowStaffContent = () => {
     }, [id]);
 
     const breadcrumbs = () => {
-        return ancestors.map((item, index) => (
-            <li key={index}>
-                <Link to={`/directories/${item.id}`}>{item.name.toUpperCase()}</Link>
-            </li>
-        ));
-    }
+        if (ancestors?.length > 0) {
+            return ancestors.map((item, index) => {
+                // Remove the prefix before the double underscore
+                const nameWithoutPrefix = item.name.includes('__') 
+                    ? item.name.split('__').slice(1).join('__') 
+                    : item.name;
+    
+                return (
+                    <li key={index}>
+                        <Link to={`/directories/${item.id}`}>{nameWithoutPrefix.toUpperCase()}</Link>
+                    </li>
+                );
+            });
+        }
+    };
+    
 
     
 
@@ -75,7 +85,7 @@ const ShowStaffContent = () => {
                                 <Spinner animation="grow" size="sm" />
                             </li> // Show spinner while loading
                         ) : (
-                            <li>{title ? title.toUpperCase() : 'Direktori'}</li> // Show title when loaded
+                            <li>{title ? title.split('__').slice(1).join('__').toUpperCase() : 'Direktori'}</li>
                         )}
                     </ul>
 

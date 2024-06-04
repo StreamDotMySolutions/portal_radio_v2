@@ -126,7 +126,7 @@ const PageContent = ({id}) => {
                                 <Spinner animation="grow" size="sm" />
                             </li> // Show spinner while loading
                         ) : (
-                            <li>{title ? title.toUpperCase() : 'Direktori'}</li> // Show title when loaded
+                            <li>{title ? title.split('__').slice(1).join('__').toUpperCase() : 'Direktori'}</li>
                         )}
                     </ul>
 
