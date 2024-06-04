@@ -1,13 +1,13 @@
 
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Image } from 'react-bootstrap';
+import { Badge, Image } from 'react-bootstrap';
 
 
 const StaffListing = ({items}) => {
     
 
-    
+    //console.log(items)
     const staffItems = () => {
         if( items.length > 0 ){
             return items.map((item, index) => (
@@ -23,7 +23,7 @@ const StaffListing = ({items}) => {
                 //     </Link>
                 // </li>
                 <tr key={index}>
-                    {/* <td id="linklistp"  style={{width:'50px'}}>{item.id}</td> */}
+                    <td id="linklistp" style={{width:'50px'}} className='text-light text-center'><Badge>{item.number}</Badge></td>
                     <td id="linklistp" style={{width:'140px'}}>
                         <Link to={`/directories/${item.id}/show`}>
                             <Image 
@@ -38,9 +38,9 @@ const StaffListing = ({items}) => {
                          <h3>{item.name.toUpperCase()}</h3>     
                     </Link>
                     </td>
-                    <td id="linklistp">{item.occupation}</td>
-                    <td id="linklistp">{item.email}</td>
-                    <td id="linklistp">{item.phone}</td>
+                    <td id="linklistp" className='text-dark'>{item.occupation}</td>
+                    <td id="linklistp" className='text-dark'>{item.email}</td>
+                    <td id="linklistp" className='text-dark'>{item.phone}</td>
                 </tr>
               
             ));
@@ -58,7 +58,7 @@ const StaffListing = ({items}) => {
             <table id="table-id" className="table responsive-table table-striped table">
                 <thead>
                     <tr style={{ backgroundColor: 'rgb(6, 57, 112)' }}>
-                        {/* <th style={{ color: 'white' }}>NO.</th> */}
+                        <th style={{ color: 'white' }}>NO.</th>
                         <th style={{ color: 'white' }}>GAMBAR</th>
                         <th style={{ color: 'white' }}>NAMA PEGAWAI</th>
                         <th style={{ color: 'white' }}>JAWATAN</th>
