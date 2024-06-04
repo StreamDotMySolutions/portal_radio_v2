@@ -36,13 +36,19 @@ class DirectoryController extends Controller
             $ancestors = Directory::query()
                             ->where('id', $id)
                             ->with(['ancestors'])
-                            ->get();
+                            ->first();
 
             // Map the results to add a virtual number column and remove the prefix from the name
-            $ancestors->getCollection()->transform(function ($item) {
-                // Remove the prefix before the double underscore
-                $item->name = substr($item->name, strpos($item->name, '__') + 2);
-                return $item;
+            $ancestors->each(function ($ancestor) {
+                if ($ancestor->ancestors) {
+                    $ancestor->ancestors->transform(function ($item) {
+                        // Remove the prefix before the double underscore
+                        if (strpos($item->name, '__') !== false) {
+                            $item->name = substr($item->name, strpos($item->name, '__') + 2);
+                        }
+                        return $item;
+                    });
+                }
             });
                                   
 
@@ -63,16 +69,16 @@ class DirectoryController extends Controller
                         ->orderBy(DB::raw('CAST(SUBSTRING_INDEX(name, "_", 1) AS UNSIGNED)'), 'asc')
                         ->paginate($perPage);
 
-                        // Map the results to add a virtual number column and remove the prefix from the name
-                        $departments->getCollection()->transform(function ($item, $index) use ($startNumber) {
-                            // Remove the prefix before the double underscore
-                            $item->name = substr($item->name, strpos($item->name, '__') + 2);
-                            
-                            // Add a virtual number column
-                            $item->number = $startNumber + $index;
-                            
-                            return $item;
-                        });
+            // Map the results to add a virtual number column and remove the prefix from the name
+            $departments->getCollection()->transform(function ($item, $index) use ($startNumber) {
+                // Remove the prefix before the double underscore
+                $item->name = substr($item->name, strpos($item->name, '__') + 2);
+                
+                // Add a virtual number column
+                $item->number = $startNumber + $index;
+                
+                return $item;
+            });
 
 
             $staffs = Directory::query()
@@ -86,6 +92,7 @@ class DirectoryController extends Controller
                 $item->number = $startNumber + $index;
                 return $item;
             });
+
             $title = Directory::where('id',$id)->select(['name'])->first();
         }
   
