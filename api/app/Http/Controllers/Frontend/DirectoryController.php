@@ -44,6 +44,10 @@ class DirectoryController extends Controller
                         ->paginate(50);
 
             $departments = Directory::query()
+                        // ->select(
+                        //     '*',  // Select all columns
+                        //     DB::raw('SUBSTRING(name, LOCATE("__", name) + 2) as name_without_prefix')
+                        // )
                         ->where('parent_id', $id)
                         ->where('type', 'folder')
                         //->defaultOrder()
@@ -51,11 +55,17 @@ class DirectoryController extends Controller
                         ->orderBy(DB::raw('CAST(SUBSTRING_INDEX(name, "_", 1) AS UNSIGNED)'), 'asc')
                         ->paginate($perPage);
 
-                        // Map the results to replace `name` with `name_without_prefix`
-            // $departments->getCollection()->transform(function ($item) {
-            //     $item->name = $item->name_without_prefix;
-            //     return $item;
-            // });
+                        // Map the results to add a virtual number column and remove the prefix from the name
+                        $departments->getCollection()->transform(function ($item, $index) use ($startNumber) {
+                            // Remove the prefix before the double underscore
+                            $item->name_without_prefix = substr($item->name, strpos($item->name, '__') + 2);
+                            
+                            // Add a virtual number column
+                            $item->number = $startNumber + $index;
+                            
+                            return $item;
+                        });
+
 
             $staffs = Directory::query()
                         ->where('parent_id', $id)
