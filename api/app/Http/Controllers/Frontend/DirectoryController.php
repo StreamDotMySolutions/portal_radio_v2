@@ -38,18 +38,7 @@ class DirectoryController extends Controller
                             ->with(['ancestors'])
                             ->first();
 
-            // Map the results to add a virtual number column and remove the prefix from the name
-            $ancestors->each(function ($ancestor) {
-                if ($ancestor->ancestors) {
-                    $ancestor->ancestors->transform(function ($item) {
-                        // Remove the prefix before the double underscore
-                        if (strpos($item->name, '__') !== false) {
-                            $item->name = substr($item->name, strpos($item->name, '__') + 2);
-                        }
-                        return $item;
-                    });
-                }
-            });
+
                                   
 
             $items = Directory::query()
