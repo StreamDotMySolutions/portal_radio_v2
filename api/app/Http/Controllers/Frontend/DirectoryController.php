@@ -58,7 +58,7 @@ class DirectoryController extends Controller
                         // Map the results to add a virtual number column and remove the prefix from the name
                         $departments->getCollection()->transform(function ($item, $index) use ($startNumber) {
                             // Remove the prefix before the double underscore
-                            $item->name_without_prefix = substr($item->name, strpos($item->name, '__') + 2);
+                            $item->name = substr($item->name, strpos($item->name, '__') + 2);
                             
                             // Add a virtual number column
                             $item->number = $startNumber + $index;
