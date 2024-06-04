@@ -37,6 +37,25 @@ class DirectoryController extends Controller
                         ->where('id', $id)
                         ->with(['ancestors'])
                         ->first();
+                                  $departments->getCollection()->transform(function ($item, $index) use ($startNumber) {
+                            // Remove the prefix before the double underscore
+                            $item->name = substr($item->name, strpos($item->name, '__') + 2);
+                            
+                            // Add a virtual number column
+                            $item->number = $startNumber + $index;
+                            
+                            return $item;
+                        });
+
+            // Map the results to add a virtual number column and remove the prefix from the name
+            $ancestors->getCollection()->transform(function ($item, $index) use ($startNumber) {
+                // Remove the prefix before the double underscore
+                $item->name = substr($item->name, strpos($item->name, '__') + 2);
+            
+                
+                return $item;
+            });
+            
 
             $items = Directory::query()
                         ->where('parent_id', $id)
