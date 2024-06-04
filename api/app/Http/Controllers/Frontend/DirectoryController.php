@@ -52,10 +52,10 @@ class DirectoryController extends Controller
                         ->paginate($perPage);
 
                         // Map the results to replace `name` with `name_without_prefix`
-            $departments->getCollection()->transform(function ($item) {
-                $item->name = $item->name_without_prefix;
-                return $item;
-            });
+            // $departments->getCollection()->transform(function ($item) {
+            //     $item->name = $item->name_without_prefix;
+            //     return $item;
+            // });
 
             $staffs = Directory::query()
                         ->where('parent_id', $id)
