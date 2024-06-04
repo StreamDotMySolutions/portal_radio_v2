@@ -36,7 +36,7 @@ class DirectoryController extends Controller
             $ancestors = Directory::query()
                              ->select(
                                 '*',  // Select all columns
-                                DB::raw('SUBSTRING(name, LOCATE("__", name) + 2) as name_')
+                                DB::raw('SUBSTRING(name, LOCATE("__", name) + 2) as name')
                             )
                             ->where('id', $id)
                             ->with(['ancestors'])
