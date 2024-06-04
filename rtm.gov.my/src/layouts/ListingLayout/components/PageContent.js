@@ -155,7 +155,7 @@ const PageContent = () => {
                        
                 </ul>
                 <div  style={{minHeight: '200px', marginTop: '5REM'}}>
-                    <h3>Content not available</h3>
+                    <h3>loading...</h3>
                 </div>
         </div>
     )
