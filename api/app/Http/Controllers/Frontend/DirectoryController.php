@@ -34,16 +34,14 @@ class DirectoryController extends Controller
             //\Log::info($items);
         } else {
             $ancestors = Directory::query()
-                        ->where('id', $id)
-                        ->with(['ancestors'])
-                        ->first();
+                             ->select(
+                                '*',  // Select all columns
+                                DB::raw('SUBSTRING(name, LOCATE("__", name) + 2) as name_')
+                            )
+                            ->where('id', $id)
+                            ->with(['ancestors'])
+                            ->first();
                                   
-                        
-                        $ancestors->getCollection()->transform(function ($item)  {
-                            // Remove the prefix before the double underscore
-                            $item->name = substr($item->name, strpos($item->name, '__') + 2);
-                            return $item;
-                        });
 
                         
 
