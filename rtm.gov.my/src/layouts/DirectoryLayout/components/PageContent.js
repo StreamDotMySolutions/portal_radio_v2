@@ -41,18 +41,21 @@ const PageContent = ({id}) => {
     const breadcrumbs = () => {
         if (ancestors?.length > 0) {
             return ancestors.map((item, index) => {
-                // Remove the prefix before the double underscore
-                const nameWithoutPrefix = item.name.includes('__') 
+                // Check if the name contains the pattern XX__ and remove the prefix
+                const nameWithoutPrefix = item.name.match(/^\w+__/) 
                     ? item.name.split('__').slice(1).join('__') 
                     : item.name;
     
                 return (
                     <li key={index}>
-                        <Link to={`/directories/${item.id}`}>{nameWithoutPrefix.toUpperCase()}</Link>
+                        <Link to={`/directories/${item.id}`}>
+                            {nameWithoutPrefix.toUpperCase()}
+                        </Link>
                     </li>
                 );
             });
         }
+        return null; // Return null if ancestors are not loaded or empty
     };
     
 
@@ -126,7 +129,7 @@ const PageContent = ({id}) => {
                                 <Spinner animation="grow" size="sm" />
                             </li> // Show spinner while loading
                         ) : (
-                            <li>{title ? title.split('__').slice(1).join('__').toUpperCase() : 'Direktori'}</li>
+                            <li>{title && /^[^_]+__/.test(title) ? title.split('__').slice(1).join('__').toUpperCase() : (title ? title.toUpperCase() : 'Direktori')}</li>                            
                         )}
                     </ul>
 
