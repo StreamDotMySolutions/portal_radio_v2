@@ -38,9 +38,6 @@ class DirectoryController extends Controller
                             ->with(['ancestors'])
                             ->first();
 
-
-                                  
-
             $items = Directory::query()
                         ->where('parent_id', $id)
                         ->defaultOrder()
