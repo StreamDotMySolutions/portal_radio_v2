@@ -51,7 +51,8 @@ class DirectoryController extends Controller
                         ->where('parent_id', $id)
                         ->where('type', 'folder')
                         ->with(['descendants' => function($query) {
-                            $query->where('type', 'folder');
+                            $query->where('type', 'folder')
+                                   ->where('name', 'NOT LIKE', '%unit%'); // Filter to exclude names containing 'unit'
                         }])
                         //->defaultOrder()
                         //->orderBy('name', 'ASC')
