@@ -51,9 +51,15 @@ class DirectoryController extends Controller
                         ->where('parent_id', $id)
                         ->where('type', 'folder')
                         ->with(['descendants' => function($query) {
-                            $query->where('type', 'folder')
-                                   ->where('name', 'NOT LIKE', '%unit%'); // Filter to exclude names containing 'unit'
+                            $query->where('type', 'folder');
+                            
                         }])
+
+                        ->with(['children' => function($query) {
+                            $query->where('type', 'folder');
+                            
+                        }])
+         
                         //->defaultOrder()
                         //->orderBy('name', 'ASC')
                         ->orderBy(DB::raw('CAST(SUBSTRING_INDEX(name, "_", 1) AS UNSIGNED)'), 'asc')

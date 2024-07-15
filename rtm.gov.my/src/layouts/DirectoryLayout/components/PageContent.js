@@ -92,9 +92,9 @@ const PageContent = ({id}) => {
                             {item.name.toUpperCase()}
                         </h3>
                     </Link>
-                    {item.descendants && item.descendants.length > 0 && (
+                    {item.children && item.children.length > 0 && (
                         <ul className="list-group">
-                            {departmentItems(item.descendants)}
+                            {departmentItems(item.children)}
                         </ul>
                     )}
                 </li>
