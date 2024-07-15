@@ -16,7 +16,7 @@ class BannerController extends Controller
         $banners = Banner::defaultOrder()->paginate(10)->withQueryString(); 
 
         if ($banners->isEmpty()) {
-            return response()->json(['message' => 'No banners found'], 404);
+            return response()->json(['message' => 'No banners found']);
         }
     
         return response()->json(['banners' => $banners]);

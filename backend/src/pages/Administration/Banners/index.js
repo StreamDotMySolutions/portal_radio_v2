@@ -17,9 +17,6 @@ const Index = () => {
         { url: '/administration/banners', label: 'Banner Management' },
     ];
     
-
-    
-
     return(
         <>
             <BreadCrumb items={items} />

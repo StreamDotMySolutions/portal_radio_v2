@@ -87,6 +87,9 @@ export default function DeleteModal({id}) {
             }
             setIsLoading(false) // animation
           })
+          .finally(
+            store.setValue('refresh', true) // to force useEffect get new data for index
+          )
     }
   
     return (
