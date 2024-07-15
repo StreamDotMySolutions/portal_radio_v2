@@ -59,25 +59,57 @@ const PageContent = ({id}) => {
     };
     
 
-    const departmentItems = () => {
+    // const departmentItems = () => {
 
-        if( departments?.length > 0 ){
+    //     if( departments?.length > 0 ){
+    //         return departments.map((item, index) => (
+    //             <li key={index} className="list-group-item  border-0">
+    //                 <Link to={`/directories/${item.id}`}>
+    //                     <h3 id="linkdirektori">
+    //                         <FontAwesomeIcon 
+    //                             icon={'fa-solid fa-building'} 
+    //                             className='text-dark mr-2'>
+    //                         </FontAwesomeIcon>
+    //                         {item.name.toUpperCase()}
+    //                     </h3>
+    //                 </Link>
+    //             </li>
+    //         ));
+    //     }
+
+    // };
+    const departmentItems = (departments) => {
+        if (departments?.length > 0) {
             return departments.map((item, index) => (
-                <li key={index} className="list-group-item  border-0">
+                <li key={index} className="list-group-item border-0">
                     <Link to={`/directories/${item.id}`}>
                         <h3 id="linkdirektori">
                             <FontAwesomeIcon 
-                                icon={'fa-solid fa-building'} 
+                                icon={item.descendants && item.descendants.length > 0 ? 'fa-folder' : 'fa-folder-open'}
                                 className='text-dark mr-2'>
                             </FontAwesomeIcon>
                             {item.name.toUpperCase()}
                         </h3>
                     </Link>
+                    {item.descendants && item.descendants.length > 0 && (
+                        <ul className="list-group">
+                            {departmentItems(item.descendants)}
+                        </ul>
+                    )}
                 </li>
             ));
+        } else {
+            return null;
         }
-
     };
+    
+    // Usage example assuming 'departments' is your main list of departments
+    // return (
+    //     <ul className="list-group">
+    //         {departmentItems(departments)}
+    //     </ul>
+    // );
+    
 
     const rootItems = () => {
 
@@ -142,7 +174,8 @@ const PageContent = ({id}) => {
                         <>
                             <h1>JABATAN</h1>
                             <ul className="directory-department list-group border border-1" >
-                                {departmentItems()} 
+                                {/* {departmentItems()}  */}
+                                {departmentItems(departments)}
                             </ul>
                         </>
                     }

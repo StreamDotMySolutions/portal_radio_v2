@@ -50,6 +50,9 @@ class DirectoryController extends Controller
                         // )
                         ->where('parent_id', $id)
                         ->where('type', 'folder')
+                        ->with(['descendants' => function($query) {
+                            $query->where('type', 'folder');
+                        }])
                         //->defaultOrder()
                         //->orderBy('name', 'ASC')
                         ->orderBy(DB::raw('CAST(SUBSTRING_INDEX(name, "_", 1) AS UNSIGNED)'), 'asc')
