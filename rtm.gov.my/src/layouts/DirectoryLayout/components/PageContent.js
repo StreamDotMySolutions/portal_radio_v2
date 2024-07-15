@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import { Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFolder, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 import './style.css'
 import StaffListing from './StaffListing';
 
@@ -85,7 +86,7 @@ const PageContent = ({id}) => {
                     <Link to={`/directories/${item.id}`}>
                         <h3 id="linkdirektori">
                             <FontAwesomeIcon 
-                                icon={item.descendants && item.descendants.length > 0 ? 'fa-folder' : 'fa-folder-open'}
+                                icon={item.descendants && item.descendants.length > 0 ? faFolderOpen : faFolder}
                                 className='text-dark mr-2'>
                             </FontAwesomeIcon>
                             {item.name.toUpperCase()}
