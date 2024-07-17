@@ -43,6 +43,17 @@ class DirectoryController extends Controller
                         ->defaultOrder()
                         ->paginate(50);
 
+                         // Map the results to add a virtual number column and remove the prefix from the name
+            $items->getCollection()->transform(function ($item, $index) use ($startNumber) {
+                // Remove the prefix before the double underscore
+                $item->name = substr($item->name, strpos($item->name, '__') + 2);
+                
+                // Add a virtual number column
+                $item->number = $startNumber + $index;
+
+                return $item;
+            });
+
             $departments = Directory::query()
                         // ->select(
                         //     '*',  // Select all columns
