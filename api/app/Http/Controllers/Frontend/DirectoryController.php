@@ -50,20 +50,21 @@ class DirectoryController extends Controller
                         // )
                         ->where('parent_id', $id)
                         ->where('type', 'folder')
-                        ->with(['descendants' => function($query) {
-                            $query->where('type', 'folder');
+                        // ->with(['descendants' => function($query) {
+                        //     $query->where('type', 'folder');
                             
-                        }])
+                        // }])
 
                         ->with(['children' => function($query) {
-                            $query->where('type', 'folder');
-                            
+                            $query->where('type', 'folder')
+                                  ->orderBy(DB::raw('CAST(SUBSTRING_INDEX(name, "_", 1) AS UNSIGNED)'), 'asc');
                         }])
          
                         //->defaultOrder()
                         //->orderBy('name', 'ASC')
                         ->orderBy(DB::raw('CAST(SUBSTRING_INDEX(name, "_", 1) AS UNSIGNED)'), 'asc')
                         ->paginate($perPage);
+                        
 
             // Map the results to add a virtual number column and remove the prefix from the name
             $departments->getCollection()->transform(function ($item, $index) use ($startNumber) {
@@ -72,9 +73,19 @@ class DirectoryController extends Controller
                 
                 // Add a virtual number column
                 $item->number = $startNumber + $index;
-                
+
+                // Apply the same transformation to each child in the children relationship
+                $item->children->transform(function ($child) {
+                    // Remove the prefix before the double underscore from the child name
+                    $child->name = substr($child->name, strpos($child->name, '__') + 2);
+                    
+                    return $child;
+                });
+
                 return $item;
             });
+
+            
 
 
             $staffs = Directory::query()
