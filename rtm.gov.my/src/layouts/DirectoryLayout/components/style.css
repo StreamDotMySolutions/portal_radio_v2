@@ -99,26 +99,23 @@ text-decoration: underline;
 
 
 
-#linkdirektoridiv:link { 
-text-decoration: none; 
+#linkdirektoridiv:link, #linkdirektoripdiv:link { 
+  text-decoration: none; 
+  color: #ffa525;
 }
 
-
-
-
-#linkdirektori{
-color:#ffa525;
+#linkdirektoridiv:hover, #linkdirektoripdiv:hover {
+  text-decoration: underline;
+  color: #ffa525;
 }
 
-
-#linkdirektoripdiv:link {
-text-decoration: none; 
+#linkdirektori {
+  color: #ffa525;
 }
 
-#linkdirektorip{
-color:#333333;
+#linkdirektorip {
+  color: #333333;
 }
-
 
 
 
