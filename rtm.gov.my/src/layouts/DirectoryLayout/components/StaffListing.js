@@ -23,7 +23,7 @@ const StaffListing = ({items}) => {
                 //     </Link>
                 // </li>
                 <tr key={index}>
-                    <td id="linklistp" style={{width:'50px'}} className='text-light text-center'><Badge>{item.number}</Badge></td>
+                    <td id="linklistp" style={{width:'50px'}} className='text-light text-center'><Badge className="bg-dark text-light">{item.number}</Badge></td>
                     <td id="linklistp" style={{width:'140px'}}>
                         <Link to={`/directories/${item.id}/show`}>
                             <Image 
