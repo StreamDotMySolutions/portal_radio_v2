@@ -35,7 +35,7 @@ const StaffListing = ({items}) => {
                     </td>
                     <td id="linklistp">
                     <Link to={`/directories/${item.id}/show`}>
-                         <h3>{item.name.toUpperCase()}</h3>     
+                         <h3>{item.name}</h3>     
                     </Link>
                     </td>
                     <td id="linklistp" className='text-dark'>{item.occupation}</td>
