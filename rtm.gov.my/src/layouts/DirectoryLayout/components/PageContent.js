@@ -25,7 +25,7 @@ const PageContent = ({id}) => {
     useEffect(() => {
         axios(`${url}/directories/${id}`)
             .then(response => {
-                console.log(response)
+                //console.log(response)
                 setItems(response.data.items.data)
                 setDepartments(response.data.departments.data)
                 setStaffs(response.data.staffs.data)
@@ -79,30 +79,64 @@ const PageContent = ({id}) => {
     //     }
 
     // };
+    // const departmentItems = (departments) => {
+    //     if (departments?.length > 0) {
+    //         return departments.map((item, index) => (
+    //             <div key={index} className="col-md-6">
+    //                 <a id="linkdirektoridiv" href={`/directories/${item.id}`}>
+    //                     <h3 id="linkdirektori">{item.name.toUpperCase()}</h3>
+    //                 </a>
+    //                 {item.children && item.children.length > 0 && (
+    //                     item.children.map((child, childIndex) => (
+    //                         <a key={childIndex} id="linkdirektorip" href={`/directories/${child.id}`}>
+    //                             <p>{child.name}</p>
+    //                         </a>
+    //                     ))
+    //                 )}
+    //             </div>
+    //         ));
+    //     } else {
+    //         return null;
+    //     }
+    // };
     const departmentItems = (departments) => {
         if (departments?.length > 0) {
-            return departments.map((item, index) => (
-                <li key={index} className="list-group-item border-0">
-                    <Link to={`/directories/${item.id}`}>
-                        <h3 id="linkdirektori">
-                            <FontAwesomeIcon 
-                                icon={item.descendants && item.descendants.length > 0 ? faFolderOpen : faFolder}
-                                className='text-dark mr-2'>
-                            </FontAwesomeIcon>
-                            {item.name.toUpperCase()}
-                        </h3>
-                    </Link>
-                    {item.children && item.children.length > 0 && (
-                        <ul className="list-group">
-                            {departmentItems(item.children)}
-                        </ul>
-                    )}
-                </li>
-            ));
+            const half = Math.ceil(departments.length / 2);
+            const firstHalf = departments.slice(0, half);
+            const secondHalf = departments.slice(half);
+    
+            const renderColumn = (items) => (
+                items.map((item, index) => (
+                    <div key={index} className="col">
+                        <Link id="linkdirektoridiv" to={`/directories/${item.id}`}>
+                            <h3 id="linkdirektori">{item.name.toUpperCase()}</h3>
+                        </Link>
+                        {item.children && item.children.length > 0 && (
+                            item.children.map((child, childIndex) => (
+                                <Link key={childIndex} id="linkdirektorip" to={`/directories/${child.id}`}>
+                                    <p>{child.name}</p>
+                                </Link>
+                            ))
+                        )}
+                    </div>
+                ))
+            );
+    
+            return (
+                <div className="row">
+                    <div className="col-md-6">
+                        {renderColumn(firstHalf)}
+                    </div>
+                    <div className="col-md-6">
+                        {renderColumn(secondHalf)}
+                    </div>
+                </div>
+            );
         } else {
             return null;
         }
     };
+    
     
     // Usage example assuming 'departments' is your main list of departments
     // return (
@@ -135,10 +169,14 @@ const PageContent = ({id}) => {
     const HeadingLink = () => {
         return (
            
+            <>
                 <h3 style={{ marginTop: '2rem', backgroundColor: 'rgb(6, 57, 112)', color: 'white', padding: '1rem' }}>
                     {title && /^[^_]+__/.test(title) ? title.split('__').slice(1).join('__').toUpperCase() : (title ? title.toUpperCase() : 'Direktori')}
                 </h3>
-           
+            <span className='text-muted'>
+                TIDAK DIBENARKAN menggunakan maklumat pada halaman ini untuk tujuan pengiklanan, pemasaran dan penjualan produk dan perkhidmatan serta menyebar maklumat pegawai tanpa kebenaran.
+            </span>
+            </>
         );
     };
 
@@ -173,7 +211,7 @@ const PageContent = ({id}) => {
 
                     {departments?.length > 0 && 
                         <>
-                            <h1>JABATAN</h1>
+                           
                             <ul className="directory-department list-group border border-1" >
                                 {/* {departmentItems()}  */}
                                 {departmentItems(departments)}
