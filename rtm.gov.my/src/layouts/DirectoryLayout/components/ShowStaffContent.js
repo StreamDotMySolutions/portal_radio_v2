@@ -85,7 +85,7 @@ const ShowStaffContent = () => {
                                 <Spinner animation="grow" size="sm" />
                             </li> // Show spinner while loading
                         ) : (
-                            <li>{title && /^[^_]+__/.test(title) ? title.split('__').slice(1).join('__').toUpperCase() : (title ? title.toUpperCase() : 'Direktori')}</li>
+                            <li>{title && /^[^_]+__/.test(title) ? title.split('__').slice(1).join('__') : (title ? title : 'Direktori')}</li>
 
                         )}
                     </ul>
