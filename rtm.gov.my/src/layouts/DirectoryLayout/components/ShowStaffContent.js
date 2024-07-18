@@ -46,7 +46,7 @@ const ShowStaffContent = () => {
     
                 return (
                     <li key={index}>
-                        <Link to={`/directories/${item.id}`}>{nameWithoutPrefix.toUpperCase()}</Link>
+                        <Link to={`/directories/${item.id}`}>{nameWithoutPrefix}</Link>
                     </li>
                 );
             });
