@@ -6,6 +6,7 @@ import Menu3 from '../components/Menu3';
 import Footer2 from '../components/Footer2';
 import { useParams } from 'react-router-dom';
 import ShowStaffContent from './components/ShowStaffContent';
+import SearchResult from './components/SearchResult';
 
 const SearchResultLayout = () => {
     const { id } = useParams(); // parentid
@@ -23,7 +24,7 @@ const SearchResultLayout = () => {
                 <Menu3 />
             </div>
        
-           result
+           <SearchResult />
 
             <div className="d-none d-md-block" id="footer-desktop">
                 <Footer />
