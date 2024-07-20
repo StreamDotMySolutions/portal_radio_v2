@@ -19,6 +19,8 @@ import Error404 from "./pages/Error404"
 import Home from "./pages/Home"
 import DirectoryLayout from "./layouts/DirectoryLayout/DirectoryLayout";
 import ShowStaffLayout from "./layouts/DirectoryLayout/ShowStaff";
+import SearchResult from "./layouts/DirectoryLayout/components/SearchResult";
+import SearchResultLayout from "./layouts/DirectoryLayout/SearchResultLayout";
 
 library.add(fas)
 
@@ -35,6 +37,7 @@ export default function App() {
           <Route path="/directories" element={<DirectoryLayout />}/>
           <Route path="/directories/:id" element={<DirectoryLayout />}/>
           <Route path="/directories/:id/show" element={<ShowStaffLayout />}/>
+          <Route path="/directories/search/:query" element={<SearchResultLayout /> } />
         </Routes>
       </BrowserRouter>
   );

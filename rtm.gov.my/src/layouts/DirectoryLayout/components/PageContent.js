@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFolder, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 import './style.css'
 import StaffListing from './StaffListing';
+import Search from './Search';
 
 
 const PageContent = ({id}) => {
@@ -205,6 +206,8 @@ const PageContent = ({id}) => {
                     </ul>
 
                     <HeadingLink />
+
+                    <Search />
 
                     {staffs?.length > 0 && <StaffListing items={staffs} />}
                     <hr />
