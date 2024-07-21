@@ -6,31 +6,31 @@ import { Table } from 'react-bootstrap';
 import Search from './Search';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import StaffListing from './StaffListing';
 
 const SearchResult = () => {
 
-    const [data,setData] = useState([])
-    const { query } = useParams()
+    const [data, setData] = useState([]);
+    const { query } = useParams();
+    const url = process.env.REACT_APP_API_URL;
 
-    useEffect( () => {
+    useEffect(() => {
         if (!query) {
             // Query is empty, handle it appropriately
             return;
         }
 
-        axios(`${process.env.REACT_APP_BACKEND_URL}/directories/search/${query}`)
-        .then(
-            response => {
-                //console.log(response)
-                setData(response.data)
-            }
-        )
-        .catch( error => {
-            console.warn(error)
-        })
-    },[query])
+        axios.post(`${url}/directories/search`, { query: query })
+            .then(response => {
+                console.log(response);
+                setData(response.data);
+            })
+            .catch(error => {
+                console.warn(error);
+            });
+    }, [query]);
 
-    console.log(query)
+    //console.log(query)
 
     const breadcrumbs = () => {
 
@@ -52,26 +52,9 @@ const SearchResult = () => {
     return (
             <div className='container-fluid col-md-10'>
                 { breadcrumbs() }
-                <h1>  <FontAwesomeIcon icon={faSearch} /> Hasil Carian</h1>
+                <h1><FontAwesomeIcon icon={faSearch} /> Hasil Carian</h1>
                 <Search />
-                <div className="table-responsive">
-                    <table id="table-id" className="table responsive-table table-striped table">
-                        <thead>
-                            <tr style={{ backgroundColor: 'rgb(6, 57, 112)' }}>
-                                <th style={{ color: 'white' }}>NO.</th>
-                                <th style={{ color: 'white' }}>GAMBAR</th>
-                                <th style={{ color: 'white' }}>NAMA PEGAWAI</th>
-                                <th style={{ color: 'white' }}>JAWATAN</th>
-                                <th style={{ color: 'white' }}>EMEL</th>
-                                <th style={{ color: 'white' }}>NO. TELEFON</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        
-                            {/* Add more table rows here */}
-                        </tbody>
-                    </table>
-                </div>
+                {data?.length > 0 ?  <StaffListing items={data} /> : <p className='text-muted'>Tiada data dalam rekod kami.</p>}
             </div>
         );
 

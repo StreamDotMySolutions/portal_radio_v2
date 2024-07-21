@@ -22,5 +22,7 @@ Route::get('/home-menu-2', [MenuController::class, 'menu2']);
 Route::get('/home-banners', [BannerController::class, 'index']);
 Route::get('/home-programmes', [ProgrammeController::class, 'index']);
 Route::get('/home-videos', [VideoController::class, 'index']);
+Route::post('/directories/search', [DirectoryController::class, 'search']);
 Route::get('/directories/{id}', [DirectoryController::class, 'index']);
 Route::get('/directories/{directory}/show', [DirectoryController::class, 'show']);
+

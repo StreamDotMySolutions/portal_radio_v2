@@ -11,17 +11,7 @@ const StaffListing = ({items}) => {
     const staffItems = () => {
         if( items.length > 0 ){
             return items.map((item, index) => (
-                // <li key={index}  className="list-group-item  border-0">
-                //     <Link to={`/directories/${item.id}`}>
-                //         <h3 id="linkdirektori">
-                //             <FontAwesomeIcon 
-                //                 icon={'fa-solid fa-person'} 
-                //                 className='text-dark mr-2'>
-                //             </FontAwesomeIcon>
-                //             {item.name.toUpperCase()}
-                //         </h3>
-                //     </Link>
-                // </li>
+    
                 <tr key={index}>
                     <td id="linklistp" style={{width:'50px'}} className='text-light text-center'><Badge className="bg-dark text-light">{item.number}</Badge></td>
                     <td id="linklistp" style={{width:'140px'}}>
@@ -41,6 +31,7 @@ const StaffListing = ({items}) => {
                     <td id="linklistp" className='text-dark'>{item.occupation}</td>
                     <td id="linklistp" className='text-dark'>{item.email}</td>
                     <td id="linklistp" className='text-dark'>{item.phone}</td>
+                    <td id="linklistp" className='text-dark'>{item.address}</td>
                 </tr>
               
             ));
@@ -48,12 +39,7 @@ const StaffListing = ({items}) => {
     }
     if(items.length > 0 ){
         return (
-            // <div>
-            //     <h1>STAFF</h1>
-            //     <ul className="directory-staffs list-group border border-1" >
-            //         {staffItems()} 
-            //     </ul>
-            // </div>
+
             <div className="table-responsive">
             <table id="table-id" className="table responsive-table table-striped table">
                 <thead>
@@ -64,11 +50,12 @@ const StaffListing = ({items}) => {
                         <th style={{ color: 'white' }}>JAWATAN</th>
                         <th style={{ color: 'white' }}>EMEL</th>
                         <th style={{ color: 'white' }}>NO. TELEFON</th>
+                        <th style={{ color: 'white' }}>ALAMAT</th>
                     </tr>
                 </thead>
                 <tbody>
                     {staffItems()}
-                    {/* Add more table rows here */}
+   
                 </tbody>
             </table>
         </div>

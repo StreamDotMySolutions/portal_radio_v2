@@ -152,4 +152,15 @@ class DirectoryController extends Controller
                     'staff' => $directory,
                 ]);
     }
+
+    public function search(Request $request){
+        $query = $request->input('query');
+        //$results = Directory::where('type', 'spreadsheet')->fullTextSearch($query)->paginate(10); // Adjust the number per page as needed
+        $results = Directory::where('type', 'spreadsheet')->fullTextSearch($query)->get(); // Adjust the number per page as needed
+
+        return response()->json($results);
+
+        // \Log::info($request);
+        // \Log::info($results);
+    }
 }
