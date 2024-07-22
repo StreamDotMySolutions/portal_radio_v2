@@ -19,10 +19,20 @@ class Directory extends Model
     //     return $query->whereRaw("MATCH(name, occupation, email, phone, address) AGAINST(? IN NATURAL LANGUAGE MODE)", [$term]);
     // }
 
+    // public function scopeFullTextSearch($query, $term)
+    // {
+    //     return $query->selectRaw("*, MATCH(name, occupation, email, phone, address) AGAINST(?) AS relevancy", [$term])
+    //                 ->whereRaw("MATCH(name, occupation, email, phone, address) AGAINST(? IN NATURAL LANGUAGE MODE)", [$term])
+    //                 ->orderByDesc('relevancy');
+    // }
+
     public function scopeFullTextSearch($query, $term)
     {
-        return $query->selectRaw("*, MATCH(name, occupation, email, phone, address) AGAINST(?) AS relevancy", [$term])
-                    ->whereRaw("MATCH(name, occupation, email, phone, address) AGAINST(? IN NATURAL LANGUAGE MODE)", [$term])
+        // Escaping quotes for the term to ensure it is treated as a phrase
+        $escapedTerm = '"' . addslashes($term) . '"';
+        
+        return $query->selectRaw("*, MATCH(name, occupation, email, phone, address) AGAINST(? IN BOOLEAN MODE) AS relevancy", [$escapedTerm])
+                    ->whereRaw("MATCH(name, occupation, email, phone, address) AGAINST(? IN BOOLEAN MODE)", [$escapedTerm])
                     ->orderByDesc('relevancy');
-        }
+    }
 }
