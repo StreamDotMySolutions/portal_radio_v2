@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
+import { faPlusCircle, faMinusCircle } from '@fortawesome/free-solid-svg-icons';
 
 const DepartmentItems = ({ departments }) => {
     const [visibleChildren, setVisibleChildren] = useState({});
@@ -34,9 +34,10 @@ const DepartmentItems = ({ departments }) => {
                         </Link>
                         {item.children && item.children.length > 0 && (
                             <FontAwesomeIcon
-                                icon={isVisible ? faMinus : faPlus}
+                                icon={isVisible ? faMinusCircle : faPlusCircle}
                                 onClick={() => toggleChildren(itemIndex)}
                                 style={{ cursor: 'pointer', marginLeft: '10px' }}
+                                size="lg"
                             />
                         )}
                     </div>
