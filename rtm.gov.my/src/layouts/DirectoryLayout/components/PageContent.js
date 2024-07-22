@@ -7,6 +7,7 @@ import { faFolder, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 import './style.css'
 import StaffListing from './StaffListing';
 import Search from './Search';
+import DepartmentItems from './DepartmentItems';
 
 
 const PageContent = ({id}) => {
@@ -217,7 +218,8 @@ const PageContent = ({id}) => {
                            
                             <ul className="directory-department list-group border border-1" >
                                 {/* {departmentItems()}  */}
-                                {departmentItems(departments)}
+                                {/* {departmentItems(departments)} */}
+                                <DepartmentItems departments={departments} />
                             </ul>
                         </>
                     }
