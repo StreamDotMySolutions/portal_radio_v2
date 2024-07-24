@@ -11,76 +11,42 @@ import DepartmentItems from './DepartmentItems';
 
 
 const PageContent = ({id}) => {
-    //console.log(id)
     //const { id } = useParams(); // parentid
     const [items, setItems] = useState([]);
     const [ancestors, setAncestors] = useState([]);
     const [settings, setSettings] = useState([]);
     const [title, setTitle] = useState('');
-   
+    const [loading, setLoading] = useState(true);
 
     const [departments, setDepartments] = useState([]);
     const [staffs, setStaffs] = useState([]);
-    const url = process.env.REACT_APP_API_URL;
 
-    const [links, setLinks] = useState([]);
+    // pagination
     const [currentPage, setCurrentPage] = useState(1);
-    const [loading, setLoading] = useState(true);
-    const [paginate, setPaginate] = useState(null);
-    const [idHasChanged, setIdHasChanged] = useState(false);
+    const [links, setLinks] = useState([]);
+    const [paginate, setPaginate] = useState('');
+
+    const url = process.env.REACT_APP_API_URL;
+    const serverUrl = process.env.REACT_APP_SERVER_URL;
 
     useEffect(() => {
-        let apiUrl = paginate && !idHasChanged ? paginate : `${url}/directories/${id}?page=1`;
-
+        let apiUrl = paginate ? paginate : `${url}/directories/${id}?page=1`;
+        //axios(`${url}/directories/${id}`)
         axios(apiUrl)
             .then(response => {
-                setItems(response.data.items.data);
-                setDepartments(response.data.departments.data);
-                setStaffs(response.data.staffs.data);
-                setAncestors(response.data.ancestors.ancestors);
-                setTitle(response.data.title.name);
-
-                setLinks(response.data.items.links); // Paginator links
-                setCurrentPage(response.data.items.current_page); // Current page for pagination
-
+                console.log(response)
+                setItems(response.data.items.data)
+                setDepartments(response.data.departments.data)
+                setStaffs(response.data.staffs.data)
+                setAncestors(response.data.ancestors.ancestors)
+                setTitle(response.data.title.name)
                 setLoading(false); // Set loading to false when data is fetched
             })
             .catch(error => {
                 console.warn(error);
                 setLoading(false); // Set loading to false on error as well
             });
-    }, [id, paginate]);
-
-    useEffect(() => {
-        setIdHasChanged(true);
     }, [id]);
-
-    const handlePaginationClick = (url) => {
-        setPaginate(url);
-        setIdHasChanged(false); // Reset the idHasChanged state when pagination is clicked
-    };
-
-    const paginatorItems = () => {
-        return links.map((item, index) => (
-            <li key={index} className={currentPage == item.label ? "active" : ""} onClick={() => handlePaginationClick(item.url)}>
-                <span style={index === 0 || index === links.length - 1 ? { backgroundColor: '#01447e', color: 'white' } : null}>
-                    {index === 0 ? '<' : index === links.length - 1 ? '>' : item.label}
-                </span>
-            </li>
-        ));
-    };
-
-    const PagePaginator = ({items}) => {
-        return (
-        <div className="pagination-container float-right" style={{ marginBottom: '6rem' }}>
-            <nav>
-                <ul className="pagination">
-                    {items}
-                </ul>
-            </nav>
-        </div>
-        )
-    }
 
     const breadcrumbs = () => {
         if (ancestors?.length > 0) {
@@ -96,7 +62,6 @@ const PageContent = ({id}) => {
                             {nameWithoutPrefix}
                         </Link>
                     </li>
-                    
                 );
             });
         }
@@ -104,6 +69,90 @@ const PageContent = ({id}) => {
     };
     
 
+    // const departmentItems = () => {
+
+    //     if( departments?.length > 0 ){
+    //         return departments.map((item, index) => (
+    //             <li key={index} className="list-group-item  border-0">
+    //                 <Link to={`/directories/${item.id}`}>
+    //                     <h3 id="linkdirektori">
+    //                         <FontAwesomeIcon 
+    //                             icon={'fa-solid fa-building'} 
+    //                             className='text-dark mr-2'>
+    //                         </FontAwesomeIcon>
+    //                         {item.name.toUpperCase()}
+    //                     </h3>
+    //                 </Link>
+    //             </li>
+    //         ));
+    //     }
+
+    // };
+    // const departmentItems = (departments) => {
+    //     if (departments?.length > 0) {
+    //         return departments.map((item, index) => (
+    //             <div key={index} className="col-md-6">
+    //                 <a id="linkdirektoridiv" href={`/directories/${item.id}`}>
+    //                     <h3 id="linkdirektori">{item.name.toUpperCase()}</h3>
+    //                 </a>
+    //                 {item.children && item.children.length > 0 && (
+    //                     item.children.map((child, childIndex) => (
+    //                         <a key={childIndex} id="linkdirektorip" href={`/directories/${child.id}`}>
+    //                             <p>{child.name}</p>
+    //                         </a>
+    //                     ))
+    //                 )}
+    //             </div>
+    //         ));
+    //     } else {
+    //         return null;
+    //     }
+    // };
+    // const departmentItems = (departments) => {
+    //     if (departments?.length > 0) {
+    //         const half = Math.ceil(departments.length / 2);
+    //         const firstHalf = departments.slice(0, half);
+    //         const secondHalf = departments.slice(half);
+    
+    //         const renderColumn = (items) => (
+    //             items.map((item, index) => (
+    //                 <div key={index} className="col">
+    //                     <Link id="linkdirektoridiv" to={`/directories/${item.id}`}>
+    //                         <h3 id="linkdirektori">{item.name.toUpperCase()}</h3>
+    //                     </Link>
+    //                     {item.children && item.children.length > 0 && (
+    //                         item.children.map((child, childIndex) => (
+    //                             <Link key={childIndex} id="linkdirektorip" to={`/directories/${child.id}`}>
+    //                                 <p>{child.name}</p>
+    //                             </Link>
+    //                         ))
+    //                     )}
+    //                 </div>
+    //             ))
+    //         );
+    
+    //         return (
+    //             <div className="row">
+    //                 <div className="col-md-6">
+    //                     {renderColumn(firstHalf)}
+    //                 </div>
+    //                 <div className="col-md-6">
+    //                     {renderColumn(secondHalf)}
+    //                 </div>
+    //             </div>
+    //         );
+    //     } else {
+    //         return null;
+    //     }
+    // };
+    
+    
+    // Usage example assuming 'departments' is your main list of departments
+    // return (
+    //     <ul className="list-group">
+    //         {departmentItems(departments)}
+    //     </ul>
+    // );
     
 
     const rootItems = () => {
@@ -193,7 +242,6 @@ const PageContent = ({id}) => {
                     }
                     
                     <div  style={{ "marginTop": "2rem" }}></div>
-                    <PagePaginator items={paginatorItems()}/>
                 </div>
             </div>
         </div>
