@@ -55,7 +55,6 @@ const StaffListing = ({items}) => {
                 </thead>
                 <tbody>
                     {staffItems()}
-   
                 </tbody>
             </table>
         </div>
