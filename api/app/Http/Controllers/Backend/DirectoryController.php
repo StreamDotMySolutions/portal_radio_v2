@@ -53,10 +53,15 @@ class DirectoryController extends Controller
 
     public function store(Request $request, $root)
     {
-        //\Log::info($root);
-        Directory::where('name', $root)->delete();
-        //$node = Directory::create(['name' => $root,'type' => 'folder']);
-        //$node->saveAsRoot();
+       
+        // Find the node with the given root name
+        $node = Directory::where('name', $root)->first();
+
+        // If the node exists, delete it and all its descendants
+        if ($node) {
+            $node->delete();
+        }
+
         $this->createCategoryWithChildren($request, null);
         return response()->json(['message' => 'Payload received']);
     }
