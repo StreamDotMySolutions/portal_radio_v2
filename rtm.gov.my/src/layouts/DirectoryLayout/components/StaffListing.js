@@ -25,7 +25,7 @@ const StaffListing = ({items}) => {
                     </td>
                     <td id="linklistp">
                     <Link to={`/directories/${item.id}/show`}>
-                         <h3>{item.name}</h3>     
+                         <p>{item.name}</p>     
                     </Link>
                     </td>
                     <td id="linklistp" className='text-dark'>{item.occupation}</td>
