@@ -31,7 +31,7 @@ const StaffListing = ({items}) => {
                     <td id="linklistp" className='text-dark'>{item.occupation}</td>
                     <td id="linklistp" className='text-dark'>{item.email}</td>
                     <td id="linklistp" className='text-dark'>{item.phone}</td>
-                    <td id="linklistp" className='text-dark'>{item.address}</td>
+                    {/* <td id="linklistp" className='text-dark'>{item.address}</td> */}
                 </tr>
               
             ));
@@ -50,7 +50,7 @@ const StaffListing = ({items}) => {
                         <th style={{ color: 'white' }}>JAWATAN</th>
                         <th style={{ color: 'white' }}>EMEL</th>
                         <th style={{ color: 'white' }}>NO. TELEFON</th>
-                        <th style={{ color: 'white' }}>ALAMAT</th>
+                        {/* <th style={{ color: 'white' }}>ALAMAT</th> */}
                     </tr>
                 </thead>
                 <tbody>
