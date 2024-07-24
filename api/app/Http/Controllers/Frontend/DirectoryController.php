@@ -20,7 +20,7 @@ class DirectoryController extends Controller
 
         // Get the current page and pagination limit
         $currentPage = request()->get('page', 1);
-        $perPage = 50;
+        $perPage = 10;
 
         // Calculate the starting number for the current page
         $startNumber = ($currentPage - 1) * $perPage + 1;
@@ -30,7 +30,7 @@ class DirectoryController extends Controller
             $items = Directory::query()
                         ->whereIsRoot()
                         ->defaultOrder()
-                        ->paginate(6);
+                        ->paginate($perPage);
             //\Log::info($items);
             // Map the results to add a virtual number column and remove the prefix from the name
             $items->getCollection()->transform(function ($item, $index) use ($startNumber) {
@@ -51,7 +51,7 @@ class DirectoryController extends Controller
             $items = Directory::query()
                         ->where('parent_id', $id)
                         ->defaultOrder()
-                        ->paginate(50);
+                        ->paginate($perPage);
 
             // Map the results to add a virtual number column and remove the prefix from the name
             $items->getCollection()->transform(function ($item, $index) use ($startNumber) {
