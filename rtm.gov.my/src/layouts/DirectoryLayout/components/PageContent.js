@@ -21,25 +21,64 @@ const PageContent = ({id}) => {
     const [departments, setDepartments] = useState([]);
     const [staffs, setStaffs] = useState([]);
 
+    // pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const [links, setLinks] = useState([]);
+    const [paginate, setPaginate] = useState('');
+
     const url = process.env.REACT_APP_API_URL;
     const serverUrl = process.env.REACT_APP_SERVER_URL;
 
     useEffect(() => {
-        axios(`${url}/directories/${id}`)
+        let apiUrl = paginate ? paginate : `${url}/directories/${id}?page=1`;
+        //axios(`${url}/directories/${id}`)
+        axios(apiUrl)
             .then(response => {
-                //console.log(response)
+                console.log(response)
                 setItems(response.data.items.data)
                 setDepartments(response.data.departments.data)
                 setStaffs(response.data.staffs.data)
                 setAncestors(response.data.ancestors.ancestors)
                 setTitle(response.data.title.name)
+
+                setLinks(response.data.items.links); // paginator links
+                setCurrentPage(response.data.items.current_page); // current_page for pagination
+
                 setLoading(false); // Set loading to false when data is fetched
             })
             .catch(error => {
                 console.warn(error);
                 setLoading(false); // Set loading to false on error as well
             });
-    }, [id]);
+    }, [id, paginate]);
+
+    const handlePaginationClick = (url) => {
+        // Handle click event and set the page to the clicked item's url
+        setPaginate(url);
+    };
+
+    const paginatorItems = () => {
+        return links.map((item, index) => (
+        
+            <li key={index} className={currentPage == item.label ? "active" : ""} onClick={() => handlePaginationClick(item.url)}>
+                <span style={index === 0 || index === links.length - 1 ? { backgroundColor: '#01447e', color: 'white' } : null}>
+                    {index === 0 ? '<' : index === links.length - 1 ? '>' : item.label}
+                </span>
+            </li>
+        ));
+    };
+
+    const PagePaginator = ({items}) => {
+        return (
+        <div className="pagination-container float-right" style={{ marginBottom: '6rem' }}>
+            <nav>
+                <ul className="pagination">
+                    {items}
+                </ul>
+            </nav>
+        </div>
+        )
+    }
 
     const breadcrumbs = () => {
         if (ancestors?.length > 0) {
@@ -101,43 +140,43 @@ const PageContent = ({id}) => {
     //         return null;
     //     }
     // };
-    const departmentItems = (departments) => {
-        if (departments?.length > 0) {
-            const half = Math.ceil(departments.length / 2);
-            const firstHalf = departments.slice(0, half);
-            const secondHalf = departments.slice(half);
+    // const departmentItems = (departments) => {
+    //     if (departments?.length > 0) {
+    //         const half = Math.ceil(departments.length / 2);
+    //         const firstHalf = departments.slice(0, half);
+    //         const secondHalf = departments.slice(half);
     
-            const renderColumn = (items) => (
-                items.map((item, index) => (
-                    <div key={index} className="col">
-                        <Link id="linkdirektoridiv" to={`/directories/${item.id}`}>
-                            <h3 id="linkdirektori">{item.name.toUpperCase()}</h3>
-                        </Link>
-                        {item.children && item.children.length > 0 && (
-                            item.children.map((child, childIndex) => (
-                                <Link key={childIndex} id="linkdirektorip" to={`/directories/${child.id}`}>
-                                    <p>{child.name}</p>
-                                </Link>
-                            ))
-                        )}
-                    </div>
-                ))
-            );
+    //         const renderColumn = (items) => (
+    //             items.map((item, index) => (
+    //                 <div key={index} className="col">
+    //                     <Link id="linkdirektoridiv" to={`/directories/${item.id}`}>
+    //                         <h3 id="linkdirektori">{item.name.toUpperCase()}</h3>
+    //                     </Link>
+    //                     {item.children && item.children.length > 0 && (
+    //                         item.children.map((child, childIndex) => (
+    //                             <Link key={childIndex} id="linkdirektorip" to={`/directories/${child.id}`}>
+    //                                 <p>{child.name}</p>
+    //                             </Link>
+    //                         ))
+    //                     )}
+    //                 </div>
+    //             ))
+    //         );
     
-            return (
-                <div className="row">
-                    <div className="col-md-6">
-                        {renderColumn(firstHalf)}
-                    </div>
-                    <div className="col-md-6">
-                        {renderColumn(secondHalf)}
-                    </div>
-                </div>
-            );
-        } else {
-            return null;
-        }
-    };
+    //         return (
+    //             <div className="row">
+    //                 <div className="col-md-6">
+    //                     {renderColumn(firstHalf)}
+    //                 </div>
+    //                 <div className="col-md-6">
+    //                     {renderColumn(secondHalf)}
+    //                 </div>
+    //             </div>
+    //         );
+    //     } else {
+    //         return null;
+    //     }
+    // };
     
     
     // Usage example assuming 'departments' is your main list of departments
@@ -235,6 +274,7 @@ const PageContent = ({id}) => {
                     }
                     
                     <div  style={{ "marginTop": "2rem" }}></div>
+                    <PagePaginator items={paginatorItems()}/>
                 </div>
             </div>
         </div>
