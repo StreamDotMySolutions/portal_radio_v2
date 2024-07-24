@@ -19,7 +19,7 @@ class DirectoryController extends Controller
         $staffs=[];
 
         // Get the current page and pagination limit
-        $currentPage = request()->get('page', 1);
+        $currentPage = request()->get('page');
         $perPage = 10;
 
         // Calculate the starting number for the current page
