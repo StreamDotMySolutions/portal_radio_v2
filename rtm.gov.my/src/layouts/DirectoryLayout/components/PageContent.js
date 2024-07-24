@@ -34,7 +34,7 @@ const PageContent = ({id}) => {
         //axios(`${url}/directories/${id}`)
         axios(apiUrl)
             .then(response => {
-                console.log(response)
+                //console.log(response)
                 setItems(response.data.items.data)
                 setDepartments(response.data.departments.data)
                 setStaffs(response.data.staffs.data)
