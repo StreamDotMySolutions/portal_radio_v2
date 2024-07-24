@@ -113,7 +113,7 @@ class DirectoryController extends Controller
                         ->where('parent_id', $id)
                         ->where('type', 'spreadsheet')
                         ->defaultOrder()
-                        ->paginate(50);
+                        ->paginate($perPage);
 
             // Map the results to add a virtual number column
             $staffs->getCollection()->transform(function ($item, $index) use ($startNumber) {
