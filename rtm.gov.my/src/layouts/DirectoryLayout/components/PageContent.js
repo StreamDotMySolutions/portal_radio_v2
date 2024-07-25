@@ -180,7 +180,7 @@ const PageContent = ({id}) => {
            
             <div className='mb-3'>
             <h3 style={{ marginTop: '2rem', backgroundColor: 'rgb(6, 57, 112)', color: 'white', padding: '1rem' }}>
-                {title && /^[^_]+__/.test(title) ? title.split('__').slice(1).join('__').toUpperCase() : (title ? title.toUpperCase() : 'Direktori')}
+                {title && /^[^_]+__/.test(title) ? title.split('__').slice(1).join('__') : (title ? title : 'Direktori')}
             </h3>
             <span className='text-muted'>
                 TIDAK DIBENARKAN menggunakan maklumat pada halaman ini untuk tujuan pengiklanan, pemasaran dan penjualan produk dan perkhidmatan serta menyebar maklumat pegawai tanpa kebenaran.
