@@ -30,7 +30,7 @@ const DepartmentItems = ({ departments }) => {
                 <div key={item.id} className="col">
                     <div className="d-flex align-items-center">
                         <Link id="linkdirektoridiv" to={`/directories/${item.id}`} className="flex-grow-1">
-                            <h3 id="linkdirektori">{item.name.toUpperCase()}</h3>
+                            <h3 id="linkdirektori">{item.name}</h3>
                         </Link>
                         {item.children && item.children.length > 0 && (
                             <FontAwesomeIcon
