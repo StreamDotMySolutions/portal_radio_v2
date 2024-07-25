@@ -19,7 +19,7 @@ const Search = () => {
     };
 
     return (
-        <div className="main">
+        <div className="main mt-2 mb-2">
             <div className="input-group">
                 <input
                     type="text"
