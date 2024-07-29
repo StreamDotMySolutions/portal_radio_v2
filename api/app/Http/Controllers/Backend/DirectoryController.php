@@ -211,5 +211,27 @@ class DirectoryController extends Controller
                 ]);
     }
 
+    public function delete(Request $request, Directory $directory)
+    {
+
+        //\Log::info($request);
+
+         // Validate the incoming request
+        $validatedData = $request->validate([
+            'acknowledge' => 'required',
+            
+        ]);
+
+        //\Log::info($request->all());
+
+        // Update the directory with the validated data
+        $directory->delete();
+
+        return response()->json([
+                    'message' => 'Successfully deleted',
+                ]);
+    }
+
+
 
 }

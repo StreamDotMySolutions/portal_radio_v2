@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Button, Modal, Form} from 'react-bootstrap'
 import { appendFormData } from '../../../../libs/FormInput'
 import axios from '../../../../libs/axios'
-import useStore from '../../../store'
+import useStore from '../store'
 import HtmlForm from '../components/HtmlForm'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -24,31 +24,6 @@ export default function DeleteModal({id}) {
     const handleShowClick = () =>{
       store.emptyData() // empty store data
       setShow(true)
-
-        // fetch data from server using given id
-        axios({ 
-            method: 'get', 
-            url: `${store.url}/videos/${id}`,
-            })
-        .then( response => { // success 200
-            //console.log(response)
-            if( response?.data?.video.hasOwnProperty('title') ){
-              store.setValue('title', response?.data?.video?.title )
-            }
-            if( response?.data?.video.hasOwnProperty('redirect_url') ){
-              store.setValue('redirect_url', response?.data?.video?.redirect_url )
-            }
-
-            if( response?.data?.video.hasOwnProperty('filename') ){
-              store.setValue('filename', response?.data?.video?.filename )
-            }
-
-            setIsLoading(false) // animation
-            })
-        .catch( error => {
-            console.warn(error)
-            setIsLoading(false) // animation
-        })
     } 
 
     /**
@@ -68,12 +43,12 @@ export default function DeleteModal({id}) {
         // send to Laravel
         axios({ 
             method: 'post', 
-            url: `${store.url}/videos/${id}`,
+            url: `${store.url}/directories/${id}/delete`,
             data: formData
           })
           .then( response => { // success 200
             //console.log(response)
-            store.setValue('refresh_videos', true) // to force useEffect get new data for index
+            store.setValue('refresh', true) // to force useEffect get new data for index
             setIsLoading(false) // animation
             handleClose() // close the modal
           })
@@ -96,11 +71,11 @@ export default function DeleteModal({id}) {
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
-            <Modal.Title>Delete Programme</Modal.Title>
+            <Modal.Title>Padam Staff</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
-            <HtmlForm isLoading={isLoading} />        
+            <h1 className='mt-5 mb-5 text-center'>Adakah anda pasti ?</h1>        
           </Modal.Body>
           
           <Modal.Footer>

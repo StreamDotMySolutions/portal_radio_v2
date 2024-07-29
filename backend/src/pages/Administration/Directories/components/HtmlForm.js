@@ -1,7 +1,7 @@
 import React from 'react';
-import { InputText,InputFile, InputTextarea } from '../../../../libs/FormInput';
+import { InputText,InputFile, InputTextarea } from './FormInput';
 import { Row,Col, Image, Figure } from 'react-bootstrap';
-import useStore from '../../../store';
+import useStore from '../store';
 
 const HtmlForm = ({isLoading}) => {
     const store = useStore()

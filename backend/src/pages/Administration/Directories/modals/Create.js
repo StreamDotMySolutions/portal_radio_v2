@@ -77,7 +77,7 @@ export default function CreateModal() {
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
-            <Modal.Title>Create Video</Modal.Title>
+            <Modal.Title>Create Staff</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>

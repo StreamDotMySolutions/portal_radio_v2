@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Button, Modal} from 'react-bootstrap'
 import { appendFormData } from '../../../../libs/FormInput'
 import axios from '../../../../libs/axios'
-import useStore from '../../../store'
+import useStore from '../store'
 import HtmlForm from '../components/HtmlForm'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -33,7 +33,7 @@ export default function EditModal({id}) {
             url: `${store.url}/directories/${id}/show`,
             })
         .then( response => { // success 200
-            //console.log(response)
+            console.log(response)
             if( response?.data?.staff.hasOwnProperty('name') ){
               store.setValue('name', response?.data?.staff?.name )
             }
@@ -97,8 +97,8 @@ export default function EditModal({id}) {
             data: formData
           })
           .then( response => { // success 200
-            console.log(response)
-            store.setValue('refresh_videos', true) // to force useEffect get new data for index
+            //console.log(response)
+            store.setValue('refresh', true) // to force useEffect get new data for index
             setIsLoading(false) // animation
             handleClose() // close the modal
           })

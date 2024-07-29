@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Button, Image, Modal, Table} from 'react-bootstrap'
 import { appendFormData } from '../../../../libs/FormInput'
 import axios from '../../../../libs/axios'
-import useStore from '../../../store'
+import useStore from '../store'
 import HtmlForm from '../components/HtmlForm'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 

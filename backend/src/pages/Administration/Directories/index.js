@@ -31,6 +31,7 @@ const Index = () => {
                 setAncestors(response.data.ancestors)
                 setData(response.data.items.data)
                 setLinks(response.data.items.links)
+               
             })
             .catch( error => { // error block
                 console.warn(error) // output to console

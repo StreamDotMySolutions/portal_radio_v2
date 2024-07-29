@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import Ordering from './Ordering'
 import ShowModal from '../modals/Show';
 import EditModal from '../modals/Edit';
+import DeleteModal from '../modals/Delete';
 
 const Data = ({items}) => {
 
@@ -48,7 +49,7 @@ const Data = ({items}) => {
                         {' '}
                         <EditModal id={item.id} />
                         {' '}
-                        <Button size='sm' variant={'danger'}><FontAwesomeIcon icon={['fas', 'fa-trash']} /> Delete</Button>
+                        <DeleteModal id={item.id} />
                     </>
                     }
                     </td>
