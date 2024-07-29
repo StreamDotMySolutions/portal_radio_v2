@@ -133,14 +133,14 @@ export default function EditModal({id}) {
               disabled={isLoading}
               variant="secondary" 
               onClick={handleCloseClick}>
-              Close
+               <FontAwesomeIcon icon={['fas', 'times-circle']} />{' '}Close
             </Button>
 
             <Button 
               disabled={isLoading}
               variant="primary" 
               onClick={handleSubmitClick}>
-              Submit
+               <FontAwesomeIcon icon={['fas', 'upload']} />{' '}Submit
             </Button>
 
           </Modal.Footer>

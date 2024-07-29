@@ -95,14 +95,14 @@ export default function DeleteModal({id}) {
               disabled={isLoading}
               variant="secondary" 
               onClick={handleCloseClick}>
-              Close
+              <FontAwesomeIcon icon={['fas', 'times-circle']} />{' '}Close
             </Button>
 
             <Button 
               disabled={isLoading}
               variant="danger" 
               onClick={handleSubmitClick}>
-              Delete
+              <FontAwesomeIcon icon={['fas', 'trash']} />{' '}Delete
             </Button>
 
           </Modal.Footer>
