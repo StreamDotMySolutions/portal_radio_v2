@@ -137,6 +137,7 @@ Route::group(['middleware' => ['guest']], function () {
     Route::get('/directories', [DirectoryController::class, 'displayDirectoryStructure']);
     Route::get('/directories/{id}', [DirectoryController::class, 'index']);
     Route::get('/directories/{directory}/show', [DirectoryController::class, 'show']);
+    Route::put('/directories/{directory}/update', [DirectoryController::class, 'update']);
     //Route::post('/directories/sync', [DirectoryController::class, 'sync']);
     Route::post('/directories/{root}', [DirectoryController::class, 'store']);
     //Route::post('/directory/sync', [DirectorySyncController::class, 'sync']);

@@ -4,6 +4,7 @@ import { Badge, Button, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Ordering from './Ordering'
 import ShowModal from '../modals/Show';
+import EditModal from '../modals/Edit';
 
 const Data = ({items}) => {
 
@@ -45,7 +46,7 @@ const Data = ({items}) => {
                     <>     
                         <ShowModal id={item.id} />   
                         {' '}
-                        <Button size='sm' variant={'success'}><FontAwesomeIcon icon={['fas', 'fa-pencil']} /> Edit</Button>
+                        <EditModal id={item.id} />
                         {' '}
                         <Button size='sm' variant={'danger'}><FontAwesomeIcon icon={['fas', 'fa-trash']} /> Delete</Button>
                     </>

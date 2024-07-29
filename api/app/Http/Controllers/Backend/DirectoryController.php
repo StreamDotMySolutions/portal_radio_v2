@@ -176,11 +176,40 @@ class DirectoryController extends Controller
     public function show(Directory $directory)
     {
 
-        \Log::info($directory);
+       //\Log::info($directory);
 
         return response()->json([
                     'staff' => $directory,
                 ]);
     }
+
+    public function update(Request $request, Directory $directory)
+    {
+
+        //\Log::info($request);
+
+         // Validate the incoming request
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'occupation' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:255',
+            'email' => 'required|email|max:255',
+            'address' => 'required|string',
+            'facebook' => 'nullable|string',
+            'instagram' => 'nullable|string',
+            'twitter' => 'nullable|string',
+            // Add other fields you need to update
+        ]);
+
+        //\Log::info($request->all());
+
+        // Update the directory with the validated data
+        $directory->update($validatedData);
+
+        return response()->json([
+                    'message' => 'Successfully updated',
+                ]);
+    }
+
 
 }

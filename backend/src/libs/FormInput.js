@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFacebookF } from '@fortawesome/free-brands-svg-icons';
 import { Badge,Button,Row,Col,Form, InputGroup } from 'react-bootstrap'
 import { React, useState, useEffect} from 'react'
 import useStore from '../pages/store'
@@ -26,8 +27,9 @@ export function InputText({fieldName, placeholder, icon, isLoading, type='text'}
     const errors = store.getValue('errors')
 
     return(<>
+                
                 <InputGroup>
-                    <InputGroup.Text><FontAwesomeIcon icon={icon}></FontAwesomeIcon></InputGroup.Text>
+                    <InputGroup.Text style={{width:'130px'}}><FontAwesomeIcon icon={icon} className='me-2'></FontAwesomeIcon>{placeholder}</InputGroup.Text>
                     <Form.Control 
                         placeholder={placeholder}
                         type={type}
@@ -59,7 +61,9 @@ export function InputTextarea({fieldName, placeholder, icon, rows, isLoading}){
 
     return(<>
                 <InputGroup>
-                    <InputGroup.Text><FontAwesomeIcon icon={icon}></FontAwesomeIcon></InputGroup.Text>
+                    {/* <InputGroup.Text><FontAwesomeIcon icon={icon}></FontAwesomeIcon></InputGroup.Text> */}
+                    <InputGroup.Text style={{width:'130px'}}><FontAwesomeIcon icon={icon} className='me-2'></FontAwesomeIcon>{placeholder}</InputGroup.Text>
+                   
                     <Form.Control 
                         as="textarea" 
                         rows={rows}

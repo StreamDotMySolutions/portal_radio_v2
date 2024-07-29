@@ -14,8 +14,10 @@ export default function EditModal({id}) {
     const [isLoading, setIsLoading] = useState(false)
     const handleClose = () => setShow(false)
     const handleShow = () => setShow(true)
+
     const handleCloseClick = () => {
-        handleClose()
+      store.emptyData() // empty store data
+      handleClose()
     }
 
     /**
@@ -28,28 +30,43 @@ export default function EditModal({id}) {
         // fetch data from server using given id
         axios({ 
             method: 'get', 
-            url: `${store.url}/videos/${id}`,
+            url: `${store.url}/directories/${id}/show`,
             })
         .then( response => { // success 200
-            console.log(response)
-            if( response?.data?.video.hasOwnProperty('title') ){
-              store.setValue('title', response?.data?.video?.title )
+            //console.log(response)
+            if( response?.data?.staff.hasOwnProperty('name') ){
+              store.setValue('name', response?.data?.staff?.name )
             }
-            if( response?.data?.video.hasOwnProperty('embed_code') ){
-              store.setValue('embed_code', response?.data?.video?.embed_code )
+            if( response?.data?.staff.hasOwnProperty('occupation') ){
+              store.setValue('occupation', response?.data?.staff?.occupation )
             }
-
-            if( response?.data?.video.hasOwnProperty('filename') ){
-              store.setValue('filename', response?.data?.video?.filename )
+            if( response?.data?.staff.hasOwnProperty('email') ){
+              store.setValue('email', response?.data?.staff?.email )
             }
-
-            setIsLoading(false) // animation
+            if( response?.data?.staff.hasOwnProperty('phone') ){
+              store.setValue('phone', response?.data?.staff?.phone )
+            }
+            if( response?.data?.staff.hasOwnProperty('twitter') ){
+              store.setValue('twitter', response?.data?.staff?.twitter )
+            }
+            if( response?.data?.staff.hasOwnProperty('facebook') ){
+              store.setValue('facebook', response?.data?.staff?.facebook )
+            }
+            if( response?.data?.staff.hasOwnProperty('instagram') ){
+              store.setValue('instagram', response?.data?.staff?.instagram )
+            }
+            if( response?.data?.staff.hasOwnProperty('address') ){
+              store.setValue('address', response?.data?.staff?.address )
+            }
             store.setValue('refresh_videos', true) // to force useEffect get new data for index
             })
         .catch( error => {
             console.warn(error)
-            setIsLoading(false) // animation
+
         })
+        .finally(
+          setIsLoading(false) // animation
+        )
     } 
 
     /**
@@ -59,8 +76,14 @@ export default function EditModal({id}) {
         
       const formData = new FormData();
       const dataArray = [
-        { key: 'title', value: store.getValue('title') },
-        { key: 'embed_code', value: store.getValue('embed_code') }, 
+        { key: 'name', value: store.getValue('name') },
+        { key: 'occupation', value: store.getValue('occupation') },
+        { key: 'email', value: store.getValue('email') }, 
+        { key: 'phone', value: store.getValue('phone') },
+        { key: 'facebook', value: store.getValue('facebook') },
+        { key: 'twitter', value: store.getValue('twitter') },
+        { key: 'instagram', value: store.getValue('instagram') },
+        { key: 'address', value: store.getValue('address') },
       ];
       
       appendFormData(formData, dataArray);
@@ -70,11 +93,11 @@ export default function EditModal({id}) {
         // send to Laravel
         axios({ 
             method: 'post', 
-            url: `${store.url}/videos/${id}`,
+            url: `${store.url}/directories/${id}/update`,
             data: formData
           })
           .then( response => { // success 200
-            //console.log(response)
+            console.log(response)
             store.setValue('refresh_videos', true) // to force useEffect get new data for index
             setIsLoading(false) // animation
             handleClose() // close the modal
@@ -98,7 +121,7 @@ export default function EditModal({id}) {
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
-            <Modal.Title>Edit Video</Modal.Title>
+            <Modal.Title>Edit Staff</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>

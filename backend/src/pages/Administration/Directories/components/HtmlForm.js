@@ -10,9 +10,75 @@ const HtmlForm = ({isLoading}) => {
         <Row>
             <Col className='mb-2'>
                 <InputText 
-                    fieldName='title' 
-                    placeholder='Title'  
-                    icon='fa-solid fa-pencil'
+                    fieldName='name' 
+                    placeholder='Nama'  
+                    icon='fa-solid fa-user'
+                    isLoading={isLoading}
+                />
+
+            </Col>
+        </Row>
+        <Row>
+            <Col className='mb-2'>
+                <InputText 
+                    fieldName='occupation' 
+                    placeholder='Jawatan'  
+                    icon='fa-solid fa-briefcase'
+                    isLoading={isLoading}
+                />
+
+            </Col>
+        </Row>
+        <Row>
+            <Col className='mb-2'>
+                <InputText 
+                    fieldName='email' 
+                    placeholder='Emel'  
+                    icon='fa-solid fa-envelope'
+                    isLoading={isLoading}
+                />
+
+            </Col>
+        </Row>
+        <Row>
+            <Col className='mb-2'>
+                <InputText 
+                    fieldName='phone' 
+                    placeholder='No Telefon'  
+                    icon='fa-solid fa-phone'
+                    isLoading={isLoading}
+                />
+
+            </Col>
+        </Row>
+        <Row>
+            <Col className='mb-2'>
+                <InputText 
+                    fieldName='facebook' 
+                    placeholder='Facebook'  
+                    icon='fa-solid fa-globe'
+                    isLoading={isLoading}
+                />
+
+            </Col>
+        </Row>
+        <Row>
+            <Col className='mb-2'>
+                <InputText 
+                    fieldName='twitter' 
+                    placeholder='Twitter/X'  
+                    icon='fa-solid fa-globe'
+                    isLoading={isLoading}
+                />
+
+            </Col>
+        </Row>
+        <Row>
+            <Col className='mb-2'>
+                <InputText 
+                    fieldName='instagram' 
+                    placeholder='Instagram'  
+                    icon='fa-solid fa-globe'
                     isLoading={isLoading}
                 />
 
@@ -21,9 +87,9 @@ const HtmlForm = ({isLoading}) => {
         <Row>    
             <Col className='mb-2'>
                 <InputTextarea
-                    fieldName='embed_code' 
-                    placeholder='Youtube Video Embed Code'  
-                    icon='fa-solid fa-hashtag'
+                    fieldName='address' 
+                    placeholder='Address'  
+                    icon='fa-solid fa-home'
                     rows={3}
                     isLoading={isLoading}
                 />
