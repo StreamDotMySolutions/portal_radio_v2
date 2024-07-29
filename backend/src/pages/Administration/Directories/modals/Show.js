@@ -9,26 +9,26 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 export default function ShowModal({id}) {
  
     const store = useStore()
-    console.log( `${store.url}/directories/${id}/show`)
     const errors = store.getValue('errors')
-   
     const [staff, setStaff] = useState([])
     const [show, setShow] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const handleClose = () => setShow(false)
     const handleShow = () => setShow(true)
+
     const handleCloseClick = () => {
+        store.emptyData() // empty store data
         handleClose()
     }
 
     /**
-     * When user click edit, load the data
+     * When user click show button, load the data
      */
     const handleShowClick = () =>{
       store.emptyData() // empty store data
       setShow(true)
 
-        // fetch data from server using given id
+        // fetch data from backend server using given id
         axios({ 
             method: 'get', 
             url: `${store.url}/directories/${id}/show`,
@@ -52,7 +52,7 @@ export default function ShowModal({id}) {
     return (
       <>
         <Button size="sm" variant="outline-primary" onClick={handleShowClick}>
-          <FontAwesomeIcon icon={['fas', 'pen-to-square']} />{' '}Show
+          <FontAwesomeIcon icon={['fas', 'eye']} />{' '}Show
         </Button>
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
@@ -112,7 +112,7 @@ export default function ShowModal({id}) {
               disabled={isLoading}
               variant="secondary" 
               onClick={handleCloseClick}>
-              Close
+               <FontAwesomeIcon icon={['fas', 'times-circle']} />{' '}Close
             </Button>
           </Modal.Footer>
         </Modal>
