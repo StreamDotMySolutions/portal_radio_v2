@@ -102,7 +102,7 @@ const HtmlForm = ({isLoading}) => {
                     fieldName='address' 
                     placeholder='Address'  
                     icon='fa-solid fa-home'
-                    rows={3}
+                    rows={5}
                     isLoading={isLoading}
                 />
 

@@ -61,7 +61,7 @@ export function InputTextarea({fieldName, placeholder, icon, rows, isLoading}){
     return(<>
                 <InputGroup>
                     {/* <InputGroup.Text><FontAwesomeIcon icon={icon}></FontAwesomeIcon></InputGroup.Text> */}
-                    <InputGroup.Text style={{width:'130px'}}><FontAwesomeIcon icon={icon} className='me-2'></FontAwesomeIcon>{placeholder}</InputGroup.Text>
+                    <InputGroup.Text style={{width:'140px'}}><FontAwesomeIcon icon={icon} className='me-2'></FontAwesomeIcon>{placeholder}</InputGroup.Text>
                    
                     <Form.Control 
                         as="textarea" 
