@@ -3,13 +3,13 @@ import { useParams } from 'react-router-dom'
 import { Button, Modal} from 'react-bootstrap'
 import { appendFormData } from '../../../../libs/FormInput'
 import axios from '../../../../libs/axios'
-import useStore from '../../../store'
+import useStore from '../store'
 import HtmlForm from '../components/HtmlForm'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-export default function CreateModal() {
+export default function CreateModal({parentId}) {
     const store = useStore()
-    const { parentId } = useParams() // parentid
+    //const { parentId } = useParams() // parentid
     const errors = store.getValue('errors')
    
     const [show, setShow] = useState(false)
@@ -23,6 +23,7 @@ export default function CreateModal() {
     } 
 
     const handleCloseClick = () => {
+      store.emptyData() // empty store data
       handleClose()
     }
 
@@ -34,10 +35,16 @@ export default function CreateModal() {
     
         const formData = new FormData();
         const dataArray = [
-            { key: 'title', value: store.getValue('title') },
-            { key: 'embed_code', value: store.getValue('embed_code') }, 
-            { key: 'poster', value: store.getValue('poster') }, 
-
+          { key: 'type', value: 'spreadsheet' },
+          { key: 'photo', value: store.getValue('photo') },
+          { key: 'name', value: store.getValue('name') },
+          { key: 'occupation', value: store.getValue('occupation') },
+          { key: 'email', value: store.getValue('email') }, 
+          { key: 'phone', value: store.getValue('phone') },
+          { key: 'facebook', value: store.getValue('facebook') },
+          { key: 'twitter', value: store.getValue('twitter') },
+          { key: 'instagram', value: store.getValue('instagram') },
+          { key: 'address', value: store.getValue('address') },
         ];
         
         appendFormData(formData, dataArray);
@@ -48,14 +55,14 @@ export default function CreateModal() {
         // send to Laravel
         axios({ 
             method: 'post', 
-            url: `${store.url}/videos`,
+            url: `${store.url}/directories/${parentId}/create`,
             data: formData
           })
           .then( response => { // success 200
             //console.log(response)
         
             setIsLoading(false) // animation
-            store.setValue('refresh_videos', true) // to force useEffect get new data for index
+            store.setValue('refresh', true) // to force useEffect get new data for index
             handleClose() // close the modal
           })
           .catch( error => {
@@ -72,7 +79,7 @@ export default function CreateModal() {
     return (
       <>
         <Button variant="primary" onClick={handleShowClick}>
-          <FontAwesomeIcon icon={['fas', 'file']} />{' '}Create
+          <FontAwesomeIcon icon={['fas', 'user-circle']} />{' '}Add
         </Button>
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
@@ -89,14 +96,14 @@ export default function CreateModal() {
               disabled={isLoading}
               variant="secondary" 
               onClick={handleCloseClick}>
-              Close
+              <FontAwesomeIcon icon={['fas', 'times-circle']} />{' '}Close
             </Button>
 
             <Button 
               disabled={isLoading}
               variant="primary" 
               onClick={handleSubmitClick}>
-              Submit
+              <FontAwesomeIcon icon={['fas', 'upload']} />{' '}Submit
             </Button>
 
           </Modal.Footer>

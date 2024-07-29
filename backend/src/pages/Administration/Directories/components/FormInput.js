@@ -28,7 +28,7 @@ export function InputText({fieldName, placeholder, icon, isLoading, type='text'}
     return(<>
                 
                 <InputGroup>
-                    <InputGroup.Text style={{width:'130px'}}><FontAwesomeIcon icon={icon} className='me-2'></FontAwesomeIcon>{placeholder}</InputGroup.Text>
+                    <InputGroup.Text style={{width:'140px'}}><FontAwesomeIcon icon={icon} className='me-2'></FontAwesomeIcon>{placeholder}</InputGroup.Text>
                     <Form.Control 
                         placeholder={placeholder}
                         type={type}

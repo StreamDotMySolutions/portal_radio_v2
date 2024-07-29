@@ -183,6 +183,35 @@ class DirectoryController extends Controller
                 ]);
     }
 
+    public function create(Request $request, $parentId)
+    {
+        $validatedData = $request->validate([
+            'photo' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'occupation' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:255',
+            'email' => 'required|email|max:255',
+            'address' => 'required|string',
+            'facebook' => 'nullable|string',
+            'instagram' => 'nullable|string',
+            'twitter' => 'nullable|string',
+            'type' => 'nullable|string',
+            // Add other fields you need to update
+        ]);
+
+         // Find the parent record
+        $parent = Directory::find($parentId);
+
+        if (!$parent) {
+            return response()->json(['error' => 'Parent not found.'], 404);
+        }
+
+        // Create a new record as a child of the parent record
+        $record = $parent->children()->create($validatedData);
+
+        return response()->json(['success' => 'Record created successfully.', 'record' => $record], 201);
+    }
+
     public function update(Request $request, Directory $directory)
     {
 
@@ -190,6 +219,7 @@ class DirectoryController extends Controller
 
          // Validate the incoming request
         $validatedData = $request->validate([
+            'photo' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'occupation' => 'required|string|max:255',
             'phone' => 'nullable|string|max:255',

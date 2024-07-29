@@ -1,15 +1,18 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
+import { useParams } from 'react-router-dom'
 import { Badge, Button, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Ordering from './Ordering'
 import ShowModal from '../modals/Show';
 import EditModal from '../modals/Edit';
 import DeleteModal from '../modals/Delete';
+import CreateModal from '../modals/Create';
 
 const Data = ({items}) => {
 
     //console.log(items)
+    const { parentId } = useParams() // parentid
 
     const contentItems = () => {
         if (items.length > 0) {
@@ -63,9 +66,7 @@ const Data = ({items}) => {
         <div>
 
             <div class="d-flex justify-content-end mb-3">
-                <Button>
-                    <FontAwesomeIcon icon={['fas', 'fa-plus-circle']} /> Add
-                </Button>
+                <CreateModal parentId={parentId}/>
             </div>
  
             <Table>

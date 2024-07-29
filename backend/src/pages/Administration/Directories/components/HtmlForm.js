@@ -10,6 +10,18 @@ const HtmlForm = ({isLoading}) => {
         <Row>
             <Col className='mb-2'>
                 <InputText 
+                    fieldName='photo' 
+                    placeholder='Path gambar'  
+                    icon='fa-solid fa-image'
+                    isLoading={isLoading}
+                />
+
+            </Col>
+        </Row>
+
+        <Row>
+            <Col className='mb-2'>
+                <InputText 
                     fieldName='name' 
                     placeholder='Nama'  
                     icon='fa-solid fa-user'

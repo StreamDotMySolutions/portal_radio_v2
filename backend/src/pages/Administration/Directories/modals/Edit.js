@@ -33,7 +33,11 @@ export default function EditModal({id}) {
             url: `${store.url}/directories/${id}/show`,
             })
         .then( response => { // success 200
-            console.log(response)
+            //console.log(response)
+            if( response?.data?.staff.hasOwnProperty('photo') ){
+              store.setValue('photo', response?.data?.staff?.photo )
+            }
+
             if( response?.data?.staff.hasOwnProperty('name') ){
               store.setValue('name', response?.data?.staff?.name )
             }
@@ -76,6 +80,7 @@ export default function EditModal({id}) {
         
       const formData = new FormData();
       const dataArray = [
+        { key: 'photo', value: store.getValue('photo') },
         { key: 'name', value: store.getValue('name') },
         { key: 'occupation', value: store.getValue('occupation') },
         { key: 'email', value: store.getValue('email') }, 
