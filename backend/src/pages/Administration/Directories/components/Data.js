@@ -38,7 +38,11 @@ const Data = ({items}) => {
                     </td>
                     <td className='text-center'>
                     {item.type === 'spreadsheet' && 
-                        <Button>Edit</Button>
+                    <>       
+                        <Button size='sm' variant={'success'}><FontAwesomeIcon icon={['fas', 'fa-pencil']} /> Edit</Button>
+                        {' '}
+                        <Button size='sm' variant={'danger'}><FontAwesomeIcon icon={['fas', 'fa-trash']} /> Delete</Button>
+                    </>
                     }
                     </td>
                 </tr>
@@ -49,13 +53,20 @@ const Data = ({items}) => {
     
     return (
         <div>
+
+            <div class="d-flex justify-content-end mb-3">
+                <Button>
+                    <FontAwesomeIcon icon={['fas', 'fa-plus-circle']} /> Add
+                </Button>
+            </div>
+ 
             <Table>
                 <thead>
                     <tr>
                         <th style={{width: '15px'}}>ID</th>
                         {/* <th>ORDERING</th> */}
                         <th>NAME</th>
-                        <th className='text-center'>ACTIONS</th>
+                        <th className='text-center col-2'>ACTIONS</th>
                     </tr>
                 </thead>
                 <tbody>
