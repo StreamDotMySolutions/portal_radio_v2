@@ -136,8 +136,10 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
 Route::group(['middleware' => ['guest']], function () {
     Route::get('/directories', [DirectoryController::class, 'displayDirectoryStructure']);
     Route::get('/directories/{id}', [DirectoryController::class, 'index']);
+    Route::get('/directories/{directory}/show', [DirectoryController::class, 'show']);
     //Route::post('/directories/sync', [DirectoryController::class, 'sync']);
     Route::post('/directories/{root}', [DirectoryController::class, 'store']);
     //Route::post('/directory/sync', [DirectorySyncController::class, 'sync']);
     Route::get('/directories/ordering/{directory}', [DirectoryController::class, 'ordering']);
+   
 });

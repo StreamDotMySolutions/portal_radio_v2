@@ -173,4 +173,14 @@ class DirectoryController extends Controller
         
     }
 
+    public function show(Directory $directory)
+    {
+
+        \Log::info($directory);
+
+        return response()->json([
+                    'staff' => $directory,
+                ]);
+    }
+
 }

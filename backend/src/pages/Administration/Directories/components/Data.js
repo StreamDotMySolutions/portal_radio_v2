@@ -3,6 +3,7 @@ import React from 'react';
 import { Badge, Button, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Ordering from './Ordering'
+import ShowModal from '../modals/Show';
 
 const Data = ({items}) => {
 
@@ -35,10 +36,15 @@ const Data = ({items}) => {
                         ) : (
                             item.name
                         )}
+
+                       
+
                     </td>
                     <td className='text-center'>
                     {item.type === 'spreadsheet' && 
-                    <>       
+                    <>     
+                        <ShowModal id={item.id} />   
+                        {' '}
                         <Button size='sm' variant={'success'}><FontAwesomeIcon icon={['fas', 'fa-pencil']} /> Edit</Button>
                         {' '}
                         <Button size='sm' variant={'danger'}><FontAwesomeIcon icon={['fas', 'fa-trash']} /> Delete</Button>
@@ -66,7 +72,7 @@ const Data = ({items}) => {
                         <th style={{width: '15px'}}>ID</th>
                         {/* <th>ORDERING</th> */}
                         <th>NAME</th>
-                        <th className='text-center col-2'>ACTIONS</th>
+                        <th className='text-center col-3'>ACTIONS</th>
                     </tr>
                 </thead>
                 <tbody>
