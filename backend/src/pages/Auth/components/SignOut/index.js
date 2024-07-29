@@ -1,45 +1,48 @@
-import { Navigate, useNavigate } from "react-router-dom"
-//import { useAuthStore } from "../../../../stores/AuthStore"
+import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../stores/AuthStore";
-import axios from "../../../../libs/axios"
-import { useState } from "react"
+import axios from "../../../../libs/axios";
+import { useEffect } from "react";
 import { Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const SignOut = () =>  {
-    // const isLoggedIn = useAuthStore( (state) => state.isLoggedIn ) // get state
-    // const setIsLoggedIn = useAuthStore((state) => state.setIsLoggedIn) // set state
-    const store = useAuthStore()
-    axios({
-        url:  `${process.env.REACT_APP_BACKEND_URL}/logout`,
-        method: 'post',
-    })
-    .then( response => {
-        //console.log(response)
-        localStorage.removeItem('token');
-        //setIsLoggedIn(false) // store
-        useAuthStore.setState({isAuthenticated:false})
-    })
-    .catch( error => {
-        console.warn(error)
-    })
+const SignOut = () => {
+    const navigate = useNavigate();
+    const { isAuthenticated, logout } = useAuthStore((state) => ({
+        isAuthenticated: state.isAuthenticated,
+        logout: state.logout,
+    }));
 
-    //if (isLoggedIn === false) {
-    if(store.isAuthenticated === false){
-        window.location.href = `${process.env.REACT_APP_FRONTEND_URL}/sign-in`;
-        //return <Navigate to='/sign-in' replace />
-    }
+    useEffect(() => {
+        const signOut = async () => {
+            try {
+                await axios({
+                    url: `${process.env.REACT_APP_BACKEND_URL}/logout`,
+                    method: 'post',
+                });
+                localStorage.removeItem('token');
+                logout();
+                navigate('/sign-in', { replace: true });
+            } catch (error) {
+                console.warn(error);
+            }
+        };
 
-    return (<>
+        signOut();
+    }, [logout, navigate]);
+
+    return (
         <Alert variant='info'>
-            <h1> <i className="fa-solid fa-sync fa-spin"></i> {' '}Logging out...</h1>
+            <h1>
+                <i className="fa-solid fa-sync fa-spin"></i> {' '}Logging out...
+            </h1>
             Processing.
             <hr />
             <Link to='/sign-in'>
                 <FontAwesomeIcon icon="fa-solid fa-reply" /> Home
             </Link>
         </Alert>
-    </>)
-  }
-  export default SignOut
+    );
+}
+
+export default SignOut;

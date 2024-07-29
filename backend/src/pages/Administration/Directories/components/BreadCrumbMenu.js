@@ -12,12 +12,12 @@ const BreadCrumbMenu = ({items}) => {
                 return (
                     <BreadcrumbItem key={index} active={isLastItem}>
                         {isLastItem ? (
-                            item.name.toUpperCase()
+                            item.name
                         ) : (
                             <Link 
                                 to={`/administration/directories/${item.id}`}
                             >
-                                {item.name.toUpperCase()}
+                                {item.name}
                             </Link>
                         )}
                     </BreadcrumbItem>
@@ -42,7 +42,6 @@ const BreadCrumbMenu = ({items}) => {
                 </Link>
             </Badge>
          </BreadcrumbItem>
-       
             {contentItems()}
         </Breadcrumb>
     );

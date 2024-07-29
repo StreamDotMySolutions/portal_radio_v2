@@ -20,7 +20,7 @@ const HandleLogout = () =>  {
     fetch(url,options)
     .then(response => {
         // response.ok status 200-299
-        console.log('sddd')
+        //console.log('sddd')
         if(response.ok) {
             // set false
            

@@ -12,6 +12,7 @@ class DirectoryController extends Controller
         //\Log::info($id);
         $ancestors = [];
         $title = null;
+        $perPage = 20;
 
         //\Log::info('test');
 
@@ -20,7 +21,7 @@ class DirectoryController extends Controller
                         ->whereIsRoot()
                         ->with(['descendants'])
                         ->defaultOrder()
-                        ->paginate(3);
+                        ->paginate($perPage);
 
             //\Log::info('root');            
         } else {
@@ -37,7 +38,7 @@ class DirectoryController extends Controller
                         ->where('parent_id', $id)
                         ->with(['descendants'])
                         ->defaultOrder()
-                        ->paginate(3);
+                        ->paginate($perPage);
 
             //$title = Directory::where('id',$id)->select(['name'])->first();
             $title = Directory::where('id', $id)->value('name');

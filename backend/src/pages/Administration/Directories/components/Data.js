@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
-import { Badge, Table } from 'react-bootstrap';
+import { Badge, Button, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Ordering from './Ordering'
 
@@ -13,13 +13,13 @@ const Data = ({items}) => {
             return items.map((item, index) => (
                 <tr key={index}>
                     <td><Badge>{item.id}</Badge></td>
-                    <td className='text-center' style={{'width':'100px'}}>
+                    {/* <td className='text-center' style={{'width':'100px'}}>
 
                         <Ordering id={item.id} direction='up' disabled={index === 0}/>
                         {' '}
                         <Ordering id={item.id} direction='down' disabled={index === items.length - 1 }/>
 
-                    </td>
+                    </td> */}
                     <td>
 
                         {item.type === 'folder' && 
@@ -30,11 +30,16 @@ const Data = ({items}) => {
                         }
                         {item.descendants && item.descendants.length > 0 ? (
                             <Link to={`/administration/directories/${item.id}`}>
-                                {item.name.toUpperCase()}
+                                {item.name}
                             </Link>
                         ) : (
-                            item.name.toUpperCase()
+                            item.name
                         )}
+                    </td>
+                    <td className='text-center'>
+                    {item.type === 'spreadsheet' && 
+                        <Button>Edit</Button>
+                    }
                     </td>
                 </tr>
             ));
@@ -48,8 +53,9 @@ const Data = ({items}) => {
                 <thead>
                     <tr>
                         <th style={{width: '15px'}}>ID</th>
-                        <th>ORDERING</th>
+                        {/* <th>ORDERING</th> */}
                         <th>NAME</th>
+                        <th className='text-center'>ACTIONS</th>
                     </tr>
                 </thead>
                 <tbody>
