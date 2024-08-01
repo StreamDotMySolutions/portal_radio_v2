@@ -14,11 +14,12 @@ class BannerController extends Controller
 
         $banners = Banner::query()
             ->where('active', 1)
+            ->where('published_start', '<=', $currentDate)
             ->where(function ($query) use ($currentDate) {
                 $query->whereNull('published_end')
                       ->orWhere('published_end', '>=', $currentDate);
             })
-            ->where('published_start', '>=', $currentDate)
+           
             ->defaultOrder()
             ->get();
 
