@@ -109,7 +109,10 @@ const PageContent = () => {
                                     <Spinner animation="grow" size="sm" />
                                 </li>
                             ) : (
-                                <li>{breadcrumbItems()}</li>
+                                <>  
+                                    {breadcrumbItems()}
+                                </>
+                              
                             )}
                                <li>{title.toUpperCase()}</li>
                         </ul>

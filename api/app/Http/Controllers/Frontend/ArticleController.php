@@ -81,6 +81,8 @@ class ArticleController extends Controller
                         ->where('id', $article->id)
                         ->with(['ancestors'])
                         ->first();    
+
+                        
     
         // settings
         $settings = ArticleSetting::where('article_id',$article->id)->first();
