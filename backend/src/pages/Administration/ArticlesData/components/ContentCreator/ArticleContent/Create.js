@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Badge, Button, Col, Modal, Tabs, Tab} from 'react-bootstrap'
-import { appendFormData, InputTextarea } from '../../../../../../libs/FormInput'
+import { appendFormData, TextEditor,InputTextarea } from '../../../../../../libs/FormInput'
 import axios from '../../../../../../libs/axios'
 import useStore from '../../../../../store'
 import DataTable from '../ArticleAsset/DataTable'
@@ -86,9 +86,14 @@ export default function Create() {
           <Modal.Body>
 
           <Tabs
-              defaultActiveKey="html"
+              defaultActiveKey="wysiwyg"
               className="mb-3"
             >
+
+              <Tab eventKey="wysiwyg" title="EDITOR">
+                  <TextEditor  fieldName={'contents'} />
+              </Tab>
+
               <Tab eventKey="html" title="HTML">
                   <InputTextarea
                     fieldName={'contents'}
