@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Badge, Button, Col, Modal, Tabs, Tab} from 'react-bootstrap'
-import { appendFormData, InputTextarea } from '../../../../../../libs/FormInput'
+import { appendFormData, InputTextarea, TextEditor } from '../../../../../../libs/FormInput'
 import axios from '../../../../../../libs/axios'
 import useStore from '../../../../../store'
 import DataTable from '../ArticleAsset/DataTable'
@@ -89,7 +89,7 @@ export default function EditModal({id}) {
           Edit
         </Button>
   
-        <Modal size={'lg'} show={show} onHide={handleCloseClick}>
+        <Modal size={'xl'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
             <Modal.Title>Edit Content</Modal.Title>
           </Modal.Header>
@@ -101,9 +101,14 @@ export default function EditModal({id}) {
               icon={'fa fa-code'}
             /> */}
              <Tabs
-              defaultActiveKey="html"
+              defaultActiveKey="wysiwyg"
               className="mb-3"
             >
+
+              <Tab eventKey="wysiwyg" title="EDITOR">
+                  <TextEditor  fieldName={'contents'} />
+              </Tab>
+
               <Tab eventKey="html" title="HTML">
                   <InputTextarea
                     fieldName={'contents'}

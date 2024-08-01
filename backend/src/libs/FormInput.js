@@ -1,6 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Badge,Button,Row,Col,Form, InputGroup } from 'react-bootstrap'
 import { React, useState, useEffect} from 'react'
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; // import styles
 import useStore from '../pages/store'
 
 export function appendFormData(formData, data) {
@@ -19,6 +21,25 @@ export function appendFormData(formData, data) {
             }
         }
     }
+}
+
+export function TextEditor({fieldName}){
+    const store = useStore()
+    const errors = store.getValue('errors')
+
+    return (
+        <div className="mb-5">
+            <ReactQuill
+              value={store.getValue(fieldName) ||  ''}
+              onChange={(content) => {
+                store.setValue(fieldName, content);
+              }}
+            style={{ height: '400px' }}
+            />
+                   
+        </div>
+               
+      );
 }
 
 export function InputText({fieldName, placeholder, icon, isLoading, type='text'}){
@@ -61,7 +82,7 @@ export function InputTextarea({fieldName, placeholder, icon, rows, isLoading}){
     return(<>
                 <InputGroup>
                     {/* <InputGroup.Text><FontAwesomeIcon icon={icon}></FontAwesomeIcon></InputGroup.Text> */}
-                    <InputGroup.Text style={{width:'130px'}}><FontAwesomeIcon icon={icon} className='me-2'></FontAwesomeIcon>{placeholder}</InputGroup.Text>
+                    <InputGroup.Text style={{width:'50px'}}><FontAwesomeIcon icon={icon} className='me-2'></FontAwesomeIcon>{placeholder}</InputGroup.Text>
                    
                     <Form.Control 
                         as="textarea" 
