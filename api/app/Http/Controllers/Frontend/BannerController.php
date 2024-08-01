@@ -18,6 +18,7 @@ class BannerController extends Controller
                 $query->whereNull('published_end')
                       ->orWhere('published_end', '>=', $currentDate);
             })
+            ->where('published_start', '>=', $currentDate)
             ->defaultOrder()
             ->get();
 
