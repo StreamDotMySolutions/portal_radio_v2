@@ -50,7 +50,10 @@ const PageContent = () => {
     
     const breadcrumbItems = () => {
         if (ancestors.length > 0) {
-            return ancestors.map((ancestor, index) => (
+            return ancestors
+                .filter(ancestor => ancestor.title !== 'Homepage Data') // Exclude MENU-1
+                .filter(ancestor => ancestor.title !== 'MENU-1') // Exclude MENU-1
+                .map((ancestor, index) => (
                 <li key={ancestor.id}>
                     <Link to={`/listings/${ancestor.id}`}>{ancestor.title}</Link>
                 </li>
