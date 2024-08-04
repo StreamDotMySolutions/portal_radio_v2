@@ -53,6 +53,8 @@ const PageContent = () => {
             return ancestors
                 .filter(ancestor => ancestor.title !== 'Homepage Data') // Exclude MENU-1
                 .filter(ancestor => ancestor.title !== 'MENU-1') // Exclude MENU-1
+                .filter(ancestor => ancestor.title !== 'MENU-2') // Exclude MENU-1
+                .filter(ancestor => ancestor.title !== 'FOOTER') // Exclude MENU-1
                 .map((ancestor, index) => (
                 <li key={ancestor.id}>
                     <Link to={`/listings/${ancestor.id}`}>{ancestor.title}</Link>
