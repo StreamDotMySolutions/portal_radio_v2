@@ -106,16 +106,23 @@ export default function EditModal({id}) {
             >
 
               <Tab eventKey="wysiwyg" title="EDITOR">
-                  <TextEditor  fieldName={'contents'} />
+                
+                  <TextEditor fieldName={'contents'} />
+                  {/* <InputTextarea
+                    fieldName={'contents'}
+                    rows={'15'}
+                    icon={'fa fa-code'}
+                  /> */}
+                  
               </Tab>
 
-              <Tab eventKey="html" title="HTML">
+              {/* <Tab eventKey="html" title="HTML">
                   <InputTextarea
                     fieldName={'contents'}
                     rows={'15'}
                     icon={'fa fa-code'}
-                />
-              </Tab>
+                  />
+              </Tab> */}
               <Tab eventKey="assets" title="ASSETS">
                 <DataTable />
               </Tab>

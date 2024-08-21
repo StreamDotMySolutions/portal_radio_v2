@@ -23,23 +23,61 @@ export function appendFormData(formData, data) {
     }
 }
 
-export function TextEditor({fieldName}){
-    const store = useStore()
-    const errors = store.getValue('errors')
+// export function TextEditor({fieldName}){
+//     const store = useStore()
+//     const errors = store.getValue('errors')
+
+//     return (
+//         <div className="mb-5">
+//             <ReactQuill
+//               value={store.getValue(fieldName) ||  ''}
+//               onChange={(content) => {
+//                 store.setValue(fieldName, content);
+//               }}
+//             style={{ height: '400px' }}
+//             />
+                   
+//         </div>
+               
+//       );
+// }
+
+export function TextEditor({ fieldName }) {
+    const store = useStore();
+    const errors = store.getValue('errors');
+    const [isHtmlMode, setIsHtmlMode] = useState(false); // State to toggle between HTML and visual mode
 
     return (
         <div className="mb-5">
-            <ReactQuill
-              value={store.getValue(fieldName) ||  ''}
-              onChange={(content) => {
-                store.setValue(fieldName, content);
-              }}
-            style={{ height: '400px' }}
-            />
-                   
+            {/* Toggle Button */}
+            <button
+                type="button"
+                className="btn btn-secondary mb-2"
+                onClick={() => setIsHtmlMode(!isHtmlMode)} // Toggle between modes
+            >
+                {isHtmlMode ? 'Visual Editor' : 'HTML'}
+            </button>
+
+            {/* Conditionally render the editor based on isHtmlMode */}
+            {!isHtmlMode ? (
+                <ReactQuill
+                    value={store.getValue(fieldName) || ''}
+                    onChange={(content) => {
+                        store.setValue(fieldName, content);
+                    }}
+                    style={{ height: '400px' }}
+                />
+            ) : (
+                <textarea
+                    value={store.getValue(fieldName) || ''}
+                    onChange={(e) => {
+                        store.setValue(fieldName, e.target.value);
+                    }}
+                    style={{ height: '400px', width: '100%', fontFamily: 'monospace' }}
+                />
+            )}
         </div>
-               
-      );
+    );
 }
 
 export function InputText({fieldName, placeholder, icon, isLoading, type='text'}){
