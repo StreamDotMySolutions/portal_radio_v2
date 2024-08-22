@@ -18,6 +18,8 @@ import DeleteModal from './Delete'
 // import ShowModal from '../modals/Show'
 
 import Ordering from './Ordering'
+import EditHtml from './EditHtml';
+import EditVisual from './EditVisual';
 
 
 const ContentData = () => {
@@ -69,8 +71,10 @@ const ContentData = () => {
                                         {' '}
                                         <Ordering id={item.id} direction='down' disabled={index === items.length - 1 }/>
                                         {' '}
-                              
-                                        <EditModal id={item.id} />
+                                        <EditVisual id={item.id} />
+                                        {' '} 
+                                        {/* <EditModal id={item.id} /> */}
+                                        <EditHtml id={item.id} />
                                         {' '} 
                                         <DeleteModal id={item.id} /> 
                                   

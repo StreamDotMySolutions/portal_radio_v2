@@ -23,26 +23,26 @@ export function appendFormData(formData, data) {
     }
 }
 
-// export function TextEditor({fieldName}){
-//     const store = useStore()
-//     const errors = store.getValue('errors')
+export function TextEditor({fieldName}){
+    const store = useStore()
+    const errors = store.getValue('errors')
 
-//     return (
-//         <div className="mb-5">
-//             <ReactQuill
-//               value={store.getValue(fieldName) ||  ''}
-//               onChange={(content) => {
-//                 store.setValue(fieldName, content);
-//               }}
-//             style={{ height: '400px' }}
-//             />
+    return (
+        <div className="mb-5">
+            <ReactQuill
+              value={store.getValue(fieldName) ||  ''}
+              onChange={(content) => {
+                store.setValue(fieldName, content);
+              }}
+            style={{ height: '400px' }}
+            />
                    
-//         </div>
+        </div>
                
-//       );
-// }
+      );
+}
 
-export function TextEditor({ fieldName }) {
+export function TextEditorWithEdit({ fieldName }) {
     const store = useStore();
     const errors = store.getValue('errors');
     const [isHtmlMode, setIsHtmlMode] = useState(false); // State to toggle between HTML and visual mode
