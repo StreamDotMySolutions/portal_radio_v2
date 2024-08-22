@@ -23,9 +23,21 @@ const PageContent = () => {
     const [paginate, setPaginate] = useState('');
 
 
+    console.log(id)
     useEffect(() => {
+        
         setLoading(true); // Set loading to true when fetching new data
-        let apiUrl = paginate ? paginate : `${url}/listings/${id}?page=1`;
+        // let apiUrl = paginate ? paginate : `${url}/listings/${id}?page=1`;
+        
+            // Reset pagination if `id` changes
+        if (paginate && id) {
+            setPaginate(''); // Reset pagination to prevent page state carrying over to new `id`
+        }
+
+        const apiUrl = paginate ? paginate : `${url}/listings/${id}?page=1`;
+        // console.log(apiUrl);
+        
+        // console.log(apiUrl)
         axios.get(apiUrl)
             .then(response => {
                 //console.log(response)
@@ -45,6 +57,7 @@ const PageContent = () => {
     
     const handlePaginationClick = (url) => {
         // Handle click event and set the page to the clicked item's url
+        //console.log(url)
         setPaginate(url);
     };
     
@@ -100,7 +113,7 @@ const PageContent = () => {
     if(settings?.active == 1 ){
         return (
             <div className="container-fluid">
-         
+                {/* {settings?.listing_type} */}
                 <div className="row">
                     <div className="col-md-1"></div>
                     <div className="col-md-10">
@@ -151,6 +164,7 @@ const PageContent = () => {
 
     return (
         <div className='container-fluid text-center text-danger'>
+            
             <ul className="breadcrumb" style={{ "marginTop": "40px" }}>
                     <li><Link to="/">Utama</Link></li>
                     {loading ? (
