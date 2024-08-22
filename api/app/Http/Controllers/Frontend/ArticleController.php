@@ -54,11 +54,15 @@ class ArticleController extends Controller
                         ->where('id', $parentId)
                         ->with(['ancestors'])
                         ->first();      
+
+                        // settings
+        $settings = ArticleSetting::where('article_id',$parentId)->first();
                         
         return response()->json([
         
             'title' => $parent->title,
-            'settings' => $parent->articleSetting, 
+            //'settings' => $parent->articleSetting, 
+            'settings' => $settings, 
             'articles' => $articles,
             'ancestors' => $ancestors
         

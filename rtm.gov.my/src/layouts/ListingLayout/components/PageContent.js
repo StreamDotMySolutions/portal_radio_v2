@@ -49,8 +49,10 @@ const PageContent = () => {
     
         axios.get(apiUrl)
             .then(response => {
+                //console.log('got data')
                 setTitle(response.data.title); // title
                 setSettings(response.data.settings); // settings
+                //console.log(response.data)
                 setAncestors(response.data.ancestors.ancestors); // ancestors
                 setItems(response.data.articles.data); // article data
                 setLinks(response.data.articles.links); // paginator links
@@ -156,7 +158,8 @@ const PageContent = () => {
     
                         <div className="container-fluid" style={{ "marginTop": "2rem" }}></div>
                       
-                        { settings?.listing_type !== 'single_article' &&
+                        {/* listing_type :  null */}
+                        { settings?.listing_type !== 'single_article' && settings?.listing_type !== null &&
                         <div className="pagination-container float-right" style={{ marginBottom: '6rem' }}>
                             <nav>
                                 <ul className="pagination">
