@@ -23,24 +23,32 @@ const PageContent = () => {
     const [paginate, setPaginate] = useState('');
 
 
-    console.log(id)
+    //console.log(id)
     useEffect(() => {
-        
-        setLoading(true); // Set loading to true when fetching new data
-        // let apiUrl = paginate ? paginate : `${url}/listings/${id}?page=1`;
-        
-            // Reset pagination if `id` changes
-        if (paginate && id) {
-            setPaginate(''); // Reset pagination to prevent page state carrying over to new `id`
+        if (!id && !paginate) {
+            return; // Exit early if neither id nor paginate is available
         }
-
-        const apiUrl = paginate ? paginate : `${url}/listings/${id}?page=1`;
-        // console.log(apiUrl);
-        
-        // console.log(apiUrl)
+    
+        setLoading(true); // Set loading to true when fetching new data
+    
+        // Reset paginate when id changes
+        let apiUrl;
+        if (id) {
+            if (paginate && !paginate.includes(`listings/${id}`)) {
+                // Reset pagination if it doesn't match the new id
+                setPaginate('');
+                apiUrl = `${url}/listings/${id}?page=1`;
+            } else {
+                apiUrl = paginate ? paginate : `${url}/listings/${id}?page=1`;
+            }
+        } else {
+            apiUrl = paginate;
+        }
+    
+        console.log('Fetching data from:', apiUrl);
+    
         axios.get(apiUrl)
             .then(response => {
-                //console.log(response)
                 setTitle(response.data.title); // title
                 setSettings(response.data.settings); // settings
                 setAncestors(response.data.ancestors.ancestors); // ancestors
@@ -53,11 +61,14 @@ const PageContent = () => {
                 console.warn(error);
                 setLoading(false); // Set loading to false on error as well
             });
-    }, [id, paginate]); // refresh data when id or page changes
+    }, [id, paginate, url]); // refresh data when id, paginate, or url changes
+    
+
+     
     
     const handlePaginationClick = (url) => {
         // Handle click event and set the page to the clicked item's url
-        //console.log(url)
+        console.log(url)
         setPaginate(url);
     };
     
@@ -144,7 +155,7 @@ const PageContent = () => {
                         </div>
     
                         <div className="container-fluid" style={{ "marginTop": "2rem" }}></div>
-    
+                      
                         { settings?.listing_type !== 'single_article' &&
                         <div className="pagination-container float-right" style={{ marginBottom: '6rem' }}>
                             <nav>
