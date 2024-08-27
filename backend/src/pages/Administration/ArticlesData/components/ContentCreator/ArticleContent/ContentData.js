@@ -25,7 +25,8 @@ import EditVisual from './EditVisual';
 const ContentData = () => {
     const store = useStore() // store management
     const { parentId } = useParams() // parentid
-    const url = store.url + '/article-data/node/' + parentId // set the index url to /api/articles/node/{parentId}
+    //const url = store.url + '/article-data/node/' + parentId // set the index url to /api/articles/node/{parentId}
+    const url = process.env.REACT_APP_BACKEND_URL + '/article-data/node/' + parentId 
     const [items, setItems] = useState([]) // data placeholder
     
     // console.log(url)
@@ -36,7 +37,7 @@ const ContentData = () => {
             axios( 
                 {
                     method: 'get', // method is GET
-                    url: store.getValue('url') ? store.getValue('url') : url
+                    url:  url
                 } 
             )
             .then( response => { // response block
@@ -61,7 +62,7 @@ const ContentData = () => {
     return (
             <>
  
-                    {items?.map((item,index) => (
+                    {Array.isArray(items) && items.map((item, index) => (
 
                         <div className='mt-2 mb-2'>
                             <Col className="d-flex justify-content-center border border-3 border-dotted bg-light mb-2 p-2">

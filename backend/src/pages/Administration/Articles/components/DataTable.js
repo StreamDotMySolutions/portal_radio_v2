@@ -18,8 +18,12 @@ const Index = () => {
     const [items, setItems] = useState([]) // data placeholder
     
     // to get items data
+    console.log( store.getValue('url'))
     useEffect( () => 
         {
+
+            const apiUrl = (store.getValue('url') || url).split('?page=')[0]; // Remove ?page=
+            
             // modified axios to prepend Bearer Token on header
             axios( 
                 {
@@ -31,13 +35,14 @@ const Index = () => {
                 //console.log(response)
                 setItems(response.data.articles) // get the data
                 store.setValue('refresh', false ) // reset the refresh state to false
+                
             })
             .catch( error => { // error block
                 console.warn(error) // output to console
             })
       },
         [
-            //store.getValue('url'), // listener when url changed by pagination click
+            store.getValue('url'), // listener when url changed by pagination click
             store.getValue('refresh'), // listener when create / update / delete / search performed
             parentId // when use navigate to parent
         ] 
