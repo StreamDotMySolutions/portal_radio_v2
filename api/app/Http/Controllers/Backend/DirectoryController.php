@@ -54,6 +54,7 @@ class DirectoryController extends Controller
 
     public function store(Request $request, $root)
     {
+	    \Log::info($request);
        
         // Find the node with the given root name
         $node = Directory::where('name', $root)->first();

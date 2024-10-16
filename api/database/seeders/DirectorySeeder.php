@@ -14,7 +14,7 @@ class DirectorySeeder extends Seeder
     public function run(): void
     {
         Directory::truncate();
-        Directory::create(['name' => 'angkasapuri','type' => 'folder']);
-        Directory::create(['name' => 'negeri', 'type' => 'folder']);
+        Directory::create(['name' => '01_Angkasapuri','type' => 'folder']);
+        Directory::create(['name' => '02_Negeri', 'type' => 'folder']);
     }
 }

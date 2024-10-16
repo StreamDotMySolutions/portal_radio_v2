@@ -1,0 +1,50 @@
+server {
+    listen 80;
+    #server_name localhost;
+
+    server_name rtm.gov.my;
+
+    root /var/www/rtm.gov.my/rtm.gov.my/build;
+
+    # Add index.php to the list if you are using PHP
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    location /backend {
+           index index.html;
+           alias /var/www/rtm.gov.my/backend/build;
+           try_files $uri $uri/ /backend/index.html;
+    }
+
+    location /storage {
+	   alias /var/www/rtm.gov.my/api/storage/app/public/;
+           index index.html;
+           autoindex on;  # Optional, enables directory listing if needed
+    }
+
+    location /api {
+         client_max_body_size 256M;
+         alias /var/www/rtm.gov.my/api/public;
+         index index.php;
+         try_files $uri $uri/ @laravelapi;
+
+             # pass PHP scripts to FastCGI server
+         location ~ \.php$ {
+             include snippets/fastcgi-php.conf;
+             fastcgi_pass unix:/run/php/php8.1-fpm.sock;
+             include fastcgi_params;
+             fastcgi_read_timeout 600;
+	     fastcgi_param SCRIPT_FILENAME $request_filename;
+             fastcgi_param SCRIPT_NAME /api$fastcgi_script_name;
+      }
+    }     
+
+    location @laravelapi {
+        rewrite /api/(.*)?$ /api/index.php?$is_args$args last;
+    }
+
+
+}
