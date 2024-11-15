@@ -16,6 +16,7 @@ use App\Http\Controllers\Backend\{
     BannerController,
     ProgrammeController,
     VideoController,
+    AssetController,
     DirectoryController,
     DirectorySyncController,
 };
@@ -128,6 +129,15 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::post('/videos', [VideoController::class, 'store']);
     Route::delete('/videos/{video}', [VideoController::class, 'delete']);
     Route::get('/videos/ordering/{video}', [VideoController::class, 'ordering']);
+
+    // Assets
+    Route::get('/assets', [AssetController::class, 'index']);
+    Route::get('/assets/{asset}', [AssetController::class, 'show']);
+    Route::post('/assets', [AssetController::class, 'store']);
+    Route::put('/assets/{asset}', [AssetController::class, 'update']);
+    Route::post('/assets', [AssetController::class, 'store']);
+    Route::delete('/assets/{asset}', [AssetController::class, 'delete']);
+    Route::get('/assets/ordering/{asset}', [AssetController::class, 'ordering']);
 
 
 });
