@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer('user_id');
             $table->string('title')->nullable();
             $table->string('filename')->nullable();
-            $table->text('redirect_url')->nullable();
+            $table->text('embed_code')->nullable();
             $table->timestamps();
             $table->nestedSet(); // Kalnoy nestedset
         });
