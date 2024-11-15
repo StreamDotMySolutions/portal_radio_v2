@@ -37,12 +37,25 @@ class AssetController extends Controller
 
      
         //\Log::info($request);
-        $asset = Asset::create([
-            'user_id' =>  auth('sanctum')->user()->id,
-            'name' => $request->input('name'),
-            'type' => $request->input('type'),
-            //'filename' => CommonService::handleStoreFile($request->file('poster'), $directory = 'assets'),
-        ]);
+
+        if($request->input('type') == 'folder'){
+            $asset = Asset::create([
+                'user_id' =>  auth('sanctum')->user()->id,
+                'name' => $request->input('name'),
+                'type' => 'folder',
+                //'filename' => CommonService::handleStoreFile($request->file('poster'), $directory = 'assets'),
+            ]);
+        }
+
+        if($request->input('type') == 'file'){
+            $asset = Asset::create([
+                'user_id' =>  auth('sanctum')->user()->id,
+                'type' => 'file',
+                'name' => CommonService::handleStoreFile($request->file('name'), $directory = 'assets'),
+            ]);
+        }
+
+
 
         // append parent id to node
         if ($request->has('parent_id')) {
@@ -101,9 +114,10 @@ class AssetController extends Controller
             'acknowledge' => 'required',
         ]);
 
-        //CommonService::handleDeleteFile($asset->filename, $directory = 'assets');
-
-
+        if($asset->type == 'file'){
+            CommonService::handleDeleteFile($asset->name, $directory = 'assets');
+        }
+        
         if ( $asset->delete() ) {
             return response()->json(['message' => 'Asset successfully deleted']);
         } else {

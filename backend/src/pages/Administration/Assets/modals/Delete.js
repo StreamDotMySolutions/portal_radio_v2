@@ -95,11 +95,11 @@ export default function DeleteModal({id}) {
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
-            <Modal.Title>Edit asset</Modal.Title>
+            <Modal.Title>Delete asset</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
-            <HtmlForm isLoading={'true'} />
+            <center><h1>Delete ?</h1></center>
           </Modal.Body>
           
           <Modal.Footer>

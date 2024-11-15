@@ -35,13 +35,13 @@ const HtmlForm = ({isLoading}) => {
 
             {store.getValue('type') === 'file' && (
                 <Col  className='border border-1 p-4 rounded mt-2' style={{'backgroundColor': '#999'}}>
-                    {store.getValue('current_filename') ? 
+                    {store.getValue('current_name') ? 
                         <>
-                            {`${store.server}/storage/assets/${store.getValue('filename')}`}
+                            {`${store.server}/storage/assets/${store.getValue('current_name')}`}
                         </>   
                     :
                         <InputFile
-                            fieldName='filename' 
+                            fieldName='name' 
                             placeholder='Choose file'  
                             icon='fa-solid fa-file'
                             isLoading={isLoading}

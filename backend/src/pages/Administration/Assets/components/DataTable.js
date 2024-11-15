@@ -17,6 +17,9 @@ const Index = () => {
     const url = store.url + '/assets/node/' + parentId // set the index url to /api/assets/node/{parentId}
     const [items, setItems] = useState([]) // data placeholder
     
+    const serverUrl = process.env.REACT_APP_SERVER_URL;
+    const path = `${serverUrl}/storage/assets`
+    
     // to get items data
     // console.log( store.getValue('url'))
     // console.log( parentId )
@@ -90,25 +93,21 @@ const Index = () => {
                             </td>
                            
                             <td>
-                                {item.descendants && item.descendants.length > 0 ?
+                  
+                                {item.type === 'folder' ?
                                     <FontAwesomeIcon className='me-2 text-warning' icon={['fas', 'fa-folder']} /> 
                                 :
                                     <FontAwesomeIcon className='me-2 text-secondary' icon={['fas', 'fa-file']} />
                                 }
-                                <Link to={`/administration/assets/${item.id}`}>{item.name}</Link>    
+                                <a target='_blank' href={`${path}/${item.name}`}>{item.name}</a>    
                             </td>
                             <td className='text-center'>
                                
-                                <Link to={`/administration/assets/${item.id}`}>
-                                    <Button size='sm' variant='outline-secondary'>
-                                        <FontAwesomeIcon className='text-info'  icon={['fas', 'fa-folder-plus']} />{' '}
-                                    </Button>
-                                </Link>
-                                {' '}
+                     
                                     
                                 
                                 {' '}
-                                <EditModal id={item.id} />
+                                {/* <EditModal id={item.id} /> */}
                                 {' '}
                                 <DeleteModal id={item.id} /> 
                             </td>
