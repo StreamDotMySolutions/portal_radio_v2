@@ -99,7 +99,13 @@ const Index = () => {
                                 :
                                     <FontAwesomeIcon className='me-2 text-secondary' icon={['fas', 'fa-file']} />
                                 }
-                                <a target='_blank' href={`${path}/${item.name}`}>{item.name}</a>    
+
+                                {item.type == 'file' ? (
+                                    <a target='_blank' href={`${path}/${item.name}`}>{item.name}</a>    
+                                ) : (
+                                    <Link to={`/administration/assets/${item.id}`}>{item.name}</Link>  
+                                )}
+                              
                             </td>
                             <td className='text-center'>
                                
