@@ -34,7 +34,7 @@ function TopNavbar() {
                 <Nav.Link as={NavLink} to="/administration/articles/0"> <FontAwesomeIcon icon="fa-solid fa-file" />{' '}Article</Nav.Link>
          
                 <Nav.Link as={NavLink} to="/administration/directories/0"> <FontAwesomeIcon icon="fa-solid fa-person" />{' '}Directory</Nav.Link>
-         
+                <Nav.Link as={NavLink} to="/administration/assets/0"> <FontAwesomeIcon icon="fa-solid fa-file" />{' '}Asset</Nav.Link>
               </Nav>
            <Account />
         </Navbar.Collapse>

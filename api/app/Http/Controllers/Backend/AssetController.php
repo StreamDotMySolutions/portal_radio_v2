@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Models\Asset;
 use App\Services\CommonService;
 
-
 class AssetController extends Controller
 {
 

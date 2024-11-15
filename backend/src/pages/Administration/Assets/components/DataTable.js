@@ -1,0 +1,123 @@
+import React, { useState, useEffect } from 'react'
+import { Table,Button } from 'react-bootstrap'
+import { Link, useParams } from 'react-router-dom'
+import useStore from '../../../store'
+import axios from '../../../../libs/axios'
+import PaginatorLink from '../../../../libs/PaginatorLink'
+import CreateButton from '../../../../libs/CreateButton'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import CreateModal from '../modals/Create'
+import EditModal from '../modals/Edit'
+import DeleteModal from '../modals/Delete'
+import Ordering from './Ordering'
+
+const Index = () => {
+    const store = useStore() // store management
+    const { parentId } = useParams() // parentid
+    const url = store.url + '/assets/node/' + parentId // set the index url to /api/assets/node/{parentId}
+    const [items, setItems] = useState([]) // data placeholder
+    
+    // to get items data
+    console.log( store.getValue('url'))
+    useEffect( () => 
+        {
+
+            const apiUrl = (store.getValue('url') || url).split('?page=')[0]; // Remove ?page=
+            
+            // modified axios to prepend Bearer Token on header
+            axios( 
+                {
+                    method: 'get', // method is GET
+                    url: store.getValue('url') ? store.getValue('url') : url
+                } 
+            )
+            .then( response => { // response block
+                //console.log(response)
+                setItems(response.data.assets) // get the data
+                store.setValue('refresh', false ) // reset the refresh state to false
+                
+            })
+            .catch( error => { // error block
+                console.warn(error) // output to console
+            })
+      },
+        [
+            store.getValue('url'), // listener when url changed by pagination click
+            store.getValue('refresh'), // listener when create / update / delete / search performed
+            parentId // when use navigate to parent
+        ] 
+
+    ) // useEffect()
+
+
+
+    return (
+        <div>
+    
+            <CreateButton>
+                <CreateModal />
+            </CreateButton>
+            <Table>
+                <thead>
+                    <tr>
+                        <th className='text-center' style={{ 'width': '20px'}}><FontAwesomeIcon icon={['fas', 'hashtag']} /></th>
+                        <th className='text-center' style={{ 'width': '50px'}}>Ordering</th>
+                  
+                        <th>Name</th>
+                        <th  style={{ 'width': '230px'}} className='text-center'> <FontAwesomeIcon icon={['fas', 'bolt']} /></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {items?.data?.map((item,index) => (
+                        
+                        <tr key={index}>
+                            <td><span className="badge bg-primary">{item.id}</span></td>
+                            <td className='text-center' style={{'width':'100px'}}>
+
+                                <Ordering id={item.id} direction='up' disabled={index === 0}/>
+                                {' '}
+                                <Ordering id={item.id} direction='down' disabled={index === items.data.length - 1 }/>
+                            
+                            </td>
+                           
+                            <td>
+                                {item.descendants && item.descendants.length > 0 ?
+                                    <FontAwesomeIcon className='me-2 text-warning' icon={['fas', 'fa-folder']} /> 
+                                :
+                                    <FontAwesomeIcon className='me-2 text-secondary' icon={['fas', 'fa-file']} />
+                                }
+                                <Link to={`/administration/assets/${item.id}`}>{item.name}</Link>    
+                            </td>
+                            <td className='text-center'>
+                               
+                                    <Link to={`/administration/assets/${item.id}`}>
+                                        <Button size='sm' variant='outline-secondary'>
+                                            <FontAwesomeIcon className='text-info'  icon={['fas', 'fa-folder-plus']} />{' '}
+                                        </Button>
+                                    </Link>
+                                {' '}
+                                   
+                                    <Link to={`/administration/assets-data/${item.id}`}>
+                                        <Button 
+                                            //disabled={item.descendants.length > 0 }
+                                            size='sm' variant='outline-primary'>
+                                            <FontAwesomeIcon icon={['fas', 'pen']} />{' '}
+                                        </Button>
+                                    </Link>
+                                    
+                                
+                                {' '}
+                                <EditModal id={item.id} />
+                                {' '}
+                                <DeleteModal id={item.id} /> 
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </Table>
+            <PaginatorLink store={store} items={items} />
+        </div>
+    );
+};
+export default Index

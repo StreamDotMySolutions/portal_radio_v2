@@ -35,6 +35,8 @@ import BannerManagement from './pages/Administration/Banners'
 import ProgrammeManagement from './pages/Administration/Programmes'
 import VideoManagement from './pages/Administration/Videos'
 import DirectoryManagement from './pages/Administration/Directories'
+import AssetManagement from './pages/Administration/Assets'
+
 library.add(fas)
 
 export default function App() {
@@ -68,6 +70,7 @@ export default function App() {
                 <Route path="/administration/programmes" element={<ProgrammeManagement />} />
                 <Route path="/administration/videos" element={<VideoManagement />} />
                 <Route path="/administration/directories/:parentId" element={<DirectoryManagement />} />
+                <Route path="/administration/assets/:parentId" element={<AssetManagement />} />
               </Route>
             </Route>
         </Routes>

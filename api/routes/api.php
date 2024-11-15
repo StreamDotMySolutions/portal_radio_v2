@@ -131,6 +131,7 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::get('/videos/ordering/{video}', [VideoController::class, 'ordering']);
 
     // Assets
+    Route::get('/assets/node/{parentId}', [AssetController::class, 'index']);
     Route::get('/assets', [AssetController::class, 'index']);
     Route::get('/assets/{asset}', [AssetController::class, 'show']);
     Route::post('/assets', [AssetController::class, 'store']);
@@ -138,6 +139,7 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::post('/assets', [AssetController::class, 'store']);
     Route::delete('/assets/{asset}', [AssetController::class, 'delete']);
     Route::get('/assets/ordering/{asset}', [AssetController::class, 'ordering']);
+
 
 
 });
