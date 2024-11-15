@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('assets', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
+            $table->string('type');
             $table->string('name');
             $table->nestedSet(); // Kalnoy nestedset
             $table->timestamps();

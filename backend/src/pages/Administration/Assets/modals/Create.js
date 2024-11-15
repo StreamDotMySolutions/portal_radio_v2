@@ -35,6 +35,7 @@ export default function CreateModal() {
         const formData = new FormData();
         const dataArray = [
             { key: 'name', value: store.getValue('name') },
+            { key: 'type', value: store.getValue('type') },
             { key: 'parent_id', value: parentId },
         ];
         
@@ -72,7 +73,7 @@ export default function CreateModal() {
         <FontAwesomeIcon icon={['fas', 'file']} />{' '}Create
         </Button>
   
-        <Modal size={'lg'} show={show} onHide={handleCloseClick}>
+        <Modal size={'md'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
             <Modal.Title>Create asset</Modal.Title>
           </Modal.Header>

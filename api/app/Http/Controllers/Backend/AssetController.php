@@ -32,6 +32,7 @@ class AssetController extends Controller
         // validation
         $request->validate([
             'name' => 'required',
+            'type' => 'required',
         ]);
 
      
@@ -39,6 +40,7 @@ class AssetController extends Controller
         $asset = Asset::create([
             'user_id' =>  auth('sanctum')->user()->id,
             'name' => $request->input('name'),
+            'type' => $request->input('type'),
             //'filename' => CommonService::handleStoreFile($request->file('poster'), $directory = 'assets'),
         ]);
 
