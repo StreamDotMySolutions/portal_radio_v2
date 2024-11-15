@@ -9,9 +9,18 @@ use App\Services\CommonService;
 class AssetController extends Controller
 {
 
-    public function index(){
+    public function index($parentId){
 
-        $assets = Asset::defaultOrder()->paginate(10)->withQueryString(); 
+       
+        if (!is_null($parentId) && !empty($parentId)) {
+            $paginate = Asset::query()->where('parent_id', $parentId);
+        } else {
+            $paginate = Asset::query()->where('parent_id', null);;
+        }
+        
+
+        $assets = $paginate->with(['descendants'])->defaultOrder()->paginate(10)->withQueryString();   
+
         return response()->json(['assets' => $assets]);
     }
 
@@ -23,7 +32,6 @@ class AssetController extends Controller
         // validation
         $request->validate([
             'name' => 'required',
-
         ]);
 
      
@@ -33,6 +41,16 @@ class AssetController extends Controller
             'name' => $request->input('name'),
             //'filename' => CommonService::handleStoreFile($request->file('poster'), $directory = 'assets'),
         ]);
+
+        // append parent id to node
+        if ($request->has('parent_id')) {
+            $parentId = $request->input('parent_id'); 
+
+            if (!is_null($parentId) && !empty($parentId)) {
+                $node = Asset::find($parentId); // find the node
+                $node->appendNode($asset); // assign created asset to that node
+            } 
+        }
 
         if (!$asset) {
             return response()->json(['message' => 'Asset creation failed'], 500);

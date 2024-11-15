@@ -18,21 +18,29 @@ const Index = () => {
     const [items, setItems] = useState([]) // data placeholder
     
     // to get items data
-    console.log( store.getValue('url'))
+    // console.log( store.getValue('url'))
+    // console.log( parentId )
+
+    // if user browsing the node
+    useEffect( () => {
+        store.setValue('url', url)
+    },[parentId])
+    
     useEffect( () => 
         {
+            // console.log(url)
+            // console.log(  store.getValue('url') )
 
-            const apiUrl = (store.getValue('url') || url).split('?page=')[0]; // Remove ?page=
             
             // modified axios to prepend Bearer Token on header
             axios( 
                 {
                     method: 'get', // method is GET
-                    url: store.getValue('url') ? store.getValue('url') : url
+                    url: store.getValue('url')  ?  store.getValue('url') : url
                 } 
             )
             .then( response => { // response block
-                //console.log(response)
+                console.log(response)
                 setItems(response.data.assets) // get the data
                 store.setValue('refresh', false ) // reset the refresh state to false
                 
@@ -91,20 +99,12 @@ const Index = () => {
                             </td>
                             <td className='text-center'>
                                
-                                    <Link to={`/administration/assets/${item.id}`}>
-                                        <Button size='sm' variant='outline-secondary'>
-                                            <FontAwesomeIcon className='text-info'  icon={['fas', 'fa-folder-plus']} />{' '}
-                                        </Button>
-                                    </Link>
+                                <Link to={`/administration/assets/${item.id}`}>
+                                    <Button size='sm' variant='outline-secondary'>
+                                        <FontAwesomeIcon className='text-info'  icon={['fas', 'fa-folder-plus']} />{' '}
+                                    </Button>
+                                </Link>
                                 {' '}
-                                   
-                                    <Link to={`/administration/assets-data/${item.id}`}>
-                                        <Button 
-                                            //disabled={item.descendants.length > 0 }
-                                            size='sm' variant='outline-primary'>
-                                            <FontAwesomeIcon icon={['fas', 'pen']} />{' '}
-                                        </Button>
-                                    </Link>
                                     
                                 
                                 {' '}
