@@ -17,6 +17,10 @@ const HandleLogout = () =>  {
         method: 'get',
     }
 
+    // delete localstorage token
+    localStorage.removeItem('token');
+
+    // delete token on api server
     fetch(url,options)
     .then(response => {
         // response.ok status 200-299
@@ -26,7 +30,7 @@ const HandleLogout = () =>  {
            
 
             // delete token from localstorage
-            localStorage.removeItem('token');
+            //localStorage.removeItem('token');
             return response.json()
         } 
         return Promise.reject(response); // reject the promise
