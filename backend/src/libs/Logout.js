@@ -27,7 +27,7 @@ const HandleLogout = () =>  {
         //console.log('sddd')
         if(response.ok) {
             // set false
-           
+            
 
             // delete token from localstorage
             //localStorage.removeItem('token');
