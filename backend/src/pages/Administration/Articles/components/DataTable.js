@@ -75,9 +75,9 @@ const Index = () => {
                             <td><span className="badge bg-primary">{item.id}</span></td>
                             <td className='text-center' style={{'width':'100px'}}>
 
-                                <Ordering id={item.id} direction='up' disabled={index === 0}/>
+                                <Ordering id={item.id} direction='up' />
                                 {' '}
-                                <Ordering id={item.id} direction='down' disabled={index === items.data.length - 1 }/>
+                                <Ordering id={item.id} direction='down'/>
                             
                             </td>
                             <td className='text-center'>{item.article_setting.active == 1 ? <FontAwesomeIcon className='text-success'  icon={['fas', 'check']} /> : <FontAwesomeIcon className='text-danger' icon={['fas', 'stop']} />  }</td>

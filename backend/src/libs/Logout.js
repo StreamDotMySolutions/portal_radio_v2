@@ -19,6 +19,7 @@ const HandleLogout = () =>  {
 
     // delete localstorage token
     localStorage.removeItem('token');
+    localStorage.removeItem('auth-storage');
 
     // delete token on api server
     fetch(url,options)
