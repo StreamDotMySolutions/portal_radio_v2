@@ -17,9 +17,14 @@ const HandleLogout = () =>  {
         method: 'get',
     }
 
+    const { isAuthenticated, logout } = useAuthStore((state) => ({
+        isAuthenticated: state.isAuthenticated,
+        logout: state.logout,
+    }));
+
     // delete localstorage token
     localStorage.removeItem('token');
-    localStorage.removeItem('auth-storage');
+    logout();
 
     // delete token on api server
     fetch(url,options)

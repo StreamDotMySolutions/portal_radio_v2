@@ -18,11 +18,12 @@ const Index = () => {
     const [items, setItems] = useState([]) // data placeholder
     
     // to get items data
-    console.log( store.getValue('url'))
+    //console.log( store.getValue('url'))
     useEffect( () => 
         {
-
-            const apiUrl = (store.getValue('url') || url).split('?page=')[0]; // Remove ?page=
+            console.log(parentId)
+            console.log( store.getValue('url'))
+            //const apiUrl = (store.getValue('url') || url).split('?page=')[0]; // Remove ?page=
             
             // modified axios to prepend Bearer Token on header
             axios( 
@@ -35,6 +36,7 @@ const Index = () => {
                 //console.log(response)
                 setItems(response.data.articles) // get the data
                 store.setValue('refresh', false ) // reset the refresh state to false
+                store.setValue('url', null ) // reset the refresh state to false
                 
             })
             .catch( error => { // error block
@@ -53,7 +55,7 @@ const Index = () => {
 
     return (
         <div>
-    
+          {parentId}
             <CreateButton>
                 <CreateModal />
             </CreateButton>
