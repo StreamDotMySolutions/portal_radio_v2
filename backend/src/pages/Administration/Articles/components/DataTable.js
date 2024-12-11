@@ -55,7 +55,7 @@ const Index = () => {
 
     return (
         <div>
-          {parentId}
+        
             <CreateButton>
                 <CreateModal />
             </CreateButton>
