@@ -22,12 +22,22 @@ const Index = () => {
     useEffect( () => 
         {
     
+            let apiUrl = null
+
+            if(parentId){
+                apiUrl = url
+                //store.setValue('url', null ) 
+            }
             
+            if(store.getValue('url')){
+                apiUrl = store.getValue('url')
+            }
             // modified axios to prepend Bearer Token on header
             axios( 
                 {
                     method: 'get', // method is GET
-                    url: store.getValue('url')
+                    //url: store.getValue('url') ? store.getValue('url') : url 
+                    url: apiUrl 
                 } 
             )
             .then( response => { // response block
@@ -46,42 +56,42 @@ const Index = () => {
         [
             store.getValue('url'), // listener when url changed by pagination click
             store.getValue('refresh'), // listener when create / update / delete / search performed
-            //parentId // when use navigate to parent
+            parentId // when use navigate to parent
         ] 
 
     ) // useEffect()
 
 
     // bt parentId
-    useEffect( () => 
-        {
+    // useEffect( () => 
+    //     {
     
             
-            // modified axios to prepend Bearer Token on header
-            axios( 
-                {
-                    method: 'get', // method is GET
-                    url: url
-                } 
-            )
-            .then( response => { // response block
-                //console.log(response)
-                setItems(response.data.articles) // get the data
-                store.setValue('refresh', false ) // reset the refresh state to false
-                //store.setValue('url', null ) // reset the refresh state to false
+    //         // modified axios to prepend Bearer Token on header
+    //         axios( 
+    //             {
+    //                 method: 'get', // method is GET
+    //                 url: url
+    //             } 
+    //         )
+    //         .then( response => { // response block
+    //             //console.log(response)
+    //             setItems(response.data.articles) // get the data
+    //             store.setValue('refresh', false ) // reset the refresh state to false
+    //             //store.setValue('url', null ) // reset the refresh state to false
                 
-            })
-            .catch( error => { // error block
-                console.warn(error) // output to console
-            })
+    //         })
+    //         .catch( error => { // error block
+    //             console.warn(error) // output to console
+    //         })
 
 
-      },
-        [
-            parentId // when use navigate to parent
-        ] 
+    //   },
+    //     [
+    //         parentId // when use navigate to parent
+    //     ] 
 
-    ) // useEffect()
+    // ) // useEffect()
 
 
 
