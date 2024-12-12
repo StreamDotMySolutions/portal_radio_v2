@@ -17,7 +17,7 @@ class ArticleService
         }
         
 
-        $articles = $paginate->with(['articleSetting','descendants'])->defaultOrder()->paginate(2)->withQueryString();   
+        $articles = $paginate->with(['articleSetting','descendants'])->defaultOrder()->paginate(10)->withQueryString();   
         
         //  $articles = $paginate->with('ancestors')->defaultOrder()->paginate(30)->withQueryString()->toTree();   
         //$articles = Article::defaultOrder()->get()->toTree();
