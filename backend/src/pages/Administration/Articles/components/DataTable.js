@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Table,Button } from 'react-bootstrap'
-import { Link, useParams } from 'react-router-dom'
+import { Link, parsePath, useParams } from 'react-router-dom'
 import useStore from '../../../store'
 import axios from '../../../../libs/axios'
 import PaginatorLink from '../../../../libs/PaginatorLink'
@@ -21,15 +21,13 @@ const Index = () => {
     //console.log( store.getValue('url'))
     useEffect( () => 
         {
-            console.log(parentId)
-            console.log( store.getValue('url'))
-            //const apiUrl = (store.getValue('url') || url).split('?page=')[0]; // Remove ?page=
+    
             
             // modified axios to prepend Bearer Token on header
             axios( 
                 {
                     method: 'get', // method is GET
-                    url: store.getValue('url') ? store.getValue('url') : url
+                    url: store.getValue('url')
                 } 
             )
             .then( response => { // response block
@@ -42,14 +40,49 @@ const Index = () => {
             .catch( error => { // error block
                 console.warn(error) // output to console
             })
+
+
       },
         [
             store.getValue('url'), // listener when url changed by pagination click
             store.getValue('refresh'), // listener when create / update / delete / search performed
+            //parentId // when use navigate to parent
+        ] 
+
+    ) // useEffect()
+
+
+    // bt parentId
+    useEffect( () => 
+        {
+    
+            
+            // modified axios to prepend Bearer Token on header
+            axios( 
+                {
+                    method: 'get', // method is GET
+                    url: url
+                } 
+            )
+            .then( response => { // response block
+                //console.log(response)
+                setItems(response.data.articles) // get the data
+                store.setValue('refresh', false ) // reset the refresh state to false
+                //store.setValue('url', null ) // reset the refresh state to false
+                
+            })
+            .catch( error => { // error block
+                console.warn(error) // output to console
+            })
+
+
+      },
+        [
             parentId // when use navigate to parent
         ] 
 
     ) // useEffect()
+
 
 
 
