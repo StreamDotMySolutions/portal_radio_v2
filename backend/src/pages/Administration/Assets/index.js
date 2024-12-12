@@ -16,6 +16,10 @@ const Index = () => {
 
     // to get items data
 
+        useEffect(() => {
+            store.setValue('url', null)  
+        },[])
+
     
         useEffect( () => 
             {

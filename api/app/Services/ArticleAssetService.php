@@ -12,7 +12,7 @@ class ArticleAssetService
     public static function index($article)
     {
         $paginate = ArticleAsset::query()->where('article_id', $article->id);
-        return $paginate->paginate(10)->withQueryString();  
+        return $paginate->paginate(10000)->withQueryString();  
     }
 
     public static function store(Request $request)

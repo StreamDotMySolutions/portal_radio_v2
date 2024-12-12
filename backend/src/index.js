@@ -65,6 +65,7 @@ export default function App() {
                 <Route path="/administration/roles" element={<RoleManagement />} />
                 <Route path="/administration/users" element={<UserManagement />} />
                 <Route path="/administration/articles/:parentId" element={<ArticleManagement />} />
+                
                 <Route path="/administration/articles-data/:parentId" element={<ArticleDataManagement />} />
                 <Route path="/administration/banners" element={<BannerManagement />} />
                 <Route path="/administration/programmes" element={<ProgrammeManagement />} />
