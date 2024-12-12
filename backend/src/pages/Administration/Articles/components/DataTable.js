@@ -36,7 +36,7 @@ const Index = () => {
                 //console.log(response)
                 setItems(response.data.articles) // get the data
                 store.setValue('refresh', false ) // reset the refresh state to false
-                store.setValue('url', null ) // reset the refresh state to false
+                //store.setValue('url', null ) // reset the refresh state to false
                 
             })
             .catch( error => { // error block
