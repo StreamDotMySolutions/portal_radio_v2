@@ -1,22 +1,27 @@
 import React from 'react'
 import { Link} from 'react-router-dom'
 
-const BreadCrumb = ({items}) => {
+const BreadCrumb = ({ items }) => {
     return (
-        
         <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
-                {/* Mapping over items.links */}
+                {/* Mapping over items */}
                 {items?.map((page, index) => (
-                        // Each iteration renders a list item with a link
                     <li key={index} className="breadcrumb-item">
-                        <Link to={page.url}>{page.label}</Link>
+                        {/* Check if the item is the last one */}
+                        {index === items.length - 1 ? (
+                            // Last item, render as plain text
+                            page.label
+                        ) : (
+                            // Other items, render as a link
+                            <Link to={page.url}>{page.label}</Link>
+                        )}
                     </li>
                 ))}
             </ol>
         </nav>
-        
     );
 };
+
 
 export default BreadCrumb;

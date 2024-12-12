@@ -27,6 +27,7 @@ const Index = () => {
             if(parentId){
                 apiUrl = url
                 //store.setValue('url', null ) 
+                //console.log('trigger')
             }
             
             if(store.getValue('url')){
@@ -51,6 +52,10 @@ const Index = () => {
                 console.warn(error) // output to console
             })
 
+               // Return the cleanup function
+            return () => {
+                //store.setValue('url', url )
+            };
 
       },
         [
@@ -62,36 +67,7 @@ const Index = () => {
     ) // useEffect()
 
 
-    // bt parentId
-    // useEffect( () => 
-    //     {
-    
-            
-    //         // modified axios to prepend Bearer Token on header
-    //         axios( 
-    //             {
-    //                 method: 'get', // method is GET
-    //                 url: url
-    //             } 
-    //         )
-    //         .then( response => { // response block
-    //             //console.log(response)
-    //             setItems(response.data.articles) // get the data
-    //             store.setValue('refresh', false ) // reset the refresh state to false
-    //             //store.setValue('url', null ) // reset the refresh state to false
-                
-    //         })
-    //         .catch( error => { // error block
-    //             console.warn(error) // output to console
-    //         })
-
-
-    //   },
-    //     [
-    //         parentId // when use navigate to parent
-    //     ] 
-
-    // ) // useEffect()
+  
 
 
 
