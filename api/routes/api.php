@@ -91,6 +91,18 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::post('/article-assets', [ArticleAssetController::class, 'store']);
     Route::delete('/article-assets/{articleAsset}', [ArticleAssetController::class, 'delete']);
 
+    
+    // ArticleGallery
+    Route::get('/article-galleries/{articleGallery}', [ArticleGallery::class, 'index']);
+    Route::post('/article-galleries', [ArticleGallery::class, 'store']);
+    Route::delete('/article-galleries/{articleGallery}', [ArticleGallery::class, 'delete']);
+
+    // ArticleAsset
+    // Route::get('/article-assets/{article}', [ArticleAssetController::class, 'index']);
+    // Route::post('/article-assets', [ArticleAssetController::class, 'store']);
+    // Route::delete('/article-assets/{articleAsset}', [ArticleAssetController::class, 'delete']);
+
+    // ArticleData
     Route::get('/article-data/node/{parentId}', [ArticleDataController::class, 'index']);
     Route::get('/article-data/ordering/{articleData}', [ArticleDataController::class, 'ordering']);
     Route::post('/article-data', [ArticleDataController::class, 'store']);
