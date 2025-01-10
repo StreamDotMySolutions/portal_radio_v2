@@ -7,6 +7,8 @@ import { useParams } from 'react-router-dom'
 import axios from '../../../../libs/axios';
 import ArticlePosterModal from './ContentCreator/ArticlePoster/ArticlePosterModal';
 import CreateContent from './ContentCreator/ArticleContent/Create'
+import CreateContentWithEditor from './ContentCreator/ArticleContent/CreateWithEditor'
+import CreateContentWithHtml from './ContentCreator/ArticleContent/CreateWithHtml'
 import ArticleSetting from './ContentCreator/ArticleSetting/ArticleSetting';
 
 import './App.css'
@@ -82,7 +84,7 @@ const ContentCreator = () => {
                     <Col className="d-flex justify-content-center border border-3 border-dotted bg-light p-3" >
                    
                         <Col className='text-center'>
-                            <CreateContent />
+                            <CreateContentWithEditor />{' '}<CreateContentWithHtml />
                         </Col>
                 
 

@@ -75,7 +75,7 @@ export default function Create() {
     return (
       <>
         <Button variant="outline-primary" size="sm" onClick={handleShowClick}>
-          <FontAwesomeIcon icon={['fas', 'fa-pen-to-square']} />{' '}EDITOR
+          <FontAwesomeIcon icon={['fas', 'fa-pen-to-square']} />{' '}HTML
         </Button>
 
         <Modal size={'xl'} show={show} onHide={handleCloseClick}>
@@ -86,13 +86,13 @@ export default function Create() {
           <Modal.Body>
 
           <Tabs
-              defaultActiveKey="wysiwyg"
+              defaultActiveKey="html"
               className="mb-3"
             >
 
-              <Tab eventKey="wysiwyg" title="EDITOR">
+              {/* <Tab eventKey="wysiwyg" title="EDITOR">
                   <TextEditor  fieldName={'contents'} />
-              </Tab>
+              </Tab> */}
 
               <Tab eventKey="html" title="HTML">
                   <InputTextarea
