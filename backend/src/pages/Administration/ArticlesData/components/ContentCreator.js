@@ -9,6 +9,7 @@ import ArticlePosterModal from './ContentCreator/ArticlePoster/ArticlePosterModa
 import CreateContent from './ContentCreator/ArticleContent/Create'
 import CreateContentWithEditor from './ContentCreator/ArticleContent/CreateWithEditor'
 import CreateContentWithHtml from './ContentCreator/ArticleContent/CreateWithHtml'
+import CreateContentWithGallery from './ContentCreator/ArticleContent/CreateGallery'
 import ArticleSetting from './ContentCreator/ArticleSetting/ArticleSetting';
 
 import './App.css'
@@ -84,7 +85,7 @@ const ContentCreator = () => {
                     <Col className="d-flex justify-content-center border border-3 border-dotted bg-light p-3" >
                    
                         <Col className='text-center'>
-                            <CreateContentWithEditor />{' '}<CreateContentWithHtml />
+                            <CreateContentWithEditor />{' '}<CreateContentWithHtml />{' '}<CreateContentWithGallery />
                         </Col>
                 
 

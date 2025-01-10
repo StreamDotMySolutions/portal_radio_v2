@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class ArticleAssetService
+class ArticleGalleryService
 {
 
     public static function index($article)
@@ -18,7 +18,7 @@ class ArticleAssetService
     public static function store(Request $request)
     {        
         //\Log::info($request);
-        if($request->has('article_asset')){
+        if($request->has('article_gallery')){
             //\Log::info('asset created');
             $articleGallery = new \App\Models\ArticleGallery([
                 'user_id' =>  auth('sanctum')->user()->id,
