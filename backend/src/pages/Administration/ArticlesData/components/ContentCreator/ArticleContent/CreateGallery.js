@@ -22,7 +22,7 @@ export default function Create() {
       //store.emptyData() // empty store data
       store.setValue('errors', null)
       store.setValue('contents', null)
-      store.setValue('article_gallery', false) // show gallery ?
+      store.setValue('show_article_gallery', false) // show gallery ?
       setShow(true)
     } 
 
@@ -58,7 +58,7 @@ export default function Create() {
           .then( response => { // success 200
             //console.log(response)
             store.setValue('refresh', true) // to force useEffect get new data for index
-            store.setValue('article_gallery', true)
+            store.setValue('show_article_gallery', true)
             setIsLoading(false) // animation
             //handleClose() // close the modal
           })
@@ -87,7 +87,7 @@ export default function Create() {
           <Modal.Body>
             {/* <DataTable /> */}
 
-            {store.getValue('article_gallery') ? (
+            {store.getValue('show_article_gallery') ? (
               <DataTable />
             ) : (
               <Table>

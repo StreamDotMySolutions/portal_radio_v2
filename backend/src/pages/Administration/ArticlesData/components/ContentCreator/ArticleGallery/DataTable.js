@@ -35,7 +35,7 @@ const DataTable = () => {
                 setRefresh(false)
                 setItems(response.data.article_assets)
                 //setItems(response.data.articles) // get the data
-                store.setValue('refresh', false ) // reset the refresh state to false
+                //store.setValue('refresh', false ) // reset the refresh state to false
             })
             .catch( error => { // error block
                 console.warn(error) // output to console
