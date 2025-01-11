@@ -96,7 +96,7 @@ export default function Create() {
             {/* <DataTable /> */}
 
             {store.getValue('show_article_gallery') ? (
-              <DataTable />
+              <DataTable article_data_id={store.getValue('article_data_id')} />
             ) : (
               <Table>
                 <tr>

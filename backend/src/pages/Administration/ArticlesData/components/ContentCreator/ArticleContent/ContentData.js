@@ -20,6 +20,7 @@ import DeleteModal from './Delete'
 import Ordering from './Ordering'
 import EditHtml from './EditHtml';
 import EditVisual from './EditVisual';
+import EditGallery from './EditGallery';
 
 
 const ContentData = () => {
@@ -76,6 +77,8 @@ const ContentData = () => {
                                         {' '} 
                                         {/* <EditModal id={item.id} /> */}
                                         <EditHtml id={item.id} />
+                                        {' '}
+                                        <EditGallery id={item.id} />
                                         {' '} 
                                         <DeleteModal id={item.id} /> 
                                   

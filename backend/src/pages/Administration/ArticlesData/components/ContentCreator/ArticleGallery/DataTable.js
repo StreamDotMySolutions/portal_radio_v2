@@ -8,11 +8,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { InputFile,appendFormData } from '../../../../../../libs/FormInput'
 
 
-const DataTable = () => {
+const DataTable = ({article_data_id}) => {
     const store = useStore() // store management
    
  
-    const url = store.url + '/article-galleries/' + store.getValue('article_data_id') // set the index url to /api/article-galleries/{parentId}
+    const url = store.url + '/article-galleries/' + article_data_id // set the index url to /api/article-galleries/{parentId}
     const [isLoading, setIsLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
     const [items, setItems] = useState([]) // data placeholder
