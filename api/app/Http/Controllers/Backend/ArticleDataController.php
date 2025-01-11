@@ -26,11 +26,15 @@ class ArticleDataController extends Controller
         $articles = ArticleDataService::articlesData($parentId);
         return response()->json(['articles' => $articles]);
     }
+    
     public function store(StoreRequest $request)
     {
         //\Log::info($request);
-        ArticleDataService::store($request);
-        return response()->json(['message' => 'Article Data successfully created']);
+        $articleData = ArticleDataService::store($request);
+        return response()->json([
+                                    'message' => 'Article Data successfully created',
+                                    'article_data_id' => $articleData->id
+                                ]);
     }
 
     public function show(ArticleData $articleData)

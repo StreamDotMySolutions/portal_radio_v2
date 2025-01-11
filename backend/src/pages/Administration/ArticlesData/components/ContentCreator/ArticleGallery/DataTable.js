@@ -11,14 +11,14 @@ import { InputFile,appendFormData } from '../../../../../../libs/FormInput'
 const DataTable = () => {
     const store = useStore() // store management
    
-    const { parentId } = useParams() // parentid
-    const url = store.url + '/article-galleries/' + parentId // set the index url to /api/article-galleries/{parentId}
+ 
+    const url = store.url + '/article-galleries/' + store.getValue('article_data_id') // set the index url to /api/article-galleries/{parentId}
     const [isLoading, setIsLoading] = useState(false)
     const [refresh, setRefresh] = useState(false)
     const [items, setItems] = useState([]) // data placeholder
 
     const serverUrl = process.env.REACT_APP_SERVER_URL;
-    const path = `${serverUrl}/storage/article_assets`
+    const path = `${serverUrl}/storage/article_galleries`
     
     // to get items data
     useEffect( () => 
@@ -31,9 +31,9 @@ const DataTable = () => {
                 } 
             )
             .then( response => { // response block
-                console.log(response)
+                //console.log(response.data.article_galleries)
                 setRefresh(false)
-                setItems(response.data.article_assets)
+                setItems(response.data.article_galleries)
                 //setItems(response.data.articles) // get the data
                 //store.setValue('refresh', false ) // reset the refresh state to false
             })
@@ -49,8 +49,8 @@ const DataTable = () => {
 
             const formData = new FormData();
             const dataArray = [
-                { key: 'article_gallery', value: store.getValue('article_gallery') },
-                { key: 'article_id', value: parentId },
+                { key: 'article_gallery', value: store.getValue('article_gallery') }, // the image file
+                { key: 'article_data_id', value: store.getValue('article_data_id') }, // which parent_id that gallery belongs to
             ];
             
             appendFormData(formData, dataArray);
@@ -117,6 +117,7 @@ const DataTable = () => {
 
     return (
         <div>
+            
             <Table>
                 <thead>
                     <tr>
@@ -129,12 +130,14 @@ const DataTable = () => {
                 </thead>
 
                 <tbody>
-                    {items?.data?.map((item,index) => (
-                       
+                    
+                    {items?.map((item,index) => (
+          
                         <tr key={index}>
                             <td><span className="badge bg-primary">{item.id}</span></td>
                  
                             <td>
+                             
                                {/* <img     
                                     className='img-fluid rounded' 
                                     src={`${store.server}/storage/article_assets/${item.filename}`} 
@@ -178,6 +181,8 @@ const DataTable = () => {
                             </td>
                         </tr>
                     ))}
+
+
                 </tbody>
             </Table>
             <PaginatorLink store={store} items={items} />

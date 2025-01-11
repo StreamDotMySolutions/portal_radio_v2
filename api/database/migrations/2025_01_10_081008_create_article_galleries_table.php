@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('article_galleries', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->nullable();
-            $table->integer('article_id')->nullable();
+            $table->integer('article_data_id')->nullable();
             $table->string('filename')->nullable();
             $table->integer('filesize')->nullable();
             $table->nestedSet(); // Kalnoy nestedset

@@ -23,6 +23,7 @@ export default function Create() {
       store.setValue('errors', null)
       store.setValue('contents', null)
       store.setValue('show_article_gallery', false) // show gallery ?
+      store.setValue('article_data_id', null) // clear article_data_id
       setShow(true)
     } 
 
@@ -32,7 +33,10 @@ export default function Create() {
 
 
     /**
-     * When user click submit button
+     * User agree to create Article Gallery
+     * Create article_data first
+     * get the article_data_id
+     * use that for parent_id reference in article_gallery
      */
     const handleSubmitClick = () => {
     
@@ -52,13 +56,17 @@ export default function Create() {
         axios({ 
             method: 'post', 
             //url: `${store.url}/article-contents`, // POST articleContent
-            url: `${store.url}/article-data`, // POST articleData
+            url: `${store.url}/article-data`, // Route::post('/article-data', [ArticleDataController::class, 'store']);
             data: formData
           })
           .then( response => { // success 200
-            //console.log(response)
+            console.log(response)
             store.setValue('refresh', true) // to force useEffect get new data for index
             store.setValue('show_article_gallery', true)
+
+            // get article_data_id from API
+            store.setValue('article_data_id', response.data.article_data_id)
+
             setIsLoading(false) // animation
             //handleClose() // close the modal
           })
@@ -111,7 +119,6 @@ export default function Create() {
                 </tr>
               </Table>
             )}
-
 
           </Modal.Body>
           

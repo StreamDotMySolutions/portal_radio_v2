@@ -9,10 +9,10 @@ use App\Models\ArticleGallery;
 
 class ArticleGalleryController extends Controller
 {
-    public function index(Article $article)
+    public function index($article_data_id)
     {
         //\Log::info($articleId);
-        $article_galleries = ArticleGalleryService::index($article);
+        $article_galleries = ArticleGalleryService::index($article_data_id);
         return response()->json(['article_galleries' => $article_galleries]);
     }
 
@@ -23,10 +23,10 @@ class ArticleGalleryController extends Controller
         return response()->json(['message' => 'Article Gallery successfully created']);
     }
 
-    public function delete(ArticleAsset $articleAsset)
+    public function delete(ArticleGallery $articleGallery)
     {
         //\Log::info($articleAsset);
-        ArticleGalleryService::delete($articleAsset);
+        ArticleGalleryService::delete($articleGallery);
         return response()->json(['message' => 'Article Gallery successfully deleted']);
     }
 

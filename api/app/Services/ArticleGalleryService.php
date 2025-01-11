@@ -9,10 +9,10 @@ use Illuminate\Support\Str;
 class ArticleGalleryService
 {
 
-    public static function index($article)
+    public static function index($article_data_id)
     {
-        $paginate = ArticleGallery::query()->where('article_id', $article->id);
-        return $paginate->paginate(10000)->withQueryString();  
+        $gallery = ArticleGallery::query()->where('article_data_id', $article_data_id)->get();
+        return $gallery;  
     }
 
     public static function store(Request $request)
@@ -22,7 +22,7 @@ class ArticleGalleryService
             //\Log::info('asset created');
             $articleGallery = new \App\Models\ArticleGallery([
                 'user_id' =>  auth('sanctum')->user()->id,
-                'article_id' => $request->input('article_id'),
+                'article_data_id' => $request->input('article_data_id'),
                 'filename' => self::handleStoreFile($request->file('article_gallery'), $directory = 'article_galleries'),
             ]);
 
