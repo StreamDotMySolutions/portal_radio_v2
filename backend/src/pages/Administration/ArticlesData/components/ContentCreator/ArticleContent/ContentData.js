@@ -75,15 +75,15 @@ const ContentData = () => {
                                         {' '}
                         
                                         {' '}
-                                        {item.contents == 'gallery' ? 
+                                        {item.contents == 'gallery' ? (
                                             <EditGallery id={item.id} />
-                                        :
+                                        ) : (
                                             <>
                                             <EditVisual id={item.id} />
                                             {' '}                      
                                             <EditHtml id={item.id} />
                                             </>
-                                        }
+                                        )}
                                          
                                         {' '} 
                                         <DeleteModal id={item.id} /> 

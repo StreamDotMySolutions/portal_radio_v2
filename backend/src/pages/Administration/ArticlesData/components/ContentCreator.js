@@ -11,6 +11,7 @@ import CreateContentWithEditor from './ContentCreator/ArticleContent/CreateWithE
 import CreateContentWithHtml from './ContentCreator/ArticleContent/CreateWithHtml'
 import CreateContentWithGallery from './ContentCreator/ArticleContent/CreateGallery'
 import ArticleSetting from './ContentCreator/ArticleSetting/ArticleSetting';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import './App.css'
 
@@ -82,9 +83,11 @@ const ContentCreator = () => {
                 <Col>
            
                    
-                    <Col className="d-flex justify-content-center border border-3 border-dotted bg-light p-3" >
-                   
+                    <Col style={{'background-color': 'lightyellow'}} className="d-flex justify-content-center border border-3 border-dotted p-3 " >
+
                         <Col className='text-center'>
+                        <FontAwesomeIcon icon={['fas', 'fa-plus']} />{' '}New Content
+                            <hr />
                             <CreateContentWithEditor />{' '}<CreateContentWithHtml />{' '}<CreateContentWithGallery />
                         </Col>
                 
