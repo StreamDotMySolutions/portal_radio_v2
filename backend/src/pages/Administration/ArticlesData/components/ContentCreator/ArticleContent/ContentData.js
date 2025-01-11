@@ -73,12 +73,18 @@ const ContentData = () => {
                                         {' '}
                                         <Ordering id={item.id} direction='down' disabled={index === items.length - 1 }/>
                                         {' '}
-                                        <EditVisual id={item.id} />
-                                        {' '} 
-                                        {/* <EditModal id={item.id} /> */}
-                                        <EditHtml id={item.id} />
+                        
                                         {' '}
-                                        <EditGallery id={item.id} />
+                                        {item.contents == 'gallery' ? 
+                                            <EditGallery id={item.id} />
+                                        :
+                                            <>
+                                            <EditVisual id={item.id} />
+                                            {' '}                      
+                                            <EditHtml id={item.id} />
+                                            </>
+                                        }
+                                         
                                         {' '} 
                                         <DeleteModal id={item.id} /> 
                                   
