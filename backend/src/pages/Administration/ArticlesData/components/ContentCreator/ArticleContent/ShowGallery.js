@@ -61,153 +61,54 @@ const ShowGallery = ({article_data_id}) => {
             })
       },[refresh] ) // useEffect()
 
-    // upload
-    useEffect( () => {
-        if(store.getValue('article_gallery') !== null && store.getValue('article_gallery') !== ''){
-            //console.log('upload')
-
-            const formData = new FormData();
-            const dataArray = [
-                { key: 'article_gallery', value: store.getValue('article_gallery') }, // the image file
-                { key: 'article_data_id', value: store.getValue('article_data_id') }, // which parent_id that gallery belongs to
-            ];
-            
-            appendFormData(formData, dataArray);
-
-            // Laravel special
-            formData.append('_method', 'post'); // get|post|put|patch|delete
-
-            // send to Laravel
-            axios({ 
-                method: 'post', 
-                url: `${store.url}/article-galleries`,
-                data: formData
-            })
-            .then( response => { // success 200
-                console.log(response)
-                store.setValue('article_gallery', null )
-                setRefresh(true)
-            })
-            .catch( error => {
-                //console.warn(error)
-                
-                if( error.response?.status == 422 ){ // detect 422 errors by Laravel
-                    console.warn(error.response.data.errors)
-                    store.setValue('errors', error.response.data.errors ) // set the errors to store
-                }
-
-            })
-        }
-
-    },[store.getValue('article_gallery')])
-
-    
-    const handleCopyClick = (value) => {
-        navigator.clipboard.writeText(value)
-            .then(() => {
-               // console.log('Text copied to clipboard:', value);
-                // Optionally, you can show a message to the user indicating the successful copy.
-            })
-            .catch((error) => {
-                console.error('Failed to copy text to clipboard:', error);
-            });
-    };
-
-    const handleDeleteClick = (id) => {
-        const formData = new FormData() // data container  
-        
-        // Laravel special
-        formData.append('_method', 'delete'); // get|post|put|patch|delete
-
-         // send to Laravel
-         axios({ 
-                method: 'post', 
-                url: `${store.url}/article-galleries/${id}`,
-                data: formData
-           })
-           .then( response => { // success 200
-                setRefresh(true)
-           })
-           .catch( error => {
-                console.warn(error)
-           })
-    }
-
-
     return (
-        <div>
-            
-            {/* <Table>
-
-                <tbody>
-                    
-                    {items?.map((item,index) => (
+      <div>
           
-                        <tr key={index}>
-                            <td>
-                                {item.filename && /\.(jpg|gif|png)$/.test(item.filename) ? (
-                                    <img
-                                        className='img-fluid rounded'
-                                        src={`${path}/${item.filename}`}
-                                        alt="Image"
-                                    />
-                                ) : (
-                                    // Render something else if the filename extension is not jpg, gif, or png
-                                    <div>Not an image</div>
-                                )}
-                            </td>
-                        </tr>
-                    ))}
+        <Row>
+          {items?.map((item, index) => (
+            <Col key={index} md={3} className="mb-4">
+              {item.filename && /\.(jpg|gif|png)$/.test(item.filename) ? (
+                <Figure>
+                  <Figure.Image
+                    src={`${path}/${item.filename}`}
+                    alt="Image"
+                    className='rounded'
+                    onLoad={(e) => handleImageLoad(e, index)}
+                    onClick={() => handleImageClick(`${path}/${item.filename}`, dimensions[index]?.width, dimensions[index]?.height)} // Open modal on click
+                    style={{ cursor: 'pointer' }}
+                  />
+                  <Figure.Caption>
+                    {`Width: ${dimensions[index]?.width || '-'} px, Height: ${dimensions[index]?.height || '-'} px`}
+                  </Figure.Caption>
+                </Figure>
+              ) : (
+                <div>Not an image</div>
+              )}
+            </Col>
+          ))}
+        </Row>
 
-
-                </tbody>
-            </Table> */}
-
-<Row>
-        {items?.map((item, index) => (
-          <Col key={index} md={3} className="mb-4">
-            {item.filename && /\.(jpg|gif|png)$/.test(item.filename) ? (
-              <Figure>
-                <Figure.Image
-                  src={`${path}/${item.filename}`}
-                  alt="Image"
-                  className='rounded'
-                  onLoad={(e) => handleImageLoad(e, index)}
-                  onClick={() => handleImageClick(`${path}/${item.filename}`, dimensions[index]?.width, dimensions[index]?.height)} // Open modal on click
-                  style={{ cursor: 'pointer' }}
-                />
-                <Figure.Caption>
-                  {`Width: ${dimensions[index]?.width || '-'} px, Height: ${dimensions[index]?.height || '-'} px`}
-                </Figure.Caption>
-              </Figure>
-            ) : (
-              <div>Not an image</div>
-            )}
-          </Col>
-        ))}
-      </Row>
-
-      <Modal show={modalInfo.show} onHide={handleClose} size="lg" centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Image Details</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <img
-            src={modalInfo.src}
-            alt="Full Image"
-            style={{ width: `${modalInfo.width}px`, height: `${modalInfo.height}px` }}
-            className="img-fluid"
-          />
-          <p className="mt-3">{`Width: ${modalInfo.width}px, Height: ${modalInfo.height}px`}</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
+        <Modal show={modalInfo.show} onHide={handleClose} size="lg" centered>
+          <Modal.Header closeButton>
+            <Modal.Title>Image Details</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <img
+              src={modalInfo.src}
+              alt="Full Image"
+              style={{ width: `${modalInfo.width}px`, height: `${modalInfo.height}px` }}
+              className="img-fluid"
+            />
+            <p className="mt-3">{`Width: ${modalInfo.width}px, Height: ${modalInfo.height}px`}</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
     
-        </div>
+      </div>
     );
 };
 export default ShowGallery

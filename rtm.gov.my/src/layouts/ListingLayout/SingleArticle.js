@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import PageGallery from './components/PageGallery';
 
 
 const SingleArticle = ({id}) => {
@@ -32,7 +33,23 @@ const SingleArticle = ({id}) => {
         if(items.length > 0)
             {
                 return items.map((item, index) => (
-                    <div className='mb-2' key={index} dangerouslySetInnerHTML={{ __html: item.contents }} />
+                    <>
+                    {/* <div className='mb-2' key={index} dangerouslySetInnerHTML={{ __html: item.contents }} /> */}
+
+                    {item.contents === 'gallery' ? (
+                        <>
+                            <PageGallery article_data_id={item.id} />
+                        </>
+                        ) : (
+                            <div key={index}
+                                className='p-3 border-1 border-light' 
+                                style={{ backgroundColor: '#fff', borderStyle: 'dashed' }}
+                            >
+                                {/* Render HTML content */}
+                                <div dangerouslySetInnerHTML={{ __html: item.contents }} />
+                            </div>
+                        )}
+                    </>
                 ));
             }
         return null;

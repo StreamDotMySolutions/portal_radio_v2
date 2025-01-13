@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Frontend\{
     MenuController,
     ArticleController,
+    ArticleGalleryController,
     BannerController,
     ProgrammeController,
     VideoController,
@@ -12,9 +13,11 @@ use App\Http\Controllers\Frontend\{
     DirectoryController,
 };
 
+// prefix frontend/...
 Route::get('/articles/{article}', [ArticleController::class, 'index']);
 Route::get('/listings/{article}', [ArticleController::class, 'listings']);
 Route::get('/show/{article}', [ArticleController::class, 'show']);
+Route::get('/article-galleries/{articleDataId}', [ArticleGalleryController::class, 'index']);
 Route::get('/home-footer', [FooterController::class, 'index']);
 Route::get('/home-menu', [MenuController::class, 'index']);
 Route::get('/home-menu-1', [MenuController::class, 'menu1']);
