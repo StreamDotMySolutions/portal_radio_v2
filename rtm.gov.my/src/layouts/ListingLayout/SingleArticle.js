@@ -41,10 +41,7 @@ const SingleArticle = ({id}) => {
                             <PageGallery article_data_id={item.id} />
                         </>
                         ) : (
-                            <div key={index}
-                                className='p-3 border-1 border-light' 
-                                style={{  }}
-                            >
+                            <div key={index} className='mb-2' >
                                 {/* Render HTML content */}
                                 <div dangerouslySetInnerHTML={{ __html: item.contents }} />
                             </div>
