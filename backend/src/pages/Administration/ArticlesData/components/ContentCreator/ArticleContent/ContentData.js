@@ -21,6 +21,7 @@ import Ordering from './Ordering'
 import EditHtml from './EditHtml';
 import EditVisual from './EditVisual';
 import EditGallery from './EditGallery';
+import ShowGallery from './ShowGallery';
 
 
 const ContentData = () => {
@@ -93,7 +94,7 @@ const ContentData = () => {
                         
                                     {item.contents === 'gallery' ? (
                                     <>
-                                        show gallery
+                                        <ShowGallery article_data_id={item.id} />
                                     </>
                                     ) : (
                                     <Col 
