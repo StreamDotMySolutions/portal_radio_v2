@@ -89,13 +89,23 @@ const ContentData = () => {
                                         <DeleteModal id={item.id} /> 
                                   
                                     </Col>
-                                   <hr />
-                                            
-                                    <Col className='p-3 border border-2 border-dashed' style={{'backgroundColor': 'lightcyan'}}>
-                                        {/* {item.article_content?.contents} */}
+                                    <hr />
+                        
+                                    {item.contents === 'gallery' ? (
+                                    <>
+                                        show gallery
+                                    </>
+                                    ) : (
+                                    <Col 
+                                        className='p-3 border-1 border-dark' 
+                                        style={{ backgroundColor: '#fff', borderStyle: 'dashed' }}
+                                    >
                                         {/* Render HTML content */}
                                         <div dangerouslySetInnerHTML={{ __html: item.contents }} />
                                     </Col>
+                                    )}
+   
+                          
                                 </Col>
                             </Col>
 
