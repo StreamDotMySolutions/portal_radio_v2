@@ -43,7 +43,7 @@ const SingleArticle = ({id}) => {
                         ) : (
                             <div key={index}
                                 className='p-3 border-1 border-light' 
-                                style={{ backgroundColor: '#fff', borderStyle: 'dashed' }}
+                                style={{  }}
                             >
                                 {/* Render HTML content */}
                                 <div dangerouslySetInnerHTML={{ __html: item.contents }} />
