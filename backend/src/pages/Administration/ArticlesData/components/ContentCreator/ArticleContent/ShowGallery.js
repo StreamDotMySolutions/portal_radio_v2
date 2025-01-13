@@ -66,7 +66,7 @@ const ShowGallery = ({article_data_id}) => {
           
         <Row>
           {items?.map((item, index) => (
-            <Col key={index} md={3} className="mb-4">
+            <Col key={index} md={4} className="mb-4">
               {item.filename && /\.(jpg|gif|png)$/.test(item.filename) ? (
                 <Figure>
                   <Figure.Image

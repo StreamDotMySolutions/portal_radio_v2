@@ -47,9 +47,9 @@ const ShowGallery = ({ article_data_id }) => {
 
   return (
     <div>
-      <div className="row mt-3">
+      <div className="row mt-3 d-flex justify-content-center">
         {items?.map((item, index) => (
-          <div key={index} className="col-md-3 mb-4">
+          <div key={index} className="col-md-4 mb-4">
             {item.filename && /\.(jpg|gif|png)$/.test(item.filename) ? (
               <figure>
                 <img
@@ -76,10 +76,10 @@ const ShowGallery = ({ article_data_id }) => {
           <div className="modal-dialog modal-lg modal-dialog-centered" role="document">
             <div className="modal-content">
               <div className="modal-header">
-                {/* <h5 className="modal-title">Image Details</h5>
+              
                 <button type="button" className="close" onClick={handleClose} aria-label="Close">
                   <span aria-hidden="true">&times;</span>
-                </button> */}
+                </button> 
               </div>
               <div className="modal-body">
                 <img
