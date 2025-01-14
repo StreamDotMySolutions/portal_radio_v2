@@ -50,7 +50,7 @@ const DataTable = ({article_data_id}) => {
             const formData = new FormData();
             const dataArray = [
                 { key: 'article_gallery', value: store.getValue('article_gallery') }, // the image file
-                { key: 'article_data_id', value: store.getValue('article_data_id') }, // which parent_id that gallery belongs to
+                { key: 'article_data_id', value: article_data_id }, // which parent_id that gallery belongs to
             ];
             
             appendFormData(formData, dataArray);
@@ -65,9 +65,11 @@ const DataTable = ({article_data_id}) => {
                 data: formData
             })
             .then( response => { // success 200
-                console.log('upload')
-                console.log(response)
+                // console.log('upload')
+                // console.log(response)
                 store.setValue('article_gallery', null )
+                store.setValue('article_data_id', null )
+                //store.setValue('refresh', false )
                 setRefresh(true)
             })
             .catch( error => {

@@ -13,7 +13,9 @@ export default function EditGallery({id}) {
     const [isLoading, setIsLoading] = useState(false)
     const handleClose = () => setShow(false)
     const handleShow = () => setShow(true)
+
     const handleCloseClick = () => {
+        store.setValue('refresh', true)
         handleClose()
     }
 
