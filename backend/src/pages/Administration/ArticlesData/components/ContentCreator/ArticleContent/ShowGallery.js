@@ -54,12 +54,12 @@ const ShowGallery = ({article_data_id}) => {
                 setRefresh(false)
                 setItems(response.data.article_galleries)
                 //setItems(response.data.articles) // get the data
-                //store.setValue('refresh', false ) // reset the refresh state to false
+                store.setValue('refresh', false ) // reset the refresh state to false
             })
             .catch( error => { // error block
                 console.warn(error) // output to console
             })
-      },[refresh] ) // useEffect()
+      },[refresh, store.getValue('refresh')] ) // useEffect()
 
     return (
       <div>

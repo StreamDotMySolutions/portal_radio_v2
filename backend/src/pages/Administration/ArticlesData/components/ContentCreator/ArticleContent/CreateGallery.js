@@ -28,6 +28,7 @@ export default function Create() {
     } 
 
     const handleCloseClick = () => {
+      store.setValue('refresh', true)
       handleClose()
     }
 

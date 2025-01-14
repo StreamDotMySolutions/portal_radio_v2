@@ -58,12 +58,10 @@ class ArticleGalleryService
 
     public static function update(Request $request, $article)
     {
-        
     }
 
     public static function show($article)
     {
- 
     }
 
     public static function delete($articleGallery)
