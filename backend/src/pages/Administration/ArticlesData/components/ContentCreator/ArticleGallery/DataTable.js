@@ -65,11 +65,11 @@ const DataTable = ({article_data_id}) => {
                 data: formData
             })
             .then( response => { // success 200
-                // console.log('upload')
-                // console.log(response)
+                console.log('upload for ' . article_data_id)
+                console.log(response)
                 store.setValue('article_gallery', null )
-                store.setValue('article_data_id', null )
-                //store.setValue('refresh', false )
+                //store.setValue('article_data_id', null )
+                store.setValue('refresh', false )
                 setRefresh(true)
             })
             .catch( error => {

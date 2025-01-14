@@ -8,7 +8,7 @@ import useStore from '../../../../../store'
 import DataTable from '../ArticleGallery/DataTable'
 
 
-export default function Create() {
+export default function Create({article_data_id}) {
     const store = useStore()
     const { parentId } = useParams() // parentid
     const errors = store.getValue('errors')

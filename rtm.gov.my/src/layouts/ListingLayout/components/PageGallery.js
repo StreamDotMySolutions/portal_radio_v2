@@ -72,14 +72,34 @@ const ShowGallery = ({ article_data_id }) => {
       </div>
 
       {modalInfo.show && (
-        <div className="modal fade show d-block" tabIndex="-1" role="dialog" aria-hidden="true" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-          <div className="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div className="modal-content">
+        <div 
+          className="modal fade show d-block" 
+          tabIndex="-1" 
+          role="dialog" 
+          aria-hidden="true" 
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}
+        >
+          <div 
+            className="modal-dialog modal-lg modal-dialog-centered" 
+            role="document"
+            style={{ border: 'none' }} // Remove the border
+          >
+            <div 
+              className="modal-content" 
+              style={{ 
+                backgroundColor: 'transparent', // Make background transparent
+                border: 'none' // Remove border from modal content as well
+              }}
+            >
               <div className="modal-header">
-              
-                <button type="button" className="close" onClick={handleClose} aria-label="Close">
+                <button 
+                  type="button" 
+                  className="close" 
+                  onClick={handleClose} 
+                  aria-label="Close"
+                >
                   <span aria-hidden="true">&times;</span>
-                </button> 
+                </button>
               </div>
               <div className="modal-body">
                 <img
@@ -88,15 +108,22 @@ const ShowGallery = ({ article_data_id }) => {
                   style={{ width: `${modalInfo.width}px`, height: `${modalInfo.height}px` }}
                   className="img-fluid"
                 />
-                {/* <p className="mt-3">{`Width: ${modalInfo.width}px, Height: ${modalInfo.height}px`}</p> */}
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={handleClose}>Close</button>
+                <button 
+                  type="button" 
+                  className="btn btn-secondary" 
+                  onClick={handleClose}
+                >
+                  Close
+                </button>
               </div>
             </div>
           </div>
         </div>
       )}
+
+
     </div>
   );
 };
