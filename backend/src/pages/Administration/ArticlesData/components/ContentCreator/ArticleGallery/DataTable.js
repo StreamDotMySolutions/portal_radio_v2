@@ -65,6 +65,7 @@ const DataTable = ({article_data_id}) => {
                 data: formData
             })
             .then( response => { // success 200
+                console.log('upload')
                 console.log(response)
                 store.setValue('article_gallery', null )
                 setRefresh(true)
@@ -83,16 +84,7 @@ const DataTable = ({article_data_id}) => {
     },[store.getValue('article_gallery')])
 
     
-    const handleCopyClick = (value) => {
-        navigator.clipboard.writeText(value)
-            .then(() => {
-               // console.log('Text copied to clipboard:', value);
-                // Optionally, you can show a message to the user indicating the successful copy.
-            })
-            .catch((error) => {
-                console.error('Failed to copy text to clipboard:', error);
-            });
-    };
+
 
     const handleDeleteClick = (id) => {
         const formData = new FormData() // data container  

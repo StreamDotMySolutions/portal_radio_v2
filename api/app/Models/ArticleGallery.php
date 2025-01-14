@@ -9,4 +9,10 @@ class ArticleGallery extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
+
+    public function articleData()
+    {
+        return $this->belongsTo(ArticleData::class);
+    }
+
 }

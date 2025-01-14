@@ -2,7 +2,9 @@
 namespace App\Services;
 
 use App\Models\ArticleData;
+use App\Models\ArticleGallery;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ArticleDataService
 {
@@ -58,6 +60,27 @@ class ArticleDataService
 
     public static function delete($articleData)
     {
+
+        //\Log::info('delete master');
+        // to delete all ArticleGallery
+        // ArticleGallery belongsTo ArticleData
+        // ArticleData hasMany ArticleGallery
+
+        // get all the related galleries
+        $articleGalleries = ArticleGallery::where('article_data_id', $articleData->id)->get();
+
+        // run foreach
+        $articleGalleries->each(function ($gallery) {
+          
+            //\Log::info('delete child ' . $gallery->filename);
+            // delete each image
+            Storage::disk('public')->delete('article_galleries/' . $gallery->filename);
+
+            // delete the database record
+            $gallery->delete();
+        });
+        
+        // now delete the ArticleData
         return $articleData->delete();
     }
 }

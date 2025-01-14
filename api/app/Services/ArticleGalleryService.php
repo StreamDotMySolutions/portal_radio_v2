@@ -66,9 +66,9 @@ class ArticleGalleryService
  
     }
 
-    public static function delete($articleAsset)
+    public static function delete($articleGallery)
     {
-        self::handleDeleteFile($articleAsset->filename,'article_galleries');
-        return $articleAsset->delete();
+        self::handleDeleteFile($articleGallery->filename,'article_galleries');
+        return $articleGallery->delete();
     }
 }

@@ -43,6 +43,7 @@ export default function EditGallery({id}) {
           </Modal.Header>
 
           <Modal.Body>
+      
             <DataTable article_data_id={id} />
           </Modal.Body>
           

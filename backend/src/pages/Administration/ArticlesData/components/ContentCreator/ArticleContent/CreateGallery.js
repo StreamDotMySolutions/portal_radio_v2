@@ -60,7 +60,7 @@ export default function Create() {
             data: formData
           })
           .then( response => { // success 200
-            console.log(response)
+            //console.log(response)
             store.setValue('refresh', true) // to force useEffect get new data for index
             store.setValue('show_article_gallery', true)
 

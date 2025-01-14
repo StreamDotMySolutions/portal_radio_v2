@@ -21,4 +21,9 @@ class ArticleData extends Model
     {
         return $this->belongsTo(Article::class);
     }
+
+    public function articleGallery()
+    {
+        return $this->hasMany(ArticleGallery::class);
+    }
 }
