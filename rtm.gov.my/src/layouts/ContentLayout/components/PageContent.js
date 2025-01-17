@@ -31,13 +31,30 @@ const PageContent = ({id}) => {
             });
     }, [id]);
 
+    // const breadcrumbs = () => {
+    //     return ancestors.map((item, index) => (
+    //         <li>
+    //             <Link to={`/listings/${item.id}`}>{item.title}</Link>
+    //         </li>
+    //     ));
+    // }
+
     const breadcrumbs = () => {
-        return ancestors.map((item, index) => (
-            <li>
-                <Link to={`/listings/${item.id}`}>{item.title}</Link>
-            </li>
-        ));
-    }
+        if (!Array.isArray(ancestors)) {
+            return null; // Return null if ancestors is not an array
+        }
+    
+        return (
+            <ul>
+                {ancestors.map((item, index) => (
+                    <li key={item.id || index}>
+                        <Link to={`/listings/${item.id}`}>{item.title}</Link>
+                    </li>
+                ))}
+            </ul>
+        );
+    };
+    
 
     const contentItems = () => {
         return items.map((item, index) => (
