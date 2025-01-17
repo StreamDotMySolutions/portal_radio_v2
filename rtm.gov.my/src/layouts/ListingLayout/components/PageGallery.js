@@ -91,7 +91,7 @@ const ShowGallery = ({ article_data_id }) => {
                 border: 'none' // Remove border from modal content as well
               }}
             >
-              <div className="modal-header">
+              {/* <div className="modal-header">
                 <button 
                   type="button" 
                   className="close" 
@@ -100,8 +100,15 @@ const ShowGallery = ({ article_data_id }) => {
                 >
                   <span aria-hidden="true">&times;</span>
                 </button>
+              </div> */}
+              <div className="modal-header d-flex justify-content-center" style={{ backgroundColor: "transparent", border: "none" }}>
+                  <button onClick={handleClose}  type="button" className="close" aria-label="Close" style={{ right: "auto" }}>
+                      <span aria-hidden="true">×</span>
+                  </button>
               </div>
-              <div className="modal-body">
+
+
+              <div className="modal-body d-flex justify-content-center">
                 <img
                   src={modalInfo.src}
                   alt="Full Image"
@@ -109,7 +116,7 @@ const ShowGallery = ({ article_data_id }) => {
                   className="img-fluid"
                 />
               </div>
-              <div className="modal-footer">
+              {/* <div className="modal-footer">
                 <button 
                   type="button" 
                   className="btn btn-secondary" 
@@ -117,7 +124,7 @@ const ShowGallery = ({ article_data_id }) => {
                 >
                   Close
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
