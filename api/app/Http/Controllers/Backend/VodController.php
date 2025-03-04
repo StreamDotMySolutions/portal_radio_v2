@@ -108,7 +108,7 @@ class VodController extends Controller
         }
     }
 
-    public function delete(Request $request,Asset $vod){
+    public function delete(Request $request,Vod $vod){
 
         $data = $request->validate([
             'acknowledge' => 'required',
