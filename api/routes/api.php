@@ -20,6 +20,7 @@ use App\Http\Controllers\Backend\{
     AssetController,
     DirectoryController,
     DirectorySyncController,
+    VodController,
 };
 
 Route::get('/', function () {
@@ -153,7 +154,15 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::delete('/assets/{asset}', [AssetController::class, 'delete']);
     Route::get('/assets/ordering/{asset}', [AssetController::class, 'ordering']);
 
-
+    // Vods
+    Route::get('/vods/node/{parentId}', [VodController::class, 'index']);
+    Route::get('/vods', [VodController::class, 'index']);
+    Route::get('/vods/{vod}', [VodController::class, 'show']);
+    Route::post('/vods', [VodController::class, 'store']);
+    Route::put('/vods/{vod}', [VodController::class, 'update']);
+    Route::post('/vods', [VodController::class, 'store']);
+    Route::delete('/vods/{vod}', [VodController::class, 'delete']);
+    Route::get('/vods/ordering/{vod}', [VodController::class, 'ordering']);
 
 });
 
