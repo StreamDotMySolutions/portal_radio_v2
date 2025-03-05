@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Vod;
 use App\Services\CommonService;
 use App\Jobs\VodJob;
+use Illuminate\Support\Facades\Storage;
 
 class VodController extends Controller
 {
@@ -126,6 +127,14 @@ class VodController extends Controller
         if($vod->type == 'file'){
             //\Log::info( $vod->name . ' file deleted');
             CommonService::handleDeleteFile($vod->name, $directory = 'vods');
+           
+
+            $storagePath = storage_path('public/');
+            $outputDir = 'vods/' . $vod->id;
+
+            // delete the playlist folder
+            Storage::disk('public')->deleteDirectory($outputDir);
+
         }
         
         if ( $vod->delete() ) {
