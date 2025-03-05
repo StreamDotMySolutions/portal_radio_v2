@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use Illuminate\Http\Request;
 use App\Models\Vod;
 use App\Services\CommonService;
+use App\Jobs\VodJob;
 
 class VodController extends Controller
 {
@@ -48,11 +49,12 @@ class VodController extends Controller
         }
 
         if($request->input('type') == 'file'){
-
+            // validate, only accepts any video
             $request->validate([
                 'name' => 'required|file|mimetypes:video/*' 
             ]);
 
+            // create a record in database
             $vod = Vod::create([
                 'user_id' =>  auth('sanctum')->user()->id,
                 'type' => 'file',
@@ -60,10 +62,9 @@ class VodController extends Controller
             ]);
 
             // Pass the $vod->name to Job Worker
-            \Log::info($vod->name);
+            dispatch(new VodJob($vod));
+            //\Log::info($vod->name);
         }
-
-
 
         // append parent id to node
         if ($request->has('parent_id')) {
