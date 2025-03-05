@@ -115,6 +115,7 @@ class VodController extends Controller
         ]);
 
         if($vod->type == 'file'){
+            //\Log::info( $vod->name . ' file deleted');
             CommonService::handleDeleteFile($vod->name, $directory = 'vods');
         }
         
