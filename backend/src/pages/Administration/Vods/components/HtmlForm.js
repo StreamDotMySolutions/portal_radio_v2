@@ -45,6 +45,7 @@ const HtmlForm = ({isLoading}) => {
                             placeholder='Choose file'  
                             icon='fa-solid fa-file'
                             isLoading={isLoading}
+                            accept='video/*'
                         />
                     }
                 </Col>

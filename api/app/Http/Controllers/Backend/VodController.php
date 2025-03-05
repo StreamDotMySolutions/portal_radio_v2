@@ -48,11 +48,19 @@ class VodController extends Controller
         }
 
         if($request->input('type') == 'file'){
+
+            $request->validate([
+                'name' => 'required|file|mimetypes:video/*' 
+            ]);
+
             $vod = Vod::create([
                 'user_id' =>  auth('sanctum')->user()->id,
                 'type' => 'file',
                 'name' => CommonService::handleStoreFile($request->file('name'), $directory = 'vods'),
             ]);
+
+            // Pass the $vod->name to Job Worker
+            \Log::info($vod->name);
         }
 
 
