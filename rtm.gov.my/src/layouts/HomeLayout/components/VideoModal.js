@@ -128,7 +128,7 @@ const VideoModal = ({ embed_code, filename }) => {
                 aria-hidden="true"
                 ref={modalRef}
               >
-                <div className="modal-dialog modal-dialog-centered" role="document">
+                <div className="modal-dialog modal-xl modal-dialog-centered" role="document">
                   <div className="modal-content">
                     <div className="modal-body">
                       <button
