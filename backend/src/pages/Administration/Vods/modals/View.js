@@ -59,10 +59,12 @@ export default function ViewModal({id}) {
             <Modal.Title>HLS Player</Modal.Title>
           </Modal.Header>
 
-          <Modal.Body className="d-flex flex-column align-items-center">
+          <Modal.Body>
           <h5>HLS Player</h5>
           <div className="w-100" style={{ maxWidth: '100%', height: 'auto', aspectRatio: '16 / 9' }}>
-            <HlsPlayer src={`${path}/${vod.id}/playlist.m3u8`} style={{ width: '100%', height: '100%' }} />
+            
+            <HlsPlayer src={`${path}/${vod.id}/playlist.m3u8`} width="100%" height="auto" />
+
           </div>
         </Modal.Body>
 
