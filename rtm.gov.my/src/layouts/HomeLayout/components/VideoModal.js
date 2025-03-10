@@ -7,43 +7,7 @@ const VideoModal = ({ embed_code, filename }) => {
   const serverUrl = process.env.REACT_APP_SERVER_URL;
   const videoSrc = `${serverUrl}/storage/vods/${embed_code}/playlist.m3u8`;
 
-  useEffect(() => {
-
-    const video = document.getElementById("videoPlayer");
-    if (!video) return;
-
-    if (Hls.isSupported()) {
-      const hls = new Hls();
-      hls.loadSource(videoSrc);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        video.play();
-      });
-    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      video.src = videoSrc;
-      video.addEventListener("loadedmetadata", () => {
-        video.play();
-      });
-    } else {
-      alert("Pelayar anda tidak menyokong HLS.");
-    }
-
-    const handleModalClose = () => {
-      video.pause();
-      video.currentTime = 0;
-    };
-
-    const modalElement = document.getElementById("videoModal");
-    if (modalElement) {
-      modalElement.addEventListener("hidden.bs.modal", handleModalClose);
-    }
-
-    return () => {
-      if (modalElement) {
-        modalElement.removeEventListener("hidden.bs.modal", handleModalClose);
-      }
-    };
-  }, []);
+  
 
   return (
     <div className="container mt-5">
