@@ -2,62 +2,41 @@ import React, { useEffect } from "react";
 
 const HlsPlayer = ({ src, width = "100%", height = "auto" }) => {
   useEffect(() => {
-    // Muatkan skrip dan CSS dari CDN hanya sekali
-    if (!window.videojs) {
-      const script = document.createElement("script");
-      script.src = "https://cdnjs.cloudflare.com/ajax/libs/video.js/8.3.0/video.min.js";
-      script.async = true;
-      script.onload = initializePlayer;
-      document.body.appendChild(script);
+    const loadHls = () => {
+      if (window.Hls) {
+        const video = document.getElementById("hls-video-player");
+        if (!video) return;
 
-      const link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = "https://cdnjs.cloudflare.com/ajax/libs/video.js/8.3.0/video-js.min.css";
-      document.head.appendChild(link);
-    } else {
-      initializePlayer();
-    }
-
-    function initializePlayer() {
-      const videoElement = document.getElementById("hls-video-player");
-      if (!videoElement || !window.videojs) return;
-
-      // Inisialisasi Video.js
-      const player = window.videojs(videoElement, {
-        controls: true,
-        autoplay: true,
-        preload: "auto",
-        fluid: true,
-        responsive: true,
-      });
-
-      // Tetapkan src
-      player.src({
-        src: src,
-        type: "application/x-mpegURL",
-      });
-
-      // Cleanup player apabila unmount
-      return () => {
-        if (player) {
-          player.dispose();
+        if (window.Hls.isSupported()) {
+          const hls = new window.Hls();
+          hls.loadSource(src);
+          hls.attachMedia(video);
+        } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+          video.src = src;
         }
-      };
+      }
+    };
+
+    // Muatkan skrip hls.js dari CDN jika belum ada
+    if (!window.Hls) {
+      const script = document.createElement("script");
+      script.src = "https://cdn.jsdelivr.net/npm/hls.js@1.4.12/dist/hls.min.js";
+      script.async = true;
+      script.onload = loadHls;
+      document.body.appendChild(script);
+    } else {
+      loadHls();
     }
   }, [src]);
 
   return (
-    <div>
-      <video
-        id="hls-video-player"
-        className="video-js vjs-default-skin"
-        style={{ width, height }}
-      >
-        <p className="vjs-no-js">
-          Your browser does not support HTML5 video. Please update your browser.
-        </p>
-      </video>
-    </div>
+    <video
+      id="hls-video-player"
+      controls
+      style={{ width, height }}
+    >
+      <p>Your browser does not support HLS streaming.</p>
+    </video>
   );
 };
 
