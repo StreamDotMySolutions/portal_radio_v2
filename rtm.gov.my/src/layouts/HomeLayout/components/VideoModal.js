@@ -41,7 +41,7 @@ const VideoModal = ({embed_code, filename}) => {
     return () => {
       modalElement.removeEventListener("hidden.bs.modal", handleModalClose);
     };
-  }, []);
+  }, [embed_code]);
 
   return (
     <div className="container mt-5">
