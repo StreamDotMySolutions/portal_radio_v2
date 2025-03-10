@@ -96,6 +96,7 @@ const VideoModal = ({ embed_code, filename }) => {
 
   return (
     <section className="wrap">
+      
       <div className="video-bg">
         <img 
           style={{ width: '100%', height: '100%', cursor: 'pointer' }}
@@ -140,7 +141,7 @@ const VideoModal = ({ embed_code, filename }) => {
                       </button>
                       <div className="text-dark embed-responsive embed-responsive-16by9">
 
-                      {embed_code}
+                        <video  id={videoPlayerId} ref={videoRef} width="100%" controls></video>
                
                       </div>
                     </div>
