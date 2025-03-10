@@ -46,6 +46,7 @@ const VideoModal = ({embed_code, filename}) => {
   return (
     <div className="container mt-5">
       {/* Button to Open Modal */}
+      embed code is : {embed_code}
       <button
         type="button"
         className="btn btn-primary"
