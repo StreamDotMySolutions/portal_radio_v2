@@ -1,23 +1,40 @@
 import React, { useEffect } from "react";
-import HlsPlayer from "../../components/HlsPlayer";
-import $ from "jquery"; // Pastikan jQuery dimasukkan kerana Bootstrap modal bergantung pada jQuery
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min";
+import Hls from "hls.js";
 
 const VideoBox = ({ modal, embedCode, filename }) => {
-  useEffect(() => {
-    // Event listener untuk hentikan video bila modal ditutup
-    $(`#modal_${modal}`).on("hidden.bs.modal", () => {
-      const video = document.getElementById("hls-video-player");
-      if (video) {
-        video.pause(); // Hentikan video
-        video.src = ""; // Kosongkan sumber video
-      }
-    });
 
-    // Cleanup listener bila komponen unmount
-    return () => {
-      $(`#modal_${modal}`).off("hidden.bs.modal");
+  useEffect(() => {
+    const video = videoRef.current;
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(videoSrc);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play();
+      });
+    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = videoSrc;
+      video.addEventListener("loadedmetadata", () => {
+        video.play();
+      });
+    } else {
+      alert("Pelayar anda tidak menyokong HLS.");
+    }
+
+    const handleModalClose = () => {
+      video.pause();
+      video.currentTime = 0;
     };
-  }, [modal]);
+
+    const modalElement = modalRef.current;
+    modalElement.addEventListener("hidden.bs.modal", handleModalClose);
+
+    return () => {
+      modalElement.removeEventListener("hidden.bs.modal", handleModalClose);
+    };
+  }, []);
 
   return (
     <section className="wrap">
@@ -65,7 +82,8 @@ const VideoBox = ({ modal, embedCode, filename }) => {
                         <span aria-hidden="true">&times;</span>
                       </button>
                       <div className="text-dark embed-responsive embed-responsive-16by9">
-                        <HlsPlayer id={embedCode} />
+                        {/* <HlsPlayer id={embedCode} /> */}
+                        <video ref={videoRef} width="100%" controls></video>
                       </div>
                     </div>
                   </div>
