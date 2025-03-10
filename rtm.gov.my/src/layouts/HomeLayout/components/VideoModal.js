@@ -83,8 +83,8 @@ const VideoModal = ({ embed_code, filename }) => {
               ></button>
             </div>
             <div className="modal-body">
-              <p>{videoSrc}</p>
-              <video ref={videoRef} width="100%" controls></video>
+              <p>{`${path}/${embed_code}/playlist.m3u8`}</p>
+              <video ref={`${path}/${embed_code}/playlist.m3u8`} width="100%" controls></video>
             </div>
           </div>
         </div>
