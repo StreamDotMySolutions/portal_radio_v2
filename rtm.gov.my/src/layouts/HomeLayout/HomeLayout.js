@@ -10,6 +10,7 @@ import Youtube2 from './components/Youtube2';
 import Footer from '../components/Footer';
 import Footer2 from '../components/Footer2';
 import Youtube3 from './components/Youtube3';
+import VideoModal from './components/ViewModal';
 
 
 const HomeLayout = () => {
@@ -35,14 +36,14 @@ const HomeLayout = () => {
             <div className="d-md-none" id="banner-mobile">
                 <BannerProgramme2 />
             </div>
-{/* 
+
             <div className="d-none d-md-block" id="youtube-desktop">
                 <Youtube />
-            </div> */}
+            </div>
 
             <div className="d-none d-md-block" id="youtube-desktop">
                 <div className="container-fluid" style={{ padding: '50px', background: 'linear-gradient(180deg, #103875 0%, #2f57ce 100%)' }}>
-                    player baru 
+                    <VideoModal />
                 </div>
             </div>
 
