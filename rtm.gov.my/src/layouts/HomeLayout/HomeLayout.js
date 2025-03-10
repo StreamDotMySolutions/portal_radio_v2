@@ -35,14 +35,15 @@ const HomeLayout = () => {
             <div className="d-md-none" id="banner-mobile">
                 <BannerProgramme2 />
             </div>
-
+{/* 
             <div className="d-none d-md-block" id="youtube-desktop">
                 <Youtube />
-            </div>
+            </div> */}
 
             <div className="d-none d-md-block" id="youtube-desktop">
-            
-            player baru 
+                <div className="container-fluid" style={{ padding: '50px', background: 'linear-gradient(180deg, #103875 0%, #2f57ce 100%)' }}>
+                    player baru 
+                </div>
             </div>
 
             
