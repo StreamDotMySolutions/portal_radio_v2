@@ -3,17 +3,20 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import Hls from "hls.js";
 
-const VideoModal = ({embed_code, filename}) => {
-    const serverUrl = process.env.REACT_APP_SERVER_URL;
-    const path = `${serverUrl}/storage/vods`
-    const videoSrc = `${path}/${embed_code}/playlist.m3u8`
+const VideoModal = ({ embed_code, filename }) => {
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
+  const path = `${serverUrl}/storage/vods`;
+  const videoSrc = `${path}/${embed_code}/playlist.m3u8`;
 
-    const videoRef = useRef(null);
-    const modalRef = useRef(null);
-    //const videoSrc = `/storage/vods/${id}/playlist.m3u8`;
+  const videoRef = useRef(null);
+  const modalRef = useRef(null);
 
   useEffect(() => {
+    if (!embed_code) return; // Ensure embed_code is valid before proceeding
+
     const video = videoRef.current;
+    if (!video) return;
+
     if (Hls.isSupported()) {
       const hls = new Hls();
       hls.loadSource(videoSrc);
@@ -36,17 +39,21 @@ const VideoModal = ({embed_code, filename}) => {
     };
 
     const modalElement = modalRef.current;
-    modalElement.addEventListener("hidden.bs.modal", handleModalClose);
+    if (modalElement) {
+      modalElement.addEventListener("hidden.bs.modal", handleModalClose);
+    }
 
     return () => {
-      modalElement.removeEventListener("hidden.bs.modal", handleModalClose);
+      if (modalElement) {
+        modalElement.removeEventListener("hidden.bs.modal", handleModalClose);
+      }
     };
   }, [embed_code]);
 
   return (
     <div className="container mt-5">
       {/* Button to Open Modal */}
-      embed code is : {embed_code}
+      <p>Embed code: {embed_code}</p>
       <button
         type="button"
         className="btn btn-primary"
@@ -76,7 +83,7 @@ const VideoModal = ({embed_code, filename}) => {
               ></button>
             </div>
             <div className="modal-body">
-        {videoSrc}
+              <p>{videoSrc}</p>
               <video ref={videoRef} width="100%" controls></video>
             </div>
           </div>
