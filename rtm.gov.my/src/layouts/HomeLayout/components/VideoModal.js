@@ -3,10 +3,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import Hls from "hls.js";
 
-const VideoModal = ({id, filename}) => {
+const VideoModal = ({embed_code, filename}) => {
     const serverUrl = process.env.REACT_APP_SERVER_URL;
     const path = `${serverUrl}/storage/vods`
-    const videoSrc = `${path}/${id}/playlist.m3u8`
+    const videoSrc = `${path}/${embed_code}/playlist.m3u8`
 
     const videoRef = useRef(null);
     const modalRef = useRef(null);

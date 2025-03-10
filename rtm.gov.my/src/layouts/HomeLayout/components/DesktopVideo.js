@@ -29,10 +29,10 @@ const DesktopVideo = () => {
         return items.map((item, index) => (
             <Col key={index} className='col-12 col-md-3 mb-4'>
       
-                {item.id}
+                {item.embed_code}
                 <VideoModal 
                     filename={item.filename}
-                    id={item.embed_code}
+                    embed_code={item.embed_code}
                 />
             </Col>
         ));
