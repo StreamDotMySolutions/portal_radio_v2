@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Col, Row, Modal } from 'react-bootstrap';
 import VideoBox from './VideoBox';
 import axios from 'axios';
+import HlsPlayer from '../../components/HlsPlayer';
 
 const Youtube3 = () => {
     const [showModal, setShowModal] = useState(false);
@@ -11,8 +12,8 @@ const Youtube3 = () => {
     const serverUrl = process.env.REACT_APP_SERVER_URL;
 
     const handleClose = () => setShowModal(false);
-    const handleShow = (url) => {
-        setVideoUrl(url);
+    const handleShow = (videoId) => {
+        setVideoUrl(videoId);
         setShowModal(true);
     };
 
@@ -30,7 +31,7 @@ const Youtube3 = () => {
                     className="img-fluid"
                     src={`${serverUrl}/storage/videos/${item.filename}`}
                     style={{ width: '100%', height: '100%', cursor: 'pointer' }}
-                    onClick={() => handleShow(`https://www.youtube.com/embed/${item.embed_code}`)}
+                    onClick={() => handleShow(`${item.embed_code}`)}
                 />
             </Col>
         ));
@@ -48,15 +49,15 @@ const Youtube3 = () => {
 
             <Modal show={showModal} onHide={handleClose}>
                 <Modal.Body>
-                   
-                   <div className="embed-responsive embed-responsive-16by9">
+                   <HlsPlayer id={videoUrl} />
+                   {/* <div className="embed-responsive embed-responsive-16by9">
                         <iframe
                           className="embed-responsive-item"
                           src={videoUrl}
                           title="YouTube Video"
                           allowFullScreen
                         ></iframe>
-                      </div>
+                      </div> */}
                 </Modal.Body>
             </Modal>
         </>
