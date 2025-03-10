@@ -17,12 +17,19 @@ class VodController extends Controller
         if (!is_null($parentId) && !empty($parentId)) {
             $paginate = Vod::query()->where('parent_id', $parentId);
         } else {
-            $paginate = Vod::query()->where('parent_id', null);;
+            $paginate = Vod::query()->where('parent_id', null);
         }
         
 
         $vods = $paginate->with(['descendants'])->defaultOrder()->paginate(10)->withQueryString();   
 
+        return response()->json(['vods' => $vods]);
+    }
+
+    
+    public function listVideos(){
+
+        $vods = Vod::query()->where('type', 'file')->get();
         return response()->json(['vods' => $vods]);
     }
 

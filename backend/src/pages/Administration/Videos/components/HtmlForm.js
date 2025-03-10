@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
-import { InputText,InputFile, InputTextarea } from '../../../../libs/FormInput';
+import React, { useEffect, useState } from 'react';
+import { InputText,InputFile, InputTextarea, InputSelect } from '../../../../libs/FormInput';
 import { Row,Col, Image, Figure } from 'react-bootstrap';
 import useStore from '../../../store';
+import axios from '../../../../libs/axios'
+import HlsPlayer from '../../Vods/components/HlsPlayer';
 
 const HtmlForm = ({isLoading}) => {
     const store = useStore()
-
+    const [videos, setVideos] = useState([]);
     const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
 
     //console.log(store.getValue('poster'))
@@ -20,9 +22,22 @@ const HtmlForm = ({isLoading}) => {
         }
     };
 
+    useEffect(() => {
+        // Fetch data dari server
+        axios
+          .get(`${store.url}/vods/list-videos`)
+          .then((response) => {
+            console.log(response.data); // Cetak data video
+            setVideos(response.data.vods)
+          })
+          .catch((error) => {
+            console.error("Error fetching videos:", error);
+          });
+      }, []); // Dependency array betul di sini
+
     return (
         <>
-         <h2>Metadata</h2>
+    
         <Row>
             <Col className='mb-2'>
                 <InputText 
@@ -34,26 +49,16 @@ const HtmlForm = ({isLoading}) => {
 
             </Col>
         </Row>
+
+        <hr />
         <Row>    
-            <Col className='mb-2'>
-                <InputTextarea
-                    fieldName='embed_code' 
-                    placeholder='Youtube Video ID, eg 9JviWN280sQ'  
-                    icon='fa-solid fa-hashtag'
-                    rows={1}
-                    isLoading={isLoading}
-                />
-
-            </Col>
-
+      
             <hr /> 
             <h2>Poster Image</h2>
             <Col className='mb-2 border border-1 rounded mb-3 m-2 p-2'>
                 {store.getValue('filename') ? 
                     <>
                    
-             
-
                     <Row>
                         <Col className='text-center p-4'>
                             <h5>Current Image</h5>
@@ -107,13 +112,29 @@ const HtmlForm = ({isLoading}) => {
                 }
             </Col>
             
-            
+            <h2>HLS Video</h2>    
+            <Col className='mb-2'>
+        
+                <InputSelect
+                    fieldName='embed_code' 
+                    placeholder='Video ID'  
+                    icon='fa-solid fa-hashtag'
+                    options={videos}
+                    rows={1}
+                    isLoading={isLoading}
+                />
+
+            </Col>
+
             
             {store.getValue('embed_code') &&
                 <>
-                    <h2>Youtube Video</h2>
-                    <Col className='mb-2 border border-1 rounded m-2 p-2 bg-dark' >
-                    <iframe 
+                    <h2></h2>
+                    <Col className='mb-2 border border-1 rounded m-2 p-2 ' >
+                    
+                    <HlsPlayer id={store.getValue('embed_code')} />
+
+                    {/* <iframe 
                         width="750px"
                         height={(750 * 9) / 16} // Calculate height for 16:9 aspect ratio
                         className="embed-responsive embed-responsive-16by9" 
@@ -124,7 +145,7 @@ const HtmlForm = ({isLoading}) => {
                         referrerpolicy="strict-origin-when-cross-origin" 
                         allowfullscreen>
 
-                    </iframe>    
+                    </iframe>     */}
                 </Col>
                 </>
             } 

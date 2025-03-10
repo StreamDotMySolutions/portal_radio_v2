@@ -1,6 +1,10 @@
 import React, { useEffect } from "react";
 
-const HlsPlayer = ({ src, width = "100%", height = "auto" }) => {
+const HlsPlayer = ({ id, width = "100%", height = "auto" }) => {
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
+  const path = `${serverUrl}/storage/vods`
+  const src = `${path}/${id}/playlist.m3u8`
+  
   useEffect(() => {
     const loadHls = () => {
       if (window.Hls) {
@@ -30,6 +34,8 @@ const HlsPlayer = ({ src, width = "100%", height = "auto" }) => {
   }, [src]);
 
   return (
+    <>
+    
     <video
       id="hls-video-player"
       controls
@@ -37,6 +43,7 @@ const HlsPlayer = ({ src, width = "100%", height = "auto" }) => {
     >
       <p>Your browser does not support HLS streaming.</p>
     </video>
+    </>
   );
 };
 

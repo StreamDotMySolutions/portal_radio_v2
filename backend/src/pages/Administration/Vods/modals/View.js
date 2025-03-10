@@ -63,7 +63,7 @@ export default function ViewModal({id}) {
 
           <div className="w-100" style={{ maxWidth: '100%', height: 'auto', aspectRatio: '16 / 9' }}>
             
-            <HlsPlayer src={`${path}/${vod.id}/playlist.m3u8`} width="100%" height="auto" />
+            <HlsPlayer id={vod.id} width="100%" height="auto" />
 
           </div>
         </Modal.Body>

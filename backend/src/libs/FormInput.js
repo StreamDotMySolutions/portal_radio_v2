@@ -161,6 +161,7 @@ export function InputSelect({fieldName, placeholder, icon, isLoading, options}){
                         readOnly={isLoading}
                         required 
                         isInvalid={errors?.hasOwnProperty(fieldName)}
+                        value={store.getValue(fieldName) || ""} // ✅ Set value pada select
                         onChange={ (e) => { 
                           store.setValue(fieldName, e.target.value)                         
                         } }
@@ -175,6 +176,7 @@ export function InputSelect({fieldName, placeholder, icon, isLoading, options}){
                         ))}
              
                     </Form.Select>
+                    
                     {
                         errors?.hasOwnProperty(fieldName) &&
                             (
