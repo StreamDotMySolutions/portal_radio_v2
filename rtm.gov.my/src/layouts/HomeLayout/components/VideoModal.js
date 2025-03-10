@@ -47,7 +47,7 @@ const VideoModal = ({ embed_code, filename }) => {
         modalElement.removeEventListener("hidden.bs.modal", handleModalClose);
       }
     };
-  }, [embed_code]);
+  }, [filename]);
 
   return (
     <div className="container mt-5">
@@ -82,7 +82,7 @@ const VideoModal = ({ embed_code, filename }) => {
               ></button>
             </div>
             <div className="modal-body">
-              <p>{videoSrc}</p>
+              <p>{videoSrc} embed code is {embed_code}</p>
               <video ref={videoRef} width="100%" controls></video>
             </div>
           </div>
