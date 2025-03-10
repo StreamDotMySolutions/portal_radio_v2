@@ -32,7 +32,7 @@ class VodJob implements ShouldQueue
     public function handle(): void
     {
         //
-        \Log::info($this->vod->name);
+        //\Log::info($this->vod->name);
         /*
         ffmpeg -i rtmklik.mp4 -codec: copy -start_number 0 -hls_time 10 -hls_list_size 0 -f hls hls/playlist.m3u8
         */
@@ -50,7 +50,9 @@ class VodJob implements ShouldQueue
      
 
         // Define FFmpeg path (Windows)
-        $ffmpegPath = 'C:\laragon\bin\ffmpeg\ffmpeg.exe';
+        //$ffmpegPath = 'C:\laragon\bin\ffmpeg\ffmpeg.exe';
+        $ffmpegPath = '/usr/bin/ffmpeg';
+
 
         // Define the FFmpeg command
         $command = [
