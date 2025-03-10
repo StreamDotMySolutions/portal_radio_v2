@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import VideoBox from './VideoBox';
 import axios from 'axios';
+import VideoModal from './ViewModal';
 
 const DesktopVideo = () => {
     const [showModal, setShowModal] = useState(false);
@@ -28,6 +29,10 @@ const DesktopVideo = () => {
         return items.map((item, index) => (
             <Col key={index} className='col-12 col-md-3 mb-4'>
               {item.filename}
+                <VideoModal 
+                    filename={item.filename}
+                    id={item.id}
+                />
             </Col>
         ));
     };

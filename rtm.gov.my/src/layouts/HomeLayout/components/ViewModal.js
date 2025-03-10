@@ -3,10 +3,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import Hls from "hls.js";
 
-const VideoModal = ({id}) => {
+const VideoModal = ({id, filename}) => {
   const videoRef = useRef(null);
   const modalRef = useRef(null);
-  const videoSrc = "/storage/vods/2/playlist.m3u8";
+  const videoSrc = `/storage/vods/${id}/playlist.m3u8`;
 
   useEffect(() => {
     const video = videoRef.current;
@@ -48,7 +48,7 @@ const VideoModal = ({id}) => {
         data-bs-toggle="modal"
         data-bs-target="#videoModal"
       >
-        View
+        {filename}
       </button>
 
       {/* Modal */}
@@ -71,6 +71,7 @@ const VideoModal = ({id}) => {
               ></button>
             </div>
             <div className="modal-body">
+                {id}
               <video ref={videoRef} width="100%" controls></video>
             </div>
           </div>
