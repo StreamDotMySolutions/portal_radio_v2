@@ -4,6 +4,7 @@ import { Button, Modal} from 'react-bootstrap'
 import useStore from '../../../store'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from '../../../../libs/axios'
+import HlsPlayer from '../components/HlsPlayer'
 
 export default function ViewModal({id}) {
     const serverUrl = process.env.REACT_APP_SERVER_URL;
@@ -64,6 +65,9 @@ export default function ViewModal({id}) {
             {vod.id}
             <br />
             {path}/{vod.id}/playlist.m3u8
+
+            <HlsPlayer src={`${path}/${vod.id}/playlist.m3u8`} />
+
           </Modal.Body>
           
           <Modal.Footer>
