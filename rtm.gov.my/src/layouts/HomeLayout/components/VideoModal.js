@@ -75,9 +75,7 @@ const VideoModal = ({id, filename}) => {
               ></button>
             </div>
             <div className="modal-body">
-                {videoSrc}
-                <hr />
-                {videoRef}
+        {videoSrc}
               <video ref={videoRef} width="100%" controls></video>
             </div>
           </div>
