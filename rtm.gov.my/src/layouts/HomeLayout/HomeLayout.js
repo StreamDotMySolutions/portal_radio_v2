@@ -39,6 +39,13 @@ const HomeLayout = () => {
             <div className="d-none d-md-block" id="youtube-desktop">
                 <Youtube />
             </div>
+
+            <div className="d-none d-md-block" id="youtube-desktop">
+            
+            player baru 
+            </div>
+
+            
             
             <div className="d-md-none" id="youtube-mobile">
                <Youtube3 />

@@ -31,7 +31,7 @@ const Youtube = () => {
                     modal={item.id} 
                     embedCode={item.embed_code} 
                     filename={`${serverUrl}/storage/videos/${item.filename}`}
-                    />
+                />
             </Col>
         ));
     };
