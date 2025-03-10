@@ -4,25 +4,24 @@ const HlsPlayer = ({ id, width = "100%", height = "auto" }) => {
   const serverUrl = process.env.REACT_APP_SERVER_URL;
   const path = `${serverUrl}/storage/vods`;
   const src = `${path}/${id}/playlist.m3u8`;
-  const videoRef = useRef(null); // ✅ Gunakan useRef untuk kawal video
+  const videoRef = useRef(null);
+  const hlsRef = useRef(null); // 🔥 Simpan rujukan HLS supaya boleh dispose nanti
 
   useEffect(() => {
-    let hls; // ✅ Simpan rujukan hls supaya boleh dispose nanti
-
     const loadHls = () => {
       const video = videoRef.current;
       if (!video) return;
 
       if (window.Hls.isSupported()) {
-        hls = new window.Hls();
-        hls.loadSource(src);
-        hls.attachMedia(video);
+        hlsRef.current = new window.Hls();
+        hlsRef.current.loadSource(src);
+        hlsRef.current.attachMedia(video);
       } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
         video.src = src;
       }
     };
 
-    // Muatkan skrip hls.js dari CDN jika belum ada
+    // Muatkan skrip hls.js hanya jika ia belum ada
     if (!window.Hls) {
       const script = document.createElement("script");
       script.src = "https://cdn.jsdelivr.net/npm/hls.js@1.4.12/dist/hls.min.js";
@@ -33,10 +32,11 @@ const HlsPlayer = ({ id, width = "100%", height = "auto" }) => {
       loadHls();
     }
 
-    // ✅ Cleanup function apabila modal ditutup (komponen unmount)
+    // ✅ Cleanup apabila komponen unmount atau modal ditutup
     return () => {
-      if (hls) {
-        hls.destroy(); // Hentikan stream HLS
+      if (hlsRef.current) {
+        hlsRef.current.destroy(); // Hentikan stream HLS
+        hlsRef.current = null;
       }
       if (videoRef.current) {
         videoRef.current.pause(); // Hentikan video
@@ -46,11 +46,9 @@ const HlsPlayer = ({ id, width = "100%", height = "auto" }) => {
   }, [src]);
 
   return (
-    <>
-      <video ref={videoRef} controls style={{ width, height }}>
-        <p>Your browser does not support HLS streaming.</p>
-      </video>
-    </>
+    <video ref={videoRef} controls style={{ width, height }}>
+      <p>Your browser does not support HLS streaming.</p>
+    </video>
   );
 };
 
