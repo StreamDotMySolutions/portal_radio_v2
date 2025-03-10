@@ -5,6 +5,11 @@ import Hls from "hls.js";
 
 const VideoBox = ({ modal, embedCode, filename }) => {
 
+  const videoRef = useRef(null);
+  const modalRef = useRef(null);
+  const videoSrc = `/storage/vods/${embedCode}/playlist.m3u8`;
+
+
   useEffect(() => {
     const video = videoRef.current;
     if (Hls.isSupported()) {
