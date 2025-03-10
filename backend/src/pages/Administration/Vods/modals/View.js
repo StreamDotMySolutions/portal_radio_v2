@@ -54,13 +54,13 @@ export default function ViewModal({id}) {
           <FontAwesomeIcon icon={['fas', 'video']} />{' '}View
         </Button>
   
-        <Modal size={'md'} show={show} onHide={handleCloseClick}>
+        <Modal size={'xl'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
             <Modal.Title>HLS Player</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
-          <h5>HLS Player</h5>
+
           <div className="w-100" style={{ maxWidth: '100%', height: 'auto', aspectRatio: '16 / 9' }}>
             
             <HlsPlayer src={`${path}/${vod.id}/playlist.m3u8`} width="100%" height="auto" />

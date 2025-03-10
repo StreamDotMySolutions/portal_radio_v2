@@ -10,7 +10,7 @@ const HlsPlayer = ({ src, width = "100%", height = "auto" }) => {
       if (!playerRef.current) {
         playerRef.current = videojs(videoRef.current, {
           controls: true,
-          autoplay: false,
+          autoplay: true,
           preload: "auto",
         });
   
