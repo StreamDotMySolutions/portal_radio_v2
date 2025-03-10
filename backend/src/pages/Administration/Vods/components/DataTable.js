@@ -113,7 +113,9 @@ const Index = () => {
                                     
                                 
                                 {' '}
-                                <ViewModal id={item.id} />
+                                {item.type === 'file' &&
+                                    <ViewModal id={item.id} />
+                                }
                                 {' '}
                                 <DeleteModal id={item.id} /> 
                             </td>
