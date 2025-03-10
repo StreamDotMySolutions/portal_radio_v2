@@ -1,4 +1,5 @@
 import React from 'react';
+import HlsPlayer from '../../components/HlsPlayer';
 
 const VideoBox = ({ modal, embedCode, filename }) => {
   //const videoSrc = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&playsinline=1&loop=1&controls=0&disablekb=1&showinfo=0`;
@@ -48,8 +49,9 @@ const VideoBox = ({ modal, embedCode, filename }) => {
                         <span aria-hidden="true">&times;</span>
                       </button>
                       <div className="text-dark embed-responsive embed-responsive-16by9">
-            
-                          <iframe 
+
+                          <HlsPlayer id={embedCode} />
+                          {/* <iframe 
                             width="750px"
                             height={(750 * 9) / 16} // Calculate height for 16:9 aspect ratio
                             className="embed-responsive embed-responsive-16by9" 
@@ -58,9 +60,8 @@ const VideoBox = ({ modal, embedCode, filename }) => {
                             frameborder="0" 
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                             referrerpolicy="strict-origin-when-cross-origin" 
-                            allowfullscreen>
-
-                        </iframe>
+                            allowfullscreen> 
+                        </iframe>*/}
                
                       </div>
                     </div>

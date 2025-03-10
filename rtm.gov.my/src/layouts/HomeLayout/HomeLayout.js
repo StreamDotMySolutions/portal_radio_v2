@@ -44,9 +44,6 @@ const HomeLayout = () => {
                <Youtube3 />
             </div>
 
-
-
-            
             <div className="d-none d-md-block" id="footer-desktop">
                 <Footer />
             </div>
