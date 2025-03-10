@@ -7,24 +7,23 @@ const HlsPlayer = ({ src, width = "100%", height = "auto" }) => {
   const playerRef = useRef(null);
 
   useEffect(() => {
-    if (playerRef.current) {
-      playerRef.current.dispose(); // Dispose the previous instance
-      playerRef.current = null;
-    }
+    if (!videoRef.current) return;
 
     if (!playerRef.current) {
       playerRef.current = videojs(videoRef.current, {
         controls: true,
         autoplay: true,
         preload: "auto",
-        fluid: true, // Makes video responsive
-      });
-
-      playerRef.current.src({
-        src: src,
-        type: "application/x-mpegURL",
+        fluid: true,
+        responsive: true,
       });
     }
+
+    // Jika `src` berubah, hanya update `src` tanpa dispose
+    playerRef.current.src({
+      src: src,
+      type: "application/x-mpegURL",
+    });
 
     return () => {
       if (playerRef.current) {
@@ -32,14 +31,20 @@ const HlsPlayer = ({ src, width = "100%", height = "auto" }) => {
         playerRef.current = null;
       }
     };
-  }, [src]); // Reinitialize when `src` changes
+  }, [src]); // `useEffect` hanya dijalankan apabila `src` berubah
 
   return (
-    <video
-      ref={videoRef}
-      className="video-js vjs-default-skin"
-      style={{ width, height }}
-    />
+    <div>
+      <video
+        ref={videoRef}
+        className="video-js vjs-default-skin"
+        style={{ width, height }}
+      >
+        <p className="vjs-no-js">
+          Your browser does not support HTML5 video. Please update your browser.
+        </p>
+      </video>
+    </div>
   );
 };
 
