@@ -5,16 +5,14 @@ import Hls from "hls.js";
 
 const VideoModal = ({ embed_code, filename }) => {
   const serverUrl = process.env.REACT_APP_SERVER_URL;
-  const path = `${serverUrl}/storage/vods`;
-  const videoSrcRef = useRef("");
+  const videoSrc = `${serverUrl}/storage/vods/${embed_code}/playlist.m3u8`;
+
   const videoRef = useRef(null);
   const modalRef = useRef(null);
 
   useEffect(() => {
     if (!embed_code) return; // Ensure embed_code is valid before proceeding
 
-    const videoSrc = `${path}/${embed_code}/playlist.m3u8`;
-    videoSrcRef.current = videoSrc;
     const video = videoRef.current;
     if (!video) return;
 
@@ -84,7 +82,7 @@ const VideoModal = ({ embed_code, filename }) => {
               ></button>
             </div>
             <div className="modal-body">
-              <p>{videoSrcRef.current}</p>
+              <p>{videoSrc}</p>
               <video ref={videoRef} width="100%" controls></video>
             </div>
           </div>
