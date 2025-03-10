@@ -32,7 +32,7 @@ const DesktopVideo = () => {
                 {item.id}
                 <VideoModal 
                     filename={item.filename}
-                    id={item.id}
+                    id={item.embed_code}
                 />
             </Col>
         ));
