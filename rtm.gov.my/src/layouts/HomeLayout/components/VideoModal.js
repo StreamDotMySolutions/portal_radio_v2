@@ -113,7 +113,7 @@ const VideoModal = ({ embed_code, filename }) => {
                   className="video-btn border-0"
                   style={{ backgroundColor: 'transparent' }}
                   data-toggle="modal"
-                  data-src={embedCode}
+                  data-src={embed_code}
                   data-target={`#modal_${modalId}`}
                 >
                   <img className="img-fluid" src="/img/play.png" alt="Play Button" />
