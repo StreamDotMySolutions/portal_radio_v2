@@ -7,7 +7,7 @@ import PaginatorLink from '../../../../libs/PaginatorLink'
 import CreateButton from '../../../../libs/CreateButton'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import CreateModal from '../modals/Create'
-import EditModal from '../modals/Edit'
+import ViewModal from '../modals/View'
 import DeleteModal from '../modals/Delete'
 import Ordering from './Ordering'
 
@@ -113,7 +113,7 @@ const Index = () => {
                                     
                                 
                                 {' '}
-                                {/* <EditModal id={item.id} /> */}
+                                <ViewModal id={item.id} />
                                 {' '}
                                 <DeleteModal id={item.id} /> 
                             </td>

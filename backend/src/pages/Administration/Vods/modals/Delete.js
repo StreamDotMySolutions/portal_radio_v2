@@ -90,7 +90,7 @@ export default function DeleteModal({id}) {
     return (
       <>
         <Button size="sm" variant="outline-danger" onClick={handleShowClick}>
-        <FontAwesomeIcon icon={['fas', 'trash']} />{' '}Delete
+          <FontAwesomeIcon icon={['fas', 'trash']} />{' '}Delete
         </Button>
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
