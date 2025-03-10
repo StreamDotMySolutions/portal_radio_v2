@@ -35,7 +35,7 @@ const HlsPlayer = ({ id, width = "100%", height = "auto" }) => {
 
   return (
     <>
-    
+    {src}
     <video
       id="hls-video-player"
       controls
