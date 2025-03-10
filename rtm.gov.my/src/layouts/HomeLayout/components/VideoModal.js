@@ -8,7 +8,6 @@ const VideoModal = ({ embed_code, filename }) => {
   const videoSrc = `${serverUrl}/storage/vods/${embed_code}/playlist.m3u8`;
 
   useEffect(() => {
-    if (!embed_code) return;
 
     const video = document.getElementById("videoPlayer");
     if (!video) return;
@@ -44,7 +43,7 @@ const VideoModal = ({ embed_code, filename }) => {
         modalElement.removeEventListener("hidden.bs.modal", handleModalClose);
       }
     };
-  }, [filename]);
+  }, []);
 
   return (
     <div className="container mt-5">
