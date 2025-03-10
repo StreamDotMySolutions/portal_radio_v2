@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import Hls from "hls.js";
@@ -7,13 +7,10 @@ const VideoModal = ({ embed_code, filename }) => {
   const serverUrl = process.env.REACT_APP_SERVER_URL;
   const videoSrc = `${serverUrl}/storage/vods/${embed_code}/playlist.m3u8`;
 
-  const videoRef = useRef(null);
-  const modalRef = useRef(null);
-
   useEffect(() => {
-    if (!embed_code) return; // Ensure embed_code is valid before proceeding
+    if (!embed_code) return;
 
-    const video = videoRef.current;
+    const video = document.getElementById("videoPlayer");
     if (!video) return;
 
     if (Hls.isSupported()) {
@@ -37,7 +34,7 @@ const VideoModal = ({ embed_code, filename }) => {
       video.currentTime = 0;
     };
 
-    const modalElement = modalRef.current;
+    const modalElement = document.getElementById("videoModal");
     if (modalElement) {
       modalElement.addEventListener("hidden.bs.modal", handleModalClose);
     }
@@ -69,7 +66,6 @@ const VideoModal = ({ embed_code, filename }) => {
         tabIndex="-1"
         aria-labelledby="videoModalLabel"
         aria-hidden="true"
-        ref={modalRef}
       >
         <div className="modal-dialog">
           <div className="modal-content">
@@ -83,7 +79,7 @@ const VideoModal = ({ embed_code, filename }) => {
             </div>
             <div className="modal-body">
               <p>{videoSrc} embed code is {embed_code}</p>
-              <video ref={videoRef} width="100%" controls></video>
+              <video id="videoPlayer" width="100%" controls></video>
             </div>
           </div>
         </div>
