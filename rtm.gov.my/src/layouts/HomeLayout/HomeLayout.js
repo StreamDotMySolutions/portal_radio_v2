@@ -11,6 +11,7 @@ import Footer from '../components/Footer';
 import Footer2 from '../components/Footer2';
 import Youtube3 from './components/Youtube3';
 import VideoModal from './components/ViewModal';
+import DesktopVideo from './components/DesktopVideo';
 
 
 const HomeLayout = () => {
@@ -40,6 +41,11 @@ const HomeLayout = () => {
             <div className="d-none d-md-block" id="youtube-desktop">
                 <Youtube />
             </div>
+
+            <div className="d-none d-md-block" id="youtube-desktop">
+                <DesktopVideo />
+            </div>
+
 
             <div className="d-none d-md-block" id="youtube-desktop">
                 <div className="container-fluid" style={{ padding: '50px', background: 'linear-gradient(180deg, #103875 0%, #2f57ce 100%)' }}>
