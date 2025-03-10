@@ -99,7 +99,7 @@ const VideoModal = ({ embed_code, filename }) => {
       <div className="video-bg">
         <img 
           style={{ width: '100%', height: '100%', cursor: 'pointer' }}
-          src={filename} 
+          src={`${serverUrl}/storage/videos/${filename}`} 
           alt="Video Background" />
       </div>
       <div className="content">
