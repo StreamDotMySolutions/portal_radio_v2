@@ -38,9 +38,9 @@ const HomeLayout = () => {
                 <BannerProgramme2 />
             </div>
 
-            <div className="d-none d-md-block" id="youtube-desktop">
+            {/* <div className="d-none d-md-block" id="youtube-desktop">
                 <Youtube />
-            </div>
+            </div> */}
 
             <div className="d-none d-md-block" id="youtube-desktop">
                 <DesktopVideo />
