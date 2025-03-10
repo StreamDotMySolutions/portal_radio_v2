@@ -4,9 +4,13 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import Hls from "hls.js";
 
 const VideoModal = ({id, filename}) => {
-  const videoRef = useRef(null);
-  const modalRef = useRef(null);
-  const videoSrc = `/storage/vods/${id}/playlist.m3u8`;
+    const serverUrl = process.env.REACT_APP_SERVER_URL;
+    const path = `${serverUrl}/storage/vods`
+    const videoSrc = `${path}/${id}/playlist.m3u8`
+
+    const videoRef = useRef(null);
+    const modalRef = useRef(null);
+    //const videoSrc = `/storage/vods/${id}/playlist.m3u8`;
 
   useEffect(() => {
     const video = videoRef.current;
