@@ -52,109 +52,109 @@ const VideoModal = ({ embed_code, filename }) => {
     };
   }, [filename]);
 
-  return (
-    <div className="container mt-5">
-      {/* Button to Open Modal */}
-      <p>Embed code: {embed_code}</p>
-      <button
-        type="button"
-        className="btn btn-primary"
-        data-bs-toggle="modal"
-        data-bs-target={`#${modalId}`}
-      >
-        {filename}
-      </button>
-
-      {/* Modal */}
-      <div
-        className="modal fade"
-        id={modalId}
-        tabIndex="-1"
-        aria-labelledby="videoModalLabel"
-        aria-hidden="true"
-        ref={modalRef}
-      >
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <div className="modal-body">
-              <p>{videoSrc} embed code is {embed_code}</p>
-              <video  id={videoPlayerId} ref={videoRef} width="100%" controls></video>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
   // return (
-  //   <section className="wrap">
-      
-  //     <div className="video-bg">
-  //       <img 
-  //         style={{ width: '100%', height: '100%', cursor: 'pointer' }}
-  //         src={`${serverUrl}/storage/videos/${filename}`} 
-  //         alt="Video Background" />
-  //     </div>
-  //     <div className="content">
-  //       <div className="container">
-  //         <div className="row">
-  //           <div className="col-md-1"></div>
-  //           <div className="col-md-10">
-  //             <h3 className="title">
-  //               <button
-  //                 type="button"
-  //                 className="video-btn border-0"
-  //                 style={{ backgroundColor: 'transparent' }}
-  //                 data-toggle="modal"
-  //                 data-src={embed_code}
-  //                 data-target={`#modal_${modalId}`}
-  //               >
-  //                 <img className="img-fluid" src="/img/play.png" alt="Play Button" />
-  //               </button>
-  //             </h3>
-  //             <div
-  //               className="modal fade"
-  //               id={`modal_${modalId}`}
-  //               tabIndex="-1"
-  //               role="dialog"
-  //               aria-labelledby="exampleModalLabel"
-  //               aria-hidden="true"
-  //             >
-  //               <div className="modal-dialog modal-dialog-centered" role="document">
-  //                 <div className="modal-content">
-  //                   <div className="modal-body">
-  //                     <button
-  //                       type="button"
-  //                       className="close"
-  //                       data-dismiss="modal"
-  //                       aria-label="Close"
-  //                     >
-  //                       <span aria-hidden="true">&times;</span>
-  //                     </button>
-  //                     <div className="text-dark embed-responsive embed-responsive-16by9">
+  //   <div className="container mt-5">
+  //     {/* Button to Open Modal */}
+  //     <p>Embed code: {embed_code}</p>
+  //     <button
+  //       type="button"
+  //       className="btn btn-primary"
+  //       data-bs-toggle="modal"
+  //       data-bs-target={`#${modalId}`}
+  //     >
+  //       {filename}
+  //     </button>
 
-  //                       <video  id={videoPlayerId} ref={videoRef} width="100%" controls></video>
-               
-  //                     </div>
-  //                   </div>
-  //                 </div>
-  //               </div>
-  //             </div>
+  //     {/* Modal */}
+  //     <div
+  //       className="modal fade"
+  //       id={modalId}
+  //       tabIndex="-1"
+  //       aria-labelledby="videoModalLabel"
+  //       aria-hidden="true"
+  //       ref={modalRef}
+  //     >
+  //       <div className="modal-dialog">
+  //         <div className="modal-content">
+  //           <div className="modal-header">
+  //             <button
+  //               type="button"
+  //               className="btn-close"
+  //               data-bs-dismiss="modal"
+  //               aria-label="Close"
+  //             ></button>
   //           </div>
-  //           <div className="col-md-1"></div>
+  //           <div className="modal-body">
+  //             <p>{videoSrc} embed code is {embed_code}</p>
+  //             <video  id={videoPlayerId} ref={videoRef} width="100%" controls></video>
+  //           </div>
   //         </div>
   //       </div>
   //     </div>
-  //   </section>
+  //   </div>
   // );
+
+  return (
+    <section className="wrap">
+      
+      <div className="video-bg">
+        <img 
+          style={{ width: '100%', height: '100%', cursor: 'pointer' }}
+          src={`${serverUrl}/storage/videos/${filename}`} 
+          alt="Video Background" />
+      </div>
+      <div className="content">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-1"></div>
+            <div className="col-md-10">
+              <h3 className="title">
+                <button
+                  type="button"
+                  className="video-btn border-0"
+                  style={{ backgroundColor: 'transparent' }}
+                  data-bs-toggle="modal"
+                  data-bs-target={`#${modalId}`}
+                >
+                  <img className="img-fluid" src="/img/play.png" alt="Play Button" />
+                </button>
+              </h3>
+              <div
+                className="modal fade"
+                id={modalId}
+                tabIndex="-1"
+                role="dialog"
+                aria-labelledby="exampleModalLabel"
+                aria-hidden="true"
+                ref={modalRef}
+              >
+                <div className="modal-dialog modal-dialog-centered" role="document">
+                  <div className="modal-content">
+                    <div className="modal-body">
+                      <button
+                        type="button"
+                        className="close"
+                        data-dismiss="modal"
+                        aria-label="Close"
+                      >
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <div className="text-dark embed-responsive embed-responsive-16by9">
+
+                        <video  id={videoPlayerId} ref={videoRef} width="100%" controls></video>
+               
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-1"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 
 };
 
