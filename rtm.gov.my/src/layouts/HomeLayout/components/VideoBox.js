@@ -1,54 +1,16 @@
-import { useEffect, useRef } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap/dist/js/bootstrap.bundle.min";
-import Hls from "hls.js";
+import React from 'react';
+import HlsPlayer from '../../components/HlsPlayer';
 
 const VideoBox = ({ modal, embedCode, filename }) => {
-
-  const videoRef = useRef(null);
-  const modalRef = useRef(null);
-  const videoSrc = `/storage/vods/${embedCode}/playlist.m3u8`;
-
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (Hls.isSupported()) {
-      const hls = new Hls();
-      hls.loadSource(videoSrc);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        video.play();
-      });
-    } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      video.src = videoSrc;
-      video.addEventListener("loadedmetadata", () => {
-        video.play();
-      });
-    } else {
-      alert("Pelayar anda tidak menyokong HLS.");
-    }
-
-    const handleModalClose = () => {
-      video.pause();
-      video.currentTime = 0;
-    };
-
-    const modalElement = modalRef.current;
-    modalElement.addEventListener("hidden.bs.modal", handleModalClose);
-
-    return () => {
-      modalElement.removeEventListener("hidden.bs.modal", handleModalClose);
-    };
-  }, []);
+  //const videoSrc = `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&playsinline=1&loop=1&controls=0&disablekb=1&showinfo=0`;
 
   return (
     <section className="wrap">
       <div className="video-bg">
-        <img
-          style={{ width: "100%", height: "100%", cursor: "pointer" }}
-          src={filename}
-          alt="Video Background"
-        />
+        <img 
+          style={{ width: '100%', height: '100%', cursor: 'pointer' }}
+          src={filename} 
+          alt="Video Background" />
       </div>
       <div className="content">
         <div className="container">
@@ -59,7 +21,7 @@ const VideoBox = ({ modal, embedCode, filename }) => {
                 <button
                   type="button"
                   className="video-btn border-0"
-                  style={{ backgroundColor: "transparent" }}
+                  style={{ backgroundColor: 'transparent' }}
                   data-toggle="modal"
                   data-src={embedCode}
                   data-target={`#modal_${modal}`}
@@ -87,8 +49,22 @@ const VideoBox = ({ modal, embedCode, filename }) => {
                         <span aria-hidden="true">&times;</span>
                       </button>
                       <div className="text-dark embed-responsive embed-responsive-16by9">
-                        {/* <HlsPlayer id={embedCode} /> */}
-                        <video ref={videoRef} width="100%" controls></video>
+
+                          <HlsPlayer id={embedCode} />
+                          {/* <iframe 
+                            width="750px"
+                            height={(750 * 9) / 16} // Calculate height for 16:9 aspect ratio
+                            className="embed-responsive embed-responsive-16by9" 
+                            src={`https://www.youtube.com/embed/${embedCode}`} 
+                            //title="Old World - Announcement Trailer | 4X Turn-Based Strategy Game" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            referrerpolicy="strict-origin-when-cross-origin" 
+                            allowfullscreen> 
+
+                        </iframe>
+                        */}
+               
                       </div>
                     </div>
                   </div>
