@@ -25,13 +25,13 @@ const BannerProgramme2 = () => {
     return groupedItems.map((group, groupIndex) => (
       <div className="row" key={groupIndex}>
         {group.map((item, index) => (
-          <div className='col' key={index}>
+          <div className='col mt-3' key={index}>
              <Link className="nav-link" to={item.redirect_url}>
-              <img 
-                style={{ borderRadius: '15px' }} 
-                className="img-fluid" 
-                src={`${serverUrl}/storage/programmes/${item.filename}`} 
-                alt={item.title} />
+                <img 
+                  style={{ borderRadius: '15px' }} 
+                  className="img-fluid" 
+                  src={`${serverUrl}/storage/programmes/${item.filename}`} 
+                  alt={item.title} />
             </Link>
           </div>
         ))}
