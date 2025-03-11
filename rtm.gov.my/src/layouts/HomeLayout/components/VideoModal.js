@@ -24,7 +24,7 @@ const VideoModal = ({ embed_code, filename }) => {
       hls.loadSource(videoSrc);
       hls.attachMedia(video);
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        video.play();
+        //video.play();
       });
     } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
       video.src = videoSrc;
