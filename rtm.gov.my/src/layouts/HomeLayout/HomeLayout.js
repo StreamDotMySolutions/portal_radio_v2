@@ -42,9 +42,9 @@ const HomeLayout = () => {
                 <Youtube />
             </div> */}
 
-            <div className="d-none d-md-block" id="youtube-desktop">
+            {/* <div className="d-none d-md-block" id="youtube-desktop">
                 <DesktopVideo />
-            </div>
+            </div> */}
 
 
             {/* <div className="d-none d-md-block" id="youtube-desktop">
@@ -55,9 +55,9 @@ const HomeLayout = () => {
 
             
             
-            <div className="d-md-none" id="youtube-mobile">
+            {/* <div className="d-md-none" id="youtube-mobile">
                <Youtube3 />
-            </div>
+            </div> */}
 
             <div className="d-none d-md-block" id="footer-desktop">
                 <Footer />
