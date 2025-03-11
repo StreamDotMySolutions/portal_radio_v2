@@ -151,13 +151,15 @@ const PageContent = () => {
                                 <span>loading ...</span>
                             ) : (
                                 <>
-                                    adakah kat sini
                                     {layout}
                                 </>
                             )}
                         </div>
     
-                        <div className="container-fluid" style={{ "marginTop": "2rem" }}></div>
+                        <div className="container-fluid" style={{ "marginTop": "2rem" }}>
+
+                            
+                        </div>
                       
                         {/* listing_type :  null */}
                         { settings?.listing_type !== 'single_article' && settings?.listing_type !== null &&

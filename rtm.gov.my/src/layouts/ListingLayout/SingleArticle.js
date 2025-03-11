@@ -64,6 +64,7 @@ const SingleArticle = ({id}) => {
         <div className="container-fluid" style={{ "marginTop": "4rem" }}>
          
             {/* Render contentItems if shouldRenderContent returns true */}
+            <h2>{title}</h2>
             {contentItems()}
                 
         </div>
