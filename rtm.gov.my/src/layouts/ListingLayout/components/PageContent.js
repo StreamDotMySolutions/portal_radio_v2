@@ -106,7 +106,7 @@ const PageContent = () => {
     let layout;
     switch (settings?.listing_type) {
         case 'poster':
-            layout = <WithPosterListing items={items} />;
+            layout = <WithPosterListing title={title} items={items} />;
             break;
 
 
@@ -120,7 +120,7 @@ const PageContent = () => {
 
         case 'default':
         default:
-            layout = <DefaultListing items={items} page={currentPage}/>;
+            layout = <DefaultListing title={title} items={items} page={currentPage}/>;
             break;
     }
 

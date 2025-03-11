@@ -20,9 +20,12 @@ const DefaultListing = ({ items, page }) => {
     
 
     return (
-        <ol start={startIndex}>
-            {contentItems()}
-        </ol>
+        <>
+            <h2>{title}</h2>
+            <ol start={startIndex}>
+                {contentItems()}
+            </ol>
+        </>
     );
 };
 

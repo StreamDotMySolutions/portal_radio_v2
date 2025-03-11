@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap'; 
 import PlaceholderImage from './img/placeholder-282.png'
 
-const WithPosterListing = ({items}) => {
+const WithPosterListing = ({title,items}) => {
     const url = process.env.REACT_APP_API_URL;
     const serverUrl = process.env.REACT_APP_SERVER_URL;
     const path = `${serverUrl}/storage/article_poster`
@@ -14,6 +14,7 @@ const WithPosterListing = ({items}) => {
     const contentItems = () => {
         return (
             <div className="row">
+                <h2>{title}</h2>
                 {items.map((item, index) => {
                     const redirectUrl = item.article_setting?.redirect_url;
                     const linkTo = redirectUrl ? redirectUrl : `/listings/${item.id}`;
