@@ -70,7 +70,7 @@ const PageContent = () => {
     
     const handlePaginationClick = (url) => {
         // Handle click event and set the page to the clicked item's url
-        console.log(url)
+        //console.log(url)
         setPaginate(url);
     };
     
@@ -108,6 +108,7 @@ const PageContent = () => {
         case 'poster':
             layout = <WithPosterListing items={items} />;
             break;
+
 
         case 'without_poster':
             layout = <WithoutPosterListing items={items} />;
@@ -150,7 +151,7 @@ const PageContent = () => {
                                 <span>loading ...</span>
                             ) : (
                                 <>
-                                    <h2>{title}</h2>
+                                    adakah kat sini
                                     {layout}
                                 </>
                             )}
