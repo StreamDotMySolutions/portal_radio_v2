@@ -111,7 +111,7 @@ const PageContent = () => {
 
 
         case 'without_poster':
-            layout = <WithoutPosterListing items={items} />;
+            layout = <WithoutPosterListing title={title} items={items} />;
             break;
 
         case 'single_article':
@@ -158,7 +158,7 @@ const PageContent = () => {
     
                         <div className="container-fluid" style={{ "marginTop": "2rem" }}>
 
-                            
+
                         </div>
                       
                         {/* listing_type :  null */}

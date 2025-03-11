@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const WithoutPosterListing = ({items}) => {
+const WithoutPosterListing = ({title,items}) => {
 
     const contentItems = () => {
         return items.map((item, index) => {
@@ -27,6 +27,7 @@ const WithoutPosterListing = ({items}) => {
 
     return (
         <div>
+          <h2>{title}</h2>
            <table class="table table-bordered " id="table-id">
                 <thead>
                 <tr>
