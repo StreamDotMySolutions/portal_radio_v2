@@ -47,7 +47,7 @@ const Footer2 = () => {
                 <div className='row'>
                     <div className='col ml-3'>
                         <ul className="footer_ul_amrc">
-                            <li><a href="http://www.mampu.gov.my/ms/"><img className="img-fluid" src="/asset/footer/mampu.png" alt="Mampu Logo" /></a></li>
+                            <li><a href="https://www.jdn.gov.my"><img className="img-fluid" src="/asset/footer/jdn.jpg" alt="JDN Logo" /></a></li>
                             <li><a href="https://www.malaysia.gov.my/portal/index"><img className="img-fluid" src="/asset/footer/mygov2.png" alt="MyGov Logo" /></a></li>
                             <li><a href="#"><img className="img-fluid" src="/asset/footer/ksn2.png" alt="KSN Logo" /></a></li>
                             <li><a href="#"><img className="img-fluid" src="/asset/footer/msc-white.png" alt="MSC Logo" /></a></li>
