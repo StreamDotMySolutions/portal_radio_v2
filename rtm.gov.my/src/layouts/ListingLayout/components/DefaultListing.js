@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const DefaultListing = ({ items, page }) => {
+const DefaultListing = ({ title,items, page }) => {
     // Calculate the starting index of the current page
     const startIndex = page === 1 ? 1 : (page - 1) * 10 + 1;
 
