@@ -1,7 +1,9 @@
 import React from 'react';
+
 import Menu1 from '../components/Menu1';
 import Menu2 from '../components/Menu2';
 import Menu3 from '../components/Menu3';
+
 import BannerCarousel from './components/BannerCarousel';
 import BannerProgramme from './components/BannerProgramme';
 import BannerProgramme2 from './components/BannerProgramme2';
@@ -37,13 +39,13 @@ const HomeLayout = () => {
                 <BannerProgramme2 />
             </div>
 
-            <div className="d-none d-md-block" id="video-desktop">
+            {/* <div className="d-none d-md-block" id="video-desktop">
                 <DesktopVideo />
             </div>
 
             <div className="d-md-none" id="video-mobile">
                <MobileVideo />
-            </div>
+            </div> */}
 
             <div className="d-none d-md-block" id="footer-desktop">
                 <Footer />
