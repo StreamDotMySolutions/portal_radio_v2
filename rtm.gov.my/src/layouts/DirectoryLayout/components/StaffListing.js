@@ -1,7 +1,7 @@
 
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Badge, Image } from 'react-bootstrap';
+//import { Badge, Image } from 'react-bootstrap';
 
 
 const StaffListing = ({items}) => {
@@ -13,10 +13,10 @@ const StaffListing = ({items}) => {
             return items.map((item, index) => (
     
                 <tr key={index}>
-                    <td id="linklistp" style={{width:'50px'}} className='text-light text-center'><Badge className="bg-dark text-light">{item.number}</Badge></td>
+                    <td id="linklistp" style={{width:'50px'}} className='text-light text-center'><span class="badge badge-dark text-light">{item.number}</span></td>
                     <td id="linklistp" style={{width:'140px'}}>
                         <Link to={`/directories/${item.id}/show`}>
-                            <Image 
+                            <img 
                                 id="gambardirektorilist" 
                                 src={`https://www.rtm.gov.my${item.photo}`} 
                                 style={{ width: '140px' }} 

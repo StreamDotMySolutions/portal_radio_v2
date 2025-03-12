@@ -36,9 +36,9 @@ function LoadFooter({ id }) {
       {loading ? (
         // Render Spinner while loading
         <div className="text-center">
-          <Spinner animation="border" role="status">
+          {/* <Spinner animation="border" role="status">
             <span className="sr-only">Loading...</span>
-          </Spinner>
+          </Spinner> */}
         </div>
       ) : (
         // Render the footer once data is loaded

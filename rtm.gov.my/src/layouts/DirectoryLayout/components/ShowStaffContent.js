@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
-import { Image, Spinner } from 'react-bootstrap';
+//import { Image, Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './style.css'
 import StaffListing from './StaffListing';
@@ -82,7 +82,7 @@ const ShowStaffContent = () => {
 
                         {loading ? (
                             <li>
-                                <Spinner animation="grow" size="sm" />
+                                {/* <Spinner animation="grow" size="sm" /> */}
                             </li> // Show spinner while loading
                         ) : (
                             <li>{title && /^[^_]+__/.test(title) ? title.split('__').slice(1).join('__') : (title ? title : 'Direktori')}</li>
@@ -100,7 +100,7 @@ const ShowStaffContent = () => {
                                 <div className="container" id="containerdirektori">
                                     <div className="row">
                                         <div className="col-lg-4 justify-content-center">
-                                            <Image 
+                                            <img 
                                                 id="gambardirektoripegawai" 
                                                 className="img-fluid rounded"
                                                 src={`https://www.rtm.gov.my${staff?.photo}`} 

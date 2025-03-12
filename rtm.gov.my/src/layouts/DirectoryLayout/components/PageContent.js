@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
-import { Spinner } from 'react-bootstrap';
+// import { Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFolder, faFolderOpen } from '@fortawesome/free-solid-svg-icons';
 import './style.css'
@@ -206,7 +206,7 @@ const PageContent = ({id}) => {
 
                         {loading ? (
                             <li>
-                                <Spinner animation="grow" size="sm" />
+                                {/* <Spinner animation="grow" size="sm" /> */}
                             </li> // Show spinner while loading
                         ) : (
                             <li>{title && /^[^_]+__/.test(title) ? title.split('__').slice(1).join('__') : (title ? title : 'Direktori')}</li>                            
