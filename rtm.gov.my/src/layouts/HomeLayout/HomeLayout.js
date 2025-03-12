@@ -29,8 +29,8 @@ const HomeLayout = () => {
             <div className="d-md-none" id="menu-mobile">
                 <MenuMobile />
             </div>
-       
-            <BannerCarousel />
+{/*        
+            <BannerCarousel /> */}
 
             <ImageCarousel />
               
