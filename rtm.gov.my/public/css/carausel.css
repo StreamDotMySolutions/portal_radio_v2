@@ -5,7 +5,11 @@
   height: 100%;
 }
 
-.carousel-item{
+.carousel-inner{
+  overflow:visible !important;
+}
+
+/* .carousel-item{
   float:none; 
   transition: 0s !important;
 }
@@ -14,4 +18,4 @@
   -webkit-transition: 0s !important;
   -o-transition: 0s !important;
   transition: 0s !important;
-}
+} */
