@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import Spinner from 'react-bootstrap/Spinner'; // Import Spinner component
+//import Spinner from 'react-bootstrap/Spinner'; // Import Spinner component
 
 function LoadFooter({ id }) {
   const url = process.env.REACT_APP_API_URL;

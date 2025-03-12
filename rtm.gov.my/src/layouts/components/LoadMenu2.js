@@ -1,11 +1,13 @@
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+// import Container from 'react-bootstrap/Container';
+// import Nav from 'react-bootstrap/Nav';
+// import Navbar from 'react-bootstrap/Navbar';
+// import NavDropdown from 'react-bootstrap/NavDropdown';
+
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import Spinner from 'react-bootstrap/Spinner'; // Import Spinner component
+
+// import Spinner from 'react-bootstrap/Spinner'; // Import Spinner component
 
 function LoadMenu2({id}) {
 

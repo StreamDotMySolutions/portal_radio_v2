@@ -1,11 +1,13 @@
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+// import Container from 'react-bootstrap/Container';
+// import Nav from 'react-bootstrap/Nav';
+// import Navbar from 'react-bootstrap/Navbar';
+// import NavDropdown from 'react-bootstrap/NavDropdown';
+
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import Spinner from 'react-bootstrap/Spinner'; // Import Spinner component
+
+//import Spinner from 'react-bootstrap/Spinner'; // Import Spinner component
 
 function LoadMenu3({id}) {
 
@@ -147,7 +149,8 @@ function LoadMenu3({id}) {
         <li className="nav-item dropdown">
           <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">
             {loading ? ( // Render spinner if loading is true
-              <Spinner animation="grow"  size="sm"  />
+              // <Spinner animation="grow"  size="sm"  />
+              <></>
             ) : (
               title // Render title if not loading
             )}
