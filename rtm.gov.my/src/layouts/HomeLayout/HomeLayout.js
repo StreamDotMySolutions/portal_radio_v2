@@ -2,14 +2,16 @@ import React from 'react';
 
 import Menu1 from '../components/Menu1';
 import Menu2 from '../components/Menu2';
-import Menu3 from '../components/Menu3';
+
+import MenuMobile from '../components/Menu3';
 
 import BannerCarousel from './components/BannerCarousel';
-import BannerProgramme from './components/BannerProgramme';
-import BannerProgramme2 from './components/BannerProgramme2';
 
-import Footer from '../components/Footer';
-import Footer2 from '../components/Footer2';
+import BannerProgrammeDesktop from './components/BannerProgramme';
+import BannerProgrammeMobile from './components/BannerProgramme2';
+
+import FooterDesktop from '../components/Footer';
+import FooterMobile from '../components/Footer2';
 
 import DesktopVideo from './components/DesktopVideo';
 import MobileVideo from './components/MobileVideo';
@@ -25,7 +27,7 @@ const HomeLayout = () => {
             </div>
             
             <div className="d-md-none" id="menu-mobile">
-                <Menu3 />
+                <MenuMobile />
             </div>
        
             <BannerCarousel />
@@ -48,11 +50,11 @@ const HomeLayout = () => {
             </div>
 
             <div className="d-none d-md-block" id="footer-desktop">
-                <Footer />
+                <FooterDesktop />
             </div>
             
             <div className="d-md-none" id="footer-mobile">
-                <Footer2 />
+                <FooterMobile />
             </div>
         </>
     );
