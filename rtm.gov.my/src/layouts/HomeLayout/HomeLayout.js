@@ -12,7 +12,7 @@ import Footer from '../components/Footer';
 import Footer2 from '../components/Footer2';
 
 import DesktopVideo from './components/DesktopVideo';
-import MobileVideo from './components/Youtube3';
+import MobileVideo from './components/MobileVideo';
 
 
 const HomeLayout = () => {
@@ -39,13 +39,13 @@ const HomeLayout = () => {
                 <BannerProgramme2 />
             </div>
 
-            {/* <div className="d-none d-md-block" id="video-desktop">
+            <div className="d-none d-md-block" id="video-desktop">
                 <DesktopVideo />
             </div>
 
             <div className="d-md-none" id="video-mobile">
                <MobileVideo />
-            </div> */}
+            </div>
 
             <div className="d-none d-md-block" id="footer-desktop">
                 <Footer />

@@ -4,7 +4,7 @@ import VideoBox from './VideoBox';
 import axios from 'axios';
 import HlsPlayer from '../../components/HlsPlayer';
 
-const Youtube3 = () => {
+const MobileVideo = () => {
     const [showModal, setShowModal] = useState(false);
     const [videoUrl, setVideoUrl] = useState('');
     const [items, setItems] = useState([]);
@@ -64,4 +64,4 @@ const Youtube3 = () => {
     );
 };
 
-export default Youtube3;
+export default MobileVideo;
