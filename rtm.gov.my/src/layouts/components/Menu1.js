@@ -55,38 +55,73 @@ const Menu1 = () => {
         ));
     };
     
+    // return (
+    //     <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: "#171717" }} id="navbardiatas">
+    //         <Link to="/" className="navbar-brand">
+    //             <img 
+    //                 className="img-responsive" 
+    //                 style={{ marginLeft: "20px" }} 
+    //                 src="/img/logortmbaharu2.png" 
+    //                 alt="Logo RTM"
+    //             />
+    //         </Link>
+
+    //         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbaratas" aria-controls="navbaratas" aria-expanded="false" aria-label="Toggle navigation">
+    //             <span className="navbar-toggler-icon"></span>
+    //         </button>
+
+    //         <div className="collapse navbar-collapse" id="navbaratas">
+
+    //             <ul className="navbar-nav ml-auto">
+    //                 {isLoading === false } {menuItems()}
+    //             </ul>
+                
+    //             <ul className="navbar-nav ml-auto">
+    //                 <li><a style={{ color: "white" }} href="https://www.tiktok.com/@radiotelevisyenmalaysia?" className="nav-link font-weight-bold text-uppercase"><img src="/img/tiktok-xxl.png" className="img-fluid" alt="TikTok Logo" /></a></li>
+    //                 <li><a style={{ color: "white" }} href="https://x.com/rtm_malaysia?lang=en" className="nav-link font-weight-bold text-uppercase"><img src="/img/x.png" className="img-fluid" alt="X Logo" /></a></li>
+    //                 <li><a style={{ color: "white" }} href="https://www.facebook.com/RadioTelevisyenMalaysia/?locale=ms_MY" className="nav-link font-weight-bold text-uppercase"><img src="/img/facebook.svg" className="img-fluid" alt="Facebook Logo" /></a></li>
+    //                 <li><a style={{ color: "white" }} href="https://www.instagram.com/rtm_malaysia/" className="nav-link font-weight-bold text-uppercase"><img src="/img/instagram.svg" className="img-fluid" alt="Instagram Logo" /></a></li>
+    //                 <li><a style={{ color: "white" }} href="https://www.youtube.com/channel/UCF4KdUqyxJ5Cb0NTGhZXt9g" className="nav-link font-weight-bold text-uppercase"><img src="/img/youtube.png" className="img-fluid" alt="YouTube Logo" /></a></li>
+    //             </ul>
+                
+    //         </div>
+    //     </nav>
+    // );
     return (
         <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: "#171717" }} id="navbardiatas">
-            <Link to="/" className="navbar-brand">
-                <img 
-                    className="img-responsive" 
-                    style={{ marginLeft: "20px" }} 
-                    src="/img/logortmbaharu2.png" 
-                    alt="Logo RTM"
-                />
-            </Link>
-
-            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbaratas" aria-controls="navbaratas" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"></span>
-            </button>
-
-            <div className="collapse navbar-collapse" id="navbaratas">
-
-                <ul className="navbar-nav ml-auto">
-                    {isLoading === false } {menuItems()}
-                </ul>
-                
-                <ul className="navbar-nav ml-auto">
-                    <li><a style={{ color: "white" }} href="https://www.tiktok.com/@radiotelevisyenmalaysia?" className="nav-link font-weight-bold text-uppercase"><img src="/img/tiktok-xxl.png" className="img-fluid" alt="TikTok Logo" /></a></li>
-                    <li><a style={{ color: "white" }} href="https://x.com/rtm_malaysia?lang=en" className="nav-link font-weight-bold text-uppercase"><img src="/img/x.png" className="img-fluid" alt="X Logo" /></a></li>
-                    <li><a style={{ color: "white" }} href="https://www.facebook.com/RadioTelevisyenMalaysia/?locale=ms_MY" className="nav-link font-weight-bold text-uppercase"><img src="/img/facebook.svg" className="img-fluid" alt="Facebook Logo" /></a></li>
-                    <li><a style={{ color: "white" }} href="https://www.instagram.com/rtm_malaysia/" className="nav-link font-weight-bold text-uppercase"><img src="/img/instagram.svg" className="img-fluid" alt="Instagram Logo" /></a></li>
-                    <li><a style={{ color: "white" }} href="https://www.youtube.com/channel/UCF4KdUqyxJ5Cb0NTGhZXt9g" className="nav-link font-weight-bold text-uppercase"><img src="/img/youtube.png" className="img-fluid" alt="YouTube Logo" /></a></li>
-                </ul>
-                
+            <div className="container text-center">
+                <Link to="/" className="navbar-brand mx-auto">
+                    <img 
+                        className="img-responsive" 
+                        style={{ marginLeft: "20px" }} 
+                        src="/img/logortmbaharu2.png" 
+                        alt="Logo RTM"
+                    />
+                </Link>
+    
+                <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbaratas" aria-controls="navbaratas" aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon"></span>
+                </button>
+    
+                <div className="collapse navbar-collapse justify-content-center" id="navbaratas">
+                    <ul className="navbar-nav">
+                        {isLoading === false && menuItems()}
+                    </ul>
+                </div>
+    
+                <div className="d-flex justify-content-center mt-2">
+                    <ul className="navbar-nav">
+                        <li><a style={{ color: "white" }} href="https://www.tiktok.com/@radiotelevisyenmalaysia?" className="nav-link font-weight-bold text-uppercase"><img src="/img/tiktok-xxl.png" className="img-fluid" alt="TikTok Logo" /></a></li>
+                        <li><a style={{ color: "white" }} href="https://x.com/rtm_malaysia?lang=en" className="nav-link font-weight-bold text-uppercase"><img src="/img/x.png" className="img-fluid" alt="X Logo" /></a></li>
+                        <li><a style={{ color: "white" }} href="https://www.facebook.com/RadioTelevisyenMalaysia/?locale=ms_MY" className="nav-link font-weight-bold text-uppercase"><img src="/img/facebook.svg" className="img-fluid" alt="Facebook Logo" /></a></li>
+                        <li><a style={{ color: "white" }} href="https://www.instagram.com/rtm_malaysia/" className="nav-link font-weight-bold text-uppercase"><img src="/img/instagram.svg" className="img-fluid" alt="Instagram Logo" /></a></li>
+                        <li><a style={{ color: "white" }} href="https://www.youtube.com/channel/UCF4KdUqyxJ5Cb0NTGhZXt9g" className="nav-link font-weight-bold text-uppercase"><img src="/img/youtube.png" className="img-fluid" alt="YouTube Logo" /></a></li>
+                    </ul>
+                </div>
             </div>
         </nav>
     );
+    
 };
 
 export default Menu1;
