@@ -5,17 +5,10 @@
   height: 100%;
 }
 
-.carousel-inner{
-  overflow:visible !important;
+.carousel-item {
+	transition: -webkit-transform 0.5s ease;
+	transition: transform 0.5s ease;
+	transition: transform 0.5s ease, -webkit-transform 0.5s ease;
+	-webkit-backface-visibility: visible;
+	        backface-visibility: visible;
 }
-
-/* .carousel-item{
-  float:none; 
-  transition: 0s !important;
-}
-
-.carousel-inner>.item {
-  -webkit-transition: 0s !important;
-  -o-transition: 0s !important;
-  transition: 0s !important;
-} */
