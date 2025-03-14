@@ -14,7 +14,7 @@ import FooterMobile from '../components/Footer2';
 
 import DesktopVideo from './components/DesktopVideo';
 import MobileVideo from './components/MobileVideo';
-import ImageCarousel from './components/ImageCarausel';
+import SimpleCarousel from './components/SimpleCarausel';
 
 
 const HomeLayout = () => {
@@ -32,7 +32,7 @@ const HomeLayout = () => {
        
             <BannerCarousel />
 
-            {/* <ImageCarousel /> */}
+            {/* <SimpleCarousel /> */}
               
 
             <div className="d-none d-md-block" id="banner-desktop">
