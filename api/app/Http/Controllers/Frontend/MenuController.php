@@ -48,7 +48,8 @@ class MenuController extends Controller
         $parent = Article::where('title', 'MENU-2')->first();
      
         $items = Article::query()
-                        ->with(['articleSetting','descendants.articleSetting'])
+                        // ->withDepth()->having('depth', '=', 1)
+                        ->with(['children','descendants', 'articleSetting' ])
                         ->where('parent_id', $parent->id)
                         ->defaultOrder()
                         ->get();

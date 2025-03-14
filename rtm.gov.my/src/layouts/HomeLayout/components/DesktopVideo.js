@@ -19,7 +19,7 @@ const DesktopVideo = () => {
     useEffect(() => {
         axios(`${url}/home-videos`)
             .then((response) => {
-                console.log(response)
+                //console.log(response)
                 setItems(response.data.items);
             });
     }, []);

@@ -15,6 +15,7 @@ import FooterMobile from '../components/Footer2';
 import DesktopVideo from './components/DesktopVideo';
 import MobileVideo from './components/MobileVideo';
 import SimpleCarousel from './components/SimpleCarausel';
+import MenuBar from '../components/MenuBar';
 
 
 const HomeLayout = () => {
@@ -24,6 +25,7 @@ const HomeLayout = () => {
             <div className="d-none d-md-block" id="menu-desktop">
                 <Menu1 />
                 <Menu2 />
+                {/* <MenuBar /> */}
             </div>
             
             <div className="d-md-none" id="menu-mobile">

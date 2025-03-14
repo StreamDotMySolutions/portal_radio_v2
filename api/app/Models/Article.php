@@ -43,4 +43,10 @@ class Article extends Model
     {
         return $this->hasMany(ArticleAssets::class);
     }
+
+    // Define relationship to fetch children
+    public function children()
+    {
+        return $this->hasMany(Article::class, 'parent_id')->with('children');
+    }
 }
