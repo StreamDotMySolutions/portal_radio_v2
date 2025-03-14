@@ -15,6 +15,7 @@ const WithPosterListing = ({title,items}) => {
         return (
             <div className="row">
                 <h2>{title}</h2>
+                <br />
                 {items.map((item, index) => {
                     const redirectUrl = item.article_setting?.redirect_url;
                     const linkTo = redirectUrl ? redirectUrl : `/listings/${item.id}`;

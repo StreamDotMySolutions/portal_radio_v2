@@ -28,6 +28,7 @@ const WithoutPosterListing = ({title,items}) => {
     return (
         <div>
           <h2>{title}</h2>
+          <br />
            <table class="table table-bordered " id="table-id">
                 <thead>
                 <tr>
