@@ -107,12 +107,12 @@ const PageContent = () => {
     switch (settings?.listing_type) {
         case 'poster':
             layout = <WithPosterListing title={title} items={items} />;
-            break;
+        break;
 
 
         case 'without_poster':
             layout = <WithoutPosterListing title={title} items={items} />;
-            break;
+        break;
 
         case 'single_article':
             layout = <SingleArticle id={id} />;
@@ -121,7 +121,7 @@ const PageContent = () => {
         case 'default':
         default:
             layout = <DefaultListing title={title} items={items} page={currentPage}/>;
-            break;
+        break;
     }
 
     if(settings?.active == 1 ){

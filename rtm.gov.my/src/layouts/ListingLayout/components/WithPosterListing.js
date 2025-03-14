@@ -13,9 +13,11 @@ const WithPosterListing = ({title,items}) => {
     
     const contentItems = () => {
         return (
+            <>
+            <h2>{title}</h2>
             <div className="row">
-                <h2>{title}</h2>
-                <br />
+                
+                
                 {items.map((item, index) => {
                     const redirectUrl = item.article_setting?.redirect_url;
                     const linkTo = redirectUrl ? redirectUrl : `/listings/${item.id}`;
@@ -57,6 +59,7 @@ const WithPosterListing = ({title,items}) => {
                     );
                 })}
             </div>
+            </>
         );
     };
     
