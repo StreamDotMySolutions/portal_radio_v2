@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import VideoBox from './VideoBox';
 import axios from 'axios';
 import VideoModal from './VideoModal';
 
