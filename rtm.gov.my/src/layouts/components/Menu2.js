@@ -21,70 +21,70 @@ const Menu2 = () => {
     }, []);
 
 
-    // const menuItems = () => {
-    //     return items.map((item, index) => {
-    //         if(item.article_setting && item.article_setting?.active == 1) {
-    //             if( item.article_setting?.show_children == 1) {
-    //                 if (item.descendants && item.descendants.length > 0) {
-    //                     return (
-    //                         <li key={index} className="nav-item dropdown">
-    //                             <a className="nav-link dropdown-toggle" href="#" id={`navbarDropdown${item.title}`} role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    //                                 {item.title}
-    //                             </a>
-    //                             <div className="dropdown-menu" aria-labelledby={`navbarDropdown${item.title}`} style={{ marginTop: "-10px" }}>
-    //                                 {item.descendants.map((descendant, idx) => (
-    //                                     <>
-    //                                     {descendant.article_setting && descendant.article_setting.redirect_url ? (
-    //                                         <NavLink key={idx} to={descendant.article_setting.redirect_url} className="nav-link">
-    //                                             {descendant.title} 
-    //                                         </NavLink>
-    //                                         ) : (
-    //                                         <NavLink key={idx}  to={`/listings/${descendant.id}`} className="nav-link">
-    //                                             {descendant.title} 
-    //                                         </NavLink>
-    //                                     )}
-    //                                     </>
-    //                                 ))}
-    //                             </div>
-    //                         </li>
-    //                     );
-    //                 } else {
-    //                     return (
-    //                         <li key={index} className="nav-item">
+    const menuItems = () => {
+        return items.map((item, index) => {
+            if(item.article_setting && item.article_setting?.active == 1) {
+                if( item.article_setting?.show_children == 1) {
+                    if (item.children && item.children.length > 0) {
+                        return (
+                            <li key={index} className="nav-item dropdown">
+                                <a className="nav-link dropdown-toggle" href="#" id={`navbarDropdown${item.title}`} role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {item.title}
+                                </a>
+                                <div className="dropdown-menu" aria-labelledby={`navbarDropdown${item.title}`} style={{ marginTop: "-10px" }}>
+                                    {item.children.map((child, idx) => (
+                                        <>
+                                        {child.article_setting && child.article_setting.redirect_url ? (
+                                            <NavLink key={idx} to={child.article_setting.redirect_url} className="nav-link">
+                                                {child.title} 
+                                            </NavLink>
+                                            ) : (
+                                            <NavLink key={idx}  to={`/listings/${child.id}`} className="nav-link">
+                                                {child.title} 
+                                            </NavLink>
+                                        )}
+                                        </>
+                                    ))}
+                                </div>
+                            </li>
+                        );
+                    } else {
+                        return (
+                            <li key={index} className="nav-item">
                         
-    //                             {item.article_setting && item.article_setting.redirect_url ? (
-    //                                 <NavLink to={item.article_setting.redirect_url} className="nav-link">
-    //                                     {item.title}
-    //                                 </NavLink>
-    //                                 ) : (
-    //                                 <NavLink to={`/listings/${item.id}`} className="nav-link">
-    //                                     {item.title}
-    //                                 </NavLink>
-    //                             )}
+                                {item.article_setting && item.article_setting.redirect_url ? (
+                                    <NavLink to={item.article_setting.redirect_url} className="nav-link">
+                                        {item.title}
+                                    </NavLink>
+                                    ) : (
+                                    <NavLink to={`/listings/${item.id}`} className="nav-link">
+                                        {item.title}
+                                    </NavLink>
+                                )}
         
-    //                         </li>
-    //                     );
-    //                 }
-    //             } else {
-    //                 return (
-    //                     <li key={index} className="nav-item">
+                            </li>
+                        );
+                    }
+                } else {
+                    return (
+                        <li key={index} className="nav-item">
                     
-    //                         {item.article_setting && item.article_setting.redirect_url ? (
-    //                             <NavLink to={item.article_setting.redirect_url} className="nav-link">
-    //                                 {item.title}
-    //                             </NavLink>
-    //                             ) : (
-    //                             <NavLink to={`/listings/${item.id}`} className="nav-link">
-    //                                 {item.title}
-    //                             </NavLink>
-    //                         )}
+                            {item.article_setting && item.article_setting.redirect_url ? (
+                                <NavLink to={item.article_setting.redirect_url} className="nav-link">
+                                    {item.title}
+                                </NavLink>
+                                ) : (
+                                <NavLink to={`/listings/${item.id}`} className="nav-link">
+                                    {item.title}
+                                </NavLink>
+                            )}
 
-    //                     </li>
-    //                 );
-    //             }
-    //         }
-    //     });
-    // };
+                        </li>
+                    );
+                }
+            }
+        });
+    };
     
     // const menuItems = () => {
     //     return items
@@ -128,43 +128,7 @@ const Menu2 = () => {
     //         });
     // };
     
-    const menuItems = () => {
-        return items
-            .filter(item => item.article_setting?.active === 1) // Only active items
-            .filter(item => item.children && item.children.length > 0) // Exclude items with no children
-            .map((item, index) => {
-                
-                const renderNavLink = (id, title, redirectUrl) => (
-                    <NavLink to={redirectUrl || `/listings/${id}`} className="nav-link">
-                        {title} 
-                    </NavLink>
-                );
-    
-                if (item.children.length > 0) {
-                    return (
-                        <li key={index} className="nav-item dropdown">
-                            <a
-                                className="nav-link dropdown-toggle"
-                                href="#"
-                                id={`navbarDropdown${item.title}`}
-                                role="button"
-                                data-toggle="dropdown"
-                            >
-                                {item.title} 
-                            </a>
-                            <div className="dropdown-menu" aria-labelledby={`navbarDropdown${item.title}`} style={{ marginTop: "-10px" }}>
-                                {item.children.map((child, idx) =>
-                                    renderNavLink(child.id, child.title, child.article_setting?.redirect_url)
-                                )}
-                            </div>
-                        </li>
-                    );
-                }
-    
-                return null; // Don't render if no children
-            });
-    };
-    
+
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light shadow-sm" style={{ backgroundColor: "white" , color: "black"}} id="navbardibawah">
