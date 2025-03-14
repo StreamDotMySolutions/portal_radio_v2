@@ -1,2 +1,2 @@
 BOILERPLATE
-
+- fixed whitespace carousel
