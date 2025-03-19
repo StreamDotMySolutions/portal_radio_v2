@@ -89,7 +89,15 @@ function LoadMenu1({id}) {
                   }
                   className="dropdown-item text-justify"
                 >
-                  <span dangerouslySetInnerHTML={{ __html: truncateTitleWithBreaks(article.title, 3) }} />
+                  {/* <span dangerouslySetInnerHTML={{ __html: truncateTitleWithBreaks(article.title, 3) }} /> */}
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: article.article_setting.redirect_url
+                      ? `${truncateTitleWithBreaks(article.title, 3)} <span class="text-muted">[ external link ]</span>`
+                      : truncateTitleWithBreaks(article.title, 3),
+                    }}
+                />
+                
                 </NavLink>
               )}
             </li>
@@ -113,7 +121,7 @@ function LoadMenu1({id}) {
           {settings.redirect_url ?
             <NavLink className="nav-link" to={`${settings.redirect_url}`}>{title} {' '}<i class="fa-solid fa-up-right-from-square"></i></NavLink>
           :
-            <NavLink className="nav-link" to={`/contents/${id}`}>{title}</NavLink>
+            <NavLink className="nav-link" to={`/listings/${id}`}>{title}</NavLink>
           }
         </li>
       </>
