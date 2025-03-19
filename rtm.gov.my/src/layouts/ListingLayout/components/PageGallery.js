@@ -50,7 +50,7 @@ const ShowGallery = ({ article_data_id }) => {
       <div className="row mt-3 d-flex justify-content-center">
         {items?.map((item, index) => (
           <div key={index} className="col-md-4 mb-4">
-            {item.filename && /\.(jpg|gif|png)$/.test(item.filename) ? (
+            {item.filename && /\.(jpg|gif|png|jpeg)$/.test(item.filename) ? (
               <figure>
                 <img
                   src={`${path}/${item.filename}`}
