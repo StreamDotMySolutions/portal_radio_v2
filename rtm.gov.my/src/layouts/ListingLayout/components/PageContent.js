@@ -6,6 +6,7 @@ import WithPosterListing from './WithPosterListing';
 import WithoutPosterListing from './WithoutPosterListing';
 import DefaultListing from './DefaultListing';
 import SingleArticle from '../SingleArticle';
+import { Helmet } from "react-helmet-async";
 import './style.css'
 
 const PageContent = () => {
@@ -14,6 +15,7 @@ const PageContent = () => {
     const [settings, setSettings] = useState([]);
     const [ancestors, setAncestors] = useState([]);
     const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
     const [loading, setLoading] = useState(true);
     const url = process.env.REACT_APP_API_URL;
     const serverUrl = process.env.REACT_APP_SERVER_URL;
@@ -126,62 +128,70 @@ const PageContent = () => {
 
     if(settings?.active == 1 ){
         return (
-            <div className="container-fluid">
-                {/* {settings?.listing_type} */}
-                <div className="row">
-                    <div className="col-md-1"></div>
-                    <div className="col-md-10">
-                        <ul className="breadcrumb" style={{ "marginTop": "40px" }}>
-                            <li><Link to="/">Utama</Link></li>
-                            {loading ? (
-                                <li>
-                                    <Spinner animation="grow" size="sm" />
-                                </li>
-                            ) : (
-                                <>  
-                                    {breadcrumbItems()}
-                                </>
-                              
-                            )}
-                               <li>{title.toUpperCase()}</li>
-                        </ul>
-    
-                        <div className="" style={{ "minHeight": "300px" }}>
-                            {loading ? (
-                                <span>loading ...</span>
-                            ) : (
-                                <>
-                                    {layout}
-                                </>
-                            )}
-                        </div>
-    
-                        <div className="container-fluid" style={{ "marginTop": "2rem" }}>
+            <>
+            <Helmet>
+                <title>RTM : {title}</title>
+                <meta name="description" content={description} />
+            </Helmet>
+                <div className="container-fluid">
+                    {/* {settings?.listing_type} */}
+                    <div className="row">
+                        <div className="col-md-1"></div>
+                        <div className="col-md-10">
+                            <ul className="breadcrumb" style={{ "marginTop": "40px" }}>
+                                <li><Link to="/">Utama</Link></li>
+                                {loading ? (
+                                    <li>
+                                        <Spinner animation="grow" size="sm" />
+                                    </li>
+                                ) : (
+                                    <>  
+                                        {breadcrumbItems()}
+                                    </>
+                                
+                                )}
+                                <li>{title.toUpperCase()}</li>
+                            </ul>
+        
+                            <div className="" style={{ "minHeight": "300px" }}>
+                                {loading ? (
+                                    <span>loading ...</span>
+                                ) : (
+                                    <>
+                                        {layout}
+                                    </>
+                                )}
+                            </div>
+        
+                            <div className="container-fluid" style={{ "marginTop": "2rem" }}>
 
 
+                            </div>
+                        
+                            {/* listing_type :  null */}
+                            { settings?.listing_type !== 'single_article' && settings?.listing_type !== null &&
+                            <div className="pagination-container float-right" style={{ marginBottom: '6rem' }}>
+                                <nav>
+                                    <ul className="pagination">
+                                        {paginatorItems()}
+                                    </ul>
+                                </nav>
+                            </div>
+                            }
+        
                         </div>
-                      
-                        {/* listing_type :  null */}
-                        { settings?.listing_type !== 'single_article' && settings?.listing_type !== null &&
-                        <div className="pagination-container float-right" style={{ marginBottom: '6rem' }}>
-                            <nav>
-                                <ul className="pagination">
-                                    {paginatorItems()}
-                                </ul>
-                            </nav>
-                        </div>
-                        }
-    
+                        <div className="col-md-1"></div>
                     </div>
-                    <div className="col-md-1"></div>
                 </div>
-            </div>
+            </>
         );
     }
 
     return (
+        <>
+
         <div className='container-fluid text-center text-danger'>
-            
+           
             <ul className="breadcrumb" style={{ "marginTop": "40px" }}>
                     <li><Link to="/">Utama</Link></li>
                     {loading ? (
@@ -197,6 +207,7 @@ const PageContent = () => {
                     <h3>loading...</h3>
                 </div>
         </div>
+        </>
     )
 
  

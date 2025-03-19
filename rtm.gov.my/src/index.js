@@ -22,11 +22,15 @@ import ShowStaffLayout from "./layouts/DirectoryLayout/ShowStaff";
 import SearchResult from "./layouts/DirectoryLayout/components/SearchResult";
 import SearchResultLayout from "./layouts/DirectoryLayout/SearchResultLayout";
 
+/** Helmet Async */
+import { HelmetProvider } from "react-helmet-async";
+
 library.add(fas)
 
 export default function App() {
 
   return (
+    <HelmetProvider>
       <BrowserRouter basename="/">
         <Routes>            
           <Route path="*" element={<Error404 />} />
@@ -40,6 +44,7 @@ export default function App() {
           <Route path="/directories/search/:query" element={<SearchResultLayout /> } />
         </Routes>
       </BrowserRouter>
+    </HelmetProvider>
   );
 }
 const root = ReactDOM.createRoot(document.getElementById('root'));
