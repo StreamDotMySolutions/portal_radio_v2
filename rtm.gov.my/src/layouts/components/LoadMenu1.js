@@ -111,7 +111,7 @@ function LoadMenu1({id}) {
         
         <li className='nav-item'>
           {settings.redirect_url ?
-            <NavLink className="nav-link" to={`${settings.redirect_url}`}>{title}</NavLink>
+            <NavLink className="nav-link" to={`${settings.redirect_url}`}>{title} {' '}<i class="fa-solid fa-up-right-from-square"></i></NavLink>
           :
             <NavLink className="nav-link" to={`/contents/${id}`}>{title}</NavLink>
           }
