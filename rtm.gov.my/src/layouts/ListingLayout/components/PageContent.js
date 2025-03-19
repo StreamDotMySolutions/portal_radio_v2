@@ -47,7 +47,7 @@ const PageContent = () => {
             apiUrl = paginate;
         }
     
-        console.log('Fetching data from:', apiUrl);
+        //console.log('Fetching data from:', apiUrl);
     
         axios.get(apiUrl)
             .then(response => {

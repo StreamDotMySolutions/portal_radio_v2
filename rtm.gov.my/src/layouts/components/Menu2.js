@@ -11,7 +11,7 @@ const Menu2 = () => {
     useEffect(() => {
         axios(`${url}/home-menu-2`)
             .then((response) => {
-                console.log(response)
+                //console.log(response)
                 setItems(response.data.items);
             }).catch( error => {
                 console.warn(error)
