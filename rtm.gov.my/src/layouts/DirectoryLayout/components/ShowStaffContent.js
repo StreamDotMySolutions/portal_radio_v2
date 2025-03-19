@@ -71,7 +71,7 @@ const ShowStaffContent = () => {
     return (
         <>
             <Helmet>
-                <title>Direktori RTM : {title}</title>
+                <title>Direktori RTM : {title && /^[^_]+__/.test(title) ? title.split('__').slice(1).join('__') : (title ? title : 'Direktori')}</title>
             </Helmet>
             <div className="container-fluid">
                 <div className="row">
