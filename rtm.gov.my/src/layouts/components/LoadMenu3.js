@@ -117,7 +117,14 @@ function LoadMenu3({id}) {
                   }
                   className="dropdown-item text-justify"
                 >
-                  <span dangerouslySetInnerHTML={{ __html: truncateTitleWithBreaks(article.title, 3) }} />
+                  {/* <span dangerouslySetInnerHTML={{ __html: truncateTitleWithBreaks(article.title, 3) }} /> */}
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: article.article_setting.redirect_url
+                      ? `${truncateTitleWithBreaks(article.title, 3)} &nbsp;&nbsp;<i class="text-muted fa-solid fa-up-right-from-square"></i>`
+                      : truncateTitleWithBreaks(article.title, 3),
+                    }}
+                  />
                 </NavLink>
               )}
             </li>
