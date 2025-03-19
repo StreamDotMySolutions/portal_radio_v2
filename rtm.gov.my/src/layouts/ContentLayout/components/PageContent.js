@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import { Spinner } from 'react-bootstrap';
+import { Helmet } from "react-helmet-async";
 import './style.css'
 
 
@@ -18,7 +19,7 @@ const PageContent = ({id}) => {
     useEffect(() => {
         axios(`${url}/show/${id}`)
             .then(response => {
-                console.log(response)
+                //console.log(response)
                 setTitle(response.data.title);
                 setItems(response.data.items);
                 setSettings(response.data.settings);
@@ -96,48 +97,52 @@ const PageContent = ({id}) => {
     
 
     return (
-        
-        <div className="container-fluid">
+        <>
+            <Helmet>
+                <title>Direktori RTM : {title}</title>
+            </Helmet>
+            <div className="container-fluid">
+                
+                <div className="row">
+                    <div className="col-md-1"></div>
+
+                    <div className="col-md-10">
+
+                        <ul className="breadcrumb" style={{ "marginTop": "40px" }}>
+                            <li><Link to="/">Utama</Link></li>
+                            {breadcrumbs()}
+                            {loading ? (
+                                <li>
+                                    <Spinner animation="grow" size="sm" />
+                                </li> // Show spinner while loading
+                            ) : (
+                                <li>{title}</li> // Show title when loaded
+                            )}
+                        </ul>
+
             
-            <div className="row">
-                <div className="col-md-1"></div>
 
-                <div className="col-md-10">
+                        <div className="container-fluid" style={{ marginTop: '4rem' }}>
+                            {shouldRenderContent() ? (
+                                <>
+                                    {/* Render contentItems if shouldRenderContent returns true */}
+                                    {contentItems()}
+                                </>
+                            ) : (
+                                // Render nothing if shouldRenderContent returns false
+                                <></>
+                            )}
+                        </div>
 
-                    <ul className="breadcrumb" style={{ "marginTop": "40px" }}>
-                        <li><Link to="/">Utama</Link></li>
-                        {breadcrumbs()}
-                        {loading ? (
-                            <li>
-                                <Spinner animation="grow" size="sm" />
-                            </li> // Show spinner while loading
-                        ) : (
-                            <li>{title}</li> // Show title when loaded
-                        )}
-                    </ul>
-
-        
-
-                    <div className="container-fluid" style={{ marginTop: '4rem' }}>
-                        {shouldRenderContent() ? (
-                            <>
-                                {/* Render contentItems if shouldRenderContent returns true */}
-                                {contentItems()}
-                            </>
-                        ) : (
-                            // Render nothing if shouldRenderContent returns false
-                            <></>
-                        )}
+                        <div className="container-fluid" style={{ "marginTop": "2rem" }}>
+                        </div>
                     </div>
 
-                    <div className="container-fluid" style={{ "marginTop": "2rem" }}>
-                    </div>
+                    <div className="col-md-1"></div>
+
                 </div>
-
-                <div className="col-md-1"></div>
-
             </div>
-        </div>
+        </>
     );
 };
 

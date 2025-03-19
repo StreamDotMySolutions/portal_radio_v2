@@ -5,6 +5,7 @@ import { Link, useParams } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import './style.css'
 import StaffListing from './StaffListing';
+import { Helmet } from "react-helmet-async";
 
 
 const ShowStaffContent = () => {
@@ -68,100 +69,104 @@ const ShowStaffContent = () => {
 
 
     return (
-        
-        <div className="container-fluid">
-            <div className="row">
-                <div className="col-md-1"></div>
+        <>
+            <Helmet>
+                <title>Direktori RTM : {title}</title>
+            </Helmet>
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-md-1"></div>
 
-                <div className="col-md-10">
+                    <div className="col-md-10">
 
-                    <ul className="breadcrumb2" style={{ "marginTop": "40px" }}>
-                        <li><Link to="/">Utama</Link></li>
-                        <li><Link to="/directories">Direktori</Link></li> 
-                        {breadcrumbs()}
+                        <ul className="breadcrumb2" style={{ "marginTop": "40px" }}>
+                            <li><Link to="/">Utama</Link></li>
+                            <li><Link to="/directories">Direktori</Link></li> 
+                            {breadcrumbs()}
 
-                        {loading ? (
-                            <li>
-                                {/* <Spinner animation="grow" size="sm" /> */}
-                            </li> // Show spinner while loading
-                        ) : (
-                            <li>{title && /^[^_]+__/.test(title) ? title.split('__').slice(1).join('__') : (title ? title : 'Direktori')}</li>
+                            {loading ? (
+                                <li>
+                                    {/* <Spinner animation="grow" size="sm" /> */}
+                                </li> // Show spinner while loading
+                            ) : (
+                                <li>{title && /^[^_]+__/.test(title) ? title.split('__').slice(1).join('__') : (title ? title : 'Direktori')}</li>
 
-                        )}
-                    </ul>
+                            )}
+                        </ul>
 
-                    
+                        
 
-                    {staff ? 
-                        <div className="container" id="containerdirektori" style={{ marginTop: '2rem', backgroundColor: 'rgb(6, 57, 112)', color: 'white', padding: '1rem' }}>
-                            <div className="row">
-                                <HeadingLink />
-                                <hr />
-                                <div className="container" id="containerdirektori">
-                                    <div className="row">
-                                        <div className="col-lg-4 justify-content-center">
-                                            <img 
-                                                id="gambardirektoripegawai" 
-                                                className="img-fluid rounded"
-                                                src={`https://www.rtm.gov.my${staff?.photo}`} 
-                                            
-                                            />
-                                        </div>
-                                        <div className="col-lg-8" id="namecardkaler">
-                                            <div className="row" style={{ marginTop: '1.5rem' }}>
-                                                <div className="col-lg-5">
-                                                    <h5 id="kalertulisan">JAWATAN</h5>
-                                                    <p id="kalertulisan">{staff.occupation}</p>
-                                                    <br />
-                                                    <h5 id="kalertulisan">ALAMAT</h5>
-                                                    <p id="kalertulisan">{staff.address}</p>
-                                                    <br />
-                                                </div>
-                                                <div className="col-lg-7">
-                                                    <h5 id="kalertulisan">EMEL</h5>
-                                                    <a href={`mailto:${staff.email}`}><p id="kalertulisan">{staff.email}</p></a>
-                                                    <br />
-                                                    <h5 id="kalertulisan">NO. TELEFON</h5>
-                                                    <p id="kalertulisan">{staff.phone}</p>
-                                                    <br />
+                        {staff ? 
+                            <div className="container" id="containerdirektori" style={{ marginTop: '2rem', backgroundColor: 'rgb(6, 57, 112)', color: 'white', padding: '1rem' }}>
+                                <div className="row">
+                                    <HeadingLink />
+                                    <hr />
+                                    <div className="container" id="containerdirektori">
+                                        <div className="row">
+                                            <div className="col-lg-4 justify-content-center">
+                                                <img 
+                                                    id="gambardirektoripegawai" 
+                                                    className="img-fluid rounded"
+                                                    src={`https://www.rtm.gov.my${staff?.photo}`} 
                                                 
-                                                    {(staff.facebook || staff.instagram || staff.twitter) && (
-                                                        <div>
-                                                            <h5 id="kalertulisan">MEDIA SOSIAL</h5>
-                                                            {staff.facebook && (
-                                                                <a target="_blank" href={staff.facebook}><img src="/img/facebook.svg" alt="Facebook" /></a>
-                                                            )}
-                                                            {' '}
-                                                            {staff.instagram && (
-                                                                <a target="_blank" href={staff.instagram}><img src="/img/instagram.svg" alt="Instagram" /></a>
-                                                            )}
-                                                            {' '}
-                                                            {staff.twitter && (
-                                                                <a target="_blank" href={staff.twitter}><img src="/img/twitter.png" alt="Twitter" /></a>
-                                                            )}
-                                                        </div>
-                                                    )}
+                                                />
+                                            </div>
+                                            <div className="col-lg-8" id="namecardkaler">
+                                                <div className="row" style={{ marginTop: '1.5rem' }}>
+                                                    <div className="col-lg-5">
+                                                        <h5 id="kalertulisan">JAWATAN</h5>
+                                                        <p id="kalertulisan">{staff.occupation}</p>
+                                                        <br />
+                                                        <h5 id="kalertulisan">ALAMAT</h5>
+                                                        <p id="kalertulisan">{staff.address}</p>
+                                                        <br />
+                                                    </div>
+                                                    <div className="col-lg-7">
+                                                        <h5 id="kalertulisan">EMEL</h5>
+                                                        <a href={`mailto:${staff.email}`}><p id="kalertulisan">{staff.email}</p></a>
+                                                        <br />
+                                                        <h5 id="kalertulisan">NO. TELEFON</h5>
+                                                        <p id="kalertulisan">{staff.phone}</p>
+                                                        <br />
+                                                    
+                                                        {(staff.facebook || staff.instagram || staff.twitter) && (
+                                                            <div>
+                                                                <h5 id="kalertulisan">MEDIA SOSIAL</h5>
+                                                                {staff.facebook && (
+                                                                    <a target="_blank" href={staff.facebook}><img src="/img/facebook.svg" alt="Facebook" /></a>
+                                                                )}
+                                                                {' '}
+                                                                {staff.instagram && (
+                                                                    <a target="_blank" href={staff.instagram}><img src="/img/instagram.svg" alt="Instagram" /></a>
+                                                                )}
+                                                                {' '}
+                                                                {staff.twitter && (
+                                                                    <a target="_blank" href={staff.twitter}><img src="/img/twitter.png" alt="Twitter" /></a>
+                                                                )}
+                                                            </div>
+                                                        )}
 
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        :
-                        <>loading ...</>
-                    }
+                            :
+                            <>loading ...</>
+                        }
 
 
 
 
-            
-                    
-                    <div  style={{ "marginTop": "2rem" }}></div>
+                
+                        
+                        <div  style={{ "marginTop": "2rem" }}></div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 

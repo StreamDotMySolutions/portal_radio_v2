@@ -129,10 +129,10 @@ const PageContent = () => {
     if(settings?.active == 1 ){
         return (
             <>
-            <Helmet>
-                <title>RTM : {title}</title>
-                <meta name="description" content={description} />
-            </Helmet>
+                <Helmet>
+                    <title>RTM : {title}</title>
+                    <meta name="description" content={description} />
+                </Helmet>
                 <div className="container-fluid">
                     {/* {settings?.listing_type} */}
                     <div className="row">
