@@ -8,6 +8,7 @@ import './style.css'
 import StaffListing from './StaffListing';
 import Search from './Search';
 import DepartmentItems from './DepartmentItems';
+import { Helmet } from "react-helmet-async";
 
 
 const PageContent = ({id}) => {
@@ -190,61 +191,65 @@ const PageContent = ({id}) => {
     };
 
     return (
-        
-        <div className="container-fluid">
-            <div className="row">
-                <div className="col-md-1"></div>
+        <>
+            <Helmet>
+                <title>Direktori RTM : {title && /^[^_]+__/.test(title) ? title.split('__').slice(1).join('__') : (title ? title : 'Direktori')}</title>
+            </Helmet>
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-md-1"></div>
 
-                <div className="col-md-10">
+                    <div className="col-md-10">
 
-                    <ul className="breadcrumb2" style={{ "marginTop": "40px" }}>
-                        <li><Link to="/">Utama</Link></li>
-                        <li><Link to="/directories">Direktori</Link></li>
+                        <ul className="breadcrumb2" style={{ "marginTop": "40px" }}>
+                            <li><Link to="/">Utama</Link></li>
+                            <li><Link to="/directories">Direktori</Link></li>
+                            
+                            {breadcrumbs()}
+                            
+
+                            {loading ? (
+                                <li>
+                                    {/* <Spinner animation="grow" size="sm" /> */}
+                                </li> // Show spinner while loading
+                            ) : (
+                                <li>{title && /^[^_]+__/.test(title) ? title.split('__').slice(1).join('__') : (title ? title : 'Direktori')}</li>                            
+                            )}
+                        </ul>
+
+                        <HeadingLink />
+
+                        <Search />
+
+                        {staffs?.length > 0 && <StaffListing items={staffs} />}
+                        <hr />
+
+                        {departments?.length > 0 && 
+                            <>
+                            
+                                <ul className="directory-department list-group border border-1" >
+                                    {/* {departmentItems()}  */}
+                                    {/* {departmentItems(departments)} */}
+                                    <DepartmentItems departments={departments} />
+                                </ul>
+                            </>
+                        }
+
                         
-                        {breadcrumbs()}
+                        {items?.length > 0 && id == null && 
+                            <>
+                            
+                                <ul className="directory-department list-group border border-1" >
+                                    {rootItems()} 
+                                </ul>
+                            </>
+                        }
                         
-
-                        {loading ? (
-                            <li>
-                                {/* <Spinner animation="grow" size="sm" /> */}
-                            </li> // Show spinner while loading
-                        ) : (
-                            <li>{title && /^[^_]+__/.test(title) ? title.split('__').slice(1).join('__') : (title ? title : 'Direktori')}</li>                            
-                        )}
-                    </ul>
-
-                    <HeadingLink />
-
-                    <Search />
-
-                    {staffs?.length > 0 && <StaffListing items={staffs} />}
-                    <hr />
-
-                    {departments?.length > 0 && 
-                        <>
-                           
-                            <ul className="directory-department list-group border border-1" >
-                                {/* {departmentItems()}  */}
-                                {/* {departmentItems(departments)} */}
-                                <DepartmentItems departments={departments} />
-                            </ul>
-                        </>
-                    }
-
-                    
-                    {items?.length > 0 && id == null && 
-                        <>
-                           
-                            <ul className="directory-department list-group border border-1" >
-                                {rootItems()} 
-                            </ul>
-                        </>
-                    }
-                    
-                    <div  style={{ "marginTop": "2rem" }}></div>
+                        <div  style={{ "marginTop": "2rem" }}></div>
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 };
 
