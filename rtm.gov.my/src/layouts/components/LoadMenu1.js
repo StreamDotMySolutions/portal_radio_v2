@@ -93,7 +93,7 @@ function LoadMenu1({id}) {
                   <span
                     dangerouslySetInnerHTML={{
                       __html: article.article_setting.redirect_url
-                      ? `${truncateTitleWithBreaks(article.title, 3)} <span class="text-muted">[ external link ]</span>`
+                      ? `${truncateTitleWithBreaks(article.title, 3)} <i class="fa-solid fa-up-right-from-square"></i>`
                       : truncateTitleWithBreaks(article.title, 3),
                     }}
                 />
