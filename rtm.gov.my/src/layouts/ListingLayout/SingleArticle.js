@@ -61,10 +61,11 @@ const SingleArticle = ({id}) => {
 
     return (
 
-        <div className="container-fluid" style={{ "marginTop": "4rem" }}>
+        <div className="container" style={{ "marginTop": "4rem" }}>
          
             {/* Render contentItems if shouldRenderContent returns true */}
             <h2>{title}</h2>
+            <br />
             {contentItems()}
                 
         </div>
