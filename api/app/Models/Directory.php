@@ -26,13 +26,23 @@ class Directory extends Model
     //                 ->orderByDesc('relevancy');
     // }
 
+    // public function scopeFullTextSearch($query, $term)
+    // {
+    //     // Escaping quotes for the term to ensure it is treated as a phrase
+    //     $escapedTerm = '"' . addslashes($term) . '"';
+        
+    //     return $query->selectRaw("*, MATCH(name, occupation, email, phone, address) AGAINST(? IN BOOLEAN MODE) AS relevancy", [$escapedTerm])
+    //                 ->whereRaw("MATCH(name, occupation, email, phone, address) AGAINST(? IN BOOLEAN MODE)", [$escapedTerm])
+    //                 ->orderByDesc('relevancy');
+    // }
+
     public function scopeFullTextSearch($query, $term)
     {
-        // Escaping quotes for the term to ensure it is treated as a phrase
-        $escapedTerm = '"' . addslashes($term) . '"';
-        
+        $escapedTerm = '+' . addslashes($term) . '*';
+
         return $query->selectRaw("*, MATCH(name, occupation, email, phone, address) AGAINST(? IN BOOLEAN MODE) AS relevancy", [$escapedTerm])
-                    ->whereRaw("MATCH(name, occupation, email, phone, address) AGAINST(? IN BOOLEAN MODE)", [$escapedTerm])
-                    ->orderByDesc('relevancy');
+                     ->whereRaw("MATCH(name, occupation, email, phone, address) AGAINST(? IN BOOLEAN MODE)", [$escapedTerm])
+                     ->orderByDesc('relevancy');
     }
+
 }
