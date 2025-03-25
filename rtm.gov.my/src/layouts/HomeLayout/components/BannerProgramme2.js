@@ -41,7 +41,7 @@ const BannerProgramme2 = () => {
 
 return (
  <>
-    <div className="row shadow-sm" style={{ backgroundColor: '#2a197f', padding: '30px' }}>    
+    <div className="row" style={{ backgroundColor: '#2a197f', padding: '30px' }}>    
       {programmeItems()}    
     </div>
   </>
