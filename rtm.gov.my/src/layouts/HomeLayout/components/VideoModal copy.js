@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import "bootstrap/dist/js/bootstrap.bundle.min";
 import Hls from "hls.js";
 
@@ -8,7 +8,7 @@ const VideoModal = ({ embed_code, filename }) => {
 
   const videoRef = useRef(null);
   const modalRef = useRef(null);
-  const hlsRef = useRef(null);
+  const hlsRef = useRef(null); // Simpan instance HLS
 
   const modalId = `videoModal-${embed_code}`;
   const videoPlayerId = `videoPlayer-${embed_code}`;
@@ -29,28 +29,14 @@ const VideoModal = ({ embed_code, filename }) => {
   const handleModalClose = () => {
     const video = videoRef.current;
     if (video) {
-      video.pause();
-      video.currentTime = 0;
+      video.pause(); // 🔥 Pause video
+      video.currentTime = 0; // 🔥 Reset masa video
     }
     if (hlsRef.current) {
-      hlsRef.current.destroy();
+      hlsRef.current.destroy(); // 🔥 Hapuskan HLS instance
       hlsRef.current = null;
     }
   };
-
-  useEffect(() => {
-    const modalElement = modalRef.current;
-
-    if (modalElement) {
-      modalElement.addEventListener("hidden.bs.modal", handleModalClose);
-    }
-
-    return () => {
-      if (modalElement) {
-        modalElement.removeEventListener("hidden.bs.modal", handleModalClose);
-      }
-    };
-  }, []);
 
   return (
     <section className="wrap">
@@ -73,7 +59,7 @@ const VideoModal = ({ embed_code, filename }) => {
                   style={{ backgroundColor: "transparent" }}
                   data-bs-toggle="modal"
                   data-bs-target={`#${modalId}`}
-                  onClick={handlePlay}
+                  onClick={handlePlay} // ✅ Load HLS hanya bila Play ditekan
                 >
                   <img className="img-fluid" src="/img/play.png" alt="Play Button" />
                 </button>
@@ -95,6 +81,7 @@ const VideoModal = ({ embed_code, filename }) => {
                         className="close"
                         data-bs-dismiss="modal"
                         aria-label="Close"
+                        onClick={handleModalClose} // ✅ Stop video bila modal tutup
                       >
                         <span aria-hidden="true">&times;</span>
                       </button>
