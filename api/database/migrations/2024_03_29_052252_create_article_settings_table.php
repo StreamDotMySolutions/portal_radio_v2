@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('layout')->nullable(); // if type = list, choose the layout style
             $table->string('redirect_url')->nullable(); // url 
 
-            $table->date('published_start')->default(Carbon::now());  // Set default value to current date and time
+            $table->date('published_start')->nullable();  // Set default value to current date and time
             $table->date('published_end')->nullable();  // datetime
 
             $table->boolean('active')->default(false); // is active ?
