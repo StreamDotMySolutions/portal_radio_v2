@@ -22,7 +22,7 @@ export default function DeleteModal({id}) {
      * When user click edit, load the data
      */
     const handleShowClick = () =>{
-      store.emptyData() // empty store data
+      //store.emptyData() // empty store data
       setShow(true)
     } 
 

@@ -32,6 +32,9 @@ export default function CreateModal({parentId}) {
      * When user click submit button
      */
     const handleSubmitClick = () => {
+
+        // clear previous error
+        store.setValue('error', '') // empty errors data
     
         const formData = new FormData();
         const dataArray = [
