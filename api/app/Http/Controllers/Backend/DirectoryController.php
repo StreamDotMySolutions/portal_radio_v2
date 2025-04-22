@@ -12,7 +12,7 @@ class DirectoryController extends Controller
         //\Log::info($id);
         $ancestors = [];
         $title = null;
-        $perPage = 20;
+        $perPage = 100;
 
         //\Log::info('test');
 
@@ -186,6 +186,9 @@ class DirectoryController extends Controller
 
     public function create(Request $request, $parentId)
     {
+
+        //$parentId = 1;
+        //\Log::info($request);
         $validatedData = $request->validate([
             'photo' => 'required|string|max:255',
             'name' => 'required|string|max:255',
@@ -204,7 +207,7 @@ class DirectoryController extends Controller
         $parent = Directory::find($parentId);
 
         if (!$parent) {
-            return response()->json(['error' => 'Parent not found.'], 404);
+            return response()->json(['error' => 'Parent not found.']);
         }
 
         // Create a new record as a child of the parent record
