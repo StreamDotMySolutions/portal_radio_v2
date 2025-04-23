@@ -54,7 +54,7 @@ class DirectoryController extends Controller
 
     public function store(Request $request, $root)
     {
-	    \Log::info($request);
+	    //\Log::info($request);
        
         // Find the node with the given root name
         $node = Directory::where('name', $root)->first();
@@ -194,7 +194,7 @@ class DirectoryController extends Controller
             'name' => 'required|string|max:255',
             'occupation' => 'required|string|max:255',
             'phone' => 'nullable|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => 'nullable|email|max:255',
             'address' => 'required|string',
             'facebook' => 'nullable|string',
             'instagram' => 'nullable|string',
@@ -227,7 +227,7 @@ class DirectoryController extends Controller
             'name' => 'required|string|max:255',
             'occupation' => 'required|string|max:255',
             'phone' => 'nullable|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => 'nullable|email|max:255',
             'address' => 'required|string',
             'facebook' => 'nullable|string',
             'instagram' => 'nullable|string',
