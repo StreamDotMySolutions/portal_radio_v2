@@ -236,6 +236,7 @@ export function InputRadio({fieldName,label,options=[]}){
                     {options.map( (item,index) => (
                     
                         <Col key={index}>
+                               
                             <Form.Check
                                 type="radio"
                                 label={item.label}
@@ -243,7 +244,8 @@ export function InputRadio({fieldName,label,options=[]}){
                                 value={item.value}
                                 isInvalid={errors?.hasOwnProperty(fieldName)}
                                 checked={store.getValue(fieldName) == item.value }
-                                onChange={(e) => { 
+                                onChange={(e) => {
+                                    //console.log(item.value) 
                                     store.setValue(fieldName, item.value)
                                 }}
                             />

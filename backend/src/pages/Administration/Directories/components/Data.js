@@ -8,6 +8,7 @@ import ShowModal from '../modals/Show';
 import EditModal from '../modals/Edit';
 import DeleteModal from '../modals/Delete';
 import CreateModal from '../modals/Create';
+import NewModal from '../modals/New';
 
 const Data = ({items}) => {
 
@@ -67,6 +68,7 @@ const Data = ({items}) => {
 
             <div class="d-flex justify-content-end mb-3">
                 <CreateModal parentId={parentId}/>
+                <NewModal parentId={parentId}/>
             </div>
  
             <Table>
