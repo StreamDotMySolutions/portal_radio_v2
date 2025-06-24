@@ -188,20 +188,50 @@ class DirectoryController extends Controller
     {
 
         //$parentId = 1;
-        //\Log::info($request);
-        $validatedData = $request->validate([
-            'photo' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'occupation' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'address' => 'required|string',
-            'facebook' => 'nullable|string',
-            'instagram' => 'nullable|string',
-            'twitter' => 'nullable|string',
-            'type' => 'nullable|string',
-            // Add other fields you need to update
-        ]);
+        \Log::info($request);
+        
+        /*
+        * Incoming $request will be for folder and spreadsheet
+        * Filter them based on given type
+        */
+
+        $type = $request->input('type');
+
+        if (!$type) {
+            \Log::warning('Missing "type" in request: ', $request->all());
+        } else {
+            switch($type) {
+                case 'spreadsheet':
+                    //\Log::info('staff');
+                        $validatedData = $request->validate([
+                                            'photo' => 'required|string|max:255',
+                                            'name' => 'required|string|max:255',
+                                            'occupation' => 'required|string|max:255',
+                                            'phone' => 'nullable|string|max:255',
+                                            'email' => 'nullable|email|max:255',
+                                            'address' => 'required|string',
+                                            'facebook' => 'nullable|string',
+                                            'instagram' => 'nullable|string',
+                                            'twitter' => 'nullable|string',
+                                            'type' => 'nullable|string',
+                                            // Add other fields you need to update
+                                        ]);
+                    break;
+
+                case 'folder':
+                    //\Log::info('department');
+                        $validatedData = $request->validate([
+                                            'name' => 'required|string|max:255',
+                                        ]);
+                    break;
+
+                default:
+                    \Log::warning('Unknown type received: ' . $type);
+                    break;
+            }
+        }
+        
+      
 
          // Find the parent record
         $parent = Directory::find($parentId);

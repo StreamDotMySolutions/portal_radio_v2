@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState,useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { Button, Modal, Col, Row} from 'react-bootstrap'
 //import { appendFormData,InputRadio,InputText } from '../../../../libs/FormInput'
@@ -12,8 +12,8 @@ export default function NewModal({parentId}) {
     const store = useStore()
     
     const options = [
-        { label: 'Department', value: 'department' },
-        { label: 'Staff', value: 'staff' },
+        { label: 'Department', value: 'folder' },
+        { label: 'Staff', value: 'spreadsheet' },
     ];
 
     //const { parentId } = useParams() // parentid
@@ -23,6 +23,13 @@ export default function NewModal({parentId}) {
     const [isLoading, setIsLoading] = useState(false)
     const handleClose = () => setShow(false)
     const handleShow = () => setShow(true)
+
+
+    // clear error when user change type
+    useEffect(() => {
+      store.setValue('errors', '') // empty errors data
+      //console.log(store.getValue('content_type'))
+    }, [store.getValue('content_type')] ); // listen to type
 
     const handleShowClick = () =>{
       store.emptyData() // empty store data
@@ -47,31 +54,46 @@ export default function NewModal({parentId}) {
         const dataArray = [];
         
         // if user choose to create department
-        if(store.getValue('content_type') === "department"){
-          const dataArray = [
-            { key: 'type', value: 'file' },
-            { key: 'name', value: store.getValue('name') },
-          ];
+        if(store.getValue('content_type') == "folder"){
+            console.log('folder')
+          // const dataArray = [
+          //   { key: 'type', value: 'folder' }, 
+          //   { key: 'name', value: store.getValue('name') },
+          // ];
+          dataArray.push(
+            { key: 'type', value: 'folder' },
+            { key: 'name', value: store.getValue('name') }
+        );
         }
 
         // if user choose to create staff
-        if(store.getValue('content_type') === "department"){
-          const dataArray = [
+        if(store.getValue('content_type') == "spreadsheet"){
+          console.log('spreadsheet')
+          // const dataArray = [
+          //   { key: 'type', value: 'spreadsheet' },
+          //   { key: 'photo', value: store.getValue('photo') },
+          //   { key: 'name', value: store.getValue('name') },
+          //   { key: 'occupation', value: store.getValue('occupation') },
+          //   { key: 'email', value: store.getValue('email') }, 
+          //   { key: 'phone', value: store.getValue('phone') },
+          //   { key: 'facebook', value: store.getValue('facebook') },
+          //   { key: 'twitter', value: store.getValue('twitter') },
+          //   { key: 'instagram', value: store.getValue('instagram') },
+          //   { key: 'address', value: store.getValue('address') },
+          // ];
+          dataArray.push(
             { key: 'type', value: 'spreadsheet' },
             { key: 'photo', value: store.getValue('photo') },
             { key: 'name', value: store.getValue('name') },
             { key: 'occupation', value: store.getValue('occupation') },
-            { key: 'email', value: store.getValue('email') }, 
+            { key: 'email', value: store.getValue('email') },
             { key: 'phone', value: store.getValue('phone') },
             { key: 'facebook', value: store.getValue('facebook') },
             { key: 'twitter', value: store.getValue('twitter') },
             { key: 'instagram', value: store.getValue('instagram') },
-            { key: 'address', value: store.getValue('address') },
-          ];
+            { key: 'address', value: store.getValue('address') }
+        );
         }
-        
-        
-       
         
         appendFormData(formData, dataArray);
 
@@ -124,7 +146,7 @@ export default function NewModal({parentId}) {
               </Col>
 
            
-              {store.getValue('content_type') === 'department' && (
+              {store.getValue('content_type') === 'folder' && (
                 <Col xs={12} className='border border-1 p-4 rounded mt-2' style={{'backgroundColor': '#EAEAEA'}}>
                 
                     <InputText 
@@ -136,7 +158,7 @@ export default function NewModal({parentId}) {
                 </Col>
               )}   
 
-              {store.getValue('content_type') === 'staff' && (
+              {store.getValue('content_type') === 'spreadsheet' && (
                 <Col xs={12} className='border border-1 p-4 rounded mt-2' style={{'backgroundColor': '#EAEAEA'}}>
                   <HtmlForm isLoading={isLoading} />
                 </Col>
