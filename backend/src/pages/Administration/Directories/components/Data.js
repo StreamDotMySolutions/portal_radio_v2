@@ -32,10 +32,19 @@ const Data = ({items}) => {
                     <td>
 
                         {item.type === 'folder' && 
+                            <>
                             <FontAwesomeIcon className='me-2 text-warning' icon={['fas', 'fa-folder']} /> 
+                            
+                            <Link to={`/administration/directories/${item.id}`}>
+                                {item.name}
+                            </Link>
+                            </>
                         }
                         {item.type === 'spreadsheet' && 
+                            <>
                             <FontAwesomeIcon className='me-2 text-secondary' icon={['fas', 'fa-user']} /> 
+                            {item.name}
+                            </>
                         }
 
                         {/* {item.descendants && item.descendants.length > 0 ? (
@@ -46,9 +55,6 @@ const Data = ({items}) => {
                             item.name
                         )} */}
 
-                        <Link to={`/administration/directories/${item.id}`}>
-                            {item.name}
-                        </Link>
                        
 
                     </td>
