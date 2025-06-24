@@ -38,14 +38,17 @@ const Data = ({items}) => {
                             <FontAwesomeIcon className='me-2 text-secondary' icon={['fas', 'fa-user']} /> 
                         }
 
-                        {item.descendants && item.descendants.length > 0 ? (
+                        {/* {item.descendants && item.descendants.length > 0 ? (
                             <Link to={`/administration/directories/${item.id}`}>
                                 {item.name}
                             </Link>
                         ) : (
                             item.name
-                        )}
+                        )} */}
 
+                        <Link to={`/administration/directories/${item.id}`}>
+                            {item.name}
+                        </Link>
                        
 
                     </td>
@@ -63,6 +66,8 @@ const Data = ({items}) => {
                     {item.type === 'folder' && 
                     <>
                         <EditFolderModal id={item.id} />
+                        {' '}
+                        <DeleteModal id={item.id} />
                     </>
                     }
                     </td>

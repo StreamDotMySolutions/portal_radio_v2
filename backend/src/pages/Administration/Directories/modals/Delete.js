@@ -71,7 +71,7 @@ export default function DeleteModal({id}) {
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
-            <Modal.Title>Padam Staff</Modal.Title>
+            <Modal.Title>Padam</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
