@@ -71,9 +71,9 @@ class DirectoryController extends Controller
         }
 
         // Optional: Reset AUTO_INCREMENT only if table is empty
-        if (Directory::count() === 0) {
-            DB::statement("ALTER TABLE directories AUTO_INCREMENT = 1");
-        }
+        // if (Directory::count() === 0) {
+        //     DB::statement("ALTER TABLE directories AUTO_INCREMENT = 1");
+        // }
 
         $this->createCategoryWithChildren($request, null);
         return response()->json(['message' => 'Payload received']);
