@@ -276,19 +276,62 @@ class DirectoryController extends Controller
 
         //\Log::info($request);
 
-         // Validate the incoming request
-        $validatedData = $request->validate([
-            'photo' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'occupation' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:255',
-            'email' => 'nullable|email|max:255',
-            'address' => 'required|string',
-            'facebook' => 'nullable|string',
-            'instagram' => 'nullable|string',
-            'twitter' => 'nullable|string',
-            // Add other fields you need to update
-        ]);
+ /*
+        * Incoming $request will be for folder and spreadsheet
+        * Filter them based on given type
+        */
+
+        //$type = $request->input('type');
+        $type = $directory->type;
+
+        if (!$type) {
+            \Log::warning('Missing "type" in request: ', $request->all());
+        } else {
+            switch($type) {
+                case 'spreadsheet':
+                    //\Log::info('staff');
+                        $validatedData = $request->validate([
+                                            'photo' => 'required|string|max:255',
+                                            'name' => 'required|string|max:255',
+                                            'occupation' => 'required|string|max:255',
+                                            'phone' => 'nullable|string|max:255',
+                                            'email' => 'nullable|email|max:255',
+                                            'address' => 'required|string',
+                                            'facebook' => 'nullable|string',
+                                            'instagram' => 'nullable|string',
+                                            'twitter' => 'nullable|string',
+                                            //'type' => 'nullable|string',
+                                            // Add other fields you need to update
+                                        ]);
+                    break;
+
+                case 'folder':
+                    //\Log::info('department');
+                        $validatedData = $request->validate([
+                                            'name' => 'required|string|max:255',
+                                            //'type' => 'nullable|string',
+                                        ]);
+                    break;
+
+                default:
+                    \Log::warning('Unknown type received: ' . $type);
+                    break;
+            }
+        }
+
+        // Validate the incoming request
+        // $validatedData = $request->validate([
+        //     'photo' => 'required|string|max:255',
+        //     'name' => 'required|string|max:255',
+        //     'occupation' => 'required|string|max:255',
+        //     'phone' => 'nullable|string|max:255',
+        //     'email' => 'nullable|email|max:255',
+        //     'address' => 'required|string',
+        //     'facebook' => 'nullable|string',
+        //     'instagram' => 'nullable|string',
+        //     'twitter' => 'nullable|string',
+        //     // Add other fields you need to update
+        // ]);
 
         //\Log::info($request->all());
 

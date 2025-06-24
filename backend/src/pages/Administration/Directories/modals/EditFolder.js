@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Button, Modal} from 'react-bootstrap'
-import { appendFormData } from '../../../../libs/FormInput'
+import { Button, Modal, Col} from 'react-bootstrap'
+import { appendFormData, InputText } from '../components/FormInput'
 import axios from '../../../../libs/axios'
 import useStore from '../store'
-import HtmlForm from '../components/HtmlForm'
+// import HtmlForm from '../components/HtmlForm'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function EditFolderModal({id}) {
@@ -33,11 +33,8 @@ export default function EditFolderModal({id}) {
             url: `${store.url}/directories/${id}/show`,
             })
         .then( response => { // success 200
-            //console.log(response)
-            if( response?.data?.staff.hasOwnProperty('photo') ){
-              store.setValue('photo', response?.data?.staff?.photo )
-            }
-
+            console.log(response)
+    
             if( response?.data?.staff.hasOwnProperty('name') ){
               store.setValue('name', response?.data?.staff?.name )
             }
@@ -101,11 +98,21 @@ export default function EditFolderModal({id}) {
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
-            <Modal.Title>Edit Staff</Modal.Title>
+            <Modal.Title>Edit Directory</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
-            update directory
+                {store.getValue('name') != '' && (
+                  <Col xs={12} className='border border-1 p-4 rounded mt-2' style={{'backgroundColor': '#EAEAEA'}}>
+                  
+                      <InputText 
+                          fieldName='name' 
+                          placeholder='Name'  
+                          icon='fa-solid fa-pencil'
+                          isLoading={isLoading}
+                      />
+                  </Col>
+                )}   
           </Modal.Body>
           
           <Modal.Footer>

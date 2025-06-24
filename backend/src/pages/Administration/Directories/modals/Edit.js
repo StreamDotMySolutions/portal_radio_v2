@@ -62,7 +62,7 @@ export default function EditModal({id}) {
             if( response?.data?.staff.hasOwnProperty('address') ){
               store.setValue('address', response?.data?.staff?.address )
             }
-            store.setValue('refresh_videos', true) // to force useEffect get new data for index
+            store.setValue('refresh', true) // to force useEffect get new data for index
             })
         .catch( error => {
             console.warn(error)
@@ -145,7 +145,7 @@ export default function EditModal({id}) {
               disabled={isLoading}
               variant="primary" 
               onClick={handleSubmitClick}>
-               <FontAwesomeIcon icon={['fas', 'upload']} />{' '}Submit
+               <FontAwesomeIcon icon={['fas', 'sync']} />{' '}Update
             </Button>
 
           </Modal.Footer>
