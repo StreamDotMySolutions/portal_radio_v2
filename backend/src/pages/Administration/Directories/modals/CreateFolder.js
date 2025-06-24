@@ -8,7 +8,7 @@ import useStore from '../store'
 import HtmlForm from '../components/HtmlForm'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-export default function NewModal({parentId}) {
+export default function CreateFolderModal({parentId}) {
     const store = useStore()
     
     const options = [

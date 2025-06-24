@@ -8,7 +8,9 @@ import ShowModal from '../modals/Show';
 import EditModal from '../modals/Edit';
 import DeleteModal from '../modals/Delete';
 import CreateModal from '../modals/Create';
-import NewModal from '../modals/New';
+
+import EditFolderModal from '../modals/EditFolder';
+import CreateFolderModal from '../modals/CreateFolder';
 
 const Data = ({items}) => {
 
@@ -35,6 +37,7 @@ const Data = ({items}) => {
                         {item.type === 'spreadsheet' && 
                             <FontAwesomeIcon className='me-2 text-secondary' icon={['fas', 'fa-user']} /> 
                         }
+
                         {item.descendants && item.descendants.length > 0 ? (
                             <Link to={`/administration/directories/${item.id}`}>
                                 {item.name}
@@ -57,11 +60,9 @@ const Data = ({items}) => {
                     </>
                     }
 
-                    {item.type === 'spreadsheet' && 
+                    {item.type === 'folder' && 
                     <>
-                        Edit Folder 
-                        <br />
-                        Delete Folder 
+                        <EditFolderModal id={item.id} />
                     </>
                     }
                     </td>
@@ -75,8 +76,8 @@ const Data = ({items}) => {
         <div>
 
             <div class="d-flex justify-content-end mb-3">
-                <CreateModal parentId={parentId}/>
-                <NewModal parentId={parentId}/>
+                {/* <CreateModal parentId={parentId}/> */}
+                <CreateFolderModal parentId={parentId}/>
             </div>
  
             <Table>
