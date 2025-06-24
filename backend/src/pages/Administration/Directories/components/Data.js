@@ -56,6 +56,14 @@ const Data = ({items}) => {
                         <DeleteModal id={item.id} />
                     </>
                     }
+
+                    {item.type === 'spreadsheet' && 
+                    <>
+                        Edit Folder 
+                        <br />
+                        Delete Folder 
+                    </>
+                    }
                     </td>
                 </tr>
             ));

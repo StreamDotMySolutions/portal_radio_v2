@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Backend;
 
 use Illuminate\Http\Request;
 use App\Models\Directory;
+use Illuminate\Support\Facades\DB;
+
 
 class DirectoryController extends Controller
 {
@@ -52,6 +54,10 @@ class DirectoryController extends Controller
             ]);
     }
 
+    /*
+    *  Caller ~ https://script.google.com/home/projects/1WwqFh0h9adHtMmda6yogJVRh0OfBpdSZiBU40Nzfqc5LAsmNuu0y8x3h/edit?pli=1
+    *  POST   var url = "https://portalrtm.streamdotmy.com/api/directories/01__Angkasapuri";
+    */
     public function store(Request $request, $root)
     {
 	    //\Log::info($request);
@@ -62,6 +68,11 @@ class DirectoryController extends Controller
         // If the node exists, delete it and all its descendants
         if ($node) {
             $node->delete();
+        }
+
+        // Optional: Reset AUTO_INCREMENT only if table is empty
+        if (Directory::count() === 0) {
+            DB::statement("ALTER TABLE directories AUTO_INCREMENT = 1");
         }
 
         $this->createCategoryWithChildren($request, null);
@@ -188,7 +199,7 @@ class DirectoryController extends Controller
     {
 
         //$parentId = 1;
-        \Log::info($request);
+        //\Log::info($parentId);
         
         /*
         * Incoming $request will be for folder and spreadsheet
@@ -222,6 +233,7 @@ class DirectoryController extends Controller
                     //\Log::info('department');
                         $validatedData = $request->validate([
                                             'name' => 'required|string|max:255',
+                                            'type' => 'nullable|string',
                                         ]);
                     break;
 
@@ -233,15 +245,28 @@ class DirectoryController extends Controller
         
       
 
-         // Find the parent record
-        $parent = Directory::find($parentId);
+         
 
-        if (!$parent) {
-            return response()->json(['error' => 'Parent not found.']);
+   
+
+        if($parentId == 0 ){
+            // means at root
+            $record = Directory::create([
+                'name' => $request->input('name'),
+                'type' => $request->input('type'),
+            ]);
+
+        } else {
+            // Find the parent record
+            $parent = Directory::find($parentId);
+            if (!$parent) {
+                return response()->json(['error' => 'Parent not found.']);
+            }
+
+            // Create a new record as a child of the parent record
+            $record = $parent->children()->create($validatedData);
         }
-
-        // Create a new record as a child of the parent record
-        $record = $parent->children()->create($validatedData);
+        
 
         return response()->json(['success' => 'Record created successfully.', 'record' => $record], 201);
     }
