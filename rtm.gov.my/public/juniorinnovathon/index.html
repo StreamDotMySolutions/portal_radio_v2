@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RTM : JUNIOR INNOVATHON</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&display=swap" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Fredoka', sans-serif;
+      scroll-behavior: smooth;
+	  background-color:#fffbfa;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Fredoka', sans-serif;
+    }
+
+    /* Navbar */
+    nav {
+      background-color: #007bff;
+    }
+
+   /* Syarat Section */
+    #syarat {
+      background-color: #fffbfa;
+      
+    }
+
+    .requirement-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 123, 255, 0.1);
+      transition: transform 0.3s;
+    }
+
+    .requirement-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .requirement-icon {
+      font-size: 2.5rem;
+      color: #ff9800;
+    }
+
+    .requirement-title {
+      font-weight: 600;
+      color: #007bff;
+    }
+
+    .requirement-text {
+      font-size: 1rem;
+      color: #333;
+    }
+
+	 /* kaedahpelaksanaan */
+    #kaedahpelaksanaan {
+      background-color: #fffbfa ;
+      
+    }
+
+  
+	
+    /* Pendaftaran Section */
+    #pendaftaran {
+      background-color: #e3f2fd;
+      padding: 4rem 1rem;
+    }
+
+    .btn-custom {
+      background-color: #ff9800;
+      color: white;
+    }
+
+    .btn-custom:hover {
+      background-color: #fb8c00;
+    }
+
+    footer {
+      background: #007bff;
+      color: white;
+      padding: 1.5rem 0;
+    }
+
+    @media (max-width: 768px) {
+      header#home h1 {
+        font-size: 2.5rem;
+      }
+    }
+	
+	.section-title {
+      font-weight: bold;
+      font-size: 2rem;
+      color: #007bff;
+    }
+
+    .content-box {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      padding: 2rem;
+    }
+
+    .condition-item {
+      margin-bottom: 1.5rem;
+    }
+
+    .condition-item h5 {
+      color: black;
+     
+    }
+	
+	    .obj-card {
+      border-left: 5px solid #007bff;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      background: white;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
+    .obj-card:hover {
+      border-left-color: #fd7e14;
+      transform: translateY(-3px);
+      transition: 0.3s;
+    }
+    .obj-number {
+      font-weight: bold;
+      color: #fd7e14;
+	  
+    }
+	        .card-glass {
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .card-glass:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            background-color: #FFA500;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+            margin: 0 auto 20px;
+        }
+
+        .kategori-title {
+            color: #007BFF;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .kategori-desc {
+            font-size: 1rem;
+            color: #333;
+        }
+	
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+      <a class="navbar-brand" href="#">Junior Innovathon</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navmenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navmenu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="https://www.rtm.gov.my/">LAMAN RTM</a></li>
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container mt-5 mb-5"  >
+<!-- Carousel -->
+<div id="demo" class="carousel slide" data-bs-ride="carousel">
+
+
+
+  <!-- The slideshow/carousel -->
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="LOGJUNIORINNOVATION.png" class="img-fluid" alt="Los Angeles" class="d-block" style="width:100%">
+    </div>
+
+  </div>
+  
+</div>
+</div>
+
+ <!-- Pengenalan -->
+  <section id="kaedahpelaksanaan">
+  <div class="container py-5">
+  <br>
+    <h1 class="section-title mb-5">PENGENALAN</h1>
+    <div class="content-box">
+     
+      <div class="condition-item">
+        <p>Kementerian Ekonomi (KE) dengan kerjasama rakan kolaborasi Kementerian Pendidikan Malaysia (KPM) dan Jabatan Penyiaran Malaysia (RTM) akan menganjurkan program Junior INNOVATHON pada tahun 2025.  Program ini memberi tumpuan kepada hasil cipta murid sekolah rendah dan sekolah menengah dalam budaya penciptaan dan inovasi yang menyumbang ke arah kesejahteraan masyarakat. Usaha komprehensif dan agresif ini bagi mengarus perdanakan budaya inovasi terutamanya dalam kalangan Generasi MADANI. </p>
+       
+      </div>
+
+
+    </div>
+  </div>
+ </section>
+
+
+ <!-- Objektif -->
+
+
+  <section id="syarat">
+  <div class="container py-5">
+  <br>
+    <h1 class="section-title mb-5">Objektif</h1>
+<div class="content-box">
+    <div class="obj-card">
+      <p><span class="obj-number">1.</span> Membangunkan pemikiran kreatif dalam kalangan peserta melalui cabaran dan aktiviti yang menggalakkan penyelesaian masalah secara luar biasa.</p>
+    </div>
+    <div class="obj-card">
+      <p><span class="obj-number">2.</span> Menggalakkan budaya inovasi di sekolah dengan memberikan platform untuk mencuba idea baharu secara selamat dan terbimbing.</p>
+    </div>
+    <div class="obj-card">
+      <p><span class="obj-number">3.</span> Meningkatkan kemahiran abad ke-21 seperti kolaborasi, komunikasi, pemikiran kritikal dan penggunaan teknologi.</p>
+    </div>
+    <div class="obj-card">
+      <p><span class="obj-number">4.</span> Menghasilkan produk atau penyelesaian inovatif yang boleh memberi manfaat kepada komuniti setempat atau sekolah.</p>
+    </div>
+    <div class="obj-card">
+      <p><span class="obj-number">5.</span> Memberi pengiktirafan kepada usaha dan pencapaian inovatif bagi menyemai semangat keusahawanan dan penciptaan dalam kalangan warga sekolah.</p>
+    </div>
+
+</div>
+  </div>
+ </section>
+
+
+
+ <!-- Kategori -->
+<section id="syarat">
+    <div class="container py-5">
+	
+         <h1 class="section-title mb-5">Kategori</h1>
+		 <div class="content-box">
+        <div class="row justify-content-center g-4">
+            
+            <!-- Sekolah Rendah -->
+            <div class="col-md-5">
+                <div class="card-glass shadow-sm">
+                    <div class="icon-circle">
+                        <i class="fas fa-school"></i>
+                    </div>
+                    <div class="kategori-title">Sekolah Rendah</div>
+                    <div class="kategori-desc">Tahun 1 hingga Tahun 6</div>
+                </div>
+            </div>
+
+            <!-- Sekolah Menengah -->
+            <div class="col-md-5">
+                <div class="card-glass shadow-sm">
+                    <div class="icon-circle">
+                        <i class="fas fa-user-graduate"></i>
+                    </div>
+                    <div class="kategori-title">Sekolah Menengah</div>
+                    <div class="kategori-desc">Tingkatan 1 hingga Tingkatan 5</div>
+                </div>
+            </div>
+
+        </div>
+		</div>
+    </div>
+</section>
+
+
+
+
+
+
+
+  <!-- Syarat Penyertaan -->
+  <section id="syarat">
+  <div class="container py-5">
+  <br>
+    <h1 class="section-title mb-5">SYARAT DAN PERATURAN</h1>
+    <div class="content-box">
+      <h1 class="section-title mb-5">Syarat - syarat</h1>
+      <div class="condition-item">
+        <p><span class="obj-number">1.</span> Terbuka kepada murid sekolah rendah (Tahun 1 hingga 6) dan sekolah menengah (Tingkatan 1 hingga 5) yang berumur 7 hingga 17 tahun sahaja serta warganegara  Malaysia.</p>
+       
+      </div>
+
+      <div class="condition-item">
+        <p><span class="obj-number">2.</span> Penyertaan secara berkumpulan yang terdiri daripada tiga orang murid dan seorang guru pembimbing dari sekolah yang sama.</p>
+      </div>
+
+      <div class="condition-item">
+        <p><span class="obj-number">3.</span> Penukaran ahli pasukan perlu mendapat kebenaran Jabatan Pendidikan Negeri (JPN) dan KPM.</p>
+     
+      </div>
+
+      <div class="condition-item">
+        <p><span class="obj-number">4.</span> Setiap murid/pasukan hanya boleh menghantar satu penyertaan sahaja.</p>
+      </div>
+
+      <div class="condition-item">
+        <p><span class="obj-number">5.</span> Sekolah dibenarkan menghantar lebih daripada satu projek.</p>
+      </div>
+
+      <div class="condition-item">
+        <p><span class="obj-number">6.</span> Produk mestilah hasil asli dan jika telah dipertandingkan, produk tersebut perlu diubahsuai atau ditambah baik.</p>
+       
+      </div>
+
+      <div class="condition-item">
+        <p><span class="obj-number">7.</span> Projek inovasi boleh berbentuk produk fizikal, perisian, aplikasi mudah alih atau sistem.</p>
+
+      </div>
+
+      <div class="condition-item">
+        <p><span class="obj-number">8.</span> Setiap pasukan mesti mengisi borang pendaftaran sebelum tarikh tutup yang ditetapkan melalui portal RTM/Junior INNOVATHON mengikut negeri masing-masing.</p>
+     
+      </div>
+
+	  
+	  <h1 class="section-title mt-5 mb-5" >Peraturan</h1>
+	  
+	        <div class="condition-item">
+        <p><span class="obj-number">1.</span> <b>Tarikh akhir penyerahan laporan inovasi</b> dan video pembentangan: <i>[dd/mm/yyyy]</i>.</p>
+       
+      </div>
+
+      <div class="condition-item">
+        <p><span class="obj-number">2.</span> Format laporan mesti dalam PDF, maksimum 15 muka surat (tidak termasuk lampiran).</p>
+      </div>
+
+      <div class="condition-item">
+        <p><span class="obj-number">3.</span> Video pembentangan berdurasi maksimum 7 minit, dalam format MP4. MP4. 16:9 ratio (landscape) dan HD Resolution 1080p.</p>
+     
+      </div>
+
+      <div class="condition-item">
+        <p><span class="obj-number">4.</span> Pembentangan secara langsung di hadapan juri menggunakan bahan sokongan seperti poster, prototaip atau demo.</p>
+      </div>
+
+      <div class="condition-item">
+        <p><span class="obj-number">5.</span> Pembentangan projek boleh menggunakan Bahasa Malaysia atau Bahasa Inggeris.</p>
+      </div>
+
+      <div class="condition-item">
+        <p><span class="obj-number">6.</span> Pakaian peserta hendaklah sopan dan sesuai dengan pertandingan. Pakaian seragam sekolah adalah dibenarkan.</p>
+       
+      </div>
+
+      <div class="condition-item">
+        <p><span class="obj-number">7.</span> Sebarang bentuk plagiat akan menyebabkan penyertaan <b>dibatalkan serta-merta.</b><p>
+
+      </div>
+
+      <div class="condition-item">
+        <p><span class="obj-number">8.</span> Juri berhak membuat keputusan muktamad dan tiada rayuan dibenarkan.</p>
+     
+      </div>
+	  
+	  
+	  
+    </div>
+  </div>
+ </section>
+ 
+
+   <!-- KAedah Pelaksanaan -->
+  <section id="kaedahpelaksanaan">
+  <div class="container py-5">
+  <br>
+    <h1 class="section-title mb-5">KAEDAH PELAKSANAAN</h1>
+    <div class="content-box">
+      <h1 class="section-title mb-5">Saringan Awal</h1>
+      <div class="condition-item">
+        <p><span class="obj-number">1.</span> Secara dalam talian <br><br> &nbsp; &nbsp; Setiap pasukan perlu menghantar slaid projek inovasi maksimum tiga muka surat sahaja untuk semakan oleh panel juri. </p>
+       
+      </div>
+
+      <div class="condition-item">
+        <p><span class="obj-number">2.</span> Secara bersemuka di RTM negeri masing-masing <br><br> &nbsp; &nbsp; Pasukan yang berjaya perlu membentangkan video berdurasi dua minit dan sesi soal jawab bersama panel juri akan dilakukan.</p>
+      </div>
+
+    
+
+	  
+	  <h1 class="section-title mt-5 mb-5" >Saringan Akhir</h1>
+	  
+	        <div class="condition-item">
+        <p><span class="obj-number">1.</span> Panel juri akan menentukan 25 pasukan terbaik bagi setiap kategori untuk bertanding secara bersemuka di RTM Angkasapuri.</p>
+       
+      </div>
+
+      <div class="condition-item">
+        <p><span class="obj-number">2.</span> Pasukan yang berjaya akan diberikan bimbingan persembahan dan pengucapan awam.</p>
+      </div>
+
+     <br><br>
+	  
+	        <div class="condition-item">
+        <p>Setiap peserta yang layak ke sesi uji bakat secara fizikal perlu membawa bersama dan mengemukakan dokumen berikut :</p>
+		<p>&nbsp; &nbsp; &nbsp; &nbsp; <span class="obj-number">i.</span> borang pendaftaran yang telah dilengkapkan;</p>
+		<p>&nbsp; &nbsp; &nbsp; &nbsp; <span class="obj-number">ii.</span> kad pengenalan/ MyKid; </p>
+		<p>&nbsp; &nbsp; &nbsp; &nbsp; <span class="obj-number">iii.</span> slaid pembentangan; dan</p>
+		<p>&nbsp; &nbsp; &nbsp; &nbsp; <span class="obj-number">iv.</span> Video persembahan</p>
+      </div>
+	  
+    </div>
+  </div>
+ </section>
+ 
+    <!-- Aspek Pemarkahan -->
+  <section id="kaedahpelaksanaan">
+  <div class="container py-5">
+  <br>
+    <h1 class="section-title mb-5">ASPEK PEMARKAHAN</h1>
+    <div class="content-box">
+      <h1 class="section-title mb-5">Penilaian Pertama</h1>
+      <div class="condition-item">
+	  
+	  <table class="table table-borderless">
+
+            <tbody>
+                <tr>
+                    <td><p><span class="obj-number">1.</span> Pengenalan masalah atau isu dengan jelas </p></td>
+                    <td><p><span class="obj-number">10 Markah</span> </p></td>
+                </tr>
+                <tr>
+                    <td><p><span class="obj-number">2.</span> Keaslian dan kreativiti inovasi  10 markah</p></td>
+                    <td><p><span class="obj-number">10 Markah</span> </p></td>
+                </tr>
+                <tr>
+
+                    <td><p><span class="obj-number">3.</span> Keberkesanan penyelesaian yang dikemukakan</p></td>
+                    <td><p><span class="obj-number">10 Markah</span> </p></td>
+                </tr>
+                <tr>
+                    <td> <p><span class="obj-number">4.</span> Relevansi dan potensi inovasi untuk diguna pakai secara meluas</p></td>
+                    <td> <p><span class="obj-number">10 Markah</span> </p></td>
+                </tr>
+                <tr>
+                    <td><p><span class="obj-number">5.</span> Reka bentuk slaid </p></td>
+                    <td> <p><span class="obj-number">05 Markah </span></p></td>
+                </tr>
+				                <tr>
+                    <td><p><span class="obj-number">6.</span> Pematuhan kepada bilangan maksimum 3 slaid sahaja </p></td>
+                    <td> <p><span class="obj-number">05 Markah</span> </p></td>
+                </tr>
+				<tr>
+				    <td><p>Jumlah keseluruhan</p></td>
+                    <td> <p><span class="obj-number">50 Markah</span> </p></td>
+				</tr>
+            </tbody>
+        </table>
+	  
+	  
+	  
+	  
+	  
+        
+       
+      </div>
+
+
+
+    
+
+	  
+	  <h1 class="section-title mt-5 mb-5" >Penilaian Kedua </h1>
+	        <div class="condition-item">
+	  
+	  <table class="table table-borderless">
+
+            <tbody>
+                <tr>
+                    <td><p><span class="obj-number">1.</span> Kefahaman & penguasaan kandungan tersusun </p></td>
+                    <td><p><span class="obj-number">10 Markah </span></p></td>
+                </tr>
+                <tr>
+                    <td><p><span class="obj-number">2.</span> Kemahiran komunikasi dan penyampaian menarik</p></td>
+                    <td><p><span class="obj-number">10 Markah </span></p></td>
+                </tr>
+                <tr>
+
+                    <td><p><span class="obj-number">3.</span> Kualiti Video (visual, audio, suntingan dan naratif)</p></td>
+                    <td><p><span class="obj-number">10 Markah</span> </p></td>
+                </tr>
+                <tr>
+                    <td> <p><span class="obj-number">4.</span> Kreativiti persembahan video (animasi, grafik dan lain-lain)</p></td>
+                    <td> <p><span class="obj-number">05 markah</span> </p></td>
+                </tr>
+                <tr>
+                    <td><p><span class="obj-number">5.</span> Pematuhan kepada maksimum durasi 2 minit video sahaja</p></td>
+                    <td> <p><span class="obj-number">05 Markah </span></p></td>
+                </tr>
+				<tr>
+                    <td><p><span class="obj-number">6.</span> Respons kepada soalan (jika ada)</p></td>
+                    <td> <p><span class="obj-number">10 Markah </span></p></td>
+                </tr>
+				
+								<tr>
+                    <td><p>Jumlah keseluruhan</p></td>
+                    <td> <p><span class="obj-number">50 Markah </span></p></td>
+                </tr>
+            </tbody>
+        </table>
+	  
+	  
+	
+
+	             
+
+	  
+        
+       
+      </div>
+
+
+     <br><br>
+	  
+
+	  
+    </div>
+  </div>
+ </section>
+ 
+ 
+     <!-- 5.0	HADIAH PERINGKAT KEBANGSAAN -->
+  <section id="kaedahpelaksanaan">
+  <div class="container py-5">
+  <br>
+    <h1 class="section-title mb-5">HADIAH PERINGKAT KEBANGSAAN</h1>
+    <div class="content-box">
+      <p>Setiap pasukan akan mendapat sijil penyertaan bagi murid dan sijil penghargaan bagi guru. Senarai hadiah kepada pemenang adalah seperti berikut:</p>
+      <br>
+	  <div class="condition-item">
+	  
+	  <table class="table table-borderless ">
+
+            <tbody>
+                <tr>
+                    <td><p>Johan</p></td>
+                    <td><p><span class="obj-number">Piala Iringan, Trofi  dan sijil pencapaian </span> </p></td>
+                </tr>
+                <tr>
+                    <td><p>Naib Johan</p></td>
+                    <td><p><span class="obj-number">Trofi dan sijil pencapaian</span> </p></td>
+                </tr>
+                <tr>
+
+                    <td><p>Tempat Ketiga</p></td>
+                    <td><p><span class="obj-number">Trofi dan sijil pencapaian</span> </p></td>
+                </tr>
+                <tr>
+                    <td> <p>Tempat Keempat</p></td>
+                    <td> <p><span class="obj-number">Trofi dan sijil pencapaian</span> </p></td>
+                </tr>
+                <tr>
+                    <td><p>Tempat Kelima</p></td>
+                    <td> <p><span class="obj-number">Trofi dan sijil pencapaian </span></p></td>
+                </tr>
+
+            </tbody>
+        </table>
+		<br>
+		
+		
+		    <table class="table table-striped table-hover align-middle text-center">
+     
+      <thead>
+        <tr>
+          <th scope="col">Hadiah</th>
+          <th scope="col">SSPN (Peserta)</th>
+          <th scope="col">Wang Tunai (Sekolah)</th>
+          <th scope="col">Trofi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Pertama</td>
+          <td>RM30,000.00</td>
+          <td>RM10,000.00</td>
+          <td>RM2,000.00 dan sijil</td>
+        </tr>
+        <tr>
+          <td>Kedua</td>
+          <td>RM15,000.00</td>
+          <td>RM7,000.00</td>
+          <td>RM2,000.00 dan sijil</td>
+        </tr>
+        <tr>
+          <td>Ketiga</td>
+          <td>RM10,000.00</td>
+          <td>RM5,000.00</td>
+          <td>RM2,000.00 dan sijil</td>
+        </tr>
+        <tr>
+          <td>Keempat</td>
+          <td>RM7,000.00</td>
+          <td>RM4,000.00</td>
+          <td>RM2,000.00 dan sijil</td>
+        </tr>
+        <tr>
+          <td>Kelima</td>
+          <td>RM5,000</td>
+          <td>RM3,000.00</td>
+          <td>RM2,000.00 dan sijil</td>
+        </tr>
+        <tr>
+          <td>Saguhati</td>
+          <td>RM3,000</td>
+          <td>RM2,000.00</td>
+          <td>Sijil sahaja</td>
+        </tr>
+      </tbody>
+    </table>
+		
+		
+		
+		
+	  
+      
+      </div>
+
+      
+      </div>
+
+
+     <br><br>
+	  
+
+	  
+    </div>
+  </div>
+ </section>
+ 
+ 
+  <!-- HAL-HAL YANG TIDAK DINYATAKAN -->
+  <section id="kaedahpelaksanaan">
+  <div class="container py-5">
+  <br>
+    <h1 class="section-title mb-5">HAL-HAL YANG TIDAK DINYATAKAN</h1>
+    <div class="content-box">
+     
+      <div class="condition-item">
+        <p>Semua hal yang tidak dinyatakan dalam kertas konsep ini atau sebarang pengecualian mengenai pematuhan syarat dan peraturan pertandingan atau semua perkara di luar jangka atau mengenai tafsiran akan diputuskan oleh pihak penganjur dan Jawatankuasa Pengelola Pertandingan.</p>
+       
+      </div>
+
+
+    </div>
+  </div>
+ </section>
+ 
+ 
+ 
+ 
+
+  <!-- Footer -->
+  <footer class="text-center">
+    <div class="container">
+      <p class="mb-0">Hak Cipta Terpelihara @ 2025 RADIO TELEVISYEN MALAYSIA</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
