@@ -24,7 +24,8 @@ const HlsPlayer = ({ id, width = "100%", height = "auto" }) => {
     // Muatkan skrip hls.js hanya jika ia belum ada
     if (!window.Hls) {
       const script = document.createElement("script");
-      script.src = "https://cdn.jsdelivr.net/npm/hls.js@1.4.12/dist/hls.min.js";
+      //script.src = "https://cdn.jsdelivr.net/npm/hls.js@1.4.12/dist/hls.min.js";
+      script.src = "/js/hls.min.js";
       script.async = true;
       script.onload = loadHls;
       document.body.appendChild(script);
