@@ -239,12 +239,83 @@ mysql -u username -p database_name < scripts/your_database_file.sql
 - `scripts/data.sql` - Sample data
 - `scripts/rtm_portal_2024-12-12.sql` - RTM portal database dump
 
+## Application Routes & Paths
+
+### Backend Admin Dashboard (`/backend`)
+
+The admin dashboard uses a base path of `/backend` and includes the following routes:
+
+#### Authentication Routes
+- `/backend/sign-in` - Admin login page
+- `/backend/sign-out` - Logout page
+- `/backend/unauthorized` - Unauthorized access page
+
+#### Protected Admin Routes (Requires Authentication)
+- `/backend/` or `/backend/home` - Dashboard home
+- `/backend/account` - User account management
+- `/backend/dashboard` - Main dashboard
+
+#### Administration Routes (Admin Role Required)
+- `/backend/administration/roles` - Role management
+- `/backend/administration/users` - User management
+- `/backend/administration/articles/{parentId}` - Article management by parent
+- `/backend/administration/articles-data/{parentId}` - Article data management
+- `/backend/administration/banners` - Banner management
+- `/backend/administration/programmes` - Programme management
+- `/backend/administration/videos` - Video management
+- `/backend/administration/directories/{parentId}` - Directory management
+- `/backend/administration/assets/{parentId}` - Asset management
+- `/backend/administration/vods/{parentId}` - VOD management
+
+### Frontend Public Website (`/frontend`)
+
+The public frontend application includes:
+
+#### Public Routes
+- `/` - Home page (HomeLayout)
+- `/contents/{id}` - Content display page
+
+### RTM Government Website (`/`)
+
+The RTM website uses the root path and includes:
+
+#### Public Routes
+- `/` - RTM home page
+- `/contents/{id}` - Content pages
+- `/listings/{id}` - Content listing pages
+
+#### Directory & Staff Routes
+- `/directories` - Directory listing
+- `/directories/{id}` - Specific directory view
+- `/directories/{id}/show` - Staff profile display
+- `/directories/search/{query}` - Directory search results
+
+#### Error Handling
+- `*` - 404 error page for all unmatched routes
+
 ## Development Workflow
 
 1. Start the API server: `cd api && php artisan serve`
 2. Start the backend: `cd backend && npm start`
 3. Start the frontend: `cd frontend && npm start`
 4. Start the RTM website: `cd rtm.gov.my && npm start`
+
+## Application Access URLs
+
+When running in development mode:
+
+- **API Server**: `http://localhost:8000`
+- **Backend Admin**: `http://localhost:3000/backend`
+- **Frontend Public**: `http://localhost:3001`
+- **RTM Website**: `http://localhost:3002`
+
+### Important Notes on Routing
+
+1. **Backend Admin Dashboard**: Uses `/backend` basename, so all routes are prefixed with `/backend`
+2. **Frontend Public**: Uses root basename `/` for public access
+3. **RTM Website**: Uses root basename `/` and includes comprehensive directory/staff management
+4. **Protected Routes**: Backend admin routes require authentication and appropriate role permissions
+5. **Dynamic Routes**: Many routes include dynamic parameters (`:id`, `:parentId`, `:query`) for content management
 
 ## Key Features
 
