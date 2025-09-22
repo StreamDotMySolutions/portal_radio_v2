@@ -258,13 +258,255 @@ mysql -u username -p database_name < scripts/your_database_file.sql
 - **Video.js** for media playback
 - **React Quill** for rich text editing
 
-## API Endpoints
+## API Documentation
 
-The API provides RESTful endpoints for:
-- Authentication (`/api/auth/*`)
-- User management (`/api/users/*`)
-- Directory management (`/api/directories/*`)
-- File uploads (`/api/uploads/*`)
+The API provides comprehensive RESTful endpoints organized into different functional areas. All backend API endpoints require authentication via Laravel Sanctum tokens (except for public endpoints).
+
+### Base URL
+- **Development**: `http://localhost:8000/api`
+- **Production**: `https://yourdomain.com/api`
+
+### Authentication
+
+#### Public Authentication Endpoints
+
+| Method | Endpoint | Description | Request Body |
+|--------|----------|-------------|--------------|
+| `POST` | `/register` | Register a new user | `name`, `email`, `password` |
+| `POST` | `/login` | Authenticate user and get token | `email`, `password` |
+| `POST` | `/password/email` | Send password reset email | `email` |
+| `POST` | `/password/reset` | Reset password with token | `email`, `password`, `password_confirmation`, `token` |
+
+#### Protected Authentication Endpoints
+
+| Method | Endpoint | Description | Headers |
+|--------|----------|-------------|---------|
+| `GET` | `/account` | Get current user account info | `Authorization: Bearer {token}` |
+| `PUT` | `/account` | Update current user account | `Authorization: Bearer {token}` |
+| `POST` | `/logout` | Logout and revoke token | `Authorization: Bearer {token}` |
+
+### User Management (Admin Only)
+
+All user management endpoints require `admin` role.
+
+| Method | Endpoint | Description | Request Body |
+|--------|----------|-------------|--------------|
+| `GET` | `/users` | List all users | - |
+| `GET` | `/users/roles` | Get available roles | - |
+| `POST` | `/users` | Create new user | `name`, `email`, `password`, `role` |
+| `GET` | `/users/{id}` | Get specific user | - |
+| `PUT` | `/users/{id}` | Update user | `name`, `email`, `role` |
+| `DELETE` | `/users/{id}` | Delete user | - |
+
+### Role Management (Admin Only)
+
+| Method | Endpoint | Description | Request Body |
+|--------|----------|-------------|--------------|
+| `GET` | `/roles` | List all roles | - |
+| `POST` | `/roles` | Create new role | `name`, `permissions` |
+| `GET` | `/roles/{id}` | Get specific role | - |
+| `PUT` | `/roles/{id}` | Update role | `name`, `permissions` |
+| `DELETE` | `/roles/{id}` | Delete role | - |
+
+### Article Management (Admin Only)
+
+| Method | Endpoint | Description | Request Body |
+|--------|----------|-------------|--------------|
+| `GET` | `/articles/node/{parentId}` | Get articles by parent node | - |
+| `POST` | `/articles` | Create new article | `title`, `content`, `parent_id` |
+| `GET` | `/articles/{id}` | Get specific article | - |
+| `PUT` | `/articles/{id}` | Update article | `title`, `content` |
+| `DELETE` | `/articles/{id}` | Delete article | - |
+| `GET` | `/articles/ordering/{id}` | Get article ordering options | - |
+
+#### Article Content Management
+
+| Method | Endpoint | Description | Request Body |
+|--------|----------|-------------|--------------|
+| `GET` | `/article-contents/{id}` | Get article content | - |
+| `POST` | `/article-contents` | Create article content | `article_id`, `content` |
+| `PUT` | `/article-contents/{id}` | Update article content | `content` |
+| `DELETE` | `/article-contents/{id}` | Delete article content | - |
+
+#### Article Assets Management
+
+| Method | Endpoint | Description | Request Body |
+|--------|----------|-------------|--------------|
+| `GET` | `/article-assets/{articleId}` | Get article assets | - |
+| `POST` | `/article-assets` | Upload article asset | `article_id`, `file` |
+| `DELETE` | `/article-assets/{id}` | Delete article asset | - |
+
+#### Article Gallery Management
+
+| Method | Endpoint | Description | Request Body |
+|--------|----------|-------------|--------------|
+| `GET` | `/article-galleries/{id}` | Get article gallery | - |
+| `POST` | `/article-galleries` | Create gallery item | `article_id`, `image` |
+| `DELETE` | `/article-galleries/{id}` | Delete gallery item | - |
+
+#### Article Data Management
+
+| Method | Endpoint | Description | Request Body |
+|--------|----------|-------------|--------------|
+| `GET` | `/article-data/node/{parentId}` | Get article data by parent | - |
+| `GET` | `/article-data/ordering/{id}` | Get data ordering options | - |
+| `POST` | `/article-data` | Create article data | `article_id`, `data` |
+| `GET` | `/article-data/{id}` | Get specific article data | - |
+| `PUT` | `/article-data/{id}` | Update article data | `data` |
+| `DELETE` | `/article-data/{id}` | Delete article data | - |
+
+#### Article Settings
+
+| Method | Endpoint | Description | Request Body |
+|--------|----------|-------------|--------------|
+| `GET` | `/article-settings/{articleId}` | Get article settings | - |
+| `PUT` | `/article-settings/{articleId}` | Update article settings | `settings` |
+
+### Banner Management (Admin Only)
+
+| Method | Endpoint | Description | Request Body |
+|--------|----------|-------------|--------------|
+| `GET` | `/banners` | List all banners | - |
+| `GET` | `/banners/{id}` | Get specific banner | - |
+| `POST` | `/banners` | Create new banner | `title`, `image`, `link` |
+| `PUT` | `/banners/{id}` | Update banner | `title`, `image`, `link` |
+| `DELETE` | `/banners/{id}` | Delete banner | - |
+| `GET` | `/banners/ordering/{id}` | Get banner ordering options | - |
+
+### Programme Management (Admin Only)
+
+| Method | Endpoint | Description | Request Body |
+|--------|----------|-------------|--------------|
+| `GET` | `/programmes` | List all programmes | - |
+| `GET` | `/programmes/{id}` | Get specific programme | - |
+| `POST` | `/programmes` | Create new programme | `title`, `description`, `schedule` |
+| `PUT` | `/programmes/{id}` | Update programme | `title`, `description`, `schedule` |
+| `DELETE` | `/programmes/{id}` | Delete programme | - |
+| `GET` | `/programmes/ordering/{id}` | Get programme ordering options | - |
+
+### Video Management (Admin Only)
+
+| Method | Endpoint | Description | Request Body |
+|--------|----------|-------------|--------------|
+| `GET` | `/videos` | List all videos | - |
+| `GET` | `/videos/{id}` | Get specific video | - |
+| `POST` | `/videos` | Create new video | `title`, `url`, `thumbnail` |
+| `PUT` | `/videos/{id}` | Update video | `title`, `url`, `thumbnail` |
+| `DELETE` | `/videos/{id}` | Delete video | - |
+| `GET` | `/videos/ordering/{id}` | Get video ordering options | - |
+
+### Asset Management (Admin Only)
+
+| Method | Endpoint | Description | Request Body |
+|--------|----------|-------------|--------------|
+| `GET` | `/assets/node/{parentId}` | Get assets by parent node | - |
+| `GET` | `/assets` | List all assets | - |
+| `GET` | `/assets/{id}` | Get specific asset | - |
+| `POST` | `/assets` | Upload new asset | `file`, `parent_id` |
+| `PUT` | `/assets/{id}` | Update asset | `name`, `description` |
+| `DELETE` | `/assets/{id}` | Delete asset | - |
+| `GET` | `/assets/ordering/{id}` | Get asset ordering options | - |
+
+### VOD (Video on Demand) Management (Admin Only)
+
+| Method | Endpoint | Description | Request Body |
+|--------|----------|-------------|--------------|
+| `GET` | `/vods/node/{parentId}` | Get VODs by parent node | - |
+| `GET` | `/vods` | List all VODs | - |
+| `GET` | `/vods/list-videos` | List available videos for VOD | - |
+| `GET` | `/vods/{id}` | Get specific VOD | - |
+| `POST` | `/vods` | Create new VOD | `title`, `video_url`, `description` |
+| `PUT` | `/vods/{id}` | Update VOD | `title`, `video_url`, `description` |
+| `DELETE` | `/vods/{id}` | Delete VOD | - |
+| `GET` | `/vods/ordering/{id}` | Get VOD ordering options | - |
+
+### Directory Management (Public)
+
+| Method | Endpoint | Description | Request Body |
+|--------|----------|-------------|--------------|
+| `GET` | `/directories` | Get directory structure | - |
+| `GET` | `/directories/{id}` | Get directory contents | - |
+| `GET` | `/directories/{id}/show` | Show directory details | - |
+| `POST` | `/directories/{id}/create` | Create subdirectory | `name` |
+| `PUT` | `/directories/{id}/update` | Update directory | `name` |
+| `DELETE` | `/directories/{id}/delete` | Delete directory | - |
+| `POST` | `/directories/{root}` | Create root directory | `name` |
+| `GET` | `/directories/ordering/{id}` | Get directory ordering options | - |
+
+### Frontend API Endpoints (Public)
+
+These endpoints are prefixed with `/frontend/` and are used by the public-facing applications.
+
+#### Content Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/frontend/articles/{id}` | Get article content |
+| `GET` | `/frontend/listings/{id}` | Get article listings |
+| `GET` | `/frontend/show/{id}` | Show article details |
+| `GET` | `/frontend/article-galleries/{dataId}` | Get article gallery |
+
+#### Home Page Content
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/frontend/home-footer` | Get footer content |
+| `GET` | `/frontend/home-menu` | Get main menu |
+| `GET` | `/frontend/home-menu-1` | Get menu level 1 |
+| `GET` | `/frontend/home-menu-2` | Get menu level 2 |
+| `GET` | `/frontend/home-banners` | Get home page banners |
+| `GET` | `/frontend/home-programmes` | Get home page programmes |
+| `GET` | `/frontend/home-videos` | Get home page videos |
+
+#### Directory Search
+
+| Method | Endpoint | Description | Request Body |
+|--------|----------|-------------|--------------|
+| `POST` | `/frontend/directories/search` | Search directories | `query`, `filters` |
+| `GET` | `/frontend/directories/{id}` | Get directory by ID | - |
+| `GET` | `/frontend/directories/{id}/show` | Show directory details | - |
+
+### Response Format
+
+All API responses follow a consistent JSON format:
+
+#### Success Response
+```json
+{
+  "message": "success",
+  "data": {
+    // Response data here
+  }
+}
+```
+
+#### Error Response
+```json
+{
+  "message": "Error description",
+  "errors": {
+    "field": ["Validation error message"]
+  }
+}
+```
+
+### Authentication
+
+The API uses Laravel Sanctum for authentication. Include the bearer token in the Authorization header:
+
+```
+Authorization: Bearer {your-token-here}
+```
+
+### Rate Limiting
+
+API endpoints are rate-limited to prevent abuse. Default limits:
+- Authenticated requests: 60 per minute
+- Guest requests: 30 per minute
+
+### CORS
+
+Cross-Origin Resource Sharing (CORS) is configured to allow requests from the frontend applications. Check `config/cors.php` for current settings.
 
 ## Troubleshooting
 
