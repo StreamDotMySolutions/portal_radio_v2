@@ -24,6 +24,457 @@ Before installing this project, ensure you have the following installed on your 
 - **MySQL** or **MariaDB**
 - **Nginx** (optional, for production)
 
+## Ubuntu Server Setup (Production Installation)
+
+This section provides a complete guide for setting up the boilerplate project on a fresh Ubuntu server from scratch.
+
+### System Requirements
+
+- **Ubuntu Server**: 20.04 LTS or 22.04 LTS
+- **RAM**: Minimum 2GB (4GB recommended)
+- **Storage**: Minimum 20GB
+- **Network**: Internet connection for package downloads
+
+### Step 1: Update System Packages
+
+```bash
+# Update package lists and upgrade system
+sudo apt update && sudo apt upgrade -y
+
+# Install essential packages
+sudo apt install -y curl wget git unzip software-properties-common apt-transport-https ca-certificates gnupg lsb-release
+```
+
+### Step 2: Install Nginx Web Server
+
+```bash
+# Install Nginx
+sudo apt install -y nginx
+
+# Start and enable Nginx
+sudo systemctl start nginx
+sudo systemctl enable nginx
+
+# Check Nginx status
+sudo systemctl status nginx
+
+# Allow Nginx through firewall
+sudo ufw allow 'Nginx Full'
+```
+
+### Step 3: Install MySQL Database Server
+
+```bash
+# Install MySQL Server
+sudo apt install -y mysql-server
+
+# Start and enable MySQL
+sudo systemctl start mysql
+sudo systemctl enable mysql
+
+# Secure MySQL installation
+sudo mysql_secure_installation
+```
+
+**MySQL Secure Installation Steps:**
+1. Set root password (choose a strong password)
+2. Remove anonymous users: **Y**
+3. Disallow root login remotely: **Y**
+4. Remove test database: **Y**
+5. Reload privilege tables: **Y**
+
+```bash
+# Create database and user for the application
+sudo mysql -u root -p
+
+# In MySQL console, run:
+CREATE DATABASE rtm_portal CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'rtm_user'@'localhost' IDENTIFIED BY 'your_secure_password';
+GRANT ALL PRIVILEGES ON rtm_portal.* TO 'rtm_user'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+```
+
+### Step 4: Install PHP 8.2 and Required Extensions
+
+```bash
+# Add PHP repository
+sudo add-apt-repository ppa:ondrej/php -y
+sudo apt update
+
+# Install PHP 8.2 and essential extensions
+sudo apt install -y php8.2 php8.2-fpm php8.2-cli php8.2-common php8.2-mysql php8.2-zip php8.2-gd php8.2-mbstring php8.2-curl php8.2-xml php8.2-bcmath php8.2-json php8.2-tokenizer php8.2-fileinfo php8.2-intl php8.2-dom php8.2-simplexml php8.2-xmlwriter php8.2-xmlreader
+
+# Start and enable PHP-FPM
+sudo systemctl start php8.2-fpm
+sudo systemctl enable php8.2-fpm
+
+# Check PHP version
+php -v
+
+# Check installed PHP extensions
+php -m
+```
+
+**Required PHP Extensions for Laravel:**
+- `php8.2-mysql` - MySQL database support
+- `php8.2-zip` - ZIP archive support
+- `php8.2-gd` - Image processing
+- `php8.2-mbstring` - Multibyte string support
+- `php8.2-curl` - HTTP client support
+- `php8.2-xml` - XML processing
+- `php8.2-bcmath` - Arbitrary precision mathematics
+- `php8.2-json` - JSON support
+- `php8.2-tokenizer` - Tokenizer support
+- `php8.2-fileinfo` - File information
+- `php8.2-intl` - Internationalization
+- `php8.2-dom` - DOM manipulation
+- `php8.2-simplexml` - Simple XML support
+
+### Step 5: Install Composer (PHP Dependency Manager)
+
+```bash
+# Download and install Composer
+curl -sS https://getcomposer.org/installer | php
+sudo mv composer.phar /usr/local/bin/composer
+
+# Make Composer executable
+sudo chmod +x /usr/local/bin/composer
+
+# Verify Composer installation
+composer --version
+```
+
+### Step 6: Install Node.js and npm
+
+```bash
+# Install Node.js 18.x LTS
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt install -y nodejs
+
+# Verify installation
+node --version
+npm --version
+
+# Install Yarn (optional, alternative to npm)
+sudo npm install -g yarn
+```
+
+### Step 7: Configure PHP for Production
+
+```bash
+# Edit PHP-FPM configuration
+sudo nano /etc/php/8.2/fpm/php.ini
+```
+
+**Important PHP Configuration Changes:**
+```ini
+# Memory and execution limits
+memory_limit = 512M
+max_execution_time = 300
+max_input_time = 300
+
+# File upload settings
+upload_max_filesize = 256M
+post_max_size = 256M
+max_file_uploads = 20
+
+# Session settings
+session.gc_maxlifetime = 1440
+session.cookie_httponly = 1
+session.cookie_secure = 1
+
+# Security settings
+expose_php = Off
+allow_url_fopen = Off
+allow_url_include = Off
+
+# Error reporting (disable in production)
+display_errors = Off
+display_startup_errors = Off
+log_errors = On
+error_log = /var/log/php_errors.log
+
+# Timezone
+date.timezone = Asia/Kuala_Lumpur
+```
+
+```bash
+# Edit PHP-FPM pool configuration
+sudo nano /etc/php/8.2/fpm/pool.d/www.conf
+```
+
+**PHP-FPM Pool Configuration:**
+```ini
+# Process management
+pm = dynamic
+pm.max_children = 50
+pm.start_servers = 5
+pm.min_spare_servers = 5
+pm.max_spare_servers = 35
+pm.max_requests = 500
+
+# Security
+security.limit_extensions = .php
+```
+
+```bash
+# Restart PHP-FPM to apply changes
+sudo systemctl restart php8.2-fpm
+```
+
+### Step 8: Create Application Directory Structure
+
+```bash
+# Create web directory
+sudo mkdir -p /var/www/rtm_portal_v2
+
+# Set ownership to www-data
+sudo chown -R www-data:www-data /var/www/rtm_portal_v2
+
+# Set proper permissions
+sudo chmod -R 755 /var/www/rtm_portal_v2
+
+# Create SSL certificate directories
+sudo mkdir -p /etc/nginx/certs
+sudo mkdir -p /etc/nginx/keys
+```
+
+### Step 9: Configure Firewall
+
+```bash
+# Enable UFW firewall
+sudo ufw enable
+
+# Allow SSH (important - don't lock yourself out!)
+sudo ufw allow ssh
+
+# Allow HTTP and HTTPS
+sudo ufw allow 80/tcp
+sudo ufw allow 443/tcp
+
+# Allow MySQL (only if needed for remote connections)
+# sudo ufw allow 3306/tcp
+
+# Check firewall status
+sudo ufw status
+```
+
+### Step 10: Install Additional Security Tools
+
+```bash
+# Install Fail2Ban for intrusion prevention
+sudo apt install -y fail2ban
+
+# Create Fail2Ban configuration for Nginx
+sudo nano /etc/fail2ban/jail.local
+```
+
+**Fail2Ban Configuration:**
+```ini
+[DEFAULT]
+bantime = 3600
+findtime = 600
+maxretry = 3
+
+[nginx-http-auth]
+enabled = true
+port = http,https
+logpath = /var/log/nginx/error.log
+
+[nginx-noscript]
+enabled = true
+port = http,https
+logpath = /var/log/nginx/access.log
+maxretry = 6
+
+[nginx-badbots]
+enabled = true
+port = http,https
+logpath = /var/log/nginx/access.log
+maxretry = 2
+```
+
+```bash
+# Start and enable Fail2Ban
+sudo systemctl start fail2ban
+sudo systemctl enable fail2ban
+```
+
+### Step 11: SSL Certificate Setup
+
+#### Option A: Let's Encrypt (Free SSL)
+
+```bash
+# Install Certbot
+sudo apt install -y certbot python3-certbot-nginx
+
+# Obtain SSL certificate (replace with your domain)
+sudo certbot --nginx -d www.rtm.gov.my -d rtm.gov.my
+
+# Test automatic renewal
+sudo certbot renew --dry-run
+```
+
+#### Option B: Custom SSL Certificate
+
+```bash
+# If you have custom SSL certificates, copy them to:
+sudo cp your-certificate.pem /etc/nginx/certs/FullChain.pem
+sudo cp your-private-key.key /etc/nginx/keys/private.key
+
+# Set proper permissions
+sudo chmod 644 /etc/nginx/certs/FullChain.pem
+sudo chmod 600 /etc/nginx/keys/private.key
+sudo chown root:root /etc/nginx/certs/FullChain.pem
+sudo chown root:root /etc/nginx/keys/private.key
+```
+
+### Step 12: System Optimization
+
+```bash
+# Increase file descriptor limits
+echo "* soft nofile 65536" | sudo tee -a /etc/security/limits.conf
+echo "* hard nofile 65536" | sudo tee -a /etc/security/limits.conf
+
+# Configure kernel parameters for better performance
+sudo nano /etc/sysctl.conf
+```
+
+**Add to sysctl.conf:**
+```ini
+# Network performance
+net.core.rmem_max = 16777216
+net.core.wmem_max = 16777216
+net.ipv4.tcp_rmem = 4096 65536 16777216
+net.ipv4.tcp_wmem = 4096 65536 16777216
+
+# File system
+fs.file-max = 2097152
+```
+
+```bash
+# Apply sysctl changes
+sudo sysctl -p
+```
+
+### Step 13: Create Deployment User
+
+```bash
+# Create deployment user
+sudo adduser deploy
+
+# Add deploy user to www-data group
+sudo usermod -a -G www-data deploy
+
+# Add deploy user to sudoers (optional, for deployment scripts)
+sudo usermod -a -G sudo deploy
+
+# Set up SSH key authentication for deploy user
+sudo -u deploy mkdir -p /home/deploy/.ssh
+sudo -u deploy chmod 700 /home/deploy/.ssh
+
+# Copy your public key to authorized_keys
+# sudo -u deploy nano /home/deploy/.ssh/authorized_keys
+# sudo -u deploy chmod 600 /home/deploy/.ssh/authorized_keys
+```
+
+### Step 14: Install Process Manager (PM2 for Node.js - Optional)
+
+```bash
+# Install PM2 globally (if you need to run Node.js processes)
+sudo npm install -g pm2
+
+# Configure PM2 to start on boot
+pm2 startup
+sudo env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u deploy --hp /home/deploy
+```
+
+### Step 15: System Monitoring Setup
+
+```bash
+# Install system monitoring tools
+sudo apt install -y htop iotop nethogs
+
+# Install log rotation for application logs
+sudo nano /etc/logrotate.d/laravel
+```
+
+**Laravel Log Rotation Configuration:**
+```
+/var/www/rtm_portal_v2/api/storage/logs/*.log {
+    daily
+    missingok
+    rotate 14
+    compress
+    notifempty
+    create 644 www-data www-data
+    postrotate
+        sudo systemctl reload php8.2-fpm
+    endscript
+}
+```
+
+### Step 16: Final System Verification
+
+```bash
+# Check all services are running
+sudo systemctl status nginx
+sudo systemctl status mysql
+sudo systemctl status php8.2-fpm
+
+# Check PHP configuration
+php -i | grep -E "(memory_limit|upload_max_filesize|post_max_size)"
+
+# Check MySQL connection
+mysql -u rtm_user -p -e "SELECT VERSION();"
+
+# Check disk space
+df -h
+
+# Check memory usage
+free -h
+
+# Check network connectivity
+curl -I http://localhost
+```
+
+### Post-Installation Security Checklist
+
+- [ ] Change default SSH port (optional but recommended)
+- [ ] Disable root SSH login
+- [ ] Configure automatic security updates
+- [ ] Set up regular backups
+- [ ] Configure log monitoring
+- [ ] Test SSL certificate
+- [ ] Verify firewall rules
+- [ ] Test application deployment
+
+### Maintenance Commands
+
+```bash
+# Update system packages
+sudo apt update && sudo apt upgrade -y
+
+# Restart web services
+sudo systemctl restart nginx php8.2-fpm mysql
+
+# Check service logs
+sudo journalctl -u nginx -f
+sudo journalctl -u php8.2-fpm -f
+sudo journalctl -u mysql -f
+
+# Monitor system resources
+htop
+iotop
+nethogs
+
+# Check SSL certificate expiration
+sudo certbot certificates
+```
+
+This completes the Ubuntu server setup. You can now proceed with the application installation steps in the main installation guide.
+
 ## Installation Guide
 
 ### 1. Clone the Repository
