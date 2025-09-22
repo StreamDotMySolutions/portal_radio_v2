@@ -207,20 +207,208 @@ cd ../rtm.gov.my
 npm run build
 ```
 
-### Nginx Configuration
+## Nginx Configuration & Production Setup
 
-Use the provided Nginx configuration files in the `nginx/` directory:
+The project includes comprehensive Nginx configuration for production deployment with multiple server configurations to handle different environments and security requirements.
 
-- `nginx.conf` - Main Nginx configuration
-- `default` - Default server configuration
-- `server.conf` - Server-specific settings
-- `www.rtm.gov.my.conf` - RTM website configuration
+### Configuration Files Overview
 
-### SSL Certificates
+The `nginx/` directory contains the following configuration files:
 
-SSL certificates and keys are stored in:
-- `nginx/certs/` - Certificate files
-- `nginx/keys/` - Private key files
+#### 1. `nginx.conf` - Main Nginx Configuration
+- **Security Headers**: Comprehensive security headers including HSTS, CSP, X-Frame-Options
+- **SSL/TLS Settings**: Modern TLS protocols (TLSv1.2, TLSv1.3) with secure ciphers
+- **Performance**: Gzip compression, optimized worker processes
+- **Content Security Policy**: Strict CSP for enhanced security
+
+#### 2. `default` - Development/Local Server Configuration
+```nginx
+server_name: rtm.gov.my
+Port: 80 (HTTP)
+Root: /var/www/rtm.gov.my/rtm.gov.my/build
+```
+
+**Location Blocks:**
+- `/` - RTM website (React build)
+- `/backend` - Admin dashboard (React build)
+- `/storage` - Laravel storage files with directory listing
+- `/api` - Laravel API with PHP-FPM processing
+
+#### 3. `server.conf` - Alternative Development Configuration
+```nginx
+server_name: localhost
+Port: 8080
+Root: /var/www/localhost/boilerplate/api/public
+```
+
+**Features:**
+- Dedicated API server configuration
+- PHP 8.2-FPM integration
+- Custom logging paths
+
+#### 4. `www.rtm.gov.my.conf` - Production HTTPS Configuration
+
+**Multi-Server Setup:**
+1. **HTTP to HTTPS Redirect** (Port 80)
+2. **Non-www to www Redirect** (Port 443)
+3. **Main Production Server** (Port 443 with SSL)
+
+**Production Server Features:**
+- **SSL/TLS**: Full SSL configuration with custom certificates
+- **Security Headers**: Enhanced security headers for production
+- **Content Security Policy**: Comprehensive CSP for media and scripts
+- **PHP-FPM**: PHP 8.2-FPM integration
+- **File Upload**: 256MB max body size for large file uploads
+
+### Server Location Mapping
+
+#### Production Server (`www.rtm.gov.my.conf`)
+
+| Path | Purpose | Physical Location |
+|------|---------|-------------------|
+| `/` | RTM Website Frontend | `/var/www/rtm_portal_v2/rtm.gov.my/build` |
+| `/images` | FTP Uploaded Images | `/var/www/rtm_portal/images/` |
+| `/storage` | Laravel Storage | `/var/www/rtm_portal_v2/api/storage/app/public/` |
+| `/api` | Laravel API | `/var/www/rtm_portal_v2/api/public` |
+
+#### Development Server (`default`)
+
+| Path | Purpose | Physical Location |
+|------|---------|-------------------|
+| `/` | RTM Website Frontend | `/var/www/rtm.gov.my/rtm.gov.my/build` |
+| `/backend` | Admin Dashboard | `/var/www/rtm.gov.my/backend/build` |
+| `/storage` | Laravel Storage | `/var/www/rtm.gov.my/api/storage/app/public/` |
+| `/api` | Laravel API | `/var/www/rtm.gov.my/api/public` |
+
+### SSL/TLS Configuration
+
+#### Certificate Files
+- **Certificate**: `nginx/certs/FullChain.pem`
+- **Private Key**: `nginx/keys/private.key`
+
+#### SSL Settings
+- **Protocols**: TLSv1.2, TLSv1.3
+- **Session Cache**: Shared SSL cache (1MB, 5min timeout)
+- **Ciphers**: HIGH security ciphers, no aNULL or MD5
+
+### Security Features
+
+#### HTTP Security Headers
+```nginx
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+X-Content-Type-Options: nosniff
+X-Frame-Options: DENY
+Content-Security-Policy: Comprehensive CSP policy
+Referrer-Policy: strict-origin-when-cross-origin
+Permissions-Policy: Restricted permissions for geolocation, camera, etc.
+```
+
+#### Content Security Policy (CSP)
+- **Scripts**: Self, unsafe-inline, Google Tag Manager, CDN
+- **Styles**: Self, unsafe-inline, Google Fonts, CDN
+- **Images**: Self, data URIs
+- **Media**: Self, RTM domain, blob URIs
+- **Connections**: Self, Google Analytics, RTM domain
+
+### PHP-FPM Integration
+
+#### Configuration Details
+- **Socket**: `/run/php/php8.2-fpm.sock` (Production)
+- **Socket**: `/run/php/php8.1-fpm.sock` (Development)
+- **Read Timeout**: 600 seconds for long-running processes
+- **Max Body Size**: 256MB for file uploads
+
+#### Laravel API Routing
+```nginx
+location @laravelapi {
+    rewrite /api/(.*)?$ /api/index.php?$is_args$args last;
+}
+```
+
+### Deployment Instructions
+
+#### 1. Copy Configuration Files
+```bash
+# Copy nginx configurations to nginx sites-available
+sudo cp nginx/nginx.conf /etc/nginx/nginx.conf
+sudo cp nginx/www.rtm.gov.my.conf /etc/nginx/sites-available/
+sudo cp nginx/default /etc/nginx/sites-available/
+
+# Enable sites
+sudo ln -s /etc/nginx/sites-available/www.rtm.gov.my.conf /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
+```
+
+#### 2. SSL Certificate Setup
+```bash
+# Copy SSL certificates
+sudo cp nginx/certs/FullChain.pem /etc/nginx/certs/
+sudo cp nginx/keys/private.key /etc/nginx/keys/
+
+# Set proper permissions
+sudo chmod 600 /etc/nginx/keys/private.key
+sudo chmod 644 /etc/nginx/certs/FullChain.pem
+```
+
+#### 3. Test and Reload Nginx
+```bash
+# Test configuration
+sudo nginx -t
+
+# Reload nginx
+sudo systemctl reload nginx
+```
+
+### Environment-Specific Configurations
+
+#### Development Environment
+- **HTTP Only**: Port 80 configuration
+- **Local Domains**: localhost, rtm.gov.my
+- **Debug Features**: Directory listing enabled for storage
+- **Relaxed Security**: Basic security headers
+
+#### Production Environment
+- **HTTPS Only**: Automatic HTTP to HTTPS redirect
+- **Domain Redirects**: Non-www to www redirection
+- **Enhanced Security**: Full security header suite
+- **Performance Optimized**: Gzip, caching, optimized workers
+
+### Monitoring and Logging
+
+#### Log Files
+- **Access Logs**: `/var/log/nginx/access.log`
+- **Error Logs**: `/var/log/nginx/error.log`
+- **Custom Logs**: `/var/log/nginx/localhost_access.log` (server.conf)
+
+#### Health Checks
+- Monitor SSL certificate expiration
+- Check PHP-FPM socket connectivity
+- Verify file upload functionality
+- Test API endpoint responses
+
+### Troubleshooting
+
+#### Common Issues
+1. **SSL Certificate Errors**: Verify certificate paths and permissions
+2. **PHP-FPM Connection**: Check socket path and PHP-FPM service status
+3. **File Upload Failures**: Verify `client_max_body_size` setting
+4. **API Routing Issues**: Check Laravel API rewrite rules
+5. **Static File 404s**: Verify build file paths and permissions
+
+#### Debug Commands
+```bash
+# Check nginx configuration
+sudo nginx -t
+
+# Check PHP-FPM status
+sudo systemctl status php8.2-fpm
+
+# Test SSL certificate
+openssl x509 -in /etc/nginx/certs/FullChain.pem -text -noout
+
+# Check file permissions
+ls -la /var/www/rtm_portal_v2/
+```
 
 ## Database
 
