@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Administration System - User Manual</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        nav {
+            background-color: #2c3e50;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #34495e;
+        }
+
+        main {
+            padding: 2rem;
+        }
+
+        section {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        section:last-child {
+            border-bottom: none;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        h4 {
+            color: #555;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .warning-box {
+            background-color: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .success-box {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .code-box {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .code-box code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background-color: #667eea;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .button-demo {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            border-radius: 4px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+
+        .btn-primary { background-color: #0d6efd; }
+        .btn-success { background-color: #198754; }
+        .btn-warning { background-color: #ffc107; color: #333; }
+        .btn-danger { background-color: #dc3545; }
+        .btn-secondary { background-color: #6c757d; }
+
+        .screenshot-placeholder {
+            background-color: #e9ecef;
+            border: 2px dashed #adb5bd;
+            padding: 3rem;
+            text-align: center;
+            margin: 1rem 0;
+            border-radius: 4px;
+            color: #6c757d;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background-color: #667eea;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .toc {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .toc h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+
+        .toc ul {
+            margin-left: 1rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .feature-card {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        .feature-card h4 {
+            color: #667eea;
+            margin-top: 0;
+        }
+
+        @media print {
+            nav {
+                display: none;
+            }
+            
+            section {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Backend Administration System</h1>
+            <p>Complete User Manual & Documentation</p>
+            <p style="font-size: 0.9rem; margin-top: 1rem;">Version 1.0 | Last Updated: January 2025</p>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#getting-started">Getting Started</a></li>
+                <li><a href="#authentication">Authentication</a></li>
+                <li><a href="#navigation">Navigation</a></li>
+                <li><a href="#modules">Modules</a></li>
+                <li><a href="#operations">Operations</a></li>
+                <li><a href="#troubleshooting">Troubleshooting</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <section id="introduction">
+                <h2>1. Introduction</h2>
+                
+                <h3>System Overview</h3>
+                <p>The Backend Administration System is a comprehensive React-based web application designed to manage organizational content, users, and digital assets efficiently. This manual provides detailed instructions for all user roles.</p>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>🔐 Role Management</h4>
+                        <p>Control user permissions and access levels</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>👥 User Management</h4>
+                        <p>Manage system users and their profiles</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📁 Directory System</h4>
+                        <p>Organize departments and staff hierarchically</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📝 Content Management</h4>
+                        <p>Create and manage articles, banners, and media</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="getting-started">
+                <h2>2. Getting Started</h2>
+
+                <h3>System Access</h3>
+                <p>Access the system through your web browser at:</p>
+                <div class="code-box">
+                    <code>https://your-domain.com/backend</code>
+                </div>
+
+                <h3>Browser Requirements</h3>
+                <ul>
+                    <li>Chrome 90+ (Recommended)</li>
+                    <li>Firefox 88+</li>
+                    <li>Safari 14+</li>
+                    <li>Edge 90+</li>
+                </ul>
+            </section>
+
+            <section id="authentication">
+                <h2>3. Authentication</h2>
+
+                <h3>Sign In</h3>
+                <ol>
+                    <li>Navigate to the login page</li>
+                    <li>Enter your email address</li>
+                    <li>Enter your password</li>
+                    <li>Click <span class="button-demo btn-primary">Sign In</span></li>
+                </ol>
+
+                <h3>Password Security</h3>
+                <div class="warning-box">
+                    <strong>⚠️ Security:</strong> Never share your credentials. Always sign out when finished.
+                </div>
+            </section>
+
+            <section id="navigation">
+                <h2>4. System Navigation</h2>
+
+                <h3>Main Interface Components</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Location</th>
+                            <th>Function</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Top Navigation Bar</td>
+                            <td>Top of page</td>
+                            <td>Account menu, logo, sign out</td>
+                        </tr>
+                        <tr>
+                            <td>Breadcrumb</td>
+                            <td>Below navigation</td>
+                            <td>Current location path</td>
+                        </tr>
+                        <tr>
+                            <td>Main Content</td>
+                            <td>Center</td>
+                            <td>Primary workspace</td>
+                        </tr>
+                        <tr>
+                            <td>Footer</td>
+                            <td>Bottom</td>
+                            <td>Additional links</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="modules">
+                <h2>5. Administration Modules</h2>
+
+                <h3 id="roles">5.1 Role Management</h3>
+                <p><strong>Access:</strong> System Administrators Only</p>
+                
+                <h4>Features:</h4>
+                <ul>
+                    <li>Create and edit roles</li>
+                    <li>Assign permissions</li>
+                    <li>Manage access control</li>
+                </ul>
+
+                <h4>Creating a Role:</h4>
+                <ol>
+                    <li>Click <span class="button-demo btn-primary">+ New</span></li>
+                    <li>Enter role name</li>
+                    <li>Select permissions</li>
+                    <li>Click <span class="button-demo btn-success">Submit</span></li>
+                </ol>
+
+                <h3 id="users">5.2 User Management</h3>
+                <p><strong>Access:</strong> Administrators and Managers</p>
+                
+                <h4>User Information:</h4>
+                <ul>
+                    <li>Name and email</li>
+                    <li>Department and position</li>
+                    <li>Assigned roles</li>
+                    <li>Account status</li>
+                </ul>
+
+                <h4>Adding a New User:</h4>
+                <ol>
+                    <li>Click <span class="button-demo btn-primary">+ New</span></li>
+                    <li>Fill in user details</li>
+                    <li>Assign role(s)</li>
+                    <li>Set initial password</li>
+                    <li>Click <span class="button-demo btn-success">Submit</span></li>
+                </ol>
+
+                <h3 id="directories">5.3 Directory Management</h3>
+                <p><strong>Access:</strong> Administrators and Department Managers</p>
+
+                <h4>Directory Types:</h4>
+                <ul>
+                    <li><strong>📁 Folder:</strong> Departments/Units</li>
+                    <li><strong>👤 Spreadsheet:</strong> Staff Members</li>
+                </ul>
+
+                <h4>Creating a Department:</h4>
+                <ol>
+                    <li>Navigate to parent location</li>
+                    <li>Click <span class="button-demo btn-primary">+ New</span></li>
+                    <li>Select "Department" type</li>
+                    <li>Enter department name</li>
+                    <li>Click <span class="button-demo btn-success">Submit</span></li>
+                </ol>
+
+                <h4>Adding Staff:</h4>
+                <ol>
+                    <li>Navigate to department</li>
+                    <li>Click <span class="button-demo btn-primary">+ New</span></li>
+                    <li>Select "Staff" type</li>
+                    <li>Fill in details:
+                        <ul>
+                            <li>Upload photo</li>
+                            <li>Full name</li>
+                            <li>Job title</li>
+                            <li>Email and phone</li>
+                            <li>Social media links</li>
+                            <li>Office address</li>
+                        </ul>
+                    </li>
+                    <li>Click <span class="button-demo btn-success">Submit</span></li>
+                </ol>
+
+                <h4>Ordering Items:</h4>
+                <p>Use Up/Down buttons to reorder items in the list</p>
+
+                <h3 id="articles">5.4 Article Management</h3>
+                <p><strong>Access:</strong> Content Managers and Administrators</p>
+
+                <h4>Article Features:</h4>
+                <ul>
+                    <li>Rich text editor</li>
+                    <li>Featured images</li>
+                    <li>Categories</li>
+                    <li>Publication status</li>
+                    <li>Scheduling</li>
+                </ul>
+
+                <h4>Creating an Article:</h4>
+                <ol>
+                    <li>Navigate to Articles</li>
+                    <li>Click <span class="button-demo btn-primary">+ New</span></li>
+                    <li>Enter title and content</li>
+                    <li>Upload featured image</li>
+                    <li>Set publication date</li>
+                    <li>Click <span class="button-demo btn-success">Publish</span></li>
+                </ol>
+
+                <h3 id="banners">5.5 Banner Management</h3>
+                <p><strong>Access:</strong> Content Managers and Administrators</p>
+
+                <h4>Banner Properties:</h4>
+                <ul>
+                    <li>Banner image (1920x600px recommended)</li>
+                    <li>Title and description</li>
+                    <li>Link URL</li>
+                    <li>Display order</li>
+                    <li>Active status</li>
+                </ul>
+
+                <h4>Creating a Banner:</h4>
+                <ol>
+                    <li>Click <span class="button-demo btn-primary">+ New</span></li>
+                    <li>Upload banner image</li>
+                    <li>Enter details</li>
+                    <li>Set link URL</li>
+                    <li>Click <span class="button-demo btn-success">Submit</span></li>
+                </ol>
+
+                <div class="warning-box">
+                    <strong>⚠️ Image Guidelines:</strong> Use optimized images under 500KB for best performance.
+                </div>
+
+                <h3 id="programmes">5.6 Programme Management</h3>
+                <p><strong>Access:</strong> Content Managers and Administrators</p>
+                <p>Manage TV and radio programme schedules and information.</p>
+
+                <h3 id="videos">5.7 Video Management</h3>
+                <p><strong>Access:</strong> Content Managers and Administrators</p>
+                <p>Upload and manage video content for the website.</p>
+
+                <h3 id="assets">5.8 Asset Management</h3>
+                <p><strong>Access:</strong> Administrators</p>
+                <p>Manage digital assets including images, documents, and files.</p>
+
+                <h3 id="vods">5.9 VOD Management</h3>
+                <p><strong>Access:</strong> Content Managers and Administrators</p>
+                <p>Manage Video On Demand content and categories.</p>
+            </section>
+
+            <section id="operations">
+                <h2>6. Common Operations</h2>
+
+                <h3>CRUD Operations</h3>
+                <p>All modules follow a standard pattern for data management:</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Operation</th>
+                            <th>Button</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Create</strong></td>
+                            <td><span class="button-demo btn-primary">+ New</span></td>
+                            <td>Add new item</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Read</strong></td>
+                            <td><span class="button-demo btn-secondary">👁 View</span></td>
+                            <td>View item details</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Update</strong></td>
+                            <td><span class="button-demo btn-warning">✏ Edit</span></td>
+                            <td>Modify existing item</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Delete</strong></td>
+                            <td><span class="button-demo btn-danger">🗑 Delete</span></td>
+                            <td>Remove item permanently</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Data Tables</h3>
+                <p>Data is displayed in tables with the following features:</p>
+                <ul>
+                    <li><strong>Sorting:</strong> Click column headers to sort</li>
+                    <li><strong>Search:</strong> Use search box to filter results</li>
+                    <li><strong>Pagination:</strong> Navigate through pages</li>
+                    <li><strong>Actions:</strong> Quick access buttons for each row</li>
+                </ul>
+
+                <h3>Forms and Modals</h3>
+                <p>Create and edit operations open in modal windows:</p>
+                <ol>
+                    <li>Fill in required fields (marked with *)</li>
+                    <li>Upload files if needed</li>
+                    <li>Review entered data</li>
+                    <li>Click Submit or Cancel</li>
+                </ol>
+
+                <div class="info-box">
+                    <strong>💡 Tip:</strong> Required fields must be completed before submitting. Form validation will highlight any errors.
+                </div>
+
+                <h3>File Uploads</h3>
+                <p>When uploading files:</p>
+                <ul>
+                    <li>Click "Choose File" or drag-and-drop</li>
+                    <li>Check file size limits</li>
+                    <li>Supported formats: JPG, PNG, GIF, PDF, DOCX</li>
+                    <li>Wait for upload completion</li>
+                </ul>
+
+                <h3>Pagination</h3>
+                <p>Navigate large datasets using pagination controls:</p>
+                <ul>
+                    <li><strong>First:</strong> Jump to first page</li>
+                    <li><strong>Previous:</strong> Go back one page</li>
+                    <li><strong>Numbers:</strong> Jump to specific page</li>
+                    <li><strong>Next:</strong> Advance one page</li>
+                    <li><strong>Last:</strong> Jump to last page</li>
+                </ul>
+            </section>
+
+            <section id="troubleshooting">
+                <h2>7. Troubleshooting</h2>
+
+                <h3>Common Issues and Solutions</h3>
+
+                <h4>Login Problems</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Problem</th>
+                            <th>Solution</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Forgot password</td>
+                            <td>Click "Forgot Password?" and follow reset instructions</td>
+                        </tr>
+                        <tr>
+                            <td>Account locked</td>
+                            <td>Contact system administrator</td>
+                        </tr>
+                        <tr>
+                            <td>Invalid credentials</td>
+                            <td>Verify email and password, check Caps Lock</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h4>Session Issues</h4>
+                <div class="warning-box">

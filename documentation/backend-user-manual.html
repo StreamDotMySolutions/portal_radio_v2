@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Administration System - User Manual</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        nav {
+            background-color: #2c3e50;
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #34495e;
+        }
+
+        main {
+            padding: 2rem;
+        }
+
+        section {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        section:last-child {
+            border-bottom: none;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        h4 {
+            color: #555;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin-left: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .warning-box {
+            background-color: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .success-box {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+        }
+
+        .code-box {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 1rem;
+            margin: 1rem 0;
+            overflow-x: auto;
+        }
+
+        .code-box code {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background-color: #667eea;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+        }
+
+        td {
+            padding: 0.75rem;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .button-demo {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            border-radius: 4px;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+
+        .btn-primary { background-color: #0d6efd; }
+        .btn-success { background-color: #198754; }
+        .btn-warning { background-color: #ffc107; color: #333; }
+        .btn-danger { background-color: #dc3545; }
+        .btn-secondary { background-color: #6c757d; }
+
+        .screenshot-placeholder {
+            background-color: #e9ecef;
+            border: 2px dashed #adb5bd;
+            padding: 3rem;
+            text-align: center;
+            margin: 1rem 0;
+            border-radius: 4px;
+            color: #6c757d;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background-color: #667eea;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .toc {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+
+        .toc h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+
+        .toc ul {
+            margin-left: 1rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .feature-card {
+            background-color: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        .feature-card h4 {
+            color: #667eea;
+            margin-top: 0;
+        }
+
+        @media print {
+            nav {
+                display: none;
+            }
+            
+            section {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Backend Administration System</h1>
+            <p>Complete User Manual & Documentation</p>
+            <p style="font-size: 0.9rem; margin-top: 1rem;">Version 1.0 | Last Updated: January 2025</p>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#getting-started">Getting Started</a></li>
+                <li><a href="#authentication">Authentication</a></li>
+                <li><a href="#navigation">Navigation</a></li>
+                <li><a href="#modules">Modules</a></li>
+                <li><a href="#operations">Operations</a></li>
+                <li><a href="#troubleshooting">Troubleshooting</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+        </nav>
+
+        <main>
+            <!-- TABLE OF CONTENTS -->
+            <div class="toc">
+                <h3>📑 Table of Contents</h3>
+                <ul>
+                    <li><a href="#introduction">1. Introduction</a></li>
+                    <li><a href="#getting-started">2. Getting Started</a></li>
+                    <li><a href="#authentication">3. Authentication</a></li>
+                    <li><a href="#navigation">4. System Navigation</a></li>
+                    <li><a href="#modules">5. Administration Modules</a>
+                        <ul>
+                            <li><a href="#roles">5.1 Role Management</a></li>
+                            <li><a href="#users">5.2 User Management</a></li>
+                            <li><a href="#directories">5.3 Directory Management</a></li>
+                            <li><a href="#articles">5.4 Article Management</a></li>
+                            <li><a href="#banners">5.5 Banner Management</a></li>
+                            <li><a href="#programmes">5.6 Programme Management</a></li>
+                            <li><a href="#videos">5.7 Video Management</a></li>
+                            <li><a href="#assets">5.8 Asset Management</a></li>
+                            <li><a href="#vods">5.9 VOD Management</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#operations">6. Common Operations</a></li>
+                    <li><a href="#troubleshooting">7. Troubleshooting</a></li>
+                    <li><a href="#faq">8. Frequently Asked Questions</a></li>
+                </ul>
+            </div>
+
+            <!-- INTRODUCTION -->
+            <section id="introduction">
+                <h2>1. Introduction</h2>
+                
+                <h3>Welcome to the Backend Administration System</h3>
+                <p>This comprehensive administration system is designed to manage all aspects of your organization's content, users, and digital assets. Built with modern web technologies, it provides a user-friendly interface for efficient content management.</p>
+
+                <h3>System Overview</h3>
+                <p>The backend administration system is a React-based Single Page Application (SPA) that communicates with a Laravel API backend. It features:</p>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>🔐 Secure Authentication</h4>
+                        <p>JWT-based authentication with role-based access control</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📊 Modular Design</h4>
+                        <p>Organized modules for different content types</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🎨 Responsive UI</h4>
+                        <p>Works seamlessly on desktop, tablet, and mobile devices</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>⚡ Real-time Updates</h4>
+                        <p>Instant data refresh and validation</p>
+                    </div>
+                </div>
+
+                <h3>Who Should Use This Manual?</h3>
+                <ul>
+                    <li><strong>System Administrators:</strong> Full access to all modules and settings</li>
+                    <li><strong>Content Managers:</strong> Create and manage articles, banners, and media</li>
+                    <li><strong>Department Managers:</strong> Manage directory structures and staff information</li>
+                    <li><strong>Regular Users:</strong> View-only access to certain modules</li>
+                </ul>
+
+                <div class="info-box">
+                    <strong>📘 Note:</strong> The features and modules you can access depend on your assigned role. If you need additional permissions, contact your system administrator.
+                </div>
+            </section>
+
+            <!-- GETTING STARTED -->
+            <section id="getting-started">
+                <h2>2. Getting Started</h2>
+
+                <h3>System Requirements</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Component</th>
+                            <th>Requirement</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Web Browser</td>
+                            <td>Google Chrome 90+, Firefox 88+, Safari 14+, Edge 90+</td>
+                        </tr>
+                        <tr>
+                            <td>Internet Connection</td>
+                            <td>Stable broadband connection (minimum 5 Mbps)</td>
+                        </tr>
+                        <tr>
+                            <td>Screen Resolution</td>
+                            <td>Minimum 1024x768 pixels (1920x1080 recommended)</td>
+                        </tr>
+                        <tr>
+                            <td>JavaScript</td>
+                            <td>Must be enabled in browser</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Accessing the System</h3>
+                <p>The backend administration system is accessed through your web browser:</p>
+                
+                <div class="code-box">
+                    <code>https://your-domain.com/backend</code>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Important:</strong> Always use HTTPS for secure access. Never share your login credentials with anyone.
+                </div>
+
+                <h3>First Time Setup</h3>
+                <ol>
+                    <li><strong>Receive Credentials:</strong> Your system administrator will provide your username and initial password</li>
+                    <li><strong>First Login:</strong> Access the login page and enter your credentials</li>
+                    <li><strong>Change Password:</strong> It's recommended to change your password on first login</li>
+                    <li><strong>Update Profile:</strong> Complete your profile information in the Account section</li>
+                    <li><strong>Explore Features:</strong> Familiarize yourself with available modules based on your role</li>
+                </ol>
+            </section>
+
+            <!-- AUTHENTICATION -->
+            <section id="authentication">
+                <h2>3. Authentication</h2>
+
+                <h3>3.1 Sign In Process</h3>
+                <p>Follow these steps to log into the system:</p>
+
+                <ol>
+                    <li><span class="step-number">1</span>Navigate to the login page</li>
+                    <li><span class="step-number">2</span>Enter your email address</li>
+                    <li><span class="step-number">3</span>Enter your password</li>
+                    <li><span class="step-number">4</span>Click the <span class="button-demo btn-primary">Sign In</span> button</li>
+                </ol>
+
+                <div class="screenshot-placeholder">
+                    [Screenshot: Login Page Interface]
+                </div>
+
+                <h3>3.2 Password Requirements</h3>
+                <p>For security, passwords must meet the following criteria:</p>
+                <ul>
+                    <li>Minimum 8 characters in length</li>
+                    <li>At least one uppercase letter</li>
+                    <li>At least one lowercase letter</li>
+                    <li>At least one number</li>
+                    <li>At least one special character (!@#$%^&*)</li>
+                </ul>
+
+                <h3>3.3 Password Recovery</h3>
+                <p>If you forget your password:</p>
+                <ol>
+                    <li>Click on "Forgot Password?" link on the login page</li>
+                    <li>Enter your registered email address</li>
+                    <li>Check your email for the password reset link</li>
+                    <li>Click the link and create a new password</li>
+                    <li>Log in with your new password</li>
+                </ol>
+
+                <div class="info-box">
+                    <strong>💡 Tip:</strong> Password reset links expire after 60 minutes. If your link expires, request a new one.
+                </div>
+
+                <h3>3.4 Session Management</h3>
+                <p>The system uses token-based authentication with the following features:</p>
+                <ul>
+                    <li><strong>Auto-logout:</strong> Sessions expire after 2 hours of inactivity</li>
+                    <li><strong>Token Refresh:</strong> Active sessions are automatically extended</li>
+                    <li><strong>Unauthorized Access:</strong> Invalid tokens redirect to login page</li>
+                </ul>
+
+                <h3>3.5 Sign Out</h3>
+                <p>To safely log out of the system:</p>
+                <ol>
+                    <li>Click on your profile icon in the top navigation bar</li>
+                    <li>Select "Sign Out" from the dropdown menu</li>
+                    <li>Confirm your logout if prompted</li>
+                </ol>
+
+                <div class="warning-box">
+                    <strong>⚠️ Security Best Practice:</strong> Always sign out when using shared or public computers.
+                </div>
+            </section>
+
+            <!-- NAVIGATION -->
+            <section id="navigation">
+                <h2>4. System Navigation</h2>
+
+                <h3>4.1 Layout Overview</h3>
+                <p>The administration interface consists of several key areas:</p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Area</th>
+                            <th>Location</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Top Navigation Bar</strong></td>
+                            <td>Top of page</td>
+                            <td>Logo, user account, quick actions, sign out</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Breadcrumb Menu</strong></td>
+                            <td>Below navigation</td>
+                            <td>Shows current location and navigation path</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Main Content Area</strong></td>
+                            <td>Center</td>
+                            <td>Primary workspace for data and forms</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Footer</strong></td>
+                            <td>Bottom</td>
+                            <td>Copyright and additional links</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>4.2 Top Navigation Bar</h3>
+                <p>The top navigation bar provides quick access to:</p>
+                <ul>
+                    <li><strong>Home Icon:</strong> Returns to dashboard</li>
+                    <li><strong>Logo:</strong> Organization branding</li>
+                    <li><strong>Account Menu:</strong> Profile settings and account management</li>
+                    <li><strong>Sign Out:</strong> Secure logout</li>
+                </ul>
+
+                <h3>4.3 Breadcrumb Navigation</h3>
+                <p>Breadcrumbs show your current location in the system hierarchy:</p>
+                <div class="code-box">
+                    <code>🏠 Home > Administration > Directory Management > IT Department</code>
+                </div>
+                <p>Click any breadcrumb link to navigate back to that level.</p>
+
+                <h3>4.4 Dashboard</h3>
+                <p>After logging in, you'll see the dashboard tailored to your role:</p>
+                <ul>
+                    <li><strong>System Dashboard:</strong> Overview of system health and statistics</li>
+                    <li><strong>Admin Dashboard:</strong> User activities and content summaries</li>
+                    <li><strong>Manager Dashboard:</strong> Department-specific metrics</li>
+                    <li><strong>User Dashboard:</strong> Personal tasks and notifications</li>
+                </ul>
+
+                <h3>4.5 Maintenance Mode</h3>
+                <p>During system maintenance, you may see a maintenance page. The system will be unavailable until maintenance is complete. Contact your IT department for estimated downtime.</p>
+
+                <div class="info-box">
+                    <strong>📌 Note:</strong> Maintenance mode is controlled through environment configuration and affects all users except system administrators.
+                </div>
+            </section>
+
+            <!-- MODULES -->
+            <section id="modules">
+                <h2>5. Administration Modules</h2>
+                <p>The system is organized into specialized modules for managing different types of content and data.</p>
+
+                <!-- ROLES -->
+                <h3 id="roles">5.1 Role Management</h3>
+                <p><strong>Access Level:</strong> System Administrators Only</p>
+                <p><strong>Purpose:</strong> Define and manage user roles and permissions.</p>
+
+                <h4>Key Features:</h4>
+                <ul>
+                    <li>Create custom roles with specific permissions</li>
+                    <li>Assign multiple permissions to each role</li>
+                    <li>View all existing roles and their permissions</li>
+                    <li>Edit role names and permission sets</li>
+                    <li>Delete unused roles</li>
+                </ul>
+
+                <h4>Common Operations:</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Operation</th>
+                            <th>Button/Action</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Create Role</td>
+                            <td><span class="button-demo btn-primary">+ New</span></td>
+                            <td>Opens modal to create new role</td>
+                        </tr>
+                        <tr>
+                            <td>Edit Role</td>
+                            <td><span class="button-demo btn-warning">✏ Edit</span></td>
+                            <td>Modify role details and permissions</td>
+                        </tr>
+                        <tr>
+                            <td>Delete Role</td>
+                            <td><span class="button-demo btn-danger">🗑 Delete</span></td>
+                            <td>Remove role (requires confirmation)</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="warning-box">
+                    <strong>⚠️ Warning:</strong> Deleting a role will affect all users assigned to that role. Ensure users are reassigned before deletion.
+                </div>
+
+                <!-- USERS -->
+                <h3 id="users">5.2 User Management</h3>
+                <p><strong>Access Level:</strong> Administrators and Managers</p>
+                <p><strong>Purpose:</strong> Manage system users and their access rights.</p>
+
+                <h4>User Information Managed:</h4>
+                <ul>
+                    <li>Full name and email address</li>
+                    <li>Department and position</li>
+                    <li>Assigned roles and permissions</li>
+                    <li>Account status (active/inactive)</li>
+                    <li>Last login information</li>
+                </ul>
+
+                <h4>Creating a New User:</h4>
+                <ol>
+                    <li>Click <span class="button-demo btn-primary">+ New</span> button</li>
+                    <li>Fill in user details:
+                        <ul>
+                            <li>Name</li>
+                            <li>Email address (will be used for login)</li>
+                            <li>Department</li>
+                            <li>Position/Title</li>
+                        </ul>
+                    </li>
+                    <li>Assign role(s) to the user</li>
+                    <li>Set initial password (user should change on first login)</li>
+                    <li>Click <span class="button-demo btn-success">Submit</span></li>
+                </ol>
+
+                <h4>Editing User Information:</h4>
+                <ol>
+                    <li>Locate user in the user table</li>
+                    <li>Click <span class="button-demo btn-warning">✏ Edit</span> button</li>
+                    <li>Update necessary fields</li>
+                    <li>Click <span class="button-demo btn-success">Update</span></li>
+                </ol>
+
+                <div class="info-box">
+                    <strong>💡 Best Practice:</strong> Regularly review user accounts and deactivate accounts for users who no longer need access.
+                </div>
+
+                <!-- DIRECTORIES -->
+                <h3 id="directories">5.3 Directory Management</h3>
+                <p><strong>Access Level:</strong> Administrators and Department Managers</p>
+                <p><strong>Purpose:</strong> Manage organizational structure and staff directory.</p>
+
+                <h4>Directory Types:</h4>
+                <ul>
+                    <li><strong>📁 Folder (Department):</strong> Represents departments or organizational units</li>
+                    <li><strong>👤 Spreadsheet (Staff):</strong> Represents individual staff members</li>
+                </ul>
+
+                <h4>Hierarchical Structure:</h4>
+                <p>The directory system uses a parent-child relationship:</p>
+                <div class="code-box">
+                    <code>
+Root<br>
+├── IT Department (Folder)<br>
+│   ├── Development Team (Folder)<br>
+│   │   ├── John Doe (Staff)<br>
+│   │   └── Jane Smith (Staff)<br>
+│   └── Support Team (Folder)<br>
+└── HR Department (Folder)
+                    </code>
+                </div>
+
+                <h4>Creating a Department (Folder):</h4>
+                <ol>
+                    <li>Navigate to parent location</li>
+                    <li>Click <span class="button-demo btn-primary">+ New</span></li>
+                    <li>Select <strong>Department</strong> type</li>
+                    <li>Enter department name</li>
+                    <li>Click <span class="button-demo btn-success">Submit</span></li>
+                </ol>
+
+                <h4>Adding Staff Information:</h4>
+                <ol>
+                    <li>Navigate to the department</li>
+                    <li>Click <span class="button-demo btn-primary">+ New</span></li>
+                    <li>Select <strong>Staff</strong> type</li>
+                    <li>Fill in staff details:
+                        <ul>
+                            <li>Upload photo</li>
+                            <li>Full name</li>
+                            <li>Job title/Occupation</li>
+                            <li>Email address</li>
+                            <li>Phone number</li>
+                            <li>Social media links (Facebook, Twitter, Instagram)</li>
+                            <li>Office address</li>
+                        </ul>
+                    </li>
+                    <li>Click <span class="button-demo btn-success">Submit</span></li>
+                </ol>
+
+                <h4>Ordering Items:</h4>
+                <p>Control the display order of departments and staff:</p>
+                <ul>
+                    <li>Click <strong>⬆ Up</strong> to move item higher in list</li>
+                    <li>Click <strong>⬇ Down</strong> to move item lower in list</li>
+                </ul>
+
+                <div class="success-box">
+                    <strong>✓ Tip:</strong> Use the breadcrumb navigation to quickly jump between department levels.
+                </div>
+
+                <!-- ARTICLES -->
+                <h3 id="articles">5.4 Article Management</h3>
+                <p><strong>Access Level:</strong> Content Managers and Administrators</p>
+                <p><strong>Purpose:</strong> Create and manage website articles and blog posts.</p>
+
+                <h4>Article Components:</h4>
+                <ul>
+                    <li>Article categories (hierarchical)</li>
+                    <li>Article content with rich text editor</li>
+                    <li>Featured images</li>
+                    <li>Publication status</li>
+                    <li>Publication date</li>
+                </ul>
+
+                <h4>Creating an Article:</h4>
+                <ol>
+                    <li>Navigate to Articles section</li>
+                    <li>Select parent category (if applicable)</li>
+                    <li>Click <span class="button-demo btn-primary">+ New</span></li>
+                    <li>Enter article information:
+                        <ul>
+                            <li>Title</li>
+                            <li>Content (using rich text editor)</li>
+                            <li>Upload featured image</li>
+                            <li>Set publication status</li>
+                            <li>Select publication date</li>
+                        </ul>
+                    </li>
+                    <li>Preview article (optional)</li>
+                    <li>Click <span class="button-demo btn-success">Publish</span></li>
+                </ol>
+
+                <h4>Rich Text Editor Features:</h4>
+                <ul>
+                    <li><strong>Bold, Italic, Underline:</strong> Text formatting</li>
+                    <li><strong>Headers:</strong> H1, H2, H3, etc.</li>
+                    <li><strong>Lists:</strong> Bulleted and numbered lists</li>
+                    <li><strong>Links:</strong> Insert hyperlinks</li>
+                    <li><strong>Images:</strong> Embed images in content</li>
+                    <li><strong>Code:</strong> Code blocks for technical content</li>
+                </ul>
+
+                <div class="info-box">
+                    <strong>📝 Note:</strong> Articles can be saved as drafts and published later. Use draft status for work-in-progress content.
+                </div>
+
+                <!-- BANNERS -->
+                <h3 id="banners">5.5 Banner Management</h3>
+                <p><strong>Access Level:</strong> Content Managers and Administrators</p>
+                <p><strong>Purpose:</strong> Manage promotional banners and sliders on the website.</p>
+
+                <h4>Banner Properties:</h4>
+                <ul>
+                    <li>Banner image (recommended size: 1920x600px)</li>
+                    <li>Title and description</li>
+                    <li>Link URL (destination when clicked)</li>
+                    <li>Display order</li>
+                    <li>Active/inactive status</li>
+                </ul>
+
+                <h4>Creating a Banner:</h4>
+                <ol>
+                    <li>Click <span class="button-demo btn-primary">+ New</span></li>
+                    <li>Upload banner image</li>
+                    <li>Enter banner details</li>
+                    <li>Set link URL (optional)</li>
+                    <li>Set display status</li>
+                    <li>Click <span class="button-demo btn-success">Submit</span></li>
+                </ol>
+
+                <div class="warning-box">
+                    <strong>⚠️ Image Guidelines:</strong> Use high-quality images optimized for web (under 500KB
