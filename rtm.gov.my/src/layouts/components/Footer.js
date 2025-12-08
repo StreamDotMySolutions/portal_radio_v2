@@ -30,9 +30,9 @@ const Footer = () => {
                     <div className="col-sm-6 col-md-3 d-md-block d-none">
                         <ul className="footer_ul_amrc">
                             <li><a href="https://www.jdn.gov.my"><img className="img-fluid" src="/asset/footer/jdn.jpg" alt="Mampu Logo" /></a></li>
-                            <li><a href="https://www.malaysia.gov.my/portal/index"><img className="img-fluid" src="/asset/footer/mygov2.png" alt="MyGov Logo" /></a></li>
-                            <li><a href="#"><img className="img-fluid" src="/asset/footer/ksn2.png" alt="KSN Logo" /></a></li>
-                            <li><a href="#"><img className="img-fluid" src="/asset/footer/msc-white.png" alt="MSC Logo" /></a></li>
+                            <li><a href="https://www.mygovuc.gov.my"><img className="img-fluid" src="/asset/footer/mygov2.png" alt="MyGov Logo" /></a></li>
+                            <li><a href="https://www.ksn.gov.my"><img className="img-fluid" src="/asset/footer/ksn2.png" alt="KSN Logo" /></a></li>
+                            <li><a href="https://mdec.my/malaysiadigital"><img className="img-fluid" src="/asset/footer/msc-white.png" alt="MSC Logo" /></a></li>
                         </ul>
                     </div>
 
