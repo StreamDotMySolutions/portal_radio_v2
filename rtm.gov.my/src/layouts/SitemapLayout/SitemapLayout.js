@@ -1,39 +1,61 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link, NavLink } from 'react-router-dom';
-
+import { NavLink } from 'react-router-dom';
 
 const SitemapLayout = () => {
 
-    const url = process.env.REACT_APP_API_URL; // This is the base URL for your API, defined in your .env file
-    const serverUrl = process.env.REACT_APP_SERVER_URL; // This is the base URL for your server, defined in your .env file
-    const [items, setItems] = useState([]); // This state will hold the menu items fetched from the API
-    const [isLoading, setIsLoading] = useState(true); // This state will indicate whether the data is still loading
+    const url = process.env.REACT_APP_API_URL;
+    const [items, setItems] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        // Fetch the menu items from the API when the component mounts
         axios(`${url}/sitemap`)
             .then((response) => {
-                setItems(response.data.items); // Set the fetched items to the state
-            }).catch( error => {
-                console.warn(error); // Log any errors that occur during the fetch
-            }).finally(() => {
-                setIsLoading(false); // Set loading to false once the fetch is complete
+                setItems(response.data.items || []);
+            })
+            .catch((error) => {
+                console.warn(error);
+            })
+            .finally(() => {
+                setIsLoading(false);
             });
-    }, []);
+    }, [url]);
 
-    // This is a simple sitemap layout. You can customize it as needed.
+    const TreeNode = ({ node, depth = 0 }) => {
+        const children = node.children || [];
+
+        return (
+            <div>
+                <div style={{ marginLeft: depth * 20 }}>
+                    - <NavLink to={node.slug || '#'}>{node.title}</NavLink>
+                </div>
+
+                {children.map(child => (
+                    <TreeNode
+                        key={child.id}
+                        node={child}
+                        depth={depth + 1}
+                    />
+                ))}
+            </div>
+        );
+    };
+
+    if (isLoading) {
+        return <div className="p-4">Loading...</div>;
+    }
+
     return (
-        <div className="bg-white min-vh-100 w-100 p-2">
-            <h1 className="pt-4">Sitemap</h1>
-            <ul className="list-unstyled">
-                <li><a href="/">Home</a></li>
-                <li><a href="/contents">Contents</a></li>
-                <li><a href="/listings">Listings</a></li>
-                <li><a href="/directories">Directories</a></li>
-                <li><a href="/sitemap">Sitemap</a></li>
-            </ul>
+        <pre>
+        <div className="bg-dark min-vh-100 w-100 p-4">
+            <h1>Sitemap</h1>
+
+            {items.map(item => (
+                <TreeNode key={item.id} node={item} />
+            ))}
         </div>
+        </pre>
     );
-}
+};
+
 export default SitemapLayout;
