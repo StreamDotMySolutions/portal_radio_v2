@@ -18,10 +18,14 @@ Route::get('/articles/{article}', [ArticleController::class, 'index']);
 Route::get('/listings/{article}', [ArticleController::class, 'listings']);
 Route::get('/show/{article}', [ArticleController::class, 'show']);
 Route::get('/article-galleries/{articleDataId}', [ArticleGalleryController::class, 'index']);
+
 Route::get('/home-footer', [FooterController::class, 'index']);
+
 Route::get('/home-menu', [MenuController::class, 'index']);
 Route::get('/home-menu-1', [MenuController::class, 'menu1']);
 Route::get('/home-menu-2', [MenuController::class, 'menu2']);
+Route::get('/sitemap', [MenuController::class, 'sitemap']);
+
 Route::get('/home-banners', [BannerController::class, 'index']);
 Route::get('/home-programmes', [ProgrammeController::class, 'index']);
 Route::get('/home-videos', [VideoController::class, 'index']);

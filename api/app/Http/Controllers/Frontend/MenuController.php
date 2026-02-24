@@ -61,4 +61,17 @@ class MenuController extends Controller
 
     }
 
+    public function sitemap()
+    {
+
+        $menu1 = Article::where('title', 'MENU-1')->first();
+        $tree = Article::with('children')
+            ->select('id', 'title')
+            ->where('parent_id', $menu1->id)
+            ->get();
+
+        return response()->json($tree);
+
+    }
+
 }
