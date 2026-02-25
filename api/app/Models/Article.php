@@ -49,4 +49,10 @@ class Article extends Model
     {
         return $this->hasMany(Article::class, 'parent_id')->with('children');
     }
+
+    // casting format dd/mm/yyyy
+    protected $casts = [    
+        'created_at' => 'datetime:d/m/Y',
+        'updated_at' => 'datetime:d/m/Y',
+    ];
 }

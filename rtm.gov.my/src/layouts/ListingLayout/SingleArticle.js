@@ -8,6 +8,7 @@ const SingleArticle = ({id}) => {
     const [items, setItems] = useState([]);
     const [ancestors, setAncestors] = useState([]);
     const [title, setTitle] = useState('');
+    const [updatedAt, setUpdatedAt] = useState('');
     const [loading, setLoading] = useState(true);
     const [settings, setSettings] = useState([]);
     const url = process.env.REACT_APP_API_URL;
@@ -16,9 +17,10 @@ const SingleArticle = ({id}) => {
     useEffect(() => {
         axios(`${url}/show/${id}`)
             .then(response => {
-                //console.log(response)
+                console.log(response)
                 setTitle(response.data.title);
-                setItems(response.data.items);
+                setUpdatedAt(response.data.settings.updated_at);
+                setItems(response.data.items); // article data
                 setAncestors(response.data.ancestors);
                 setSettings(response.data.settings);
                 setLoading(false); // Set loading to false when data is fetched
@@ -67,7 +69,8 @@ const SingleArticle = ({id}) => {
             <h2>{title}</h2>
             <br />
             {contentItems()}
-                
+            <hr />
+            <p className='text-muted'>Tarikh akhir kemaskini: {updatedAt}</p>
         </div>
 
     );

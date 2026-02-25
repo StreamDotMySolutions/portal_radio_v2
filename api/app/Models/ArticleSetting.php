@@ -39,4 +39,10 @@ class ArticleSetting extends Model
         return $isPublished;
     }
 
+    // casting format dd/mm/yyyy
+    protected $casts = [    
+        'created_at' => 'datetime:d/m/Y',
+        'updated_at' => 'datetime:d/m/Y',
+    ];
+
 }

@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 const SitemapLayout = () => {
 
     const url = process.env.REACT_APP_API_URL;
+    const serverUrl = process.env.REACT_APP_SERVER_URL;
     const [items, setItems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -27,7 +28,8 @@ const SitemapLayout = () => {
         return (
             <div>
                 <div style={{ marginLeft: depth * 20 }}>
-                    - <NavLink to={node.slug || '#'} style={{ color: '#0000ff' }}>{node.title}</NavLink>
+                    - <NavLink to={'/listings/' + node.id || '#'} style={{ color: '#0000ff' }}>{node.title}</NavLink>
+            
                 </div>
 
                 {children.map(child => (
