@@ -27,7 +27,7 @@ const SitemapLayout = () => {
         return (
             <div>
                 <div style={{ marginLeft: depth * 20 }}>
-                    - <NavLink to={node.slug || '#'}>{node.title}</NavLink>
+                    - <NavLink to={node.slug || '#'} style={{ color: '#0000ff' }}>{node.title}</NavLink>
                 </div>
 
                 {children.map(child => (
@@ -47,7 +47,7 @@ const SitemapLayout = () => {
 
     return (
         <pre>
-        <div className="bg-dark min-vh-100 w-100 p-4">
+        <div className="bg-light min-vh-100 w-100 p-4" style={{ color: '#000000' }}>
             <h1>Sitemap</h1>
 
             {items.map(item => (
