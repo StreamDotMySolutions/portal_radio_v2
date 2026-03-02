@@ -1,167 +1,160 @@
 import React, { useState, useEffect } from 'react'
-import { Table,Button } from 'react-bootstrap'
-import { Link, parsePath, useParams } from 'react-router-dom'
+import { Badge, Button, Form, InputGroup, Table } from 'react-bootstrap'
+import { Link, useParams } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useStore from '../../../store'
 import axios from '../../../../libs/axios'
 import PaginatorLink from '../../../../libs/PaginatorLink'
-import CreateButton from '../../../../libs/CreateButton'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import CreateModal from '../modals/Create'
 import EditModal from '../modals/Edit'
 import DeleteModal from '../modals/Delete'
 import Ordering from './Ordering'
 
-const Index = () => {
-    const store = useStore() // store management
-    const { parentId } = useParams() // parentid
-    const url = store.url + '/articles/node/' + parentId // set the index url to /api/articles/node/{parentId}
-    const [items, setItems] = useState([]) // data placeholder
-    
-    // to get items data
-    console.log( parentId)
-    useEffect( () => 
-        {
-            // modified axios to prepend Bearer Token on header
-            axios( 
-                {
-                    method: 'get', // method is GET
-                    url: store.getValue('url') ? store.getValue('url') : url 
-         
-                } 
-            )
-            .then( response => { // response block
-                //console.log(response)
-                setItems(response.data.articles) // get the data
-                store.setValue('refresh', false ) // reset the refresh state to false
-                //store.setValue('url', null ) // reset the refresh state to false
-                
+const DataTable = () => {
+    const store = useStore()
+    const { parentId } = useParams()
+
+    const [query, setQuery] = useState('')
+    const [search, setSearch] = useState('')
+    const [items, setItems] = useState([])
+
+    // Debounce: commit typed query after 400ms idle
+    useEffect(() => {
+        const timer = setTimeout(() => setSearch(query), 400)
+        return () => clearTimeout(timer)
+    }, [query])
+
+    // Reset URL when parentId or search changes
+    useEffect(() => {
+        const base = `${store.url}/articles/node/${parentId}`
+        const url = search ? `${base}?search=${encodeURIComponent(search)}` : base
+        store.setValue('url', url)
+    }, [parentId, search])
+
+    // Fetch when url or refresh changes
+    useEffect(() => {
+        const url = store.getValue('url') ?? `${store.url}/articles/node/${parentId}`
+        axios({ method: 'get', url })
+            .then(response => {
+                setItems(response.data.articles)
+                store.setValue('refresh', false)
             })
-            .catch( error => { // error block
-                console.warn(error) // output to console
-            })
+            .catch(error => console.warn(error))
+    }, [store.getValue('url'), store.getValue('refresh')])
 
-               // Return the cleanup function
-            return () => {
-                //store.setValue('url', url )
-            };
-
-      },
-        [
-            store.getValue('url'), // listener when url changed by pagination click
-            store.getValue('refresh'), // listener when create / update / delete / search performed
-            //parentId // when use navigate to parent
-        ] 
-
-    ) // useEffect()
-
-    useEffect( () => 
-        {
-            // modified axios to prepend Bearer Token on header
-            axios( 
-                {
-                    method: 'get', // method is GET
-                    url: url 
-         
-                } 
-            )
-            .then( response => { // response block
-                //console.log(response)
-                setItems(response.data.articles) // get the data
-                store.setValue('refresh', false ) // reset the refresh state to false
-                //store.setValue('url', null ) // reset the refresh state to false
-                
-            })
-            .catch( error => { // error block
-                console.warn(error) // output to console
-            })
-
-               // Return the cleanup function
-            return () => {
-                //store.setValue('url', url )
-            };
-
-      },
-        [
-            // store.getValue('url'), // listener when url changed by pagination click
-            // store.getValue('refresh'), // listener when create / update / delete / search performed
-            parentId // when use navigate to parent
-        ] 
-
-    ) // useEffect()
-
-
-  
-
-
-
+    const handleClearSearch = () => setQuery('')
 
     return (
         <div>
-        
-            <CreateButton>
+            {/* Toolbar */}
+            <div className='d-flex align-items-center justify-content-between mb-3 gap-2'>
+                <InputGroup style={{ maxWidth: '340px' }}>
+                    <InputGroup.Text>
+                        <FontAwesomeIcon icon={['fas', 'magnifying-glass']} />
+                    </InputGroup.Text>
+                    <Form.Control
+                        placeholder='Search by title...'
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                    />
+                    {query && (
+                        <Button variant='outline-secondary' onClick={handleClearSearch}>
+                            <FontAwesomeIcon icon={['fas', 'xmark']} />
+                        </Button>
+                    )}
+                </InputGroup>
                 <CreateModal />
-            </CreateButton>
-            <Table>
-                <thead>
+            </div>
+
+            {/* Result count */}
+            {items?.total !== undefined && (
+                <p className='text-muted small mb-2'>
+                    {items.total} item{items.total !== 1 ? 's' : ''} found
+                    {search && <> for <strong>"{search}"</strong></>}
+                </p>
+            )}
+
+            <Table hover responsive style={{ '--bs-table-cell-padding-y': '0.85rem' }}>
+                <thead className='table-light'>
                     <tr>
-                        <th className='text-center' style={{ 'width': '20px'}}><FontAwesomeIcon icon={['fas', 'hashtag']} /></th>
-                        <th className='text-center'>Ordering</th>
-                        <th className='text-center' style={{ 'width': '100px'}}>Active ?</th>
+<th style={{ width: '110px' }}>Order</th>
+                        <th style={{ width: '100px' }}>Status</th>
+                        <th className='text-center' style={{ width: '80px' }}>Type</th>
                         <th>Title</th>
-                        <th  style={{ 'width': '230px'}} className='text-center'> <FontAwesomeIcon icon={['fas', 'bolt']} /></th>
+                        <th className='text-center' style={{ width: '80px' }}>Content</th>
+                        <th className='text-center' style={{ width: '160px' }}>Action</th>
                     </tr>
                 </thead>
-
                 <tbody>
-                    {items?.data?.map((item,index) => (
-                        
-                        <tr key={index}>
-                            <td><span className="badge bg-primary">{item.id}</span></td>
-                            <td className='text-center' style={{'width':'100px'}}>
-
+                    {items?.data?.map((item) => (
+                        <tr key={item.id}>
+<td className='text-nowrap'>
                                 <Ordering id={item.id} direction='up' />
                                 {' '}
-                                <Ordering id={item.id} direction='down'/>
-                            
+                                <Ordering id={item.id} direction='down' />
                             </td>
-                            <td className='text-center'>{item.article_setting.active == 1 ? <FontAwesomeIcon className='text-success'  icon={['fas', 'check']} /> : <FontAwesomeIcon className='text-danger' icon={['fas', 'stop']} />  }</td>
                             <td>
-                                {item.descendants && item.descendants.length > 0 ?
-                                    <FontAwesomeIcon className='me-2 text-warning' icon={['fas', 'fa-folder']} /> 
-                                :
-                                    <FontAwesomeIcon className='me-2 text-secondary' icon={['fas', 'fa-file']} />
+                                {item.article_setting.active == 1
+                                    ? <Badge bg='success'>Active</Badge>
+                                    : <Badge bg='secondary'>Inactive</Badge>
                                 }
-                                <Link to={`/administration/articles/${item.id}`}>{item.title}</Link>    
                             </td>
                             <td className='text-center'>
-                               
-                                    <Link to={`/administration/articles/${item.id}`}>
-                                        <Button size='sm' variant='outline-secondary'>
-                                            <FontAwesomeIcon className='text-info'  icon={['fas', 'fa-folder-plus']} />{' '}
+                                {item.type === 'folder'
+                                    ? <FontAwesomeIcon className='text-warning' icon={['fas', 'folder']} />
+                                    : <FontAwesomeIcon className='text-secondary' icon={['fas', 'file']} />
+                                }
+                            </td>
+                            <td>
+                                <Link to={`/administration/articles/${item.id}`}>{item.title}</Link>
+                            </td>
+                            <td className='text-center'>
+                                <Link to={`/administration/articles-data/${item.id}`}>
+                                    <Button size='sm' variant='outline-info' title='Edit content'>
+                                        <FontAwesomeIcon icon={['fas', 'pen']} />
+                                    </Button>
+                                </Link>
+                            </td>
+                            <td className='text-center text-nowrap'>
+                                {item.type === 'folder' ? (
+                                    <>
+                                        <Link to={`/administration/articles/${item.id}`}>
+                                            <Button size='sm' variant={item.descendants?.length > 0 ? 'outline-warning' : 'outline-primary'} title='Manage sub-articles'>
+                                                <FontAwesomeIcon icon={['fas', item.descendants?.length > 0 ? 'folder-open' : 'folder-plus']} />
+                                            </Button>
+                                        </Link>
+                                        {' '}
+                                    </>
+                                ) : (
+                                    <>
+                                        <Button size='sm' variant='outline-secondary' disabled>
+                                            <FontAwesomeIcon icon={['fas', 'file']} />
                                         </Button>
-                                    </Link>
-                                {' '}
-                                   
-                                    <Link to={`/administration/articles-data/${item.id}`}>
-                                        <Button 
-                                            //disabled={item.descendants.length > 0 }
-                                            size='sm' variant='outline-primary'>
-                                            <FontAwesomeIcon icon={['fas', 'pen']} />{' '}
-                                        </Button>
-                                    </Link>
-                                    
-                                
-                                {' '}
+                                        {' '}
+                                    </>
+                                )}
                                 <EditModal id={item.id} />
                                 {' '}
-                                <DeleteModal id={item.id} /> 
+                                <DeleteModal id={item.id} title={item.title} />
                             </td>
                         </tr>
                     ))}
+                    {items?.data?.length === 0 && (
+                        <tr>
+                            <td colSpan='6' className='text-center text-muted py-4'>
+                                {search
+                                    ? <>No articles found matching <strong>"{search}"</strong>.</>
+                                    : 'No articles found.'
+                                }
+                            </td>
+                        </tr>
+                    )}
                 </tbody>
             </Table>
+
             <PaginatorLink store={store} items={items} />
         </div>
-    );
-};
-export default Index
+    )
+}
+
+export default DataTable

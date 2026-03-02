@@ -14,13 +14,13 @@ class VodController extends Controller
 
     public function index(Request $request, $parentId){
 
-        $query = !is_null($parentId) && !empty($parentId)
-            ? Vod::query()->where('parent_id', $parentId)
-            : Vod::query()->whereNull('parent_id');
-
         if ($request->filled('search')) {
             $search = $request->input('search');
-            $query->where('name', 'like', "%{$search}%");
+            $query = Vod::query()->where('name', 'like', "%{$search}%");
+        } elseif (!is_null($parentId) && !empty($parentId)) {
+            $query = Vod::query()->where('parent_id', $parentId);
+        } else {
+            $query = Vod::query()->whereNull('parent_id');
         }
 
         $vods = $query->with(['descendants'])->defaultOrder()->paginate(10)->withQueryString();

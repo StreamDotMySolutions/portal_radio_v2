@@ -1,4 +1,4 @@
-import { Badge } from 'react-bootstrap'
+import { Alert, Badge } from 'react-bootstrap'
 import DataTable from "./components/DataTable"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import BreadCrumb from '../../../libs/BreadCrumb'
@@ -73,6 +73,34 @@ const Index = () => {
     return(
         <>
             <BreadCrumb items={items} />
+
+            {parentId === '0' && (
+                <Alert variant='warning' className='mb-3'>
+                    <Alert.Heading>
+                        <FontAwesomeIcon icon={['fas', 'triangle-exclamation']} className='me-2' />
+                        Compulsory Root Folders
+                    </Alert.Heading>
+                    <p className='mb-2'>
+                        The following three root-level folders <strong>must exist</strong> and must use these exact titles.
+                        They drive the public site navigation and footer menus.
+                    </p>
+                    <div className='d-flex flex-column gap-1'>
+                        <div>
+                            <Badge bg='dark' className='me-2'>MENU-1</Badge>
+                            Primary navigation menu displayed on the public site header.
+                        </div>
+                        <div>
+                            <Badge bg='dark' className='me-2'>MENU-2</Badge>
+                            Secondary navigation menu displayed on the public site header.
+                        </div>
+                        <div>
+                            <Badge bg='dark' className='me-2'>FOOTER</Badge>
+                            Footer links displayed at the bottom of every public page.
+                        </div>
+                    </div>
+                </Alert>
+            )}
+
             <DataTable />
         </>
     )

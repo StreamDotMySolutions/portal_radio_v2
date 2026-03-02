@@ -13,13 +13,13 @@ class AssetController extends Controller
 
     public function index(Request $request, $parentId){
 
-        $query = !is_null($parentId) && !empty($parentId)
-            ? Asset::query()->where('parent_id', $parentId)
-            : Asset::query()->whereNull('parent_id');
-
         if ($request->filled('search')) {
             $search = $request->input('search');
-            $query->where('name', 'like', "%{$search}%");
+            $query = Asset::query()->where('name', 'like', "%{$search}%");
+        } elseif (!is_null($parentId) && !empty($parentId)) {
+            $query = Asset::query()->where('parent_id', $parentId);
+        } else {
+            $query = Asset::query()->whereNull('parent_id');
         }
 
         $assets = $query->with(['descendants'])->defaultOrder()->paginate(10)->withQueryString();
