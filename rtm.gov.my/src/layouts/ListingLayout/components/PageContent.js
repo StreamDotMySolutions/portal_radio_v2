@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
-import { Spinner } from 'react-bootstrap';
 import WithPosterListing from './WithPosterListing';
 import WithoutPosterListing from './WithoutPosterListing';
 import DefaultListing from './DefaultListing';
@@ -141,9 +140,7 @@ const PageContent = () => {
                             <ul className="breadcrumb mt-5">
                                 <li><Link to="/">Utama</Link></li>
                                 {loading ? (
-                                    <li>
-                                        <Spinner animation="grow" size="sm" />
-                                    </li>
+                                    <li>...</li>
                                 ) : (
                                     <>  
                                         {breadcrumbItems()}
@@ -155,7 +152,7 @@ const PageContent = () => {
         
                             <div className="" style={{ "minHeight": "300px" }}>
                                 {loading ? (
-                                    <span>loading ...</span>
+                                    <span>...</span>
                                 ) : (
                                     <>
                                         {layout}
@@ -192,19 +189,17 @@ const PageContent = () => {
 
         <div className='container-fluid text-center text-danger'>
            
-            <ul className="breadcrumb mt-5">
+                <ul className="breadcrumb mt-5">
                     <li><Link to="/">Utama</Link></li>
                     {loading ? (
-                        <li>
-                            <Spinner animation="grow" size="sm" />
-                        </li>
+                        <li>...</li>
                     ) : (
                         <li>{breadcrumbItems()}</li>
                     )}
                        
                 </ul>
                 <div className="mt-5" style={{minHeight: '200px'}}>
-                    <h3>loading...</h3>
+                    <h3>...</h3>
                 </div>
         </div>
         </>

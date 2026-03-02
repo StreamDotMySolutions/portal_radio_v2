@@ -1,0 +1,12 @@
+/* Centralized CSS entry point */
+@import url('./menu1.css');
+@import url('./menu2.css');
+@import url('./carausel.css');
+@import url('./cover.css');
+@import url('./pagination.css');
+@import url('./breadcrumb.css');
+@import url('./linklist.css');
+@import url('./searchbox.css');
+@import url('./directory.css');
+@import url('./video.css');
+@import url('./footer.css');

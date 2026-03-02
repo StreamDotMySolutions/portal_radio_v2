@@ -25,6 +25,8 @@ import SearchResultLayout from "./layouts/DirectoryLayout/SearchResultLayout";
 
 /** Helmet Async */
 import { HelmetProvider } from "react-helmet-async";
+import './libs/globalLoadingInterceptor';
+import LoadingBarProvider from './components/LoadingBarProvider';
 
 library.add(fas)
 
@@ -32,20 +34,22 @@ export default function App() {
 
   return (
     <HelmetProvider>
-      <BrowserRouter basename="/">
-        <Routes>            
-          <Route path="*" element={<Error404 />} />
-          <Route index element={<HomeLayout />}  />
-          <Route path="/contents/:id" element={<ContentLayout />}/>
-          <Route path="/listings/:id" element={<ListingLayout />}/>
+      <LoadingBarProvider>
+        <BrowserRouter basename="/">
+          <Routes>            
+            <Route path="*" element={<Error404 />} />
+            <Route index element={<HomeLayout />}  />
+            <Route path="/contents/:id" element={<ContentLayout />}/>
+            <Route path="/listings/:id" element={<ListingLayout />}/>
 
-          <Route path="/directories" element={<DirectoryLayout />}/>
-          <Route path="/directories/:id" element={<DirectoryLayout />}/>
-          <Route path="/directories/:id/show" element={<ShowStaffLayout />}/>
-          <Route path="/directories/search/:query" element={<SearchResultLayout /> } />
-          <Route path="/sitemap" element={<SitemapLayout />}/>
-        </Routes>
-      </BrowserRouter>
+            <Route path="/directories" element={<DirectoryLayout />}/>
+            <Route path="/directories/:id" element={<DirectoryLayout />}/>
+            <Route path="/directories/:id/show" element={<ShowStaffLayout />}/>
+            <Route path="/directories/search/:query" element={<SearchResultLayout /> } />
+            <Route path="/sitemap" element={<SitemapLayout />}/>
+          </Routes>
+        </BrowserRouter>
+      </LoadingBarProvider>
     </HelmetProvider>
   );
 }

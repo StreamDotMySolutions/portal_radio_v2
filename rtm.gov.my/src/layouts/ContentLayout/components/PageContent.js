@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
-import { Spinner } from 'react-bootstrap';
 import { Helmet } from "react-helmet-async";
 import './style.css'
 
@@ -112,11 +111,9 @@ const PageContent = ({id}) => {
                             <li><Link to="/">Utama</Link></li>
                             {breadcrumbs()}
                             {loading ? (
-                                <li>
-                                    <Spinner animation="grow" size="sm" />
-                                </li> // Show spinner while loading
+                                <li>...</li>
                             ) : (
-                                <li>{title}</li> // Show title when loaded
+                                <li>{title}</li>
                             )}
                         </ul>
 

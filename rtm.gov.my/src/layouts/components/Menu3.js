@@ -134,11 +134,9 @@ const Menu3 = () => {
     };
     return (
         <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: "#171717" }} id="navbardiatas">
-            <Link to="/" className="navbar-brand">
-                <img 
-                    className="img-responsive" 
-                    className="ms-3"
-                    src="/img/logortmbaharu2.png" 
+            <Link to="/" className="navbar-brand ms-2">
+                <img
+                    src="/img/logortmbaharu2.png"
                     alt="Logo"
                 />
             </Link>
@@ -149,27 +147,15 @@ const Menu3 = () => {
 
             <div className="collapse navbar-collapse" id="navbaratas">
 
-                <div className='row'>
-                    <div className='col'>
-                        <ul className="navbar-nav ml-auto">
-                            {isLoading === false } {menuItems1()}
-                        </ul>
-                    </div>
-                    <div className='col'>
-                        <ul className="navbar-nav mx-auto">
-                            {isLoading === false } {menuItems2()}
-                        </ul>
-                    </div>
-                </div>
-                <hr />
-             
+                <ul className="navbar-nav mx-auto">
+                    {menuItems1()}
+                    {menuItems2()}
+                </ul>
 
-                {/* <div className='row ml-auto'> */}
-                <div className="d-flex flex-wrap justify-content-center justify-content-md-start">
+                <div className="d-flex align-items-center" style={{ gap: '5px' }}>
                     <SocialLinks />
                 </div>
-                
-   
+
             </div>
         </nav>
     );

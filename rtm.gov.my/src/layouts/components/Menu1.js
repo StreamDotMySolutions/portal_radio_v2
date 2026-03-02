@@ -22,64 +22,57 @@ const Menu1 = () => {
     }, []);
 
     const menuItems = () => {
+        return items.map((item, index) => {
+            const setting = item.article_setting;
+            if (!setting || setting.active !== 1) {
+                return null;
+            }
 
-        // 1. check ArticleSetting
-        // 2. check active | true or false
-        // 3. check show_children | yes or no
-        // 4. check listing_type | single_article or listing
-    
-        return items.map((item, index) => (
-            <span key={index}>
-               
-                {item.article_setting && item.article_setting.active === 1 && // check active
+            if (setting.show_children === 1) {
+                return <LoadMenu key={item.id ?? index} id={item.id} />;
+            }
 
-                    <>
-                    {item.article_setting.show_children && item.article_setting.show_children === 1 ?
-                        <LoadMenu key={index} id={item.id}/>
-                        :
-                        <>
-                            <li key={index} className="nav-item">
-                     
-                                <NavLink to={`/listings/${item.id}`} className="nav-link">
-                                    {item.title}
-                                </NavLink>
-                            
-                            </li>
-                        </>
-                    }
-                    </>
-                } 
+            const linkTo = setting.redirect_url ? setting.redirect_url : `/listings/${item.id}`;
 
-                
-            </span>
-        ));
+            return (
+                <li key={item.id ?? index} className="nav-item">
+                    <NavLink to={linkTo} className="nav-link">
+                        {item.title}
+                    </NavLink>
+                </li>
+            );
+        });
     };
     
     return (
         <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: "#171717" }} id="navbardiatas">
-            <Link to="/" className="navbar-brand">
-                <img 
-                    className="img-responsive" 
-                    className="ms-3"
-                    src="/img/logortmbaharu2.png" 
-                    alt="Logo RTM"
-                />
-            </Link>
+            <div className="container-fluid d-flex align-items-center justify-content-between">
+                <div className="d-flex align-items-center">
+                    <Link to="/" className="navbar-brand">
+                        <img src="/img/logortmbaharu2.png" alt="Logo RTM" />
+                    </Link>
+                    <button
+                        className="navbar-toggler ms-2"
+                        type="button"
+                        data-toggle="collapse"
+                        data-target="#navbaratas"
+                        aria-controls="navbaratas"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                    >
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+                </div>
 
-            <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbaratas" aria-controls="navbaratas" aria-expanded="false" aria-label="Toggle navigation">
-                <span className="navbar-toggler-icon"></span>
-            </button>
+                <div className="collapse navbar-collapse justify-content-center flex-grow-1" id="navbaratas">
+                    <ul className="navbar-nav mx-auto">
+                        {menuItems()}
+                    </ul>
+                </div>
 
-            <div className="collapse navbar-collapse" id="navbaratas">
-
-                <ul className="navbar-nav ml-auto">
-                    {isLoading === false } {menuItems()}
-                </ul>
-                
-                <div className="d-flex">
+                <div className="d-flex align-items-center" style={{ gap: '10px' }}>
                     <SocialLinks />
                 </div>
-                
             </div>
         </nav>
     );

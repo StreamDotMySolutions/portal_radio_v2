@@ -1,29 +1,53 @@
 
+.pagination {
+    display: flex;
+    gap: 0.35rem;
+    list-style: none;
+    padding: 0;
+}
 
-.pagination li:hover{
+.pagination li {
+    border-radius: 0.35rem;
+    overflow: hidden;
+}
+
+.pagination li a,
+.pagination li span {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    padding: 0.35rem 0.75rem;
+    color: #20232a;
+    font-weight: 500;
+    background: #fff;
+    border: 1px solid rgba(32, 35, 42, 0.25);
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.pagination li:hover a,
+.pagination li:hover span {
+    background: rgba(255, 110, 0, 0.1);
+    border-color: #ff6e00;
+    color: #ff6e00;
     cursor: pointer;
 }
 
-
-		
-.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+.pagination>.active>a,
+.pagination>.active>span {
     z-index: 3;
     color: #fff;
+    background: #ff6e00;
+    border-color: #ff6e00;
     cursor: default;
-    background-color: #ffa525;
-    border-color: #ffa525;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.15);
 }
-		
-		
-		
-.pagination>li>a, .pagination>li>span {
-    position: relative;
-    float: left;
-    padding: 6px 12px;
-    margin-left: -1px;
-    line-height: 1.42857143;
-    color: #337ab7;
-    text-decoration: none;
-    background-color: #fff;
-    border: 1px solid #ddd;
+
+.pagination>.disabled span,
+.pagination>.disabled a {
+    color: rgba(32, 35, 42, 0.5);
+    border-color: transparent;
+    background: transparent;
 }

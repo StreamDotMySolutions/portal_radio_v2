@@ -7,7 +7,6 @@ import Menu3 from '../components/Menu3';
 import Footer from '../components/Footer';
 import Footer2 from '../components/Footer2';
 import useFetch from '../../libs/useFetch';
-import LoadingSpinner from '../components/LoadingSpinner';
 
 const url = process.env.REACT_APP_API_URL;
 
@@ -62,7 +61,7 @@ const SitemapLayout = () => {
             <div className="container py-5">
                 <h1 className="mb-4">Peta Laman</h1>
 
-                {isLoading && <LoadingSpinner />}
+                {isLoading && <p className="text-muted small">Memuatkan peta laman...</p>}
 
                 {!isLoading && items.length === 0 && (
                     <p className="text-muted">Tiada kandungan untuk dipaparkan.</p>

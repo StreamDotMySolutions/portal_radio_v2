@@ -13,6 +13,25 @@
     font-family: 'Open Sans', sans-serif;
 }
 
+#navbardiatas .nav-link.active,
+#navbardiatas .dropdown-item.active {
+    background-color: #0b5ed7;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 0.25rem;
+    padding: 0.35rem 1rem;
+    box-shadow: 0 4px 12px rgba(11, 94, 215, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    transform: translateY(-1px);
+}
+
+#navbardiatas .nav-link:hover,
+#navbardiatas .dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #fff;
+    border-radius: 0.25rem;
+    padding: 0.35rem 1rem;
+}
 
 /* breakpoint and up - mega dropdown styles */
 @media screen and (min-width: 992px) {
