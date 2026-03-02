@@ -79,7 +79,7 @@ const ShowStaffContent = () => {
 
                     <div className="col-md-10">
 
-                        <ul className="breadcrumb2" style={{ "marginTop": "40px" }}>
+                        <ul className="breadcrumb2 mt-5">
                             <li><Link to="/">Utama</Link></li>
                             <li><Link to="/directories">Direktori</Link></li> 
                             {breadcrumbs()}
@@ -97,7 +97,7 @@ const ShowStaffContent = () => {
                         
 
                         {staff ? 
-                            <div className="container" id="containerdirektori" style={{ marginTop: '2rem', backgroundColor: 'rgb(6, 57, 112)', color: 'white', padding: '1rem' }}>
+                            <div className="container mt-4" id="containerdirektori" style={{ backgroundColor: 'rgb(6, 57, 112)', color: 'white', padding: '1rem' }}>
                                 <div className="row">
                                     <HeadingLink />
                                     <hr />
@@ -112,7 +112,7 @@ const ShowStaffContent = () => {
                                                 />
                                             </div>
                                             <div className="col-lg-8" id="namecardkaler">
-                                                <div className="row" style={{ marginTop: '1.5rem' }}>
+                                                <div className="row mt-4">
                                                     <div className="col-lg-5">
                                                         <h5 id="kalertulisan">JAWATAN</h5>
                                                         <p id="kalertulisan">{staff.occupation}</p>
@@ -162,7 +162,7 @@ const ShowStaffContent = () => {
 
                 
                         
-                        <div  style={{ "marginTop": "2rem" }}></div>
+                        <div className="mt-4"></div>
                     </div>
                 </div>
             </div>

@@ -137,7 +137,7 @@ const Menu3 = () => {
             <Link to="/" className="navbar-brand">
                 <img 
                     className="img-responsive" 
-                    style={{ marginLeft: "20px" }} 
+                    className="ms-3"
                     src="/img/logortmbaharu2.png" 
                     alt="Logo"
                 />

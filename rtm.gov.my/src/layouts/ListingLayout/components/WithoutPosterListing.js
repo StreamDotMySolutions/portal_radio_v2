@@ -12,7 +12,7 @@ const WithoutPosterListing = ({title,items}) => {
                 <tr key={index}>
                     <td>
                         <Link 
-                            style={{ textDecoration: "none", color: "#333333" }} 
+                            className="text-decoration-none text-dark"
                             to={linkTo}
                         >
                             {item.title}
@@ -32,7 +32,7 @@ const WithoutPosterListing = ({title,items}) => {
            <table className="table table-bordered" id="table-id">
                 <thead>
                 <tr>
-                    <th style={{backgroundColor: "#EAEAEA"}}>Tajuk</th>
+                    <th className="table-light">Tajuk</th>
                 </tr>
                 </thead>
                 <tbody>

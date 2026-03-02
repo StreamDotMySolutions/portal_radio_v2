@@ -138,7 +138,7 @@ const PageContent = () => {
                     <div className="row">
                         <div className="col-md-1"></div>
                         <div className="col-md-10">
-                            <ul className="breadcrumb" style={{ "marginTop": "40px" }}>
+                            <ul className="breadcrumb mt-5">
                                 <li><Link to="/">Utama</Link></li>
                                 {loading ? (
                                     <li>
@@ -170,7 +170,7 @@ const PageContent = () => {
                         
                             {/* listing_type :  null */}
                             { settings?.listing_type !== 'single_article' && settings?.listing_type !== null &&
-                            <div className="pagination-container float-right" style={{ marginBottom: '6rem' }}>
+                            <div className="pagination-container float-right mb-5">
                                 <nav>
                                     <ul className="pagination">
                                         {paginatorItems()}
@@ -192,7 +192,7 @@ const PageContent = () => {
 
         <div className='container-fluid text-center text-danger'>
            
-            <ul className="breadcrumb" style={{ "marginTop": "40px" }}>
+            <ul className="breadcrumb mt-5">
                     <li><Link to="/">Utama</Link></li>
                     {loading ? (
                         <li>
@@ -203,7 +203,7 @@ const PageContent = () => {
                     )}
                        
                 </ul>
-                <div  style={{minHeight: '200px', marginTop: '5REM'}}>
+                <div className="mt-5" style={{minHeight: '200px'}}>
                     <h3>loading...</h3>
                 </div>
         </div>

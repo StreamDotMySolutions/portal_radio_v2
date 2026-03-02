@@ -25,7 +25,7 @@ const Footer = ({ variant = 'desktop' }) => {
         <div className="container">
             <div className="row">
                 <div className="col-md-12 d-flex justify-content-center">
-                    <p style={{ marginTop: "0.5rem" }}>Hak Cipta Terpelihara @ {new Date().getFullYear()} RADIO TELEVISYEN MALAYSIA</p>
+                    <p className="mt-2">Hak Cipta Terpelihara @ {new Date().getFullYear()} RADIO TELEVISYEN MALAYSIA</p>
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@ const Footer = ({ variant = 'desktop' }) => {
     if (variant === 'mobile') {
         return (
             <footer className="footer">
-                <div className="container bottom_border" style={{ marginTop: "20px" }}>
+                <div className="container bottom_border" className="mt-3">
                     <div className='row'>
                         <div className='col'>
                             {isLoading ? (
@@ -78,7 +78,7 @@ const Footer = ({ variant = 'desktop' }) => {
 
     return (
         <footer className="footer">
-            <div className="container bottom_border" style={{ marginTop: "20px" }}>
+            <div className="container bottom_border" className="mt-3">
                 <div className="row">
                     <div className="col-sm-6 col-md-3 d-md-block d-none">
                         <ul className="footer_ul_amrc">

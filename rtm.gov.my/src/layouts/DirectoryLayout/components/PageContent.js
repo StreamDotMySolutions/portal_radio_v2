@@ -201,7 +201,7 @@ const PageContent = ({id}) => {
 
                     <div className="col-md-10">
 
-                        <ul className="breadcrumb2" style={{ "marginTop": "40px" }}>
+                        <ul className="breadcrumb2 mt-5">
                             <li><Link to="/">Utama</Link></li>
                             <li><Link to="/directories">Direktori</Link></li>
                             
@@ -245,7 +245,7 @@ const PageContent = ({id}) => {
                             </>
                         }
                         
-                        <div  style={{ "marginTop": "2rem" }}></div>
+                        <div className="mt-4"></div>
                     </div>
                 </div>
             </div>
