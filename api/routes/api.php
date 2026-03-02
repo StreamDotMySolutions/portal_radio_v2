@@ -12,6 +12,7 @@ use App\Http\Controllers\Backend\{
     ArticleContentController,
     ArticleAssetController,
     ArticleGalleryController,
+    ArticlePdfController,
     ArticleDataController,
     ArticleSettingController,
     BannerController,
@@ -98,6 +99,11 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::get('/article-galleries/{articleGallery}', [ArticleGalleryController::class, 'index']);
     Route::post('/article-galleries', [ArticleGalleryController::class, 'store']);
     Route::delete('/article-galleries/{articleGallery}', [ArticleGalleryController::class, 'delete']);
+
+    // ArticlePdf
+    Route::get('/article-pdf/{articleData}', [ArticlePdfController::class, 'show']);
+    Route::post('/article-pdf', [ArticlePdfController::class, 'store']);
+    Route::delete('/article-pdf/{articlePdf}', [ArticlePdfController::class, 'delete']);
 
     // ArticleAsset
     // Route::get('/article-assets/{article}', [ArticleAssetController::class, 'index']);

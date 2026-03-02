@@ -96,6 +96,7 @@ class ArticleController extends Controller
             // get the items based on $article->id from ArticleData table
             $items = ArticleData::query()
             ->where('article_id', $article->id)
+            ->with(['articlePdf'])
             ->defaultOrder()
             ->get();
         }

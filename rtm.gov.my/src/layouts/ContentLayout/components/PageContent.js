@@ -57,9 +57,19 @@ const PageContent = ({id}) => {
     
 
     const contentItems = () => {
-        return items.map((item, index) => (
-            <div className='mb-2' key={index} dangerouslySetInnerHTML={{ __html: item.contents }} />
-        ));
+        return items.map((item, index) => {
+            if (item.contents === 'pdf' && item.article_pdf) {
+                const pdfUrl = `${serverUrl}/storage/article_pdf/${item.article_pdf.filename}`;
+                return (
+                    <div className='mb-4' key={index}>
+                        <embed src={pdfUrl} type="application/pdf" width="100%" height="600px" />
+                    </div>
+                );
+            }
+            return (
+                <div className='mb-2' key={index} dangerouslySetInnerHTML={{ __html: item.contents }} />
+            );
+        });
     };
 
     const today = new Date();
