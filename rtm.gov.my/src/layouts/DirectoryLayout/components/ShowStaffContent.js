@@ -60,7 +60,7 @@ const ShowStaffContent = () => {
     const HeadingLink = () => {
         return (
            
-                <h3 style={{  backgroundColor: 'rgb(6, 57, 112)', color: 'white', padding: '1rem' }}>
+                <h3 style={{  backgroundColor: 'rgb(6, 57, 112)', color: 'white', padding: '1rem', borderRadius: '.25rem' }}>
                     {title}
                 </h3>
            
@@ -97,7 +97,7 @@ const ShowStaffContent = () => {
                         
 
                         {staff ? 
-                            <div className="container mt-4" id="containerdirektori" style={{ backgroundColor: 'rgb(6, 57, 112)', color: 'white', padding: '1rem' }}>
+                            <div className="container mt-4" id="containerdirektori" style={{ backgroundColor: 'rgb(6, 57, 112)', color: 'white', padding: '1rem', borderRadius: '.25rem' }}>
                                 <div className="row">
                                     <HeadingLink />
                                     <hr />
