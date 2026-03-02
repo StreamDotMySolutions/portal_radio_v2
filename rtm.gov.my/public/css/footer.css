@@ -32,7 +32,7 @@ footer p { font-size:16px; color:#CCC; padding-bottom:0px; margin-bottom:8px;}
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #ff6e00;
+    color: #fff;
 }
 
 .footer-contact li span:last-child {
