@@ -30,6 +30,13 @@ font-family: 'Open Sans', sans-serif;
     border-radius: 0.35rem;
 }
 
+#navbardibawah .dropdown-menu .dropdown-item {
+    padding: 0.45rem 1.25rem;
+    border-radius: 0.35rem;
+    margin: 0.15rem 0;
+    transition: all 0.15s ease;
+}
+
 /* breakpoint and up - mega dropdown styles */
 @media screen and (min-width: 992px) {
   
