@@ -132,7 +132,7 @@ const PageContent = () => {
                     <title>RTM : {title}</title>
                     <meta name="description" content={description} />
                 </Helmet>
-                <div className="container-fluid">
+                <div className="container-fluid bg-white">
                     {/* {settings?.listing_type} */}
                     <div className="row">
                         <div className="col-md-1"></div>
@@ -187,7 +187,7 @@ const PageContent = () => {
     return (
         <>
 
-        <div className='container-fluid text-center text-danger'>
+        <div className='container-fluid bg-white text-center text-danger'>
            
                 <ul className="breadcrumb mt-5">
                     <li><Link to="/">Utama</Link></li>

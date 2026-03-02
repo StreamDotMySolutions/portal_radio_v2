@@ -100,8 +100,8 @@ const PageContent = ({id}) => {
             <Helmet>
                 <title>Direktori RTM : {title}</title>
             </Helmet>
-            <div className="container-fluid">
-                
+            <div className="container-fluid bg-white">
+
                 <div className="row">
                     <div className="col-md-1"></div>
 
