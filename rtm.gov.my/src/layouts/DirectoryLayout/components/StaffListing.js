@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 
 const StaffListing = ({items}) => {
+    const serverUrl = process.env.REACT_APP_SERVER_URL;
     
 
     //console.log(items)
@@ -13,13 +14,13 @@ const StaffListing = ({items}) => {
             return items.map((item, index) => (
     
                 <tr key={index}>
-                    <td id="linklistp" style={{width:'50px'}} className='text-light text-center'><span class="badge badge-dark text-light">{item.number}</span></td>
+                    <td id="linklistp" style={{width:'50px'}} className='text-light text-center'><span className="badge badge-dark text-light">{item.number}</span></td>
                     <td id="linklistp" style={{width:'140px'}}>
                         <Link to={`/directories/${item.id}/show`}>
-                            <img 
-                                id="gambardirektorilist" 
-                                src={`https://www.rtm.gov.my${item.photo}`} 
-                                style={{ width: '140px' }} 
+                            <img
+                                id="gambardirektorilist"
+                                src={`${serverUrl}${item.photo}`}
+                                style={{ width: '140px' }}
                             />
                         </Link>
                     </td>

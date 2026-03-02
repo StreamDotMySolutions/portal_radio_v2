@@ -12,12 +12,10 @@ const SingleArticle = ({id}) => {
     const [loading, setLoading] = useState(true);
     const [settings, setSettings] = useState([]);
     const url = process.env.REACT_APP_API_URL;
-    const serverUrl = process.env.REACT_APP_SERVER_URL;
 
     useEffect(() => {
         axios(`${url}/show/${id}`)
             .then(response => {
-                console.log(response)
                 setTitle(response.data.title);
                 setUpdatedAt(response.data.settings.updated_at);
                 setItems(response.data.items); // article data
@@ -54,12 +52,6 @@ const SingleArticle = ({id}) => {
         return null;
      
     };
-
-    const today = new Date();
-    const currentDay = today.getDay(); // Gets the current day (0 for Sunday, 1 for Monday, ..., 6 for Saturday)
-
-    // Define a function to check if content should be rendered based on the day
-
 
     return (
 

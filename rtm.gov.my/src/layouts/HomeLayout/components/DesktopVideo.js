@@ -4,17 +4,8 @@ import axios from 'axios';
 import VideoModal from './VideoModal';
 
 const DesktopVideo = () => {
-    const [showModal, setShowModal] = useState(false);
-    const [videoUrl, setVideoUrl] = useState('');
     const [items, setItems] = useState([]);
     const url = process.env.REACT_APP_API_URL;
-    const serverUrl = process.env.REACT_APP_SERVER_URL;
-
-    const handleClose = () => setShowModal(false);
-    const handleShow = (url) => {
-        setVideoUrl(url);
-        setShowModal(true);
-    };
 
     useEffect(() => {
         axios(`${url}/home-videos`)

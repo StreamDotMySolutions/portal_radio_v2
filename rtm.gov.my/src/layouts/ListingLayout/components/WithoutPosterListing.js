@@ -29,7 +29,7 @@ const WithoutPosterListing = ({title,items}) => {
         <div>
           <h2>{title}</h2>
           <br />
-           <table class="table table-bordered " id="table-id">
+           <table className="table table-bordered" id="table-id">
                 <thead>
                 <tr>
                     <th style={{backgroundColor: "#EAEAEA"}}>Tajuk</th>

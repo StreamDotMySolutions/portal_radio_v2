@@ -5,7 +5,6 @@ import LoadMenu3 from './LoadMenu3';
 
 const Menu3 = () => {
     const url = process.env.REACT_APP_API_URL;
-    const serverUrl = process.env.REACT_APP_SERVER_URL;
     const [items, setItems] = useState([]);
     const [menu1Items, setMenu1Items] = useState([]);
     const [menu2Items, setMenu2Items] = useState([]);

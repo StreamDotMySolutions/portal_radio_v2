@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { NavLink,Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const Menu2 = () => {
     const url = process.env.REACT_APP_API_URL;
-    const serverUrl = process.env.REACT_APP_SERVER_URL;
     const [items, setItems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
         

@@ -22,7 +22,6 @@ const SearchResult = () => {
 
         axios.post(`${url}/directories/search`, { query: query })
             .then(response => {
-                console.log(response);
                 setData(response.data);
             })
             .catch(error => {

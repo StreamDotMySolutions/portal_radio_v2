@@ -107,7 +107,7 @@ const ShowStaffContent = () => {
                                                 <img 
                                                     id="gambardirektoripegawai" 
                                                     className="img-fluid rounded"
-                                                    src={`https://www.rtm.gov.my${staff?.photo}`} 
+                                                    src={`${serverUrl}${staff?.photo}`}
                                                 
                                                 />
                                             </div>

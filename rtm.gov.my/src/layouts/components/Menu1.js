@@ -5,7 +5,6 @@ import { Link, NavLink } from 'react-router-dom';
 
 const Menu1 = () => {
     const url = process.env.REACT_APP_API_URL;
-    const serverUrl = process.env.REACT_APP_SERVER_URL;
     const [items, setItems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
         
