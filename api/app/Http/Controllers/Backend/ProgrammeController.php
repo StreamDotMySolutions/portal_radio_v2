@@ -9,9 +9,17 @@ use App\Services\CommonService;
 class ProgrammeController extends Controller
 {
 
-    public function index(){
+    public function index(Request $request){
 
-        $programmes = Programme::defaultOrder()->paginate(10)->withQueryString(); 
+        $query = Programme::defaultOrder();
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where('title', 'like', "%{$search}%");
+        }
+
+        $programmes = $query->paginate(10)->withQueryString();
+
         return response()->json(['programmes' => $programmes]);
     }
 

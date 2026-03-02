@@ -4,6 +4,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useStore from '../../../store'
 import axios from '../../../../libs/axios'
 
+const serverUrl = process.env.REACT_APP_SERVER_URL
+const storagePath = `${serverUrl}/storage/assets`
+
 const formatBytes = (bytes) => {
     if (!bytes) return '-'
     if (bytes < 1024) return `${bytes} B`
@@ -29,8 +32,18 @@ const TreeNode = ({ node, depth = 0 }) => (
                 </>
             ) : (
                 <>
-                    <FontAwesomeIcon icon={['fas', 'video']} className='text-secondary me-2' />
-                    <span>{node.name}</span>
+                    <FontAwesomeIcon icon={['fas', 'file']} className='text-secondary me-2' />
+                    <a
+                        href={`${storagePath}/${node.name}`}
+                        target='_blank'
+                        rel='noreferrer'
+                        className='me-2 text-truncate'
+                        style={{ maxWidth: '300px' }}
+                    >
+                        {node.name}
+                    </a>
+                    {node.mimetype && <Badge bg='secondary' className='me-2'>{node.mimetype}</Badge>}
+                    <span className='text-muted small ms-auto pe-2'>{formatBytes(node.filesize)}</span>
                 </>
             )}
         </div>
@@ -40,46 +53,35 @@ const TreeNode = ({ node, depth = 0 }) => (
     </>
 )
 
-export default function ViewModal({ id }) {
+export default function ShowModal({ id }) {
     const store = useStore()
-    const serverUrl = process.env.REACT_APP_SERVER_URL
 
     const [show, setShow] = useState(false)
-    const [vod, setVod] = useState(null)
+    const [asset, setAsset] = useState(null)
     const [copied, setCopied] = useState(false)
-    const [copiedOriginal, setCopiedOriginal] = useState(false)
 
     const handleShowClick = () => {
         setShow(true)
-        setVod(null)
+        setAsset(null)
         setCopied(false)
-        setCopiedOriginal(false)
 
-        axios({ method: 'get', url: `${store.url}/vods/${id}` })
-            .then(response => setVod(response?.data?.vod))
+        axios({ method: 'get', url: `${store.url}/assets/${id}` })
+            .then(response => setAsset(response?.data?.asset))
             .catch(error => console.warn(error))
     }
 
     const handleClose = () => setShow(false)
 
-    const hlsUrl      = vod ? `${serverUrl}/storage/vods/${vod.id}/playlist.m3u8` : ''
-    const originalUrl = vod ? `${serverUrl}/storage/vods/${vod.name}` : ''
+    const fileUrl = asset ? `${storagePath}/${asset.name}` : ''
 
     const handleCopy = () => {
-        navigator.clipboard.writeText(hlsUrl).then(() => {
+        navigator.clipboard.writeText(fileUrl).then(() => {
             setCopied(true)
             setTimeout(() => setCopied(false), 2000)
         })
     }
 
-    const handleCopyOriginal = () => {
-        navigator.clipboard.writeText(originalUrl).then(() => {
-            setCopiedOriginal(true)
-            setTimeout(() => setCopiedOriginal(false), 2000)
-        })
-    }
-
-    const treeData = vod?.descendants ? buildTree(vod.descendants, vod.id) : []
+    const treeData = asset?.descendants ? buildTree(asset.descendants, asset.id) : []
 
     return (
         <>
@@ -90,55 +92,46 @@ export default function ViewModal({ id }) {
             <Modal size='lg' show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        {vod?.type === 'folder'
-                            ? <><FontAwesomeIcon icon={['fas', 'folder']} className='text-warning me-2' />{vod.name}</>
-                            : 'VOD Details'
+                        {asset?.type === 'folder'
+                            ? <><FontAwesomeIcon icon={['fas', 'folder']} className='text-warning me-2' />{asset.name}</>
+                            : 'Asset Details'
                         }
                     </Modal.Title>
                 </Modal.Header>
 
                 <Modal.Body>
-                    {!vod ? (
+                    {!asset ? (
                         <div className='text-center py-4 text-muted'>
                             <FontAwesomeIcon icon={['fas', 'spinner']} spin className='me-2' />
                             Loading...
                         </div>
-                    ) : vod.type === 'file' ? (
+                    ) : asset.type === 'file' ? (
                         <>
                             <Table borderless className='mb-3'>
                                 <tbody>
                                     <tr>
                                         <th style={{ width: '130px' }} className='text-muted fw-normal'>Name</th>
-                                        <td style={{ wordBreak: 'break-all' }}>{vod.name}</td>
+                                        <td style={{ wordBreak: 'break-all' }}>{asset.name}</td>
                                     </tr>
                                     <tr>
                                         <th className='text-muted fw-normal'>Mimetype</th>
-                                        <td><Badge bg='secondary'>{vod.mimetype ?? '-'}</Badge></td>
+                                        <td><Badge bg='secondary'>{asset.mimetype ?? '-'}</Badge></td>
                                     </tr>
                                     <tr>
-                                        <th className='text-muted fw-normal'>Original size</th>
-                                        <td>{formatBytes(vod.filesize)}</td>
-                                    </tr>
-                                    <tr>
-                                        <th className='text-muted fw-normal'>HLS size</th>
-                                        <td>
-                                            {vod.hls_size
-                                                ? formatBytes(vod.hls_size)
-                                                : <span className='text-muted small fst-italic'>Processing...</span>
-                                            }
-                                        </td>
+                                        <th className='text-muted fw-normal'>Size</th>
+                                        <td>{formatBytes(asset.filesize)}</td>
                                     </tr>
                                     <tr>
                                         <th className='text-muted fw-normal'>Uploaded</th>
-                                        <td>{vod.created_at}</td>
+                                        <td>{asset.created_at}</td>
                                     </tr>
                                 </tbody>
                             </Table>
 
-                            <div className='p-3 bg-light rounded mb-2'>
-                                <div className='small text-muted mb-2'>HLS Stream URL</div>
+                            <div className='p-3 bg-light rounded'>
+                                <div className='small text-muted mb-2'>File URL</div>
                                 <div className='d-flex align-items-center gap-2'>
-                                    <code className='flex-grow-1 text-break small'>{hlsUrl}</code>
+                                    <code className='flex-grow-1 text-break small'>{fileUrl}</code>
                                     <Button
                                         size='sm'
                                         variant={copied ? 'success' : 'outline-secondary'}
@@ -150,24 +143,9 @@ export default function ViewModal({ id }) {
                                     </Button>
                                 </div>
                             </div>
-
-                            <div className='p-3 bg-light rounded'>
-                                <div className='small text-muted mb-2'>Original Video URL</div>
-                                <div className='d-flex align-items-center gap-2'>
-                                    <code className='flex-grow-1 text-break small'>{originalUrl}</code>
-                                    <Button
-                                        size='sm'
-                                        variant={copiedOriginal ? 'success' : 'outline-secondary'}
-                                        onClick={handleCopyOriginal}
-                                        style={{ whiteSpace: 'nowrap' }}
-                                    >
-                                        <FontAwesomeIcon icon={['fas', copiedOriginal ? 'check' : 'copy']} className='me-1' />
-                                        {copiedOriginal ? 'Copied' : 'Copy'}
-                                    </Button>
-                                </div>
-                            </div>
                         </>
                     ) : (
+                        /* Folder tree view */
                         <div className='border rounded overflow-hidden'>
                             {treeData.length === 0 ? (
                                 <div className='text-center text-muted py-4'>This folder is empty.</div>

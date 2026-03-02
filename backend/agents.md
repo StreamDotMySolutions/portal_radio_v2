@@ -338,6 +338,127 @@ const CreateModal = () => {
 
 ---
 
+## HtmlForm UI Standard
+
+Every `HtmlForm.js` **must** use Bootstrap `Card` components to group related fields into labelled sections. This is the project-wide standard, applied consistently across all CRUD features.
+
+### Structure
+
+```jsx
+import { Card, Form, InputGroup } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+const HtmlForm = ({ form, onChange, errors, isLoading }) => (
+    <div className='d-flex flex-column gap-3'>
+
+        <Card>
+            <Card.Header className='fw-semibold'>
+                <FontAwesomeIcon icon={['fas', 'pencil']} className='me-2 text-secondary' />
+                Section Title
+            </Card.Header>
+            <Card.Body className='d-flex flex-column gap-2'>
+                <InputGroup>
+                    <InputGroup.Text style={{ width: '80px' }}>Label</InputGroup.Text>
+                    <Form.Control
+                        placeholder='...'
+                        value={form.field}
+                        readOnly={isLoading}
+                        isInvalid={!!errors?.field}
+                        onChange={(e) => onChange('field')(e.target.value)}
+                    />
+                    {errors?.field && (
+                        <Form.Control.Feedback type='invalid'>{errors.field[0]}</Form.Control.Feedback>
+                    )}
+                </InputGroup>
+            </Card.Body>
+        </Card>
+
+    </div>
+)
+```
+
+### Rules
+
+- **Outer wrapper**: `<div className='d-flex flex-column gap-3'>` — provides consistent vertical spacing between cards
+- **Card header**: always `fw-semibold` + a FontAwesome icon with `text-secondary` + a short section label
+- **Card body with multiple inputs**: use `className='d-flex flex-column gap-2'` on `Card.Body` instead of `<br>` or margin utilities
+- **Card body with one input or image**: use plain `Card.Body` (no flex gap needed)
+- **InputGroup label width**: `style={{ width: '80px' }}` for short labels, `style={{ width: '110px' }}` for longer ones — keep consistent within a card
+- **File inputs**: use `fa-upload` icon on `InputGroup.Text`, not `fa-image`
+- **Descriptive text**: when a field needs explanation, add `<p className='text-muted small mb-2'>...</p>` at the top of `Card.Body`
+- **Empty/warning states**: render an `<Alert variant='warning' className='mt-2 py-2 mb-0 small'>` inside the relevant card body, not as a standalone block
+
+### Grouping guidelines
+
+| Content | Card |
+|---|---|
+| Text inputs (name, title, email) | Group related fields in one **Basic Info** card |
+| Role / dropdown select | Include in the same card as the identity fields |
+| Password + confirmation | Separate **Password** card |
+| Schedule / date pickers / active toggle | **Publishing** card |
+| File / image upload | Dedicated image card (**Poster Image**, **Banner Image**, etc.) |
+| HLS video select from VOD Library | **HLS Video** card with empty-state `Alert` + link to VOD |
+
+### Empty-state link pattern (VOD / nested-set selects)
+
+When a `<Form.Select>` depends on data from another section (e.g. VOD Library), disable it when empty and show a contextual warning with a React Router `Link`:
+
+```jsx
+import { Link } from 'react-router-dom'
+
+<Form.Select disabled={isLoading || !videos?.length} ...>
+    ...
+</Form.Select>
+{!isLoading && videos?.length === 0 && (
+    <Alert variant='warning' className='mt-2 py-2 mb-0 small'>
+        <FontAwesomeIcon icon={['fas', 'triangle-exclamation']} className='me-1' />
+        No videos found in the VOD Library.{' '}
+        <Link to='/administration/vods/0'>Go to VOD Management</Link> and add a video first.
+    </Alert>
+)}
+```
+
+### Image replace pattern
+
+When editing an existing record that has an image, show the current image with a **Replace** button. Only show the file input when replacing:
+
+```jsx
+{filename && !replacing ? (
+    <>
+        <Figure className='w-100 mb-2'>
+            <Figure.Image className='w-100 rounded' src={`${serverUrl}/storage/{folder}/${filename}`} alt='...' />
+        </Figure>
+        <Button size='sm' variant='outline-secondary' onClick={() => setReplacing(true)}>
+            <FontAwesomeIcon icon={['fas', 'arrows-rotate']} className='me-1' />
+            Replace image
+        </Button>
+    </>
+) : (
+    <>
+        <InputGroup>
+            <InputGroup.Text><FontAwesomeIcon icon={['fas', 'upload']} /></InputGroup.Text>
+            <Form.Control type='file' accept='image/*' onChange={(e) => onFileChange(e.target.files[0])} />
+        </InputGroup>
+        {filename && (
+            <Button size='sm' variant='link' className='ps-0 mt-1 text-secondary' onClick={handleCancelReplace}>
+                Cancel replace
+            </Button>
+        )}
+    </>
+)}
+```
+
+### Reference implementations
+
+| Feature | File |
+|---|---|
+| Videos | `src/pages/Administration/Videos/components/HtmlForm.js` |
+| Users | `src/pages/Administration/Users/components/HtmlForm.js` |
+| Banners | `src/pages/Administration/Banners/components/HtmlForm.js` |
+| Programmes | `src/pages/Administration/Programmes/components/HtmlForm.js` |
+
+---
+
 ## Form Input Components (`src/libs/FormInput.js`)
 
 All inputs are connected directly to the global Zustand store.

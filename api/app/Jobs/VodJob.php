@@ -72,6 +72,15 @@ class VodJob implements ShouldQueue
             }
 
             \Log::info('HLS conversion completed: ' . $outputPlaylist);
+
+            // Calculate total HLS folder size and persist
+            $files = Storage::disk('public')->files($outputDir);
+            $hlsSize = array_sum(array_map(
+                fn($file) => Storage::disk('public')->size($file),
+                $files
+            ));
+            $this->vod->update(['hls_size' => $hlsSize]);
+
         } catch (\Exception $e) {
             \Log::error('FFmpeg error: ' . $e->getMessage());
         }

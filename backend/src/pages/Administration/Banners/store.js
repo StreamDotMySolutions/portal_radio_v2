@@ -6,6 +6,12 @@ const useBannersStore = create((set) => ({
 
     paginatorUrl: null,
     setPaginatorUrl: (url) => set({ paginatorUrl: url }),
+
+    search: '',
+    setSearch: (search) => set({ search, paginatorUrl: null }),
+
+    activeFilter: '',
+    setActiveFilter: (activeFilter) => set({ activeFilter, paginatorUrl: null }),
 }))
 
 export default useBannersStore

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Button, Modal } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
 import useUsersStore from '../store'
@@ -56,7 +57,7 @@ export default function CreateModal() {
     return (
         <>
             <Button variant='primary' onClick={handleShowClick}>
-                Create
+                <FontAwesomeIcon icon={['fas', 'circle-plus']} className='me-1' />Create
             </Button>
 
             <Modal size='lg' show={show} onHide={handleClose}>

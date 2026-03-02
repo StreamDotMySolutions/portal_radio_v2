@@ -6,6 +6,9 @@ const useProgrammesStore = create((set) => ({
 
     paginatorUrl: null,
     setPaginatorUrl: (url) => set({ paginatorUrl: url }),
+
+    search: '',
+    setSearch: (search) => set({ search, paginatorUrl: null }),
 }))
 
 export default useProgrammesStore

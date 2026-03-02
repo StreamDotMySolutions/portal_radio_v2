@@ -10,15 +10,21 @@ use Carbon\Carbon;
 class BannerController extends Controller
 {
 
-    public function index(){
+    public function index(Request $request){
 
-        //$banners = Banner::defaultOrder()->get();
-        $banners = Banner::defaultOrder()->paginate(10)->withQueryString(); 
+        $query = Banner::defaultOrder();
 
-        if ($banners->isEmpty()) {
-            return response()->json(['message' => 'No banners found']);
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where('title', 'like', "%{$search}%");
         }
-    
+
+        if ($request->has('active') && $request->input('active') !== '') {
+            $query->where('active', $request->input('active'));
+        }
+
+        $banners = $query->paginate(10)->withQueryString();
+
         return response()->json(['banners' => $banners]);
 
     }

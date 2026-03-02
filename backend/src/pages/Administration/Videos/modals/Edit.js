@@ -71,7 +71,7 @@ export default function EditModal({ id }) {
     return (
         <>
             <Button size='sm' variant='outline-primary' onClick={handleShowClick}>
-                <FontAwesomeIcon icon={['fas', 'pen-to-square']} />{' '}Edit
+                <FontAwesomeIcon icon={['fas', 'pen-to-square']} />
             </Button>
 
             <Modal size='lg' show={show} onHide={handleClose}>

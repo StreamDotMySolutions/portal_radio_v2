@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Alert, Button, Col, Figure, Form, InputGroup, Row } from 'react-bootstrap'
+import { Alert, Button, Card, Col, Figure, Form, InputGroup, Row } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const HtmlForm = ({ form, onChange, filename, onBannerChange, serverUrl, errors, isLoading }) => {
@@ -36,17 +36,20 @@ const HtmlForm = ({ form, onChange, filename, onBannerChange, serverUrl, errors,
     }
 
     return (
-        <>
-            <Col className='mb-2'>
-                <h3>Publishing</h3>
+        <div className='d-flex flex-column gap-3'>
 
-                <Alert variant='info' className='py-2 mb-3'>
-                    <FontAwesomeIcon icon={['fas', 'circle-info']} className='me-2' />
-                    {statusText()}
-                </Alert>
+            <Card>
+                <Card.Header className='fw-semibold'>
+                    <FontAwesomeIcon icon={['fas', 'calendar-days']} className='me-2 text-secondary' />
+                    Publishing
+                </Card.Header>
+                <Card.Body>
+                    <Alert variant='info' className='py-2 mb-3 small'>
+                        <FontAwesomeIcon icon={['fas', 'circle-info']} className='me-2' />
+                        {statusText()}
+                    </Alert>
 
-                <Form.Group>
-                    <Row>
+                    <Row className='mb-3'>
                         <Col>
                             <Form.Check
                                 type='switch'
@@ -94,12 +97,10 @@ const HtmlForm = ({ form, onChange, filename, onBannerChange, serverUrl, errors,
                             )}
                         </Col>
                     </Row>
-                </Form.Group>
 
-                <Form.Group className='col-4 mt-3'>
-                    <Form.Label><h6>Active</h6></Form.Label>
-                    <Row>
-                        <Col>
+                    <Form.Group>
+                        <Form.Label className='fw-semibold small text-muted mb-1'>Active</Form.Label>
+                        <div className='d-flex gap-3'>
                             <Form.Check
                                 type='radio'
                                 label='Yes'
@@ -108,8 +109,6 @@ const HtmlForm = ({ form, onChange, filename, onBannerChange, serverUrl, errors,
                                 checked={form.active == 1}
                                 onChange={() => onChange('active')(1)}
                             />
-                        </Col>
-                        <Col>
                             <Form.Check
                                 type='radio'
                                 label='No'
@@ -118,127 +117,127 @@ const HtmlForm = ({ form, onChange, filename, onBannerChange, serverUrl, errors,
                                 checked={form.active == 0}
                                 onChange={() => onChange('active')(0)}
                             />
-                        </Col>
-                    </Row>
-                </Form.Group>
-            </Col>
+                        </div>
+                    </Form.Group>
+                </Card.Body>
+            </Card>
 
-            <hr />
-            <h3>Metadata</h3>
+            <Card>
+                <Card.Header className='fw-semibold'>
+                    <FontAwesomeIcon icon={['fas', 'pencil']} className='me-2 text-secondary' />
+                    Metadata
+                </Card.Header>
+                <Card.Body className='d-flex flex-column gap-2'>
+                    <InputGroup>
+                        <InputGroup.Text style={{ width: '110px' }}>Title</InputGroup.Text>
+                        <Form.Control
+                            placeholder='Banner title'
+                            value={form.title}
+                            readOnly={isLoading}
+                            isInvalid={!!errors?.title}
+                            onChange={(e) => onChange('title')(e.target.value)}
+                        />
+                        {errors?.title && (
+                            <Form.Control.Feedback type='invalid'>{errors.title[0]}</Form.Control.Feedback>
+                        )}
+                    </InputGroup>
 
-            <Col className='mb-2'>
-                <InputGroup>
-                    <InputGroup.Text style={{ width: '130px' }}>
-                        <FontAwesomeIcon icon={['fas', 'pencil']} className='me-2' />
-                        Title
-                    </InputGroup.Text>
-                    <Form.Control
-                        placeholder='Title'
-                        value={form.title}
-                        readOnly={isLoading}
-                        isInvalid={!!errors?.title}
-                        onChange={(e) => onChange('title')(e.target.value)}
-                    />
-                    {errors?.title && (
-                        <Form.Control.Feedback type='invalid'>{errors.title[0]}</Form.Control.Feedback>
-                    )}
-                </InputGroup>
-            </Col>
+                    <InputGroup>
+                        <InputGroup.Text style={{ width: '110px' }}>Description</InputGroup.Text>
+                        <Form.Control
+                            placeholder='Short description'
+                            value={form.description}
+                            readOnly={isLoading}
+                            isInvalid={!!errors?.description}
+                            onChange={(e) => onChange('description')(e.target.value)}
+                        />
+                        {errors?.description && (
+                            <Form.Control.Feedback type='invalid'>
+                                {errors.description[0]}
+                            </Form.Control.Feedback>
+                        )}
+                    </InputGroup>
 
-            <Col className='mb-2'>
-                <InputGroup>
-                    <InputGroup.Text style={{ width: '130px' }}>
-                        <FontAwesomeIcon icon={['fas', 'pencil']} className='me-2' />
-                        Description
-                    </InputGroup.Text>
-                    <Form.Control
-                        placeholder='Short Description'
-                        value={form.description}
-                        readOnly={isLoading}
-                        isInvalid={!!errors?.description}
-                        onChange={(e) => onChange('description')(e.target.value)}
-                    />
-                    {errors?.description && (
-                        <Form.Control.Feedback type='invalid'>
-                            {errors.description[0]}
-                        </Form.Control.Feedback>
-                    )}
-                </InputGroup>
-            </Col>
+                    <InputGroup>
+                        <InputGroup.Text style={{ width: '110px' }}>URL</InputGroup.Text>
+                        <Form.Control
+                            placeholder='https://...'
+                            value={form.redirectUrl}
+                            readOnly={isLoading}
+                            isInvalid={!!errors?.redirect_url}
+                            onChange={(e) => onChange('redirectUrl')(e.target.value)}
+                        />
+                        {errors?.redirect_url && (
+                            <Form.Control.Feedback type='invalid'>
+                                {errors.redirect_url[0]}
+                            </Form.Control.Feedback>
+                        )}
+                    </InputGroup>
+                </Card.Body>
+            </Card>
 
-            <Col className='mb-2'>
-                <InputGroup>
-                    <InputGroup.Text style={{ width: '130px' }}>
-                        <FontAwesomeIcon icon={['fas', 'globe']} className='me-2' />
-                        URL
-                    </InputGroup.Text>
-                    <Form.Control
-                        placeholder='URL'
-                        value={form.redirectUrl}
-                        readOnly={isLoading}
-                        isInvalid={!!errors?.redirect_url}
-                        onChange={(e) => onChange('redirectUrl')(e.target.value)}
-                    />
-                    {errors?.redirect_url && (
-                        <Form.Control.Feedback type='invalid'>
-                            {errors.redirect_url[0]}
-                        </Form.Control.Feedback>
-                    )}
-                </InputGroup>
-            </Col>
-
-            <hr />
-            <h3>Banner</h3>
-
-            <Col className='mb-2'>
-                {filename && !replacing ? (
-                    <>
-                        <Figure className='w-100'>
-                            <Figure.Image className='w-100 rounded' src={`${serverUrl}/storage/banners/${filename}`} />
-                        </Figure>
-                        <Button
-                            size='sm'
-                            variant='outline-secondary'
-                            disabled={isLoading}
-                            onClick={() => setReplacing(true)}
-                        >
-                            <FontAwesomeIcon icon={['fas', 'arrows-rotate']} className='me-1' />
-                            Replace image
-                        </Button>
-                    </>
-                ) : (
-                    <>
-                        <InputGroup>
-                            <InputGroup.Text>
-                                <FontAwesomeIcon icon={['fas', 'image']} />
-                            </InputGroup.Text>
-                            <Form.Control
-                                type='file'
-                                accept='image/*'
-                                disabled={isLoading}
-                                isInvalid={!!errors?.banner}
-                                onChange={(e) => onBannerChange(e.target.files[0])}
-                            />
-                            {errors?.banner && (
-                                <Form.Control.Feedback type='invalid'>
-                                    {errors.banner[0]}
-                                </Form.Control.Feedback>
-                            )}
-                        </InputGroup>
-                        {filename && (
+            <Card>
+                <Card.Header className='fw-semibold'>
+                    <FontAwesomeIcon icon={['fas', 'image']} className='me-2 text-secondary' />
+                    Banner Image
+                </Card.Header>
+                <Card.Body>
+                    <p className='text-muted small mb-2'>
+                        Upload the banner image to be displayed in the homepage carousel.
+                    </p>
+                    {filename && !replacing ? (
+                        <>
+                            <Figure className='w-100 mb-2'>
+                                <Figure.Image
+                                    className='w-100 rounded'
+                                    src={`${serverUrl}/storage/banners/${filename}`}
+                                />
+                            </Figure>
                             <Button
                                 size='sm'
-                                variant='link'
-                                className='ps-0 mt-1 text-secondary'
-                                onClick={handleCancelReplace}
+                                variant='outline-secondary'
+                                disabled={isLoading}
+                                onClick={() => setReplacing(true)}
                             >
-                                Cancel replace
+                                <FontAwesomeIcon icon={['fas', 'arrows-rotate']} className='me-1' />
+                                Replace image
                             </Button>
-                        )}
-                    </>
-                )}
-            </Col>
-        </>
+                        </>
+                    ) : (
+                        <>
+                            <InputGroup>
+                                <InputGroup.Text>
+                                    <FontAwesomeIcon icon={['fas', 'upload']} />
+                                </InputGroup.Text>
+                                <Form.Control
+                                    type='file'
+                                    accept='image/*'
+                                    disabled={isLoading}
+                                    isInvalid={!!errors?.banner}
+                                    onChange={(e) => onBannerChange(e.target.files[0])}
+                                />
+                                {errors?.banner && (
+                                    <Form.Control.Feedback type='invalid'>
+                                        {errors.banner[0]}
+                                    </Form.Control.Feedback>
+                                )}
+                            </InputGroup>
+                            {filename && (
+                                <Button
+                                    size='sm'
+                                    variant='link'
+                                    className='ps-0 mt-1 text-secondary'
+                                    onClick={handleCancelReplace}
+                                >
+                                    Cancel replace
+                                </Button>
+                            )}
+                        </>
+                    )}
+                </Card.Body>
+            </Card>
+
+        </div>
     )
 }
 

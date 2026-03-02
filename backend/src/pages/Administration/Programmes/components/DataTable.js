@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Table } from 'react-bootstrap'
+import { Button, Form, InputGroup, Table } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useStore from '../../../store'
 import useProgrammesStore from '../store'
 import axios from '../../../../libs/axios'
 import PaginatorLink from '../../../../libs/PaginatorLink'
-import CreateButton from '../../../../libs/CreateButton'
 import CreateModal from '../modals/Create'
 import ShowModal from '../modals/Show'
 import EditModal from '../modals/Edit'
@@ -19,14 +18,26 @@ const DataTable = () => {
     const refreshKey = useProgrammesStore((s) => s.refreshKey)
     const paginatorUrl = useProgrammesStore((s) => s.paginatorUrl)
     const setPaginatorUrl = useProgrammesStore((s) => s.setPaginatorUrl)
+    const search = useProgrammesStore((s) => s.search)
+    const setSearch = useProgrammesStore((s) => s.setSearch)
 
+    const [query, setQuery] = useState(search)
     const [items, setItems] = useState([])
 
+    // Debounce: commit typed query to store after 400ms idle
     useEffect(() => {
-        axios({ method: 'get', url: paginatorUrl ?? baseUrl })
+        const timer = setTimeout(() => setSearch(query), 400)
+        return () => clearTimeout(timer)
+    }, [query])
+
+    const effectiveUrl = paginatorUrl
+        ?? (search ? `${baseUrl}?search=${encodeURIComponent(search)}` : baseUrl)
+
+    useEffect(() => {
+        axios({ method: 'get', url: effectiveUrl })
             .then((response) => setItems(response.data.programmes))
             .catch((error) => console.warn(error))
-    }, [refreshKey, paginatorUrl])
+    }, [refreshKey, paginatorUrl, search])
 
     const paginatorAdapter = {
         setValue: (key, value) => {
@@ -34,25 +45,50 @@ const DataTable = () => {
         },
     }
 
+    const handleClearSearch = () => setQuery('')
+
     return (
         <div>
-            <CreateButton>
+            {/* Toolbar */}
+            <div className='d-flex align-items-center justify-content-between mb-3 gap-2'>
+                <InputGroup style={{ maxWidth: '340px' }}>
+                    <InputGroup.Text>
+                        <FontAwesomeIcon icon={['fas', 'magnifying-glass']} />
+                    </InputGroup.Text>
+                    <Form.Control
+                        placeholder='Search by title...'
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                    />
+                    {query && (
+                        <Button variant='outline-secondary' onClick={handleClearSearch}>
+                            <FontAwesomeIcon icon={['fas', 'xmark']} />
+                        </Button>
+                    )}
+                </InputGroup>
                 <CreateModal />
-            </CreateButton>
-            <Table>
-                <thead>
+            </div>
+
+            {/* Result count */}
+            {items?.total !== undefined && (
+                <p className='text-muted small mb-2'>
+                    {items.total} programme{items.total !== 1 ? 's' : ''} found
+                    {search && <> for <strong>"{search}"</strong></>}
+                </p>
+            )}
+
+            <Table hover responsive style={{ '--bs-table-cell-padding-y': '0.85rem' }}>
+                <thead className='table-light'>
                     <tr>
-                        <th className='text-center'>Ordering</th>
+                        <th style={{ width: '100px' }}>Order</th>
                         <th>Title</th>
-                        <th className='text-center' style={{ width: '200px' }}>
-                            <FontAwesomeIcon icon={['fas', 'bolt']} />
-                        </th>
+                        <th className='text-center' style={{ width: '160px' }}>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {items?.data?.map((item, index) => (
                         <tr key={item.id}>
-                            <td className='text-center' style={{ width: '100px' }}>
+                            <td className='text-nowrap'>
                                 <Ordering id={item.id} direction='up' disabled={index === 0} />
                                 {' '}
                                 <Ordering
@@ -62,15 +98,26 @@ const DataTable = () => {
                                 />
                             </td>
                             <td>{item.title}</td>
-                            <td className='text-end'>
+                            <td className='text-end text-nowrap'>
                                 <ShowModal id={item.id} />{' '}
                                 <EditModal id={item.id} />{' '}
                                 <DeleteModal id={item.id} title={item.title} />
                             </td>
                         </tr>
                     ))}
+                    {items?.data?.length === 0 && (
+                        <tr>
+                            <td colSpan='3' className='text-center text-muted py-4'>
+                                {search
+                                    ? <>No programmes found matching <strong>"{search}"</strong>.</>
+                                    : 'No programmes found.'
+                                }
+                            </td>
+                        </tr>
+                    )}
                 </tbody>
             </Table>
+
             <PaginatorLink store={paginatorAdapter} items={items} />
         </div>
     )

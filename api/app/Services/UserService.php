@@ -9,19 +9,21 @@ use Illuminate\Support\Facades\Hash;
 class UserService
 {
 
-    public static function index()
+    public static function index(Request $request)
     {
-           
-        $paginate = User::query()
-                        ->with('profile')
-                        ->with('roles');
-                        // ->whereHas('roles', function($q) use ($role) {
-                        //     $q->whereIn('name', [$role]);
-                        // })
-                        // ->where('is_approved', false);
-        $users = $paginate->orderBy('id','DESC')->paginate(25)->withQueryString();
+        $query = User::query()
+            ->with('profile')
+            ->with('roles');
 
-        return $users;
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        return $query->orderBy('id', 'DESC')->paginate(25)->withQueryString();
     }
 
 

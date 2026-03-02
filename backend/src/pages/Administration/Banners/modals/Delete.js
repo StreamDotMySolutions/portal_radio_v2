@@ -37,7 +37,7 @@ export default function DeleteModal({ id, title }) {
     return (
         <>
             <Button size='sm' variant='outline-danger' onClick={handleShowClick}>
-                <FontAwesomeIcon icon={['fas', 'trash']} />{' '}Delete
+                <FontAwesomeIcon icon={['fas', 'trash']} />
             </Button>
 
             <Modal size='lg' show={show} onHide={handleClose}>

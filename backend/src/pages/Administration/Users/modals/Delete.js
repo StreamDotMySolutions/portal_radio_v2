@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Button, Modal, Form } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
 import useUsersStore from '../store'
@@ -36,7 +37,7 @@ export default function DeleteModal({ id, name, email, disabled = false }) {
     return (
         <>
             <Button size='sm' variant='outline-danger' onClick={handleShowClick} disabled={disabled}>
-                Delete
+                <FontAwesomeIcon icon={['fas', 'trash']} />
             </Button>
 
             <Modal size='lg' show={show} onHide={handleClose}>

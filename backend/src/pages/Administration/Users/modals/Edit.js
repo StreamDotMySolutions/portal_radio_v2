@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Button, Modal } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
 import useUsersStore from '../store'
@@ -75,7 +76,7 @@ export default function EditModal({ id, disabled = false }) {
     return (
         <>
             <Button size='sm' variant='outline-primary' onClick={handleShowClick} disabled={disabled}>
-                Edit
+                <FontAwesomeIcon icon={['fas', 'pen-to-square']} />
             </Button>
 
             <Modal size='lg' show={show} onHide={handleClose}>

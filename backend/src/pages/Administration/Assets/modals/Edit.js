@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Button, Modal} from 'react-bootstrap'
-import { appendFormData } from '../../../../libs/FormInput'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
 import HtmlForm from '../components/HtmlForm'
@@ -8,110 +7,87 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function EditModal({id}) {
     const store = useStore()
-    const errors = store.getValue('errors')
-   
+
     const [show, setShow] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const handleClose = () => setShow(false)
-    const handleShow = () => setShow(true)
-    const handleCloseClick = () => {
-        handleClose()
+    const handleCloseClick = () => handleClose()
+
+    const handleShowClick = () => {
+        store.emptyData()
+        setShow(true)
+
+        axios({ method: 'get', url: `${store.url}/assets/${id}` })
+            .then(response => {
+                const asset = response?.data?.asset
+                store.setValue('type', asset?.type)
+                store.setValue('name', asset?.name)
+                store.setValue('rename', asset?.name)
+                store.setValue('mimetype', asset?.mimetype)
+                store.setValue('filesize', asset?.filesize)
+                setIsLoading(false)
+            })
+            .catch(error => {
+                console.warn(error)
+                setIsLoading(false)
+            })
     }
 
-    /**
-     * When user click edit, load the data
-     */
-    const handleShowClick = () =>{
-      store.emptyData() // empty store data
-      setShow(true)
-
-        // fetch data from server using given id
-        axios({ 
-            method: 'get', 
-            url: `${store.url}/assets/${id}`,
-            })
-        .then( response => { // success 200
-            //console.log(response)
-            if( response?.data?.asset.hasOwnProperty('name') ){
-              store.setValue('name', response?.data?.asset?.name )
-            }
-            setIsLoading(false) // animation
-            })
-        .catch( error => {
-            console.warn(error)
-            setIsLoading(false) // animation
-        })
-    } 
-
-    /**
-     * When user click submit button
-     */
     const handleSubmitClick = () => {
-        
-      const formData = new FormData();
-      const dataArray = [
-          { key: 'name', value: store.getValue('name') },
-      ];
-      
-      appendFormData(formData, dataArray);
-        // Laravel special
-        formData.append('_method', 'put'); // get|post|put|patch|delete
+        const formData = new FormData()
+        formData.append('_method', 'put')
 
-        // send to Laravel
-        axios({ 
-            method: 'post', 
-            url: `${store.url}/assets/${id}`,
-            data: formData
-          })
-          .then( response => { // success 200
-            //console.log(response)
-            store.setValue('refresh', true) // to force useEffect get new data for index
-            setIsLoading(false) // animation
-            handleClose() // close the modal
-          })
-          .catch( error => {
-            //console.warn(error)
-            
-            if( error.response?.status == 422 ){ // detect 422 errors by Laravel
-              //console.log(error.response.data.errors)
-              store.setValue('errors', error.response.data.errors ) // set the errors to store
+        if (store.getValue('type') === 'folder') {
+            formData.append('name', store.getValue('name'))
+        }
+
+        if (store.getValue('type') === 'file') {
+            if (store.getValue('rename')) {
+                formData.append('rename', store.getValue('rename'))
             }
-            setIsLoading(false) // animation
-          })
+            if (store.getValue('file')) {
+                formData.append('file', store.getValue('file'))
+            }
+        }
+
+        axios({ method: 'post', url: `${store.url}/assets/${id}`, data: formData })
+            .then(response => {
+                store.setValue('refresh', true)
+                setIsLoading(false)
+                handleClose()
+            })
+            .catch(error => {
+                if (error.response?.status == 422) {
+                    store.setValue('errors', error.response.data.errors)
+                }
+                setIsLoading(false)
+            })
     }
-  
+
     return (
-      <>
-        <Button size="sm" variant="outline-primary" onClick={handleShowClick}>
-        <FontAwesomeIcon icon={['fas', 'pen-to-square']} />{' '}Edit
-        </Button>
-  
-        <Modal size={'lg'} show={show} onHide={handleCloseClick}>
-          <Modal.Header closeButton>
-            <Modal.Title>Edit asset</Modal.Title>
-          </Modal.Header>
-
-          <Modal.Body>
-            <HtmlForm isLoading={isLoading} />
-          </Modal.Body>
-          
-          <Modal.Footer>
-            <Button 
-              disabled={isLoading}
-              variant="secondary" 
-              onClick={handleCloseClick}>
-              Close
+        <>
+            <Button size="sm" variant="outline-primary" onClick={handleShowClick}>
+                <FontAwesomeIcon icon={['fas', 'pen-to-square']} />
             </Button>
 
-            <Button 
-              disabled={isLoading}
-              variant="primary" 
-              onClick={handleSubmitClick}>
-              Submit
-            </Button>
+            <Modal size={'lg'} show={show} onHide={handleCloseClick}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit asset</Modal.Title>
+                </Modal.Header>
 
-          </Modal.Footer>
-        </Modal>
-      </>
+                <Modal.Body>
+                    <HtmlForm isLoading={isLoading} mode='edit' />
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button disabled={isLoading} variant="secondary" onClick={handleCloseClick}>
+                        Close
+                    </Button>
+                    <Button disabled={isLoading} variant="primary" onClick={handleSubmitClick}>
+                        Submit
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
     );
-  }
+}

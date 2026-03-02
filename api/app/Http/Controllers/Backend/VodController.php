@@ -3,25 +3,27 @@
 namespace App\Http\Controllers\Backend;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use App\Models\Vod;
 use App\Services\CommonService;
 use App\Jobs\VodJob;
-use Illuminate\Support\Facades\Storage;
 
 class VodController extends Controller
 {
 
-    public function index($parentId){
+    public function index(Request $request, $parentId){
 
-       
-        if (!is_null($parentId) && !empty($parentId)) {
-            $paginate = Vod::query()->where('parent_id', $parentId);
-        } else {
-            $paginate = Vod::query()->where('parent_id', null);
+        $query = !is_null($parentId) && !empty($parentId)
+            ? Vod::query()->where('parent_id', $parentId)
+            : Vod::query()->whereNull('parent_id');
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where('name', 'like', "%{$search}%");
         }
-        
 
-        $vods = $paginate->with(['descendants'])->defaultOrder()->paginate(10)->withQueryString();   
+        $vods = $query->with(['descendants'])->defaultOrder()->paginate(10)->withQueryString();
 
         return response()->json(['vods' => $vods]);
     }
@@ -34,6 +36,9 @@ class VodController extends Controller
     }
 
     public function show(Vod $vod){
+        if ($vod->type === 'folder') {
+            $vod->load(['descendants' => fn($q) => $q->defaultOrder()]);
+        }
         return response()->json(['vod' => $vod]);
     }
 
@@ -59,14 +64,18 @@ class VodController extends Controller
         if($request->input('type') == 'file'){
             // validate, only accepts any video
             $request->validate([
-                'name' => 'required|file|mimetypes:video/*' 
+                'name' => 'required|file|mimetypes:video/*'
             ]);
+
+            $file = $request->file('name');
 
             // create a record in database
             $vod = Vod::create([
-                'user_id' =>  auth('sanctum')->user()->id,
-                'type' => 'file',
-                'name' => CommonService::handleStoreFile($request->file('name'), $directory = 'vods'),
+                'user_id'  => auth('sanctum')->user()->id,
+                'type'     => 'file',
+                'name'     => CommonService::handleStoreFile($file, $directory = 'vods'),
+                'mimetype' => $file->getMimeType(),
+                'filesize' => $file->getSize(),
             ]);
 
             // Pass the $vod->name to Job Worker
@@ -92,37 +101,32 @@ class VodController extends Controller
         
     }
 
-    public function update(Request $request,Asset $vod)
+    public function update(Request $request, Vod $vod)
     {
-        // validation
-        $data = $request->validate([
-            'name' => 'sometimes',
-            //'poster' => 'sometimes|image|mimes:jpeg,png,jpg,gif'
+        $request->validate([
+            'name'   => 'sometimes|string',
+            'rename' => 'sometimes|string',
         ]);
 
-        // $vod = Asset::where('id', $vod->id)->update(
-        //     $request->except(['_method','id'])
-        // );
-         // Prepare the data array for updating
-        $updateData = [
-            'user_id' => auth('sanctum')->user()->id,
-            'name' => $request->input('name'),
-        ];
+        $updateData = ['user_id' => auth('sanctum')->user()->id];
 
-        // Conditionally add 'filename' if 'poster' is present in the request
-        // if ($request->hasFile('poster')) {
-        //     $updateData['filename'] = CommonService::handleStoreFile($request->file('poster'), 'vods');
-        // }
+        if ($vod->type === 'folder') {
+            $updateData['name'] = $request->input('name');
+        }
 
-        // Perform the update
+        if ($vod->type === 'file' && $request->filled('rename')) {
+            $ext     = pathinfo($vod->name, PATHINFO_EXTENSION);
+            $newName = Str::slug(pathinfo($request->input('rename'), PATHINFO_FILENAME)) . '.' . $ext;
+
+            if ($newName !== $vod->name) {
+                Storage::disk('public')->move("vods/{$vod->name}", "vods/{$newName}");
+                $updateData['name'] = $newName;
+            }
+        }
+
         $vod->where('id', $vod->id)->update($updateData);
 
-        // Check if the update was successful
-        if ($vod) {
-            return response()->json(['message' => 'Vod successfully created']);
-        } else {
-            return response()->json(['message' => 'Vod update failed'], 500);
-        }
+        return response()->json(['message' => 'Vod successfully updated']);
     }
 
     public function delete(Request $request,Vod $vod){
