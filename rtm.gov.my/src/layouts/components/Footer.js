@@ -70,7 +70,7 @@ const Footer = ({ variant = 'desktop' }) => {
     return (
         <footer className="footer">
             <div className="container bottom_border mt-3">
-                <div className="row justify-content-center align-items-start text-center text-md-start">
+                <div className="row justify-content-center align-items-start text-md-start">
                     <div className="col-sm-6 col-md-3 d-md-block d-none text-md-start text-center">
                         <ul className="footer_ul_amrc">
                             <li><a href="https://www.jdn.gov.my"><img className="img-fluid" src="/asset/footer/jdn.jpg" alt="JDN Logo" /></a></li>
