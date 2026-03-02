@@ -18,7 +18,7 @@ ul.breadcrumb li a {
   text-decoration: none;
 }
 ul.breadcrumb li a:hover {
-  color: #01447e;
+  color: white;
   text-decoration: underline;
 }
 
