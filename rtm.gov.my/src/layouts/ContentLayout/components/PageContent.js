@@ -119,20 +119,11 @@ const PageContent = ({id}) => {
 
             
 
-                        <div className="container-fluid" style={{ marginTop: '4rem' }}>
-                            {shouldRenderContent() ? (
-                                <>
-                                    {/* Render contentItems if shouldRenderContent returns true */}
-                                    {contentItems()}
-                                </>
-                            ) : (
-                                // Render nothing if shouldRenderContent returns false
-                                <></>
-                            )}
+                        <div style={{ marginTop: '4rem' }}>
+                            {shouldRenderContent() ? contentItems() : null}
                         </div>
 
-                        <div className="container-fluid" style={{ "marginTop": "2rem" }}>
-                        </div>
+                        <div style={{ marginTop: '2rem' }}></div>
                     </div>
 
                     <div className="col-md-1"></div>

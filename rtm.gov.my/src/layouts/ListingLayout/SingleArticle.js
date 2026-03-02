@@ -55,7 +55,7 @@ const SingleArticle = ({id}) => {
 
     return (
 
-        <div className="container mt-5">
+        <div className="mt-5">
          
             {/* Render contentItems if shouldRenderContent returns true */}
             <h2>{title}</h2>
