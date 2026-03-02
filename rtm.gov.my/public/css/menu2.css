@@ -19,19 +19,23 @@ font-family: 'Open Sans', sans-serif;
     background-color: #ff6e00;
     color: #fff;
     font-weight: 600;
-    border-radius: 0.35rem;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35);
+    border-radius: 0.25rem;
+    padding: 0.35rem 1rem;
+    box-shadow: 0 4px 12px rgba(255, 110, 0, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    transform: translateY(-1px);
 }
 
 #navbardibawah .nav-link:hover,
 #navbardibawah .dropdown-item:hover {
     background-color: rgba(255, 110, 0, 0.12);
     color: #ff6e00;
-    border-radius: 0.35rem;
+    border-radius: 0.25rem;
+    padding: 0.35rem 1rem;
 }
 
 #navbardibawah .dropdown-menu .dropdown-item {
-    padding: 0.45rem 1.25rem;
+    padding: 0.35rem 1rem;
     border-radius: 0.35rem;
     margin: 0.15rem 0;
     transition: all 0.15s ease;
@@ -47,7 +51,7 @@ font-family: 'Open Sans', sans-serif;
   
 }
 
-/* remove the padding from the nav-item and add some margin to give some breathing room on hovers */
+  /* remove the padding from the nav-item and add some margin to give some breathing room on hovers */
 #navbardibawah.navbar .nav-item {
   padding:.5rem .5rem;
   margin:0 .25rem;
@@ -65,7 +69,9 @@ font-family: 'Open Sans', sans-serif;
 #navbardibawah.navbar .dropdown-menu {
     border: 1px solid rgba(0,0,0,.15);
     background-color: #fff;
-	
+    padding: 0.75rem 0.25rem;
+    border-radius: 0.35rem;
+    box-shadow: 0 12px 36px rgba(0,0,0,.15);
   }
 
 }
