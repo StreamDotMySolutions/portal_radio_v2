@@ -22,12 +22,12 @@ const Menu2 = () => {
 
     const menuItems = () => {
         return items.map((item, index) => {
-            if(item.article_setting && item.article_setting?.active == 1) {
-                if( item.article_setting?.show_children == 1) {
+            if(item.article_setting && item.article_setting?.active === 1) {
+                if( item.article_setting?.show_children === 1) {
                     if (item.children && item.children.length > 0) {
                         return (
                             <li key={index} className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle" href="#" id={`navbarDropdown${item.title}`} role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a className="nav-link dropdown-toggle" role="button" id={`navbarDropdown${item.title}`} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {item.title}
                                 </a>
                                 <div className="dropdown-menu" aria-labelledby={`navbarDropdown${item.title}`} style={{ marginTop: "-10px" }}>
@@ -84,50 +84,6 @@ const Menu2 = () => {
             }
         });
     };
-    
-    // const menuItems = () => {
-    //     return items
-    //         .filter(item => item.article_setting?.active === 1)
-    //         .filter(item => item.children.length != 0)
-    //         .map((item, index) => {
-                
-    //             const renderNavLink = (id, title, redirectUrl) => (
-                    
-    //                 <NavLink to={redirectUrl || `/listings/${id}`} className="nav-link">
-    //                     {title} + || {item.children.length}
-    //                 </NavLink>
-    //             );
-    
-    //             if ( item.children && item.children.length > 0) {
-    //                 return (
-    //                     <li key={index} className="nav-item dropdown">
-    //                         <a
-    //                             className="nav-link dropdown-toggle"
-    //                             href="#"
-    //                             id={`navbarDropdown${item.title}`}
-    //                             role="button"
-    //                             data-toggle="dropdown"
-    //                         >
-    //                             {item.title} ** {item.children.length}
-    //                         </a>
-    //                         <div className="dropdown-menu" aria-labelledby={`navbarDropdown${item.title}`} style={{ marginTop: "-10px" }}>
-    //                             {item.descendants.map((descendant, idx) =>
-    //                                 renderNavLink(descendant.id, descendant.title, descendant.article_setting?.redirect_url)
-    //                             )}
-    //                         </div>
-    //                     </li>
-    //                 );
-    //             }
-    
-    //             return (
-    //                 <li key={index} className="nav-item">
-    //                     {renderNavLink(item.id, item.title, item.article_setting?.redirect_url)}
-    //                 </li>
-    //             );
-    //         });
-    // };
-    
-
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light shadow-sm" style={{ backgroundColor: "white" , color: "black"}} id="navbardibawah">

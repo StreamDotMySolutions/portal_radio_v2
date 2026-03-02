@@ -49,7 +49,7 @@ const Menu3 = () => {
     const menuItems2 = () => {
         return menu2Items.map((item, index) => {
             //console.log(item)
-            if(item.article_setting  && item.article_setting.active == 1 ){
+            if(item.article_setting  && item.article_setting.active === 1 ){
 
            
 
@@ -69,7 +69,7 @@ const Menu3 = () => {
 
                     return (
                         <li key={index} className="nav-item dropdown">
-                            <a className="nav-link dropdown-toggle" href="#" id={`navbarDropdown${item.title}`} role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a className="nav-link dropdown-toggle" role="button" id={`navbarDropdown${item.title}`} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {item.title}
                             </a>
                             <div className="dropdown-menu" aria-labelledby={`navbarDropdown${item.title}`} style={{ marginTop: "-10px" }}>
@@ -81,7 +81,7 @@ const Menu3 = () => {
                                         </NavLink>
                                         ) : (
                                         <>
-                                        {descendant.article_setting && descendant.article_setting.listing_type == 'single_article' ?
+                                        {descendant.article_setting && descendant.article_setting.listing_type === 'single_article' ?
                                             <NavLink key={idx}  to={`/listings/${descendant.id}`} className="nav-link">
                                                 {descendant.title}
                                             </NavLink>
@@ -111,7 +111,7 @@ const Menu3 = () => {
                                 //     {item.title}
                                 // </NavLink>
                                 <>
-                                {item.article_setting && item.article_setting.listing_type == 'single_article' ?
+                                {item.article_setting && item.article_setting.listing_type === 'single_article' ?
                                 <NavLink to={`/listings/${item.id}`} className="nav-link">
                                     {item.title}
                                 </NavLink>

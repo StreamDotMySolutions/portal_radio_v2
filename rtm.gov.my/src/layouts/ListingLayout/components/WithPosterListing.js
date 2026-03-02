@@ -4,7 +4,6 @@ import { Button } from 'react-bootstrap';
 import PlaceholderImage from './img/placeholder-282.png'
 
 const WithPosterListing = ({title,items}) => {
-    const url = process.env.REACT_APP_API_URL;
     const serverUrl = process.env.REACT_APP_SERVER_URL;
     const path = `${serverUrl}/storage/article_poster`
   
@@ -69,12 +68,6 @@ const WithPosterListing = ({title,items}) => {
     return (
         <div>
             {contentItems()}
-           {/* <table class="table border-0" id="table-id">
-           
-                <tbody>
-                    {contentItems()}
-                </tbody>
-            </table> */}
         </div>
     );
 };

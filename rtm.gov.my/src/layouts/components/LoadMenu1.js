@@ -102,7 +102,7 @@ function LoadMenu1({id}) {
     return (
       <>
         <li className="nav-item dropdown">
-          <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">
+          <a className="nav-link dropdown-toggle" role="button" id="navbarDropdown" data-toggle="dropdown">
             {loading ? ( // Render spinner if loading is true
               // <Spinner animation="grow"  size="sm"  />
               <></>

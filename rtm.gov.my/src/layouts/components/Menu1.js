@@ -31,10 +31,10 @@ const Menu1 = () => {
         return items.map((item, index) => (
             <span key={index}>
                
-                {item.article_setting && item.article_setting.active == 1 && // check active
+                {item.article_setting && item.article_setting.active === 1 && // check active
 
                     <>
-                    {item.article_setting.show_children && item.article_setting.show_children == 1 ?
+                    {item.article_setting.show_children && item.article_setting.show_children === 1 ?
                         <LoadMenu key={index} id={item.id}/>
                         :
                         <>

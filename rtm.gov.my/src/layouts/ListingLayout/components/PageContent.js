@@ -79,10 +79,10 @@ const PageContent = () => {
     const breadcrumbItems = () => {
         if (ancestors.length > 0) {
             return ancestors
-                .filter(ancestor => ancestor.title !== 'Homepage Data') // Exclude MENU-1
-                .filter(ancestor => ancestor.title !== 'MENU-1') // Exclude MENU-1
-                .filter(ancestor => ancestor.title !== 'MENU-2') // Exclude MENU-1
-                .filter(ancestor => ancestor.title !== 'FOOTER') // Exclude MENU-1
+                .filter(ancestor => ancestor.title !== 'Homepage Data')
+                .filter(ancestor => ancestor.title !== 'MENU-1')
+                .filter(ancestor => ancestor.title !== 'MENU-2')
+                .filter(ancestor => ancestor.title !== 'FOOTER')
                 .map((ancestor, index) => (
                 <li key={ancestor.id}>
                     <Link to={`/listings/${ancestor.id}`}>{ancestor.title}</Link>
@@ -126,7 +126,7 @@ const PageContent = () => {
         break;
     }
 
-    if(settings?.active == 1 ){
+    if(settings?.active === 1 ){
         return (
             <>
                 <Helmet>

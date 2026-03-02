@@ -1,14 +1,7 @@
-// import Container from 'react-bootstrap/Container';
-// import Nav from 'react-bootstrap/Nav';
-// import Navbar from 'react-bootstrap/Navbar';
-// import NavDropdown from 'react-bootstrap/NavDropdown';
-
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { truncateTitleWithBreaks } from '../../libs/utils';
-
-//import Spinner from 'react-bootstrap/Spinner'; // Import Spinner component
 
 function LoadMenu3({id}) {
 
@@ -29,40 +22,6 @@ function LoadMenu3({id}) {
       console.warn(error)
     })
   },[])
-
-
-  // const items = () => {
-  //   if (articles.length === 0) {
-  //     return null; // or any default content you want to render when there are no articles
-  //   }
-  
-  //   const groupedArticles = [];
-  //   for (let i = 0; i < articles.length; i += 8) {
-  //     groupedArticles.push(articles.slice(i, i + 8));
-  //   }
-
-
-  
-  //   return groupedArticles.map((group, index) => (
-     
-
-  //       <ul key={index} className="nav flex-column">
-  //         {group.map((article, idx) => (
-  //           <li key={article.id} className="nav-item">
-  //             <NavLink
-  //               to={article.article_setting && article.article_setting.redirect_url ? article.article_setting.redirect_url : `/contents/${article.id}`}
-  //               className="dropdown-item text-justify"
-  //             >
-
-  //                 <span dangerouslySetInnerHTML={{ __html: truncateTitleWithBreaks(article.title, 3) }} />
-
-  //             </NavLink>
-  //           </li>
-  //         ))}
-  //       </ul>
-      
-  //   ));
-  // };
 
   const items = () => {
     if (articles.length === 0) {
@@ -126,7 +85,7 @@ function LoadMenu3({id}) {
     return (
       <>
         <li className="nav-item dropdown">
-          <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" data-toggle="dropdown">
+          <a className="nav-link dropdown-toggle" role="button" id="navbarDropdown" data-toggle="dropdown">
             {loading ? ( // Render spinner if loading is true
               // <Spinner animation="grow"  size="sm"  />
               <></>
