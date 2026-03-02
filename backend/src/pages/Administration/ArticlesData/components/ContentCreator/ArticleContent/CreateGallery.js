@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Badge, Button, Col, Modal, Tabs, Tab, Table} from 'react-bootstrap'
+import { Badge, Button, Col, Modal, Tabs, Tab} from 'react-bootstrap'
 import { appendFormData, TextEditor,InputTextarea } from '../../../../../../libs/FormInput'
 import axios from '../../../../../../libs/axios'
 import useStore from '../../../../../store'
@@ -85,7 +85,7 @@ export default function Create({article_data_id}) {
     return (
       <>
         <Button variant="outline-primary" size="sm" onClick={handleShowClick}>
-          <FontAwesomeIcon icon={['fas', 'fa-image']} />{' '}GALLERY
+          <FontAwesomeIcon icon={['fas', 'image']} />{' '}GALLERY
         </Button>
 
         <Modal size={'xl'} show={show} onHide={handleCloseClick}>
@@ -99,26 +99,12 @@ export default function Create({article_data_id}) {
             {store.getValue('show_article_gallery') ? (
               <DataTable article_data_id={store.getValue('article_data_id')} />
             ) : (
-              <Table>
-                <tr>
-                  <td className='text-center'>
-                    <h3>Create gallery ?</h3>
-                  </td>
-                </tr>
-                <tr>
-                  <td className='text-center'>
-                    <Button 
-                      onClick={handleSubmitClick}
-                      variant='success' 
-                      className='text-success'>Yes</Button>
-                    {' '}
-                    <Button 
-                      onClick={handleCloseClick}
-                      variant='danger' 
-                      className='text-danger'>No</Button>
-                  </td>
-                </tr>
-              </Table>
+              <div className='text-center py-4'>
+                <h5 className='mb-3'>Create gallery?</h5>
+                <Button onClick={handleSubmitClick} variant='success'>Yes</Button>
+                {' '}
+                <Button onClick={handleCloseClick} variant='danger'>No</Button>
+              </div>
             )}
 
           </Modal.Body>

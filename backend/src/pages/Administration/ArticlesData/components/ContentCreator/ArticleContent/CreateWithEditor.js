@@ -75,7 +75,7 @@ export default function Create() {
     return (
       <>
         <Button variant="outline-primary" size="sm" onClick={handleShowClick}>
-          <FontAwesomeIcon icon={['fas', 'fa-pen-to-square']} />{' '}EDITOR
+          <FontAwesomeIcon icon={['fas', 'pen-to-square']} />{' '}EDITOR
         </Button>
 
         <Modal size={'xl'} show={show} onHide={handleCloseClick}>

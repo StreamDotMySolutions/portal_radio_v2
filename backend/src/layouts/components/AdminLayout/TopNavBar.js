@@ -17,7 +17,7 @@ function TopNavbar() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav>
-                <Nav.Link as={NavLink} to="/"> <FontAwesomeIcon icon="fa-solid fa-home" />{' '}Home</Nav.Link>
+                <Nav.Link as={NavLink} to="/"> <FontAwesomeIcon icon={['fas', 'gauge']} />{' '}Dashboard</Nav.Link>
 
                 <NavDropdown title={ <span><FontAwesomeIcon icon="fa-solid fa-cog" />{' '}System</span> } id="basic-nav-dropdown">
                   <NavDropdown.Item as={NavLink} to="/administration/users"><FontAwesomeIcon icon="fa-solid fa-user" />{' '}Users</NavDropdown.Item>
@@ -33,6 +33,7 @@ function TopNavbar() {
                 <Nav.Link as={NavLink} to="/administration/directories/0"> <FontAwesomeIcon icon="fa-solid fa-address-book" />{' '}Directory</Nav.Link>
                 <Nav.Link as={NavLink} to="/administration/assets/0"> <FontAwesomeIcon icon="fa-solid fa-folder-open" />{' '}Asset</Nav.Link>
                 <Nav.Link as={NavLink} to="/administration/vods/0"> <FontAwesomeIcon icon="fa-solid fa-film" />{' '}Vod</Nav.Link>
+                <Nav.Link as={NavLink} to="/administration/analytics"> <FontAwesomeIcon icon="fa-solid fa-chart-bar" />{' '}Analytics</Nav.Link>
               </Nav>
            <Account />
         </Navbar.Collapse>

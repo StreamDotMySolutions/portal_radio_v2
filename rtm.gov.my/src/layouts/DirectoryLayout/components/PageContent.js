@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { trackEvent } from '../../../libs/analytics';
 import { Link, useParams } from 'react-router-dom';
 // import { Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -41,7 +42,8 @@ const PageContent = ({id}) => {
                 setStaffs(response.data.staffs.data)
                 setAncestors(response.data.ancestors.ancestors)
                 setTitle(response.data.title.name)
-                setLoading(false); // Set loading to false when data is fetched
+                setLoading(false);
+                trackEvent('pageview', 'directory', id, response.data.title.name);
             })
             .catch(error => {
                 console.warn(error);

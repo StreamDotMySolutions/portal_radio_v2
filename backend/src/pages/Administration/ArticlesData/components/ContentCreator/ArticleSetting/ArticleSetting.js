@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Form,Badge, Button, Col, Modal, Row} from 'react-bootstrap'
-import { InputCheckbox, InputDate, InputRadio, InputText, InputTextarea,appendFormData } from '../../../../../../libs/FormInput'
+import { Card, Form, InputGroup, Button, Col, Modal, Row} from 'react-bootstrap'
+import { InputCheckbox, InputDate, InputRadio, InputTextarea,appendFormData } from '../../../../../../libs/FormInput'
 import axios from '../../../../../../libs/axios'
 import useStore from '../../../../../store'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -119,91 +119,98 @@ export default function ArticleSetting() {
     
 
         <Button variant="outline-primary" size="sm" onClick={handleShowClick}>
-          <FontAwesomeIcon icon={['fas', 'fa-cog']} />{' '}SETTINGS
+          <FontAwesomeIcon icon={['fas', 'gear']} />{' '}SETTINGS
         </Button>
 
 
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
-            <Modal.Title><FontAwesomeIcon icon={['fas', 'fa-cog']} />{' '}Settings</Modal.Title>
+            <Modal.Title><FontAwesomeIcon icon={['fas', 'gear']} />{' '}Settings</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
-        
-            <Form.Group className='col-2'>
-              <InputRadio 
-                fieldName='active' 
-                label='Active'
-                options={[
-                  { label: 'Yes', value: 1 },
-                  { label: 'No', value: 0 }
-                ]}
-                
-                />
-            </Form.Group>
-            <hr />
-            <Form.Group>
-              <Form.Label><h6>Redirect Link</h6></Form.Label>
-             
-                  <InputText 
-                    placeholder={'http://somewebsite.com'}
-                    icon='fa-globe' 
-                    fieldName='redirect_url' 
-                  />
-             
-            </Form.Group>
 
-            <hr />
-
-            {/** Don't show id redirect_url is present */}
-            {!store.getValue('redirect_url') &&  (
-              <>
-              <Form.Group>
-                <Form.Label><h6>Publish Date</h6></Form.Label>
-                <Row>
-                  <Col>
-                    <InputDate icon='fa-calendar' fieldName='published_start' />
-                  </Col>
-                  <Col>
-                    <InputDate  icon='fa-calendar' fieldName='published_end' />
-                  </Col>
-                </Row>
-              </Form.Group>
-              <hr />
-              <Form.Group className='col-7'>
-                <InputRadio 
-                  fieldName='listing_type' 
-                  label='Listing Type'
+            <Card className='mb-3'>
+              <Card.Header className='text-muted small fw-semibold text-uppercase py-2'>Visibility</Card.Header>
+              <Card.Body>
+                <InputRadio
+                  fieldName='active'
+                  label=''
                   options={[
-                    { label: 'Default', value: 'default' },
-                    { label: 'With Poster', value: 'poster' },
-                    { label: 'Without Poster', value: 'without_poster' },
-                    { label: 'Single Article', value: 'single_article' }
+                    { label: 'Active', value: 1 },
+                    { label: 'Inactive', value: 0 }
                   ]}
-                  />
-              </Form.Group>
+                />
+              </Card.Body>
+            </Card>
 
-                  
-              { store.getValue('listing_type') != 'single_article' && (
+            <Card className='mb-3'>
+              <Card.Header className='text-muted small fw-semibold text-uppercase py-2'>Redirect URL</Card.Header>
+              <Card.Body>
+                <InputGroup>
+                  <InputGroup.Text><FontAwesomeIcon icon={['fas', 'globe']} /></InputGroup.Text>
+                  <Form.Control
+                    placeholder='http://somewebsite.com'
+                    type='text'
+                    value={store.getValue('redirect_url') || ''}
+                    onChange={e => store.setValue('redirect_url', e.target.value)}
+                  />
+                </InputGroup>
+                <div className='text-muted small mt-2'>If set, this article will redirect to the URL instead of displaying its content.</div>
+              </Card.Body>
+            </Card>
+
+            {!store.getValue('redirect_url') && (
               <>
-                <hr />
-                <Form.Group className='col-5'>
-                  <InputRadio 
-                    fieldName='show_children' 
-                    label='Show Children ( Drowpdown Menu )'
-                    options={[
-                      { label: 'Yes', value: 1 },
-                      { label: 'No', value: 0 },
-                    ]}
+                <Card className='mb-3'>
+                  <Card.Header className='text-muted small fw-semibold text-uppercase py-2'>Publish Date</Card.Header>
+                  <Card.Body>
+                    <Row>
+                      <Col>
+                        <Form.Label className='small text-muted mb-1'>Start</Form.Label>
+                        <InputDate icon='fa-calendar' fieldName='published_start' />
+                      </Col>
+                      <Col>
+                        <Form.Label className='small text-muted mb-1'>End</Form.Label>
+                        <InputDate icon='fa-calendar' fieldName='published_end' />
+                      </Col>
+                    </Row>
+                  </Card.Body>
+                </Card>
+
+                <Card className='mb-3'>
+                  <Card.Header className='text-muted small fw-semibold text-uppercase py-2'>Listing Type</Card.Header>
+                  <Card.Body>
+                    <InputRadio
+                      fieldName='listing_type'
+                      label=''
+                      options={[
+                        { label: 'Default', value: 'default' },
+                        { label: 'With Poster', value: 'poster' },
+                        { label: 'Without Poster', value: 'without_poster' },
+                        { label: 'Single Article', value: 'single_article' }
+                      ]}
                     />
-                </Form.Group>
-              </>
-              )}
-              
+                  </Card.Body>
+                </Card>
+
+                {store.getValue('listing_type') != 'single_article' && (
+                  <Card>
+                    <Card.Header className='text-muted small fw-semibold text-uppercase py-2'>Visible in Dropdown Menu</Card.Header>
+                    <Card.Body>
+                      <InputRadio
+                        fieldName='show_children'
+                        label=''
+                        options={[
+                          { label: 'Yes', value: 1 },
+                          { label: 'No', value: 0 },
+                        ]}
+                      />
+                    </Card.Body>
+                  </Card>
+                )}
               </>
             )}
-            
-          
 
           </Modal.Body>
           

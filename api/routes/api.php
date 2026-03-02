@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\{
     UserController,
     AuthController,
     AccountController,
+    DashboardController,
     ArticleController,
     ArticlePosterController,
     ArticleContentController,
@@ -22,6 +23,7 @@ use App\Http\Controllers\Backend\{
     DirectoryController,
     DirectorySyncController,
     VodController,
+    AnalyticsController,
 };
 
 Route::get('/', function () {
@@ -171,6 +173,16 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::delete('/vods/{vod}', [VodController::class, 'delete']);
     Route::get('/vods/ordering/{vod}', [VodController::class, 'ordering']);
 
+});
+
+// Dashboard
+Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+});
+
+// Analytics
+Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
+    Route::get('/analytics', [AnalyticsController::class, 'index']);
 });
 
 // Manage Directories

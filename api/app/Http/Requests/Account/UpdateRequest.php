@@ -22,7 +22,7 @@ class UpdateRequest extends FormRequest
                 Rule::unique('users', 'email')->ignore($user->id)->whereNull('deleted_at'),
             ],
 
-            'password' => 'required_if:password_present,true|min:6',
+            'password' => 'sometimes|nullable|min:6|confirmed',
 
             'name' => 'sometimes|required',
             'occupation' => 'sometimes|required',

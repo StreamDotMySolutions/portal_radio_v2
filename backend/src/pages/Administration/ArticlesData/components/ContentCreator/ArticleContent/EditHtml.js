@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Badge, Button, Col, Modal, Tabs, Tab} from 'react-bootstrap'
 import { appendFormData, InputTextarea, TextEditor } from '../../../../../../libs/FormInput'
 import axios from '../../../../../../libs/axios'
@@ -86,7 +87,7 @@ export default function EditHtml({id}) {
     return (
       <>
         <Button size="sm" variant="outline-primary" onClick={handleShowClick}>
-          Edit HTML
+          <FontAwesomeIcon icon={['fas', 'pen-to-square']} />{' '}Edit HTML
         </Button>
   
         <Modal size={'xl'} show={show} onHide={handleCloseClick}>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { trackEvent } from '../../../libs/analytics';
 import { Link, useParams } from 'react-router-dom';
 import WithPosterListing from './WithPosterListing';
 import WithoutPosterListing from './WithoutPosterListing';
@@ -51,14 +52,14 @@ const PageContent = () => {
         axios.get(apiUrl)
             .then(response => {
                 //console.log('got data')
-                setTitle(response.data.title); // title
-                setSettings(response.data.settings); // settings
-                //console.log(response.data)
-                setAncestors(response.data.ancestors.ancestors); // ancestors
-                setItems(response.data.articles.data); // article data
-                setLinks(response.data.articles.links); // paginator links
-                setCurrentPage(response.data.articles.current_page); // current_page for pagination
-                setLoading(false); // Set loading to false when data is fetched
+                setTitle(response.data.title);
+                setSettings(response.data.settings);
+                setAncestors(response.data.ancestors.ancestors);
+                setItems(response.data.articles.data);
+                setLinks(response.data.articles.links);
+                setCurrentPage(response.data.articles.current_page);
+                setLoading(false);
+                trackEvent('pageview', 'listing', id, response.data.title);
             })
             .catch(error => {
                 console.warn(error);

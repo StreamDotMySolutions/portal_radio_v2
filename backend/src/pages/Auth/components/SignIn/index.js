@@ -41,9 +41,8 @@ const SignInForm = () => {
         .then(response => {
             //console.log(response.data)
             setMessage(response.message)
-            localStorage.setItem('token', response.data.token) // localstorate
-            useAuthStore.setState({user : response.data.user}) // user data
-            useAuthStore.setState({isAuthenticated : true}) // system wide
+            localStorage.setItem('token', response.data.token)
+            store.login(response.data.user)
 
             //setIsLoggedIn(true) // store
             setIsLoading(false)

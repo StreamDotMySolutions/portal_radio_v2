@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import { Helmet } from "react-helmet-async";
+import { trackEvent } from '../../../libs/analytics';
 import './style.css'
 
 
@@ -23,7 +24,8 @@ const PageContent = ({id}) => {
                 setItems(response.data.items);
                 setSettings(response.data.settings);
                 setAncestors(response.data.ancestors);
-                setLoading(false); // Set loading to false when data is fetched
+                setLoading(false);
+                trackEvent('pageview', 'article', id, response.data.title);
             })
             .catch(error => {
                 console.warn(error);
