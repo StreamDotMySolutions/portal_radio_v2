@@ -1,44 +1,42 @@
 import React, { useState, useEffect } from 'react'
-import { Table,Button, Badge } from 'react-bootstrap'
+import { Table, Badge } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useStore from '../../../store'
+import useUsersStore from '../store'
 import axios from '../../../../libs/axios'
 import PaginatorLink from '../../../../libs/PaginatorLink'
 import CreateButton from '../../../../libs/CreateButton'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import CreateModal from '../modals/Create'
 import EditModal from '../modals/Edit'
 import DeleteModal from '../modals/Delete'
 
-const Index = () => {
-    const store = useStore() // store management
-    const url = store.url + '/users' // set the index url to /api/users
-    const [items, setItems] = useState([]) // data placeholder
-    
-    // to get items data
-    useEffect( () => 
-        {
-            // modified axios to prepend Bearer Token on header
-            axios( 
-                {
-                    method: 'get', // method is GET
-                    url: store.getValue('url') ? store.getValue('url') : url
-                } 
-            )
-            .then( response => { // response block
-                //console.log(response)
-                setItems(response.data.users) // get the data
-                store.setValue('refresh', false ) // reset the refresh state to false
-            })
-            .catch( error => { // error block
-                console.warn(error) // output to console
-            })
-      },
-        [
-            store.getValue('url'), // listener when url changed by pagination click
-            store.getValue('refresh') // listener when create / update / delete / search performed
-        ] 
+const DataTable = () => {
+    const { url: apiBase } = useStore()
+    const baseUrl = `${apiBase}/users`
 
-    ) // useEffect()
+    const refreshKey = useUsersStore((s) => s.refreshKey)
+    const paginatorUrl = useUsersStore((s) => s.paginatorUrl)
+    const setPaginatorUrl = useUsersStore((s) => s.setPaginatorUrl)
+
+    const [items, setItems] = useState([])
+
+    const adminCount = items?.data?.filter(
+        (user) => user.roles?.some((role) => role.name === 'admin')
+    ).length ?? 0
+
+    useEffect(() => {
+        axios({ method: 'get', url: paginatorUrl ?? baseUrl })
+            .then((response) => {
+                setItems(response.data.users)
+            })
+            .catch((error) => console.warn(error))
+    }, [refreshKey, paginatorUrl])
+
+    const paginatorAdapter = {
+        setValue: (key, value) => {
+            if (key === 'url') setPaginatorUrl(value)
+        },
+    }
 
     return (
         <div>
@@ -48,7 +46,6 @@ const Index = () => {
             <Table>
                 <thead>
                     <tr>
-                        <th style={{ 'width': '20px'}}><FontAwesomeIcon icon={['fas', 'hashtag']} />{' '}</th>
                         <th><FontAwesomeIcon icon={['fas', 'briefcase']} />{' '}Role</th>
                         <th><FontAwesomeIcon icon={['fas', 'person']} />{' '}Name</th>
                         <th><FontAwesomeIcon icon={['fas', 'envelope']} />{' '}Email</th>
@@ -56,28 +53,40 @@ const Index = () => {
                         <th className='text-center'><FontAwesomeIcon icon={['fas', 'bolt']} /></th>
                     </tr>
                 </thead>
-
                 <tbody>
-                    {items?.data?.map((item,index) => (
-                        <tr key={index}>
-                            <td><span className="badge bg-primary">{item.id}</span></td>
-                            <td style={{'width':'80px'}}>
-                                {item.roles?.map((role, index) => (
-                                    <React.Fragment key={index}>
-                                       {' '}<Badge bg='secondary'>{role.name}</Badge>
-                                    </React.Fragment>
-                                ))}
-                            </td>
-                            <td>{item.name}</td>
-                            <td style={{'width':'150px'}}>{item.email}</td>
-                            <td style={{'width':'180px'}}>{item.created_at}</td>
-                            <td className='text-center' style={{'width':'200px'}}><EditModal id={item.id} />{' '}<DeleteModal id={item.id} /> </td>
-                        </tr>
-                    ))}
+                    {items?.data?.map((item) => {
+                        const isLastAdmin =
+                            adminCount === 1 &&
+                            item.roles?.some((role) => role.name === 'admin')
+                        return (
+                            <tr key={item.id}>
+                                <td style={{ width: '80px' }}>
+                                    {item.roles?.map((role) => (
+                                        <Badge key={role.id} bg='secondary' className='me-1'>
+                                            {role.name}
+                                        </Badge>
+                                    ))}
+                                </td>
+                                <td>{item.name}</td>
+                                <td style={{ width: '150px' }}>{item.email}</td>
+                                <td style={{ width: '180px' }}>{item.created_at}</td>
+                                <td className='text-center' style={{ width: '200px' }}>
+                                    <EditModal id={item.id} disabled={isLastAdmin} />{' '}
+                                    <DeleteModal
+                                        id={item.id}
+                                        name={item.name}
+                                        email={item.email}
+                                        disabled={isLastAdmin}
+                                    />
+                                </td>
+                            </tr>
+                        )
+                    })}
                 </tbody>
             </Table>
-            <PaginatorLink store={store} items={items} />
+            <PaginatorLink store={paginatorAdapter} items={items} />
         </div>
-    );
-};
-export default Index
+    )
+}
+
+export default DataTable

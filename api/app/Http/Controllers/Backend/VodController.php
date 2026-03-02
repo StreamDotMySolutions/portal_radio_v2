@@ -152,7 +152,7 @@ class VodController extends Controller
         
     }
 
-    public function ordering(Asset $vod, Request $request)
+    public function ordering(Vod $vod, Request $request)
     {
         // reference https://github.com/lazychaser/laravel-nestedset
         switch($request->input('direction')){

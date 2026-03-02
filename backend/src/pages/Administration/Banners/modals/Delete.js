@@ -1,141 +1,78 @@
 import { useState } from 'react'
-import { Button, Modal, Form} from 'react-bootstrap'
-import { appendFormData } from '../../../../libs/FormInput'
+import { Button, Modal, Form } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
-import HtmlForm from '../components/HtmlForm'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import useBannersStore from '../store'
 
-export default function DeleteModal({id}) {
-    const store = useStore()
-    const errors = store.getValue('errors')
-   
+export default function DeleteModal({ id, title }) {
+    const { url: apiBase } = useStore()
+    const setRefresh = useBannersStore((s) => s.setRefresh)
+
     const [show, setShow] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [acknowledged, setAcknowledged] = useState(false)
+
+    const handleShowClick = () => {
+        setAcknowledged(false)
+        setShow(true)
+    }
+
     const handleClose = () => setShow(false)
-    const handleShow = () => setShow(true)
-    const handleCloseClick = () => {
-        handleClose()
-    }
 
-    /**
-     * When user click edit, load the data
-     */
-    const handleShowClick = () =>{
-      store.emptyData() // empty store data
-      setShow(true)
-
-        // fetch data from server using given id
-        axios({ 
-            method: 'get', 
-            url: `${store.url}/banners/${id}`,
-            })
-        .then( response => { // success 200
-            //console.log(response)
-            if( response?.data?.banner.hasOwnProperty('title') ){
-              store.setValue('title', response?.data?.banner?.title )
-            }
-            if( response?.data?.banner.hasOwnProperty('description') ){
-              store.setValue('description', response?.data?.banner?.description )
-            }
-            if( response?.data?.banner.hasOwnProperty('redirect_url') ){
-              store.setValue('redirect_url', response?.data?.banner?.redirect_url )
-            }
-            if( response?.data?.banner.hasOwnProperty('filename') ){
-              store.setValue('filename', response?.data?.banner?.filename )
-            }
-            setIsLoading(false) // animation
-            })
-        .catch( error => {
-            console.warn(error)
-            setIsLoading(false) // animation
-        })
-    } 
-
-    /**
-     * When user click submit button
-     */
     const handleSubmitClick = () => {
-        
-        const formData = new FormData() // data container
-       
-        if (store.getValue('acknowledge') != null ) {  // get role acknowledge entered by user
-            formData.append('acknowledge', store.getValue('acknowledge')); // append to formData
-        }
+        setIsLoading(true)
+        const formData = new FormData()
+        formData.append('_method', 'delete')
 
-        // Laravel special
-        formData.append('_method', 'delete'); // get|post|put|patch|delete
-
-        // send to Laravel
-        axios({ 
-            method: 'post', 
-            url: `${store.url}/banners/${id}`,
-            data: formData
-          })
-          .then( response => { // success 200
-            //console.log(response)
-            store.setValue('refresh', true) // to force useEffect get new data for index
-            setIsLoading(false) // animation
-            handleClose() // close the modal
-          })
-          .catch( error => {
-            //console.warn(error)
-            
-            if( error.response?.status == 422 ){ // detect 422 errors by Laravel
-              //console.log(error.response.data.errors)
-              store.setValue('errors', error.response.data.errors ) // set the errors to store
-            }
-            setIsLoading(false) // animation
-          })
-          .finally(
-            store.setValue('refresh', true) // to force useEffect get new data for index
-          )
+        axios({ method: 'post', url: `${apiBase}/banners/${id}`, data: formData })
+            .then(() => {
+                setRefresh()
+                handleClose()
+            })
+            .catch((error) => console.warn(error))
+            .finally(() => setIsLoading(false))
     }
-  
+
     return (
-      <>
-        <Button size="sm" variant="outline-danger" onClick={handleShowClick}>
-        <FontAwesomeIcon icon={['fas', 'trash']} />{' '}Delete
-        </Button>
-  
-        <Modal size={'lg'} show={show} onHide={handleCloseClick}>
-          <Modal.Header closeButton>
-            <Modal.Title>Delete Banner</Modal.Title>
-          </Modal.Header>
-
-          <Modal.Body>
-            <HtmlForm isLoading={isLoading} />        
-          </Modal.Body>
-          
-          <Modal.Footer>
-
-            <Form.Check
-              className='me-4'
-              isInvalid={errors?.hasOwnProperty('acknowledge')}
-              reverse
-              disabled={isLoading}
-              label="acknowledge"
-              type="checkbox"
-              onClick={ () => store.setValue('errors', null) }
-              onChange={ (e) => store.setValue('acknowledge', true) }
-            />
-
-            <Button 
-              disabled={isLoading}
-              variant="secondary" 
-              onClick={handleCloseClick}>
-              Close
+        <>
+            <Button size='sm' variant='outline-danger' onClick={handleShowClick}>
+                <FontAwesomeIcon icon={['fas', 'trash']} />{' '}Delete
             </Button>
 
-            <Button 
-              disabled={isLoading}
-              variant="danger" 
-              onClick={handleSubmitClick}>
-              Delete
-            </Button>
+            <Modal size='lg' show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Delete Banner</Modal.Title>
+                </Modal.Header>
 
-          </Modal.Footer>
-        </Modal>
-      </>
-    );
-  }
+                <Modal.Body>
+                    <p>
+                        Are you sure you want to delete banner <strong>{title}</strong>?
+                    </p>
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Form.Check
+                        className='me-4'
+                        reverse
+                        disabled={isLoading}
+                        label='Acknowledge'
+                        type='checkbox'
+                        checked={acknowledged}
+                        onChange={(e) => setAcknowledged(e.target.checked)}
+                    />
+                    <Button variant='secondary' disabled={isLoading} onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button
+                        variant='danger'
+                        disabled={isLoading || !acknowledged}
+                        onClick={handleSubmitClick}
+                    >
+                        Delete
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    )
+}

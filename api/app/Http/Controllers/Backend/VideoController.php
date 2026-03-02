@@ -45,39 +45,26 @@ class VideoController extends Controller
         
     }
 
-    public function update(Request $request,Video $video)
+    public function update(Request $request, Video $video)
     {
-        // validation
-        $data = $request->validate([
-            'title' => 'sometimes',
+        $request->validate([
+            'title'      => 'sometimes',
             'embed_code' => 'sometimes',
-            'poster' => 'sometimes|image|mimes:jpeg,png,jpg,gif'
+            'poster'     => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        // $video = Video::where('id', $video->id)->update(
-        //     $request->except(['_method','id'])
-        // );
-         // Prepare the data array for updating
-        $updateData = [
-            'user_id' => auth('sanctum')->user()->id,
-            'title' => $request->input('title'),
-            'embed_code' => $request->input('embed_code'),
-        ];
+        $data = $request->only(['title', 'embed_code']);
 
-        // Conditionally add 'filename' if 'poster' is present in the request
         if ($request->hasFile('poster')) {
-            $updateData['filename'] = CommonService::handleStoreFile($request->file('poster'), 'videos');
+            if ($video->filename) {
+                CommonService::handleDeleteFile($video->filename, 'videos');
+            }
+            $data['filename'] = CommonService::handleStoreFile($request->file('poster'), 'videos');
         }
 
-        // Perform the update
-        $video->where('id', $video->id)->update($updateData);
+        $video->update($data);
 
-        // Check if the update was successful
-        if ($video) {
-            return response()->json(['message' => 'Video successfully created']);
-        } else {
-            return response()->json(['message' => 'Video update failed'], 500);
-        }
+        return response()->json(['message' => 'Video successfully updated']);
     }
 
     public function delete(Request $request,Video $video){

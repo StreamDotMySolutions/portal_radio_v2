@@ -1,93 +1,88 @@
 import React, { useState, useEffect } from 'react'
-import { Table,Button } from 'react-bootstrap'
-import { Link, useParams } from 'react-router-dom'
+import { Table } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useStore from '../../../store'
+import useBannersStore from '../store'
 import axios from '../../../../libs/axios'
 import PaginatorLink from '../../../../libs/PaginatorLink'
 import CreateButton from '../../../../libs/CreateButton'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import CreateModal from '../modals/Create'
+import ShowModal from '../modals/Show'
 import EditModal from '../modals/Edit'
 import DeleteModal from '../modals/Delete'
 import Ordering from './Ordering'
 
-const Index = () => {
-    const store = useStore() // store management
-    const { parentId } = useParams() // parentid
-    const url = store.url + '/banners' // set the index url to /api/articles/node/{parentId}
-    const [items, setItems] = useState([]) // data placeholder
-    
-    // to get items data
-    useEffect( () => 
-        {
-            // modified axios to prepend Bearer Token on header
-            axios( 
-                {
-                    method: 'get', // method is GET
-                    url: store.getValue('url') ? store.getValue('url') : url // pagination and preset url
-                } 
-            )
-            .then( response => { // response block
-                //console.log(response)
-                setItems(response.data.banners) // get the data
-                store.setValue('refresh', false ) // reset the refresh state to false
-            })
-            .catch( error => { // error block
-                console.warn(error) // output to console
-            })
-      },
-        [
-            //store.getValue('url'), // listener when url changed by pagination click
-            store.getValue('refresh'), // listener when create / update / delete / search performed
-            parentId // when use navigate to parent
-        ] 
+const DataTable = () => {
+    const { url: apiBase } = useStore()
+    const baseUrl = `${apiBase}/banners`
 
-    ) // useEffect()
+    const refreshKey = useBannersStore((s) => s.refreshKey)
+    const paginatorUrl = useBannersStore((s) => s.paginatorUrl)
+    const setPaginatorUrl = useBannersStore((s) => s.setPaginatorUrl)
+
+    const [items, setItems] = useState([])
+
+    useEffect(() => {
+        axios({ method: 'get', url: paginatorUrl ?? baseUrl })
+            .then((response) => {
+                setItems(response.data.banners)
+            })
+            .catch((error) => console.warn(error))
+    }, [refreshKey, paginatorUrl])
+
+    const paginatorAdapter = {
+        setValue: (key, value) => {
+            if (key === 'url') setPaginatorUrl(value)
+        },
+    }
 
     return (
         <div>
-    
             <CreateButton>
                 <CreateModal />
             </CreateButton>
             <Table>
                 <thead>
                     <tr>
-                        <th className='text-center' style={{ 'width': '20px'}}><FontAwesomeIcon icon={['fas', 'hashtag']} /></th>
                         <th className='text-center'>Ordering</th>
-                        <th className='text-center' style={{ 'width': '100px'}}>Active ?</th>
+                        <th className='text-center' style={{ width: '100px' }}>Active?</th>
                         <th>Title</th>
-                        <th className='text-center' style={{'width':'200px'}}> <FontAwesomeIcon icon={['fas', 'bolt']} /></th>
+                        <th className='text-center' style={{ width: '200px' }}>
+                            <FontAwesomeIcon icon={['fas', 'bolt']} />
+                        </th>
                     </tr>
                 </thead>
-
                 <tbody>
-                    {items?.data?.map((item,index) => (
-                        
-                        <tr key={index}>
-                            <td><span className="badge bg-primary">{item.id}</span></td>
-                           
-                            <td className='text-center' style={{'width':'100px'}}>
-
-                                <Ordering id={item.id} direction='up' disabled={index === 0}/>
+                    {items?.data?.map((item, index) => (
+                        <tr key={item.id}>
+                            <td className='text-center' style={{ width: '100px' }}>
+                                <Ordering id={item.id} direction='up' disabled={index === 0} />
                                 {' '}
-                                <Ordering id={item.id} direction='down' disabled={index === items.data.length - 1 }/>
-                            
+                                <Ordering
+                                    id={item.id}
+                                    direction='down'
+                                    disabled={index === items.data.length - 1}
+                                />
                             </td>
-                            <td className='text-center'>{item.active == 1 ? <FontAwesomeIcon className='text-success'  icon={['fas', 'check']} /> : <FontAwesomeIcon className='text-danger' icon={['fas', 'stop']} />  }</td>
+                            <td className='text-center'>
+                                {item.active == 1
+                                    ? <FontAwesomeIcon className='text-success' icon={['fas', 'check']} />
+                                    : <FontAwesomeIcon className='text-danger' icon={['fas', 'stop']} />
+                                }
+                            </td>
                             <td>{item.title}</td>
-                            <td className='text-end' >
-                               
-                                <EditModal id={item.id} />
-                                {' '}
-                                <DeleteModal id={item.id} /> 
+                            <td className='text-end'>
+                                <ShowModal id={item.id} />{' '}
+                                <EditModal id={item.id} />{' '}
+                                <DeleteModal id={item.id} title={item.title} />
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </Table>
-            <PaginatorLink store={store} items={items} />
+            <PaginatorLink store={paginatorAdapter} items={items} />
         </div>
-    );
-};
-export default Index
+    )
+}
+
+export default DataTable

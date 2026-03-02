@@ -1,137 +1,66 @@
 import { useState } from 'react'
-import { Button, Modal, Form} from 'react-bootstrap'
-import { appendFormData } from '../../../../libs/FormInput'
+import { Button, Form, Modal } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
-import HtmlForm from '../components/HtmlForm'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import useVideosStore from '../store'
 
-export default function DeleteModal({id}) {
-    const store = useStore()
-    const errors = store.getValue('errors')
-   
+export default function DeleteModal({ id, title }) {
+    const { url: apiBase } = useStore()
+    const setRefresh = useVideosStore((s) => s.setRefresh)
+
     const [show, setShow] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [acknowledged, setAcknowledged] = useState(false)
+
+    const handleShowClick = () => {
+        setAcknowledged(false)
+        setShow(true)
+    }
+
     const handleClose = () => setShow(false)
-    const handleShow = () => setShow(true)
-    const handleCloseClick = () => {
-        handleClose()
-    }
 
-    /**
-     * When user click edit, load the data
-     */
-    const handleShowClick = () =>{
-      store.emptyData() // empty store data
-      setShow(true)
-
-        // fetch data from server using given id
-        axios({ 
-            method: 'get', 
-            url: `${store.url}/videos/${id}`,
-            })
-        .then( response => { // success 200
-            //console.log(response)
-            if( response?.data?.video.hasOwnProperty('title') ){
-              store.setValue('title', response?.data?.video?.title )
-            }
-            if( response?.data?.video.hasOwnProperty('redirect_url') ){
-              store.setValue('redirect_url', response?.data?.video?.redirect_url )
-            }
-
-            if( response?.data?.video.hasOwnProperty('filename') ){
-              store.setValue('filename', response?.data?.video?.filename )
-            }
-
-            setIsLoading(false) // animation
-            })
-        .catch( error => {
-            console.warn(error)
-            setIsLoading(false) // animation
-        })
-    } 
-
-    /**
-     * When user click submit button
-     */
     const handleSubmitClick = () => {
-        
-        const formData = new FormData() // data container
-       
-        if (store.getValue('acknowledge') != null ) {  // get role acknowledge entered by user
-            formData.append('acknowledge', store.getValue('acknowledge')); // append to formData
-        }
+        setIsLoading(true)
+        const formData = new FormData()
+        formData.append('acknowledge', true)
+        formData.append('_method', 'delete')
 
-        // Laravel special
-        formData.append('_method', 'delete'); // get|post|put|patch|delete
-
-        // send to Laravel
-        axios({ 
-            method: 'post', 
-            url: `${store.url}/videos/${id}`,
-            data: formData
-          })
-          .then( response => { // success 200
-            //console.log(response)
-            store.setValue('refresh_videos', true) // to force useEffect get new data for index
-            setIsLoading(false) // animation
-            handleClose() // close the modal
-          })
-          .catch( error => {
-            //console.warn(error)
-            
-            if( error.response?.status == 422 ){ // detect 422 errors by Laravel
-              //console.log(error.response.data.errors)
-              store.setValue('errors', error.response.data.errors ) // set the errors to store
-            }
-            setIsLoading(false) // animation
-          })
+        axios({ method: 'post', url: `${apiBase}/videos/${id}`, data: formData })
+            .then(() => {
+                setRefresh()
+                handleClose()
+            })
+            .catch((error) => console.warn(error))
+            .finally(() => setIsLoading(false))
     }
-  
+
     return (
-      <>
-        <Button size="sm" variant="outline-danger" onClick={handleShowClick}>
-        <FontAwesomeIcon icon={['fas', 'trash']} />{' '}Delete
-        </Button>
-  
-        <Modal size={'lg'} show={show} onHide={handleCloseClick}>
-          <Modal.Header closeButton>
-            <Modal.Title>Delete Programme</Modal.Title>
-          </Modal.Header>
-
-          <Modal.Body>
-            <HtmlForm isLoading={isLoading} />        
-          </Modal.Body>
-          
-          <Modal.Footer>
-
-            <Form.Check
-              className='me-4'
-              isInvalid={errors?.hasOwnProperty('acknowledge')}
-              reverse
-              disabled={isLoading}
-              label="acknowledge"
-              type="checkbox"
-              onClick={ () => store.setValue('errors', null) }
-              onChange={ (e) => store.setValue('acknowledge', true) }
-            />
-
-            <Button 
-              disabled={isLoading}
-              variant="secondary" 
-              onClick={handleCloseClick}>
-              Close
+        <>
+            <Button size='sm' variant='outline-danger' onClick={handleShowClick}>
+                <FontAwesomeIcon icon={['fas', 'trash']} />
             </Button>
 
-            <Button 
-              disabled={isLoading}
-              variant="danger" 
-              onClick={handleSubmitClick}>
-              Delete
-            </Button>
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Delete Video</Modal.Title>
+                </Modal.Header>
 
-          </Modal.Footer>
-        </Modal>
-      </>
-    );
-  }
+                <Modal.Body>
+                    <p>Are you sure you want to delete <strong>{title}</strong>?</p>
+                    <Form.Check
+                        type='checkbox'
+                        label='I acknowledge this action is irreversible'
+                        checked={acknowledged}
+                        onChange={(e) => setAcknowledged(e.target.checked)}
+                    />
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant='secondary' disabled={isLoading} onClick={handleClose}>Close</Button>
+                    <Button variant='danger' disabled={isLoading || !acknowledged} onClick={handleSubmitClick}>Delete</Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    )
+}

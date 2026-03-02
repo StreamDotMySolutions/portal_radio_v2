@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-const useProgrammesStore = create((set) => ({
+const useRolesStore = create((set) => ({
     refreshKey: 0,
     setRefresh: () => set((state) => ({ refreshKey: state.refreshKey + 1 })),
 
@@ -8,4 +8,4 @@ const useProgrammesStore = create((set) => ({
     setPaginatorUrl: (url) => set({ paginatorUrl: url }),
 }))
 
-export default useProgrammesStore
+export default useRolesStore

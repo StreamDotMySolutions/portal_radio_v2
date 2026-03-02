@@ -39,20 +39,13 @@ class VodJob implements ShouldQueue
 
         // Define paths
         $storagePath = storage_path('app/public/');
-        $inputFile = $storagePath . 'vods/' . $this->vod->name; 
+        $inputFile = $storagePath . 'vods/' . $this->vod->name;
         $outputDir = 'vods/' . $this->vod->id;
         $outputPlaylist =  $storagePath . 'vods/' . $this->vod->id . '/playlist.m3u8';
-        // \Log::info($outputDir);
-        // Storage::disk('local')->makeDirectory($outputDir);
-        //mkdir($outputDir, 0700);
         Storage::disk('public')->makeDirectory($outputDir);
 
-     
-
-        // Define FFmpeg path (Windows)
-        //$ffmpegPath = 'C:\laragon\bin\ffmpeg\ffmpeg.exe';
-        $ffmpegPath = '/usr/bin/ffmpeg';
-
+        // get ffmpeg binary from config (env override supported)
+        $ffmpegPath = config('ffmpeg.path');
 
         // Define the FFmpeg command
         $command = [
@@ -63,7 +56,7 @@ class VodJob implements ShouldQueue
             '-hls_time', '10',
             '-hls_list_size', '0',
             '-f', 'hls',
-            $outputPlaylist
+            $outputPlaylist,
         ];
 
         // Execute FFmpeg command
