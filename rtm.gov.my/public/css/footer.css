@@ -12,6 +12,34 @@ footer p { font-size:16px; color:#CCC; padding-bottom:0px; margin-bottom:8px;}
 .fleft { float:left;}
 .padding-right { padding-right:10px; }
 
+.footer-contact {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.footer-contact li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    color: #CCC;
+    font-size: 14px;
+    margin-bottom: 0.5rem;
+}
+
+.footer-contact li span:first-child {
+    min-width: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ff6e00;
+}
+
+.footer-contact li span:last-child {
+    flex: 1;
+    line-height: 1.4;
+}
+
 .footer_ul2_amrc {margin:0px; list-style-type:none; padding:0px;}
 .footer_ul2_amrc li p { display:table; }
 .footer_ul2_amrc li a:hover { text-decoration:none;}

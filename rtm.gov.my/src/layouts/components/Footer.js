@@ -30,21 +30,21 @@ const Footer = ({ variant = 'desktop' }) => {
         return (
             <footer className="footer">
                 <div className="container bottom_border mt-3">
-                    <div className="row justify-content-center text-center">
+                    <div className="row justify-content-center ">
                         <div className="col-6">
                             {footerID && <LoadFooter id={footerID} />}
                         </div>
                         <div className="col-6">
-                            <p className="mb10">Radio Televisyen Malaysia<br />
-                                Angkasapuri Kota Media<br />
-                                50614 Kuala Lumpur</p>
-                            <p>aduan [at] rtm.gov.my</p>
-                            <p>Tel: 03 - 2282 5333</p>
-                            <p>Faks: 03 - 2284 7591</p>
+                            <ul className="footer-contact mb10">
+                                <li><span><i className="fa-solid fa-building"></i></span><span>Radio Televisyen Malaysia · Angkasapuri Kota Media · 50614 Kuala Lumpur</span></li>
+                                <li><span><i className="fa-solid fa-envelope"></i></span><span>aduan [at] rtm.gov.my</span></li>
+                                <li><span><i className="fa-solid fa-phone"></i></span><span>Tel: 03 - 2282 5333</span></li>
+                                <li><span><i className="fa-solid fa-fax"></i></span><span>Faks: 03 - 2284 7591</span></li>
+                            </ul>
                         </div>
                     </div>
                     <hr />
-                    <div className="row justify-content-center text-center">
+                    <div className="row justify-content-center ">
                         <div className="col-6">
                             <ul className="footer_ul_amrc">
                                 <li><a href="https://www.jdn.gov.my"><img className="img-fluid" src="/asset/footer/jdn.jpg" alt="JDN Logo" /></a></li>
@@ -71,7 +71,7 @@ const Footer = ({ variant = 'desktop' }) => {
         <footer className="footer">
             <div className="container bottom_border mt-3">
                 <div className="row justify-content-center align-items-start text-md-start">
-                    <div className="col-sm-6 col-md-3 d-md-block d-none text-md-start text-center">
+                    <div className="col-sm-6 col-md-3 d-md-block d-none text-md-start ">
                         <ul className="footer_ul_amrc">
                             <li><a href="https://www.jdn.gov.my"><img className="img-fluid" src="/asset/footer/jdn.jpg" alt="JDN Logo" /></a></li>
                             <li><a href="https://www.mygovuc.gov.my"><img className="img-fluid" src="/asset/footer/mygov2.png" alt="MyGov Logo" /></a></li>
@@ -80,20 +80,20 @@ const Footer = ({ variant = 'desktop' }) => {
                         </ul>
                     </div>
 
-                    <div className="col-sm-6 col-md-3 text-md-start text-center">
+                    <div className="col-sm-6 col-md-3 text-md-start ">
                         {footerID && <LoadFooter id={footerID} />}
                     </div>
 
-                    <div className="col-sm-6 col-md-3 text-md-start text-center">
-                        <p className="mb10">Radio Televisyen Malaysia<br />
-                            Angkasapuri Kota Media<br />
-                            50614 Kuala Lumpur</p>
-                        <p>aduan [at] rtm.gov.my</p>
-                        <p>Tel: 03 - 2282 5333</p>
-                        <p>Faks: 03 - 2284 7591</p>
+                    <div className="col-sm-6 col-md-3 text-md-start ">
+                        <ul className="footer-contact mb10">
+                            <li><span><i className="fa-solid fa-building"></i></span><span>Radio Televisyen Malaysia · Angkasapuri Kota Media · 50614 Kuala Lumpur</span></li>
+                            <li><span><i className="fa-solid fa-envelope"></i></span><span>aduan [at] rtm.gov.my</span></li>
+                            <li><span><i className="fa-solid fa-phone"></i></span><span>Tel: 03 - 2282 5333</span></li>
+                            <li><span><i className="fa-solid fa-fax"></i></span><span>Faks: 03 - 2284 7591</span></li>
+                        </ul>
                     </div>
 
-                    <div className="col-sm-6 col-md-3 text-center">
+                    <div className="col-sm-6 col-md-3 ">
                         <ul className="footer_ul_amrc">
                             <li><a href="https://apps.apple.com/my/app/rtmklik/id777391399"><img className="img-fluid" src="/asset/footer/apps.png" alt="Apple App Store Logo" /></a></li>
                             <li><a href="https://play.google.com/store/apps/details?id=my.gov.rtm.mobile"><img className="img-fluid" src="/asset/footer/googleplay-bm.png" alt="Google Play Store Logo" /></a></li>
