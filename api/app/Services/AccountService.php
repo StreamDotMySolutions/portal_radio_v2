@@ -33,7 +33,7 @@ class AccountService
             $user->update($request->only('email'));
         }
 
-        if($request->has('password')){
+        if($request->filled('password')){
             $user->update([ 'password' => Hash::make($request->input('password')) ] );
         }
 

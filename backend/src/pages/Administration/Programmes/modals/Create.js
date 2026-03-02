@@ -1,105 +1,86 @@
 import { useState } from 'react'
-import { useParams } from 'react-router-dom'
-import { Button, Modal} from 'react-bootstrap'
-import { appendFormData } from '../../../../libs/FormInput'
+import { Button, Modal } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
+import useProgrammesStore from '../store'
 import HtmlForm from '../components/HtmlForm'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+const emptyForm = { title: '', redirectUrl: '' }
 
 export default function CreateModal() {
-    const store = useStore()
-    const { parentId } = useParams() // parentid
-    const errors = store.getValue('errors')
-   
+    const { url: apiBase, server: serverUrl } = useStore()
+    const setRefresh = useProgrammesStore((s) => s.setRefresh)
+
     const [show, setShow] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [form, setForm] = useState(emptyForm)
+    const [imageFile, setImageFile] = useState(null)
+    const [errors, setErrors] = useState(null)
+
+    const onChange = (field) => (value) => setForm((prev) => ({ ...prev, [field]: value }))
+
+    const handleShowClick = () => {
+        setForm(emptyForm)
+        setImageFile(null)
+        setErrors(null)
+        setShow(true)
+    }
+
     const handleClose = () => setShow(false)
-    const handleShow = () => setShow(true)
 
-    const handleShowClick = () =>{
-      store.emptyData() // empty store data
-      setShow(true)
-    } 
-
-    const handleCloseClick = () => {
-      handleClose()
-    }
-
-
-    /**
-     * When user click submit button
-     */
     const handleSubmitClick = () => {
-    
-        const formData = new FormData();
-        const dataArray = [
-            { key: 'title', value: store.getValue('title') },
-            { key: 'redirect_url', value: store.getValue('redirect_url') }, 
-            { key: 'programme', value: store.getValue('programme') },
-        ];
-        
-        appendFormData(formData, dataArray);
+        setIsLoading(true)
+        const formData = new FormData()
+        if (form.title) formData.append('title', form.title)
+        if (form.redirectUrl) formData.append('redirect_url', form.redirectUrl)
+        if (imageFile) formData.append('programme', imageFile)
 
-        // Laravel special
-        formData.append('_method', 'post'); // get|post|put|patch|delete
-
-        // send to Laravel
-        axios({ 
-            method: 'post', 
-            url: `${store.url}/programmes`,
-            data: formData
-          })
-          .then( response => { // success 200
-            //console.log(response)
-           
-            setIsLoading(false) // animation
-            store.setValue('refresh_programmes', true) // to force useEffect get new data for index
-            handleClose() // close the modal
-          })
-          .catch( error => {
-            //console.warn(error)
-            
-            if( error.response?.status == 422 ){ // detect 422 errors by Laravel
-              console.log(error.response.data.errors)
-              store.setValue('errors', error.response.data.errors ) // set the errors to store
-            }
-            setIsLoading(false) // animation
-          })
+        axios({ method: 'post', url: `${apiBase}/programmes`, data: formData })
+            .then(() => {
+                setRefresh()
+                handleClose()
+            })
+            .catch((error) => {
+                if (error.response?.status === 422) {
+                    setErrors(error.response.data.errors)
+                }
+            })
+            .finally(() => setIsLoading(false))
     }
-  
+
     return (
-      <>
-        <Button variant="primary" onClick={handleShowClick}>
-          <FontAwesomeIcon icon={['fas', 'file']} />{' '}Create
-        </Button>
-  
-        <Modal size={'lg'} show={show} onHide={handleCloseClick}>
-          <Modal.Header closeButton>
-            <Modal.Title>Create Programme</Modal.Title>
-          </Modal.Header>
-
-          <Modal.Body>
-            <HtmlForm isLoading={isLoading} />
-          </Modal.Body>
-          
-          <Modal.Footer>
-            <Button 
-              disabled={isLoading}
-              variant="secondary" 
-              onClick={handleCloseClick}>
-              Close
+        <>
+            <Button variant='primary' onClick={handleShowClick}>
+                <FontAwesomeIcon icon={['fas', 'circle-plus']} className='me-1' />Create
             </Button>
 
-            <Button 
-              disabled={isLoading}
-              variant="primary" 
-              onClick={handleSubmitClick}>
-              Submit
-            </Button>
+            <Modal size='lg' show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Create Programme</Modal.Title>
+                </Modal.Header>
 
-          </Modal.Footer>
-        </Modal>
-      </>
-    );
-  }
+                <Modal.Body>
+                    <HtmlForm
+                        form={form}
+                        onChange={onChange}
+                        filename={null}
+                        onImageChange={setImageFile}
+                        serverUrl={serverUrl}
+                        errors={errors}
+                        isLoading={isLoading}
+                    />
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant='secondary' disabled={isLoading} onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant='primary' disabled={isLoading} onClick={handleSubmitClick}>
+                        Submit
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    )
+}

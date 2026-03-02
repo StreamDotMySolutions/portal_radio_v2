@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { trackEvent } from '../../../libs/analytics';
 
 const Search = () => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -7,6 +8,7 @@ const Search = () => {
 
     const handleSearch = () => {
         if (searchTerm.trim()) {
+            trackEvent('search', null, null, searchTerm.trim());
             navigate(`/directories/search/${encodeURIComponent(searchTerm)}`);
         }
     };

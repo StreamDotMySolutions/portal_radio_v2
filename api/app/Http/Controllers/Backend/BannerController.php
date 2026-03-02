@@ -10,15 +10,21 @@ use Carbon\Carbon;
 class BannerController extends Controller
 {
 
-    public function index(){
+    public function index(Request $request){
 
-        //$banners = Banner::defaultOrder()->get();
-        $banners = Banner::defaultOrder()->paginate(10)->withQueryString(); 
+        $query = Banner::defaultOrder();
 
-        if ($banners->isEmpty()) {
-            return response()->json(['message' => 'No banners found']);
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where('title', 'like', "%{$search}%");
         }
-    
+
+        if ($request->has('active') && $request->input('active') !== '') {
+            $query->where('active', $request->input('active'));
+        }
+
+        $banners = $query->paginate(10)->withQueryString();
+
         return response()->json(['banners' => $banners]);
 
     }
@@ -59,28 +65,29 @@ class BannerController extends Controller
         }
     }
 
-    public function update(Request $request,Banner $banner)
+    public function update(Request $request, Banner $banner)
     {
-
-        //\Log::info($request);
-        // validation
-        $data = $request->validate([
-            'title' => 'sometimes|string',
-            'description' => 'sometimes|string',
-            'active' => 'sometimes|boolean',
-            'published_start' => 'sometimes|date',
-            'published_end' => 'sometimes|date|after_or_equal:published_start',
-            //'banner' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048'
+        $request->validate([
+            'title'          => 'sometimes|string',
+            'description'    => 'sometimes|string',
+            'active'         => 'sometimes|boolean',
+            'published_start'=> 'sometimes|date',
+            'published_end'  => 'sometimes|date|after_or_equal:published_start',
+            'banner'         => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $banner = Banner::where('id', $banner->id)->update($request->except(['_method','id']));
+        $data = $request->only(['title', 'description', 'redirect_url', 'active', 'published_start', 'published_end']);
 
-        // Check if the update was successful
-        if ($banner) {
-            return response()->json(['message' => 'Banner successfully created']);
-        } else {
-            return response()->json(['message' => 'Banner update failed'], 500);
+        if ($request->hasFile('banner')) {
+            if ($banner->filename) {
+                CommonService::handleDeleteFile($banner->filename, 'banners');
+            }
+            $data['filename'] = CommonService::handleStoreFile($request->file('banner'), 'banners');
         }
+
+        $banner->update($data);
+
+        return response()->json(['message' => 'Banner successfully updated']);
     }
 
     public function delete(Request $request,Banner $banner){

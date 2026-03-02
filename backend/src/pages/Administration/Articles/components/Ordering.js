@@ -24,7 +24,7 @@ const Ordering = ({id,direction, disabled=false}) => {
     return (
     
         <Button disabled={disabled} onClick={handleClick} size='sm' variant='outline-secondary'>
-            <FontAwesomeIcon icon={['fas', `fa-caret-${direction}`]} />
+            <FontAwesomeIcon icon={['fas', `caret-${direction}`]} />
         </Button>
  
     )

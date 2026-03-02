@@ -8,16 +8,17 @@ use Illuminate\Http\Request;
 class ArticleService
 {
 
-    public static function index($parentId)
+    public static function index($parentId, $search = null)
     {
-        if (!is_null($parentId) && !empty($parentId)) {
+        if ($search) {
+            $paginate = Article::query()->where('title', 'like', "%{$search}%");
+        } elseif (!is_null($parentId) && !empty($parentId)) {
             $paginate = Article::query()->where('parent_id', $parentId);
         } else {
-            $paginate = Article::query()->where('parent_id', null);;
+            $paginate = Article::query()->where('parent_id', null);
         }
-        
 
-        $articles = $paginate->with(['articleSetting','descendants'])->defaultOrder()->paginate(10000)->withQueryString();   
+        $articles = $paginate->with(['articleSetting','descendants'])->defaultOrder()->paginate(10000)->withQueryString();
         
         //  $articles = $paginate->with('ancestors')->defaultOrder()->paginate(30)->withQueryString()->toTree();   
         //$articles = Article::defaultOrder()->get()->toTree();
@@ -41,8 +42,9 @@ class ArticleService
     {        
         $user =  auth('sanctum')->user();
         $article = Article::create([
-            'title' => $request->input('title') ,
-            'user_id' => $user->id
+            'title'   => $request->input('title'),
+            'type'    => $request->input('type'),
+            'user_id' => $user->id,
         ]);
 
         // populate default settings

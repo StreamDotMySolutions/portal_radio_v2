@@ -1,42 +1,14 @@
 import { create } from 'zustand'
-const useStore  = create((set) => ({
 
-    url: process.env.REACT_APP_BACKEND_URL,
-    server: process.env.REACT_APP_SERVER_URL,
-    
-    refresh: false,
-    errors: null,
-    latestId: null,
-    data: {},
-    
-    setValue: (fieldName, value) => {
-      set((state) => ({
-        data: {
-          ...state.data,
-          [fieldName]: { value },
-        },
-      }));
-    },
+const useVideosStore = create((set) => ({
+    refreshKey: 0,
+    setRefresh: () => set((state) => ({ refreshKey: state.refreshKey + 1 })),
 
-    setError: (fieldName, error) => {
-        set((state) => ({
-          data: {
-            ...state.data,
-            [fieldName]: { error },
-          },
-        }));
-    },
-      
-    emptyData: () => {
-        set({ data: {} });
-        set({ errors: {} });
-    },
+    paginatorUrl: null,
+    setPaginatorUrl: (url) => set({ paginatorUrl: url }),
 
-    getValue: (fieldName) => {
-        const field = useStore.getState().data[fieldName];
-        return field ? field.value : null;
-    },
+    search: '',
+    setSearch: (search) => set({ search, paginatorUrl: null }),
+}))
 
-}));
-
-export default useStore
+export default useVideosStore

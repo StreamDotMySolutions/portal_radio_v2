@@ -1,121 +1,99 @@
-import { useEffect, useState } from 'react'
-import { Button, Image, Modal, Table} from 'react-bootstrap'
-import { appendFormData } from '../../../../libs/FormInput'
-import axios from '../../../../libs/axios'
-import useStore from '../store'
-import HtmlForm from '../components/HtmlForm'
+import { useState } from 'react'
+import { Button, Image, Modal, Table } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import axios from '../../../../libs/axios'
+import useStore from '../../../store'
 
-export default function ShowModal({id}) {
- 
+export default function ShowModal({ id }) {
     const store = useStore()
-    const errors = store.getValue('errors')
-    const [staff, setStaff] = useState([])
-    const [show, setShow] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
-    const handleClose = () => setShow(false)
-    const handleShow = () => setShow(true)
 
-    const handleCloseClick = () => {
-        store.emptyData() // empty store data
-        handleClose()
+    const [show, setShow] = useState(false)
+    const [staff, setStaff] = useState(null)
+
+    const handleClose = () => setShow(false)
+
+    const handleShowClick = () => {
+        setStaff(null)
+        setShow(true)
+
+        axios({ method: 'get', url: `${store.url}/directories/${id}` })
+            .then(response => setStaff(response.data.directory))
+            .catch(error => console.warn(error))
     }
 
-    /**
-     * When user click show button, load the data
-     */
-    const handleShowClick = () =>{
-      store.emptyData() // empty store data
-      setShow(true)
-
-        // fetch data from backend server using given id
-        axios({ 
-            method: 'get', 
-            url: `${store.url}/directories/${id}/show`,
-            })
-        .then( response => { // success 200
-            //console.log(response)
-            setStaff(response.data.staff)
-            //store.setValue('refresh_videos', true) // to force useEffect get new data for index
-            })
-        .catch( error => {
-            console.warn(error)
-           
-        })
-        .finally(
-          setIsLoading(false) // animation
-        )
-    } 
-
-   
-  
     return (
-      <>
-        <Button size="sm" variant="outline-primary" onClick={handleShowClick}>
-          <FontAwesomeIcon icon={['fas', 'eye']} />{' '}Show
-        </Button>
-  
-        <Modal size={'lg'} show={show} onHide={handleCloseClick}>
-          <Modal.Header closeButton>
-            <Modal.Title>{staff.name}</Modal.Title>
-          </Modal.Header>
-
-          <Modal.Body>
-            <Table>
-              <tr>
-              <td colSpan="2" className='text-center'>
-                <Image 
-                  className="img-fluid rounded border border-dark mb-3"
-                  src={`https://www.rtm.gov.my/${staff.photo}`} 
-                  alt="Staff Image" 
-                />
-               </td>
-
-              </tr>
-              <tr>
-                  <th>Nama</th>
-                  <td>{staff.name}</td>
-              </tr>
-              <tr>
-                  <th>Jawatan</th>
-                  <td>{staff.occupation}</td>
-              </tr>
-              <tr>
-                  <th>Emel</th>
-                  <td>{staff.email}</td>
-              </tr>
-              <tr>
-                  <th>No Telefon</th>
-                  <td>{staff.phone}</td>
-              </tr>
-              <tr>
-                  <th>Alamat</th>
-                  <td>{staff.address}</td>
-              </tr>
-              <tr>
-                  <th>Twitter</th>
-                  <td>{staff.twitter}</td>
-              </tr>
-              <tr>
-                  <th>Facebook</th>
-                  <td>{staff.facebook}</td>
-              </tr>
-              <tr>
-                  <th>Instagram</th>
-                  <td>{staff.instagram}</td>
-              </tr>
-            </Table>
-          </Modal.Body>
-          
-          <Modal.Footer>
-            <Button 
-              disabled={isLoading}
-              variant="secondary" 
-              onClick={handleCloseClick}>
-               <FontAwesomeIcon icon={['fas', 'times-circle']} />{' '}Close
+        <>
+            <Button size='sm' variant='outline-info' onClick={handleShowClick}>
+                <FontAwesomeIcon icon={['fas', 'eye']} />
             </Button>
-          </Modal.Footer>
-        </Modal>
-      </>
-    );
-  }
+
+            <Modal size='lg' show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>{staff?.name ?? 'Staff Details'}</Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body>
+                    {!staff ? (
+                        <div className='text-center py-4 text-muted'>
+                            <FontAwesomeIcon icon={['fas', 'spinner']} spin className='me-2' />
+                            Loading...
+                        </div>
+                    ) : (
+                        <>
+                            {staff.photo && (
+                                <div className='text-center mb-3'>
+                                    <Image
+                                        className='img-fluid rounded border'
+                                        src={`https://www.rtm.gov.my/${staff.photo}`}
+                                        alt='Staff Photo'
+                                        style={{ maxHeight: '200px' }}
+                                    />
+                                </div>
+                            )}
+                            <Table borderless>
+                                <tbody>
+                                    <tr>
+                                        <th style={{ width: '130px' }} className='text-muted fw-normal'>Name</th>
+                                        <td>{staff.name}</td>
+                                    </tr>
+                                    <tr>
+                                        <th className='text-muted fw-normal'>Occupation</th>
+                                        <td>{staff.occupation ?? '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <th className='text-muted fw-normal'>Email</th>
+                                        <td>{staff.email ?? '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <th className='text-muted fw-normal'>Phone</th>
+                                        <td>{staff.phone ?? '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <th className='text-muted fw-normal'>Address</th>
+                                        <td>{staff.address ?? '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <th className='text-muted fw-normal'>Facebook</th>
+                                        <td>{staff.facebook ?? '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <th className='text-muted fw-normal'>Twitter / X</th>
+                                        <td>{staff.twitter ?? '-'}</td>
+                                    </tr>
+                                    <tr>
+                                        <th className='text-muted fw-normal'>Instagram</th>
+                                        <td>{staff.instagram ?? '-'}</td>
+                                    </tr>
+                                </tbody>
+                            </Table>
+                        </>
+                    )}
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant='secondary' onClick={handleClose}>Close</Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    )
+}

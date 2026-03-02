@@ -1,144 +1,115 @@
-import { useEffect, useState } from 'react'
-import { Button, Modal} from 'react-bootstrap'
-import { appendFormData } from '../../../../libs/FormInput'
+import { useState } from 'react'
+import { Button, Modal } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
+import useBannersStore from '../store'
 import HtmlForm from '../components/HtmlForm'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-export default function EditModal({id}) {
-    const store = useStore()
-    const errors = store.getValue('errors')
-   
+const emptyForm = {
+    title: '',
+    description: '',
+    redirectUrl: '',
+    active: '',
+    publishedStart: '',
+    publishedEnd: '',
+}
+
+export default function EditModal({ id }) {
+    const { url: apiBase, server: serverUrl } = useStore()
+    const setRefresh = useBannersStore((s) => s.setRefresh)
+
     const [show, setShow] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [form, setForm] = useState(emptyForm)
+    const [filename, setFilename] = useState('')
+    const [bannerFile, setBannerFile] = useState(null)
+    const [errors, setErrors] = useState(null)
+
+    const onChange = (field) => (value) => setForm((prev) => ({ ...prev, [field]: value }))
+
+    const handleShowClick = () => {
+        setErrors(null)
+        setBannerFile(null)
+        setIsLoading(true)
+        setShow(true)
+
+        axios({ method: 'get', url: `${apiBase}/banners/${id}` })
+            .then((response) => {
+                const b = response.data.banner
+                setForm({
+                    title: b.title ?? '',
+                    description: b.description ?? '',
+                    redirectUrl: b.redirect_url ?? '',
+                    active: b.active ?? '',
+                    publishedStart: b.published_start ?? '',
+                    publishedEnd: b.published_end ?? '',
+                })
+                setFilename(b.filename ?? '')
+            })
+            .catch((error) => console.warn(error))
+            .finally(() => setIsLoading(false))
+    }
+
     const handleClose = () => setShow(false)
-    const handleShow = () => setShow(true)
-    const handleCloseClick = () => {
-        handleClose()
-    }
 
-    /**
-     * When user click edit, load the data
-     */
-    const handleShowClick = () =>{
-      store.emptyData() // empty store data
-      setShow(true)
-
-        // fetch data from server using given id
-        axios({ 
-            method: 'get', 
-            url: `${store.url}/banners/${id}`,
-            })
-        .then( response => { // success 200
-            //console.log(response)
-            if( response?.data?.banner.hasOwnProperty('title') ){
-              store.setValue('title', response?.data?.banner?.title )
-            }
-            if( response?.data?.banner.hasOwnProperty('description') ){
-              store.setValue('description', response?.data?.banner?.description )
-            }
-            if( response?.data?.banner.hasOwnProperty('redirect_url') ){
-              store.setValue('redirect_url', response?.data?.banner?.redirect_url )
-            }
-            if( response?.data?.banner.hasOwnProperty('filename') ){
-              store.setValue('filename', response?.data?.banner?.filename )
-            }
-
-            if( response?.data?.banner.hasOwnProperty('active') ){
-              store.setValue('active', response?.data?.banner?.active )
-            }
-
-            if( response?.data?.banner.hasOwnProperty('published_start') ){
-              store.setValue('published_start', response?.data?.banner?.published_start )
-            }
-
-            if( response?.data?.banner.hasOwnProperty('published_end') ){
-              store.setValue('published_end', response?.data?.banner?.published_end )
-            }
-            setIsLoading(false) // animation
-            store.setValue('refresh', true) // to force useEffect get new data for index
-            })
-        .catch( error => {
-            console.warn(error)
-            setIsLoading(false) // animation
-        })
-    } 
-
-    /**
-     * When user click submit button
-     */
     const handleSubmitClick = () => {
-        
-      const formData = new FormData();
-      const dataArray = [
-        { key: 'title', value: store.getValue('title') },
-        { key: 'description', value: store.getValue('description') }, 
-        { key: 'redirect_url', value: store.getValue('redirect_url') }, 
-        { key: 'active', value: store.getValue('active') },
-        { key: 'published_start', value: store.getValue('published_start') },
-        { key: 'published_end', value: store.getValue('published_end') },
-      ];
-      
-      appendFormData(formData, dataArray);
-        // Laravel special
-        formData.append('_method', 'put'); // get|post|put|patch|delete
+        setIsLoading(true)
+        const formData = new FormData()
+        if (form.title) formData.append('title', form.title)
+        if (form.description) formData.append('description', form.description)
+        if (form.redirectUrl) formData.append('redirect_url', form.redirectUrl)
+        if (form.active !== '') formData.append('active', form.active)
+        if (form.publishedStart) formData.append('published_start', form.publishedStart)
+        if (form.publishedEnd) formData.append('published_end', form.publishedEnd)
+        if (bannerFile) formData.append('banner', bannerFile)
+        formData.append('_method', 'put')
 
-        // send to Laravel
-        axios({ 
-            method: 'post', 
-            url: `${store.url}/banners/${id}`,
-            data: formData
-          })
-          .then( response => { // success 200
-            //console.log(response)
-            store.setValue('refresh', true) // to force useEffect get new data for index
-            setIsLoading(false) // animation
-            handleClose() // close the modal
-          })
-          .catch( error => {
-            //console.warn(error)
-            
-            if( error.response?.status == 422 ){ // detect 422 errors by Laravel
-              //console.log(error.response.data.errors)
-              store.setValue('errors', error.response.data.errors ) // set the errors to store
-            }
-            setIsLoading(false) // animation
-          })
+        axios({ method: 'post', url: `${apiBase}/banners/${id}`, data: formData })
+            .then(() => {
+                setRefresh()
+                handleClose()
+            })
+            .catch((error) => {
+                if (error.response?.status === 422) {
+                    setErrors(error.response.data.errors)
+                }
+            })
+            .finally(() => setIsLoading(false))
     }
-  
+
     return (
-      <>
-        <Button size="sm" variant="outline-primary" onClick={handleShowClick}>
-        <FontAwesomeIcon icon={['fas', 'pen-to-square']} />{' '}Edit
-        </Button>
-  
-        <Modal size={'lg'} show={show} onHide={handleCloseClick}>
-          <Modal.Header closeButton>
-            <Modal.Title>Edit Banner</Modal.Title>
-          </Modal.Header>
-
-          <Modal.Body>
-            <HtmlForm isLoading={isLoading} />
-          </Modal.Body>
-          
-          <Modal.Footer>
-            <Button 
-              disabled={isLoading}
-              variant="secondary" 
-              onClick={handleCloseClick}>
-              Close
+        <>
+            <Button size='sm' variant='outline-primary' onClick={handleShowClick}>
+                <FontAwesomeIcon icon={['fas', 'pen-to-square']} />
             </Button>
 
-            <Button 
-              disabled={isLoading}
-              variant="primary" 
-              onClick={handleSubmitClick}>
-              Submit
-            </Button>
+            <Modal size='lg' show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit Banner</Modal.Title>
+                </Modal.Header>
 
-          </Modal.Footer>
-        </Modal>
-      </>
-    );
-  }
+                <Modal.Body>
+                    <HtmlForm
+                        form={form}
+                        onChange={onChange}
+                        filename={filename}
+                        onBannerChange={setBannerFile}
+                        serverUrl={serverUrl}
+                        errors={errors}
+                        isLoading={isLoading}
+                    />
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant='secondary' disabled={isLoading} onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant='primary' disabled={isLoading} onClick={handleSubmitClick}>
+                        Submit
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    )
+}

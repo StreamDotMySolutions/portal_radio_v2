@@ -1,58 +1,55 @@
-import { useParams } from 'react-router-dom'
-import axios from '../../../libs/axios'
 import React, { useState, useEffect } from 'react'
-import useStore from './store' // global store
-
-import Data from './components/Data'
-import BreadCrumbMenu from './components/BreadCrumbMenu'
-import PaginationLinks from './components/PaginationLinks'
+import { Badge } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { useParams } from 'react-router-dom'
+import BreadCrumb from '../../../libs/BreadCrumb'
+import axios from '../../../libs/axios'
+import useStore from '../../store'
+import DataTable from './components/DataTable'
 
 const Index = () => {
+    const { parentId } = useParams()
+    const store = useStore()
+    const [data, setData] = useState([])
 
-    const { parentId } = useParams() // parentid
-    const store = useStore() // store management
-    const url = store.url + '/directories/' + parentId 
-    const [ancestors,setAncestors] = useState([])
-    const [data,setData] = useState([])
-    const [links,setLinks] = useState([])
+    useEffect(() => {
+        if (parentId && parentId !== '0') {
+            axios({ method: 'get', url: `${store.url}/directories/${parentId}` })
+                .then(response => setData(response.data.directory))
+                .catch(error => console.warn(error))
+        } else {
+            setData([])
+        }
+    }, [parentId])
 
-        // detect parentId change
-        useEffect( () => {
-            //console.log('parent id updated')
-            store.setValue('url',  store.url + '/directories/' + parentId )
-        },[parentId])
+    const breadcrumbItems = [
+        {
+            url: '/',
+            label: (
+                <Badge>
+                    <FontAwesomeIcon icon={['fas', 'home']} />
+                </Badge>
+            ),
+        },
+        { url: '/administration/directories/0', label: 'Directory Management' },
+    ]
 
-        // pagination change / data table change
-        useEffect( () => {
-         
-            axios(store.getValue('url') ? store.getValue('url') : url) // use default url, then if store.url present, use that
-            .then( response => { // response block
-                //console.log(response)
-                setAncestors(response.data.ancestors)
-                setData(response.data.items.data)
-                setLinks(response.data.items.links)
-               
-            })
-            .catch( error => { // error block
-                console.warn(error) // output to console
-            })
-            .finally(
-                store.setValue('refresh', false) // reset refresh to false
-            )
-        },  [
-                store.getValue('refresh'), // modal actions , ordering 
-                store.getValue('url') // pagination
-            ] 
-      ) // useEffect()
+    if (data.ancestors) {
+        data.ancestors.forEach(ancestor =>
+            breadcrumbItems.push({ url: `/administration/directories/${ancestor.id}`, label: ancestor.name })
+        )
+    }
 
-   
-    return(
+    if (data.name) {
+        breadcrumbItems.push({ url: `/administration/directories/${data.id}`, label: data.name })
+    }
+
+    return (
         <>
-            <BreadCrumbMenu items={ancestors} />
-            <Data items={data} />
-            <PaginationLinks items={links} />
+            <BreadCrumb items={breadcrumbItems} />
+            <DataTable />
         </>
     )
 }
+
 export default Index
-  

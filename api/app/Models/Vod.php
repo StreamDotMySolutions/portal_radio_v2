@@ -12,4 +12,8 @@ class Vod extends Model
     use NodeTrait;
 
     protected $guarded = ['id'];
+
+    protected $casts = [
+        'created_at' => 'datetime:d/m/Y H:i',
+    ];
 }

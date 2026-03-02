@@ -12,7 +12,7 @@ class RoleService
     public static function index()
     {
         $paginate = Role::query();
-        $roles = $paginate->orderBy('id','DESC')->paginate(10)->withQueryString();     
+        $roles = $paginate->orderBy('id','DESC')->paginate(10)->withQueryString();
         return $roles;
     }
 

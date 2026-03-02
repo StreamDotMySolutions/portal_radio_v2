@@ -11,6 +11,7 @@ class StoreRequest extends FormRequest
     {
         return [
             'title' => 'required',
+            'type'  => 'required|in:folder,file',
         ];
     }
 }

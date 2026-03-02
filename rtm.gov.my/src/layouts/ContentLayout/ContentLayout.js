@@ -7,7 +7,7 @@ import Footer2 from '../components/Footer2';
 import { useParams } from 'react-router-dom';
 
 const ContentLayout = () => {
-    const { id } = useParams(); // parentid
+    const { id } = useParams();
 
     return (
         <>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
 import { Helmet } from "react-helmet-async";
+import { trackEvent } from '../../../libs/analytics';
 import './style.css'
 
 
@@ -23,7 +24,8 @@ const PageContent = ({id}) => {
                 setItems(response.data.items);
                 setSettings(response.data.settings);
                 setAncestors(response.data.ancestors);
-                setLoading(false); // Set loading to false when data is fetched
+                setLoading(false);
+                trackEvent('pageview', 'article', id, response.data.title);
             })
             .catch(error => {
                 console.warn(error);
@@ -57,9 +59,19 @@ const PageContent = ({id}) => {
     
 
     const contentItems = () => {
-        return items.map((item, index) => (
-            <div className='mb-2' key={index} dangerouslySetInnerHTML={{ __html: item.contents }} />
-        ));
+        return items.map((item, index) => {
+            if (item.contents === 'pdf' && item.article_pdf) {
+                const pdfUrl = `${serverUrl}/storage/article_pdf/${item.article_pdf.filename}`;
+                return (
+                    <div className='mb-4' key={index}>
+                        <embed src={pdfUrl} type="application/pdf" width="100%" height="600px" />
+                    </div>
+                );
+            }
+            return (
+                <div className='mb-2' key={index} dangerouslySetInnerHTML={{ __html: item.contents }} />
+            );
+        });
     };
 
     const today = new Date();

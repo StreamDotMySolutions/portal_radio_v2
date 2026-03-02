@@ -9,9 +9,17 @@ use App\Services\CommonService;
 class ProgrammeController extends Controller
 {
 
-    public function index(){
+    public function index(Request $request){
 
-        $programmes = Programme::defaultOrder()->paginate(10)->withQueryString(); 
+        $query = Programme::defaultOrder();
+
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where('title', 'like', "%{$search}%");
+        }
+
+        $programmes = $query->paginate(10)->withQueryString();
+
         return response()->json(['programmes' => $programmes]);
     }
 
@@ -45,22 +53,26 @@ class ProgrammeController extends Controller
         }
     }
 
-    public function update(Request $request,Programme $programme)
+    public function update(Request $request, Programme $programme)
     {
-        // validation
-        $data = $request->validate([
-            'title' => 'sometimes',
-            'redirect_url' => 'sometimes|url',
+        $request->validate([
+            'title'       => 'sometimes',
+            'redirect_url'=> 'sometimes|url',
+            'programme'   => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $programme = Programme::where('id', $programme->id)->update($request->except(['_method','id']));
+        $data = $request->only(['title', 'redirect_url']);
 
-        // Check if the update was successful
-        if ($programme) {
-            return response()->json(['message' => 'Programme successfully created']);
-        } else {
-            return response()->json(['message' => 'Programme update failed'], 500);
+        if ($request->hasFile('programme')) {
+            if ($programme->filename) {
+                CommonService::handleDeleteFile($programme->filename, 'programmes');
+            }
+            $data['filename'] = CommonService::handleStoreFile($request->file('programme'), 'programmes');
         }
+
+        $programme->update($data);
+
+        return response()->json(['message' => 'Programme successfully updated']);
     }
 
     public function delete(Request $request,Programme $programme){

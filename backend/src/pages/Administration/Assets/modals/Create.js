@@ -1,104 +1,73 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Button, Modal} from 'react-bootstrap'
+import { Button, Modal } from 'react-bootstrap'
 import { appendFormData } from '../../../../libs/FormInput'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
 import HtmlForm from '../components/HtmlForm'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function CreateModal() {
     const store = useStore()
-    const { parentId } = useParams() // parentid
-    const errors = store.getValue('errors')
-   
+    const { parentId } = useParams()
+
     const [show, setShow] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-    const handleClose = () => setShow(false)
-    const handleShow = () => setShow(true)
 
-    const handleShowClick = () =>{
-      store.emptyData() // empty store data
-      setShow(true)
-    } 
-
-    const handleCloseClick = () => {
-      handleClose()
+    const handleShowClick = () => {
+        store.emptyData()
+        setShow(true)
     }
 
+    const handleClose = () => setShow(false)
 
-    /**
-     * When user click submit button
-     */
     const handleSubmitClick = () => {
-    
-        const formData = new FormData();
-        const dataArray = [
+        setIsLoading(true)
+
+        const formData = new FormData()
+        appendFormData(formData, [
             { key: 'name', value: store.getValue('name') },
             { key: 'type', value: store.getValue('type') },
             { key: 'parent_id', value: parentId },
-        ];
-        
-        appendFormData(formData, dataArray);
+        ])
 
-        // Laravel special
-        formData.append('_method', 'post'); // get|post|put|patch|delete
-
-        // send to Laravel
-        axios({ 
-            method: 'post', 
-            url: `${store.url}/assets`,
-            data: formData
-          })
-          .then( response => { // success 200
-            //console.log(response)
-            store.setValue('refresh', true) // to force useEffect get new data for index
-            setIsLoading(false) // animation
-            handleClose() // close the modal
-          })
-          .catch( error => {
-            //console.warn(error)
-            
-            if( error.response?.status == 422 ){ // detect 422 errors by Laravel
-              console.log(error.response.data.errors)
-              store.setValue('errors', error.response.data.errors ) // set the errors to store
-            }
-            setIsLoading(false) // animation
-          })
+        axios({ method: 'post', url: `${store.url}/assets`, data: formData })
+            .then(() => {
+                store.setValue('refresh', true)
+                handleClose()
+            })
+            .catch((error) => {
+                if (error.response?.status === 422) {
+                    store.setValue('errors', error.response.data.errors)
+                }
+            })
+            .finally(() => setIsLoading(false))
     }
-  
+
     return (
-      <>
-        <Button variant="primary" onClick={handleShowClick}>
-        <FontAwesomeIcon icon={['fas', 'file']} />{' '}Create
-        </Button>
-  
-        <Modal size={'md'} show={show} onHide={handleCloseClick}>
-          <Modal.Header closeButton>
-            <Modal.Title>Create asset</Modal.Title>
-          </Modal.Header>
-
-          <Modal.Body>
-            <HtmlForm isLoading={isLoading} />
-          </Modal.Body>
-          
-          <Modal.Footer>
-            <Button 
-              disabled={isLoading}
-              variant="secondary" 
-              onClick={handleCloseClick}>
-              Close
+        <>
+            <Button variant='primary' onClick={handleShowClick}>
+                <FontAwesomeIcon icon={['fas', 'circle-plus']} className='me-1' />Create
             </Button>
 
-            <Button 
-              disabled={isLoading}
-              variant="primary" 
-              onClick={handleSubmitClick}>
-              Submit
-            </Button>
+            <Modal size='md' show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Create Asset</Modal.Title>
+                </Modal.Header>
 
-          </Modal.Footer>
-        </Modal>
-      </>
-    );
-  }
+                <Modal.Body>
+                    <HtmlForm isLoading={isLoading} />
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant='secondary' disabled={isLoading} onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant='primary' disabled={isLoading} onClick={handleSubmitClick}>
+                        Submit
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    )
+}

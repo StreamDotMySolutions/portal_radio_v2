@@ -1,127 +1,89 @@
 import { useState } from 'react'
-import { Button, Modal} from 'react-bootstrap'
-import { InputText, InputTextarea, appendFormData } from '../../../../libs/FormInput'
+import { Button, Modal } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
+import useUsersStore from '../store'
 import HtmlForm from '../components/HtmlForm'
 
+const emptyForm = { name: '', roleId: '', email: '', password: '', passwordConfirmation: '' }
+
 export default function CreateModal() {
-    const store = useStore()
-    const errors = store.getValue('errors')
-   
+    const { url: apiBase } = useStore()
+    const setRefresh = useUsersStore((s) => s.setRefresh)
+
     const [show, setShow] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+    const [form, setForm] = useState(emptyForm)
+    const [roles, setRoles] = useState([])
+    const [errors, setErrors] = useState(null)
+
+    const onChange = (field) => (value) => setForm((prev) => ({ ...prev, [field]: value }))
+
+    const handleShowClick = () => {
+        setForm(emptyForm)
+        setErrors(null)
+        setShow(true)
+
+        axios({ method: 'get', url: `${apiBase}/users/roles` })
+            .then((response) => setRoles(response.data.roles))
+            .catch((error) => console.warn(error))
+    }
+
     const handleClose = () => setShow(false)
-    const handleShow = () => setShow(true)
 
-    const handleShowClick = () =>{
-      store.emptyData() // empty store data
-      setShow(true)
-      
-      // load roles
-      axios({ 
-          method: 'get', 
-          url: `${store.url}/users/roles`,
-          })
-      .then( response => { // success 200
-          //console.log(response)
-          store.setValue('roles', response.data.roles)
-          })
-      .catch( error => {
-          console.warn(error)
-      })
-      
-    } 
-
-    const handleCloseClick = () => {
-      handleClose()
-    }
-
-
-    /**
-     * When user click submit button
-     */
     const handleSubmitClick = () => {
-        
-        //const formData = new FormData() // data container
-       
-        // if (store.getValue('name') != null ) {  // get role name entered by user
-        //     formData.append('name', store.getValue('name')); // append to formData
-        // }
+        setIsLoading(true)
+        const formData = new FormData()
+        formData.append('name', form.name)
+        formData.append('role_id', form.roleId)
+        formData.append('email', form.email)
+        formData.append('password', form.password)
+        formData.append('password_confirmation', form.passwordConfirmation)
 
-        // if (store.getValue('email') != null ) {  // get role name entered by user
-        //   formData.append('email', store.getValue('email')); // append to formData
-        // }
-
-        const formData = new FormData();
-        const dataArray = [
-            { key: 'name', value: store.getValue('name') },
-            { key: 'role_id', value: store.getValue('role_id') },
-            { key: 'email', value: store.getValue('email') },
-            { key: 'password', value: store.getValue('password') },
-            { key: 'password_confirmation', value: store.getValue('password_confirmation') },
-        ];
-        
-        appendFormData(formData, dataArray);
-
-        // Laravel special
-        formData.append('_method', 'post'); // get|post|put|patch|delete
-
-        // send to Laravel
-        axios({ 
-            method: 'post', 
-            url: `${store.url}/users`,
-            data: formData
-          })
-          .then( response => { // success 200
-            console.log(response)
-            store.setValue('refresh', true) // to force useEffect get new data for index
-            setIsLoading(false) // animation
-            handleClose() // close the modal
-          })
-          .catch( error => {
-            console.warn(error)
-            
-            if( error.response?.status == 422 ){ // detect 422 errors by Laravel
-              console.log(error.response.data.errors)
-              store.setValue('errors', error.response.data.errors ) // set the errors to store
-            }
-            setIsLoading(false) // animation
-          })
+        axios({ method: 'post', url: `${apiBase}/users`, data: formData })
+            .then(() => {
+                setRefresh()
+                handleClose()
+            })
+            .catch((error) => {
+                if (error.response?.status === 422) {
+                    setErrors(error.response.data.errors)
+                }
+            })
+            .finally(() => setIsLoading(false))
     }
-  
+
     return (
-      <>
-        <Button variant="primary" onClick={handleShowClick}>
-          Create
-        </Button>
-  
-        <Modal size={'lg'} show={show} onHide={handleCloseClick}>
-          <Modal.Header closeButton>
-            <Modal.Title>Create User</Modal.Title>
-          </Modal.Header>
-
-          <Modal.Body>
-            <HtmlForm isLoading={isLoading} />
-          </Modal.Body>
-          
-          <Modal.Footer>
-            <Button 
-              disabled={isLoading}
-              variant="secondary" 
-              onClick={handleCloseClick}>
-              Close
+        <>
+            <Button variant='primary' onClick={handleShowClick}>
+                <FontAwesomeIcon icon={['fas', 'circle-plus']} className='me-1' />Create
             </Button>
 
-            <Button 
-              disabled={isLoading}
-              variant="primary" 
-              onClick={handleSubmitClick}>
-              Submit
-            </Button>
+            <Modal size='lg' show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Create User</Modal.Title>
+                </Modal.Header>
 
-          </Modal.Footer>
-        </Modal>
-      </>
-    );
-  }
+                <Modal.Body>
+                    <HtmlForm
+                        form={form}
+                        onChange={onChange}
+                        roles={roles}
+                        errors={errors}
+                        isLoading={isLoading}
+                    />
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant='secondary' disabled={isLoading} onClick={handleClose}>
+                        Close
+                    </Button>
+                    <Button variant='primary' disabled={isLoading} onClick={handleSubmitClick}>
+                        Submit
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    )
+}

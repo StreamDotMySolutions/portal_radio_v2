@@ -7,11 +7,13 @@ use App\Http\Controllers\Backend\{
     UserController,
     AuthController,
     AccountController,
+    DashboardController,
     ArticleController,
     ArticlePosterController,
     ArticleContentController,
     ArticleAssetController,
     ArticleGalleryController,
+    ArticlePdfController,
     ArticleDataController,
     ArticleSettingController,
     BannerController,
@@ -21,6 +23,7 @@ use App\Http\Controllers\Backend\{
     DirectoryController,
     DirectorySyncController,
     VodController,
+    AnalyticsController,
 };
 
 Route::get('/', function () {
@@ -99,6 +102,11 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::post('/article-galleries', [ArticleGalleryController::class, 'store']);
     Route::delete('/article-galleries/{articleGallery}', [ArticleGalleryController::class, 'delete']);
 
+    // ArticlePdf
+    Route::get('/article-pdf/{articleData}', [ArticlePdfController::class, 'show']);
+    Route::post('/article-pdf', [ArticlePdfController::class, 'store']);
+    Route::delete('/article-pdf/{articlePdf}', [ArticlePdfController::class, 'delete']);
+
     // ArticleAsset
     // Route::get('/article-assets/{article}', [ArticleAssetController::class, 'index']);
     // Route::post('/article-assets', [ArticleAssetController::class, 'store']);
@@ -167,19 +175,25 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
 
 });
 
-// Directory
-Route::group(['middleware' => ['guest']], function () {
-    Route::get('/directories', [DirectoryController::class, 'displayDirectoryStructure']);
-    Route::get('/directories/{id}', [DirectoryController::class, 'index']);
-
-    Route::get('/directories/{directory}/show', [DirectoryController::class, 'show']);
-    Route::post('/directories/{directory}/create', [DirectoryController::class, 'create']);
-    Route::put('/directories/{directory}/update', [DirectoryController::class, 'update']);
-    Route::delete('/directories/{directory}/delete', [DirectoryController::class, 'delete']);
-    
-    //Route::post('/directories/sync', [DirectoryController::class, 'sync']);
-    Route::post('/directories/{root}', [DirectoryController::class, 'store']);
-    //Route::post('/directory/sync', [DirectorySyncController::class, 'sync']);
-    Route::get('/directories/ordering/{directory}', [DirectoryController::class, 'ordering']);
-   
+// Dashboard
+Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
+    Route::get('/dashboard', [DashboardController::class, 'index']);
 });
+
+// Analytics
+Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
+    Route::get('/analytics', [AnalyticsController::class, 'index']);
+});
+
+// Manage Directories
+Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
+    Route::get('/directories/node/{parentId}', [DirectoryController::class, 'index']);
+    Route::post('/directories', [DirectoryController::class, 'storeRecord']);
+    Route::get('/directories/ordering/{directory}', [DirectoryController::class, 'ordering']);
+    Route::get('/directories/{directory}', [DirectoryController::class, 'show']);
+    Route::put('/directories/{directory}', [DirectoryController::class, 'update']);
+    Route::delete('/directories/{directory}', [DirectoryController::class, 'delete']);
+});
+
+// Directory bulk import (external, e.g. Google Apps Script)
+Route::post('/directories/sync/{root}', [DirectoryController::class, 'store']);

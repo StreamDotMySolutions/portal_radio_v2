@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import {Col, Container, Row } from 'react-bootstrap';
+import {Card, Col, Container, Row } from 'react-bootstrap';
 import ContentData from './ContentCreator/ArticleContent/ContentData';
 import DescriptionModal from './ContentCreator/DescriptionModal';
 import useStore from '../../../store';
@@ -10,6 +10,7 @@ import CreateContent from './ContentCreator/ArticleContent/Create'
 import CreateContentWithEditor from './ContentCreator/ArticleContent/CreateWithEditor'
 import CreateContentWithHtml from './ContentCreator/ArticleContent/CreateWithHtml'
 import CreateContentWithGallery from './ContentCreator/ArticleContent/CreateGallery'
+import CreateContentWithPdf from './ContentCreator/ArticleContent/CreatePdf'
 import ArticleSetting from './ContentCreator/ArticleSetting/ArticleSetting';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -51,16 +52,12 @@ const ContentCreator = () => {
 
             <Row>
                 <Col>
-                {/* <CreateModal /> */}
-                   
-                    <Col className="d-flex justify-content-center border border-3 border-dotted bg-light p-3" >
-                   
-                        <Col className='text-center'>
+                    <Card>
+                        <Card.Header>Article Settings</Card.Header>
+                        <Card.Body className='text-center'>
                             <ArticleSetting />
-                        </Col>
-                
-
-                    </Col>
+                        </Card.Body>
+                    </Card>
                 </Col>
             </Row>
                 
@@ -81,18 +78,14 @@ const ContentCreator = () => {
 
             <Row>
                 <Col>
-           
-                   
-                    <Col style={{'background-color': 'lightyellow'}} className="d-flex justify-content-center border border-3 border-dotted p-3 " >
-
-                        <Col className='text-center'>
-                        <FontAwesomeIcon icon={['fas', 'fa-plus']} />{' '}New Content
-                            <hr />
-                            <CreateContentWithEditor />{' '}<CreateContentWithHtml />{' '}<CreateContentWithGallery />
-                        </Col>
-                
-
-                    </Col>
+                    <Card>
+                        <Card.Header>
+                            <FontAwesomeIcon icon={['fas', 'plus']} />{' '}Add Content
+                        </Card.Header>
+                        <Card.Body className='text-center'>
+                            <CreateContentWithEditor />{' '}<CreateContentWithHtml />{' '}<CreateContentWithGallery />{' '}<CreateContentWithPdf />
+                        </Card.Body>
+                    </Card>
                 </Col>
             </Row>
 

@@ -1,92 +1,126 @@
 import React, { useState, useEffect } from 'react'
-import { Table,Button } from 'react-bootstrap'
-import { Link, useParams } from 'react-router-dom'
+import { Button, Form, InputGroup, Table } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useStore from '../../../store'
+import useVideosStore from '../store'
 import axios from '../../../../libs/axios'
 import PaginatorLink from '../../../../libs/PaginatorLink'
-import CreateButton from '../../../../libs/CreateButton'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import CreateModal from '../modals/Create'
+import ShowModal from '../modals/Show'
 import EditModal from '../modals/Edit'
 import DeleteModal from '../modals/Delete'
 import Ordering from './Ordering'
 
-const Index = () => {
-    const store = useStore() // store management
-    const { parentId } = useParams() // parentid
-    const url = store.url + '/videos' // set the index url to /api/articles/node/{parentId}
-    const [items, setItems] = useState([]) // data placeholder
-    
-    // to get items data
-    useEffect( () => 
-        {
-            // modified axios to prepend Bearer Token on header
-            axios( 
-                {
-                    method: 'get', // method is GET
-                    url: store.getValue('url') ? store.getValue('url') : url // pagination and preset url
-                } 
-            )
-            .then( response => { // response block
-                //console.log(response)
-                setItems(response.data.videos) // get the data
-                store.setValue('refresh_videos', false ) // reset the refresh state to false
-            })
-            .catch( error => { // error block
-                console.warn(error) // output to console
-            })
-      },
-        [
-            //store.getValue('url'), // listener when url changed by pagination click
-            store.getValue('refresh_videos'), // listener when create / update / delete / search performed
-            parentId // when use navigate to parent
-        ] 
+const DataTable = () => {
+    const { url: apiBase } = useStore()
+    const baseUrl = `${apiBase}/videos`
 
-    ) // useEffect()
+    const refreshKey = useVideosStore((s) => s.refreshKey)
+    const paginatorUrl = useVideosStore((s) => s.paginatorUrl)
+    const setPaginatorUrl = useVideosStore((s) => s.setPaginatorUrl)
+    const search = useVideosStore((s) => s.search)
+    const setSearch = useVideosStore((s) => s.setSearch)
 
+    const [query, setQuery] = useState(search)
+    const [items, setItems] = useState([])
 
+    // Debounce: commit typed query to store after 400ms idle
+    useEffect(() => {
+        const timer = setTimeout(() => setSearch(query), 400)
+        return () => clearTimeout(timer)
+    }, [query])
+
+    const effectiveUrl = paginatorUrl
+        ?? (search ? `${baseUrl}?search=${encodeURIComponent(search)}` : baseUrl)
+
+    useEffect(() => {
+        axios({ method: 'get', url: effectiveUrl })
+            .then((response) => setItems(response.data.videos))
+            .catch((error) => console.warn(error))
+    }, [refreshKey, paginatorUrl, search])
+
+    const paginatorAdapter = {
+        setValue: (key, value) => {
+            if (key === 'url') setPaginatorUrl(value)
+        },
+    }
+
+    const handleClearSearch = () => setQuery('')
 
     return (
         <div>
-    
-            <CreateButton>
+            {/* Toolbar */}
+            <div className='d-flex align-items-center justify-content-between mb-3 gap-2'>
+                <InputGroup style={{ maxWidth: '340px' }}>
+                    <InputGroup.Text>
+                        <FontAwesomeIcon icon={['fas', 'magnifying-glass']} />
+                    </InputGroup.Text>
+                    <Form.Control
+                        placeholder='Search by title...'
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                    />
+                    {query && (
+                        <Button variant='outline-secondary' onClick={handleClearSearch}>
+                            <FontAwesomeIcon icon={['fas', 'xmark']} />
+                        </Button>
+                    )}
+                </InputGroup>
                 <CreateModal />
-            </CreateButton>
-            <Table>
-                <thead>
+            </div>
+
+            {/* Result count */}
+            {items?.total !== undefined && (
+                <p className='text-muted small mb-2'>
+                    {items.total} video{items.total !== 1 ? 's' : ''} found
+                    {search && <> for <strong>"{search}"</strong></>}
+                </p>
+            )}
+
+            <Table hover responsive style={{ '--bs-table-cell-padding-y': '0.85rem' }}>
+                <thead className='table-light'>
                     <tr>
-                        <th className='text-center' style={{ 'width': '20px'}}><FontAwesomeIcon icon={['fas', 'hashtag']} /></th>
-                        <th className='text-center'>Ordering</th>
+                        <th style={{ width: '100px' }}>Order</th>
                         <th>Title</th>
-                        <th className='text-center' style={{'width':'200px'}}> <FontAwesomeIcon icon={['fas', 'bolt']} /></th>
+                        <th className='text-center' style={{ width: '160px' }}>Action</th>
                     </tr>
                 </thead>
-
                 <tbody>
-                    {items?.data?.map((item,index) => (
-                        
-                        <tr key={index}>
-                            <td><span className="badge bg-primary">{item.id}</span></td>
-                            <td className='text-center' style={{'width':'100px'}}>
-
-                                <Ordering id={item.id} direction='up' disabled={index === 0}/>
+                    {items?.data?.map((item, index) => (
+                        <tr key={item.id}>
+                            <td className='text-nowrap'>
+                                <Ordering id={item.id} direction='up' disabled={index === 0} />
                                 {' '}
-                                <Ordering id={item.id} direction='down' disabled={index === items.data.length - 1 }/>
-                            
+                                <Ordering
+                                    id={item.id}
+                                    direction='down'
+                                    disabled={index === items.data.length - 1}
+                                />
                             </td>
                             <td>{item.title}</td>
-                            <td className='text-end' >
-                               
-                                <EditModal id={item.id} />
-                                {' '}
-                                <DeleteModal id={item.id} /> 
+                            <td className='text-end text-nowrap'>
+                                <ShowModal id={item.id} />{' '}
+                                <EditModal id={item.id} />{' '}
+                                <DeleteModal id={item.id} title={item.title} />
                             </td>
                         </tr>
                     ))}
+                    {items?.data?.length === 0 && (
+                        <tr>
+                            <td colSpan='3' className='text-center text-muted py-4'>
+                                {search
+                                    ? <>No videos found matching <strong>"{search}"</strong>.</>
+                                    : 'No videos found.'
+                                }
+                            </td>
+                        </tr>
+                    )}
                 </tbody>
             </Table>
-            <PaginatorLink store={store} items={items} />
+
+            <PaginatorLink store={paginatorAdapter} items={items} />
         </div>
-    );
-};
-export default Index
+    )
+}
+
+export default DataTable

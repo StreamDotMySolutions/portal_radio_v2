@@ -1,159 +1,138 @@
-import React, { useEffect, useState } from 'react';
-import { InputText,InputFile, InputTextarea, InputSelect } from '../../../../libs/FormInput';
-import { Row,Col, Image, Figure } from 'react-bootstrap';
-import useStore from '../../../store';
-import axios from '../../../../libs/axios'
-import HlsPlayer from '../../Vods/components/HlsPlayer';
+import { useState } from 'react'
+import { Alert, Button, Card, Figure, Form, InputGroup } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Link } from 'react-router-dom'
 
-const HtmlForm = ({isLoading}) => {
-    const store = useStore()
-    const [videos, setVideos] = useState([]);
-    const [imagePreviewUrl, setImagePreviewUrl] = useState(null);
+const HtmlForm = ({ form, onChange, videos, filename, onPosterChange, serverUrl, errors, isLoading }) => {
+    const [replacing, setReplacing] = useState(false)
 
-    //console.log(store.getValue('poster'))
-    if(store.getValue('poster')) {
-        const file = store.getValue('poster')
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreviewUrl(reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    useEffect(() => {
-        // Fetch data dari server
-        axios
-          .get(`${store.url}/vods/list-videos`)
-          .then((response) => {
-            console.log(response.data); // Cetak data video
-            setVideos(response.data.vods)
-          })
-          .catch((error) => {
-            console.error("Error fetching videos:", error);
-          });
-      }, []); // Dependency array betul di sini
+    const handleCancelReplace = () => {
+        setReplacing(false)
+        onPosterChange(null)
+    }
 
     return (
-        <>
-    
-        <Row>
-            <Col className='mb-2'>
-                <InputText 
-                    fieldName='title' 
-                    placeholder='Title'  
-                    icon='fa-solid fa-pencil'
-                    isLoading={isLoading}
-                />
+        <div className='d-flex flex-column gap-3'>
 
-            </Col>
-        </Row>
-
-        <hr />
-        <Row>    
-      
-            <hr /> 
-            <h2>Poster Image</h2>
-            <Col className='mb-2 border border-1 rounded mb-3 m-2 p-2'>
-                {store.getValue('filename') ? 
-                    <>
-                   
-                    <Row>
-                        <Col className='text-center p-4'>
-                            <h5>Current Image</h5>
-                            <Figure>
-                                <Figure.Image
-                                    src={`${store.server}/storage/videos/${store.getValue('filename')}`}
-                                />
-                            </Figure>
-                        </Col>
-                        <Col className='text-center p-4'>
-                        {imagePreviewUrl && (<>
-                            <h5>New Image</h5>    
-                            <Figure>
-                                <Figure.Image
-                                    src={imagePreviewUrl}
-                                />
-                            </Figure>
-                            </>)}
-                        </Col>
-                    </Row>
-
-
-                    <InputFile
-                        fieldName='poster' 
-                        placeholder='Choose image'  
-                        icon='fa-solid fa-image'
-                        isLoading={isLoading}
-                    />
-                    </>
-                          
-                :
-                <>
-                         {imagePreviewUrl && (
-                     
-                            <Figure>
-                                 <Figure.Image
-                                     src={imagePreviewUrl}
-                                 />
-                             </Figure>
-                        )}
-
-                        <InputFile
-                            
-                            fieldName='poster' 
-                            placeholder='Choose image'  
-                            icon='fa-solid fa-image'
-                            isLoading={isLoading}
+            <Card>
+                <Card.Header className='fw-semibold'>
+                    <FontAwesomeIcon icon={['fas', 'pencil']} className='me-2 text-secondary' />
+                    Basic Info
+                </Card.Header>
+                <Card.Body>
+                    <InputGroup>
+                        <InputGroup.Text style={{ width: '80px' }}>Title</InputGroup.Text>
+                        <Form.Control
+                            placeholder='Enter video title'
+                            value={form.title}
+                            readOnly={isLoading}
+                            isInvalid={!!errors?.title}
+                            onChange={(e) => onChange('title')(e.target.value)}
                         />
-                </>
-                   
-                }
-            </Col>
-            
-            <h2>HLS Video</h2>    
-            <Col className='mb-2'>
-        
-                <InputSelect
-                    fieldName='embed_code' 
-                    placeholder='Video ID'  
-                    icon='fa-solid fa-hashtag'
-                    options={videos}
-                    rows={1}
-                    isLoading={isLoading}
-                />
+                        {errors?.title && (
+                            <Form.Control.Feedback type='invalid'>{errors.title[0]}</Form.Control.Feedback>
+                        )}
+                    </InputGroup>
+                </Card.Body>
+            </Card>
 
-            </Col>
+            <Card>
+                <Card.Header className='fw-semibold'>
+                    <FontAwesomeIcon icon={['fas', 'film']} className='me-2 text-secondary' />
+                    HLS Video
+                </Card.Header>
+                <Card.Body>
+                    <p className='text-muted small mb-2'>
+                        Select a video from the VOD Library. The selected video will be streamed using HLS on the public portal.
+                    </p>
+                    <Form.Select
+                        value={form.embedCode}
+                        disabled={isLoading || !videos?.length}
+                        isInvalid={!!errors?.embed_code}
+                        onChange={(e) => onChange('embedCode')(e.target.value)}
+                    >
+                        <option value=''>— Select video —</option>
+                        {videos?.map((v) => (
+                            <option key={v.id} value={v.id}>{v.name}</option>
+                        ))}
+                    </Form.Select>
+                    {errors?.embed_code && (
+                        <Form.Control.Feedback type='invalid' className='d-block'>
+                            {errors.embed_code[0]}
+                        </Form.Control.Feedback>
+                    )}
+                    {!isLoading && videos?.length === 0 && (
+                        <Alert variant='warning' className='mt-2 py-2 mb-0 small'>
+                            <FontAwesomeIcon icon={['fas', 'triangle-exclamation']} className='me-1' />
+                            No videos found in the VOD Library.{' '}
+                            <Link to='/administration/vods/0'>Go to VOD Management</Link> and add a video first.
+                        </Alert>
+                    )}
+                </Card.Body>
+            </Card>
 
-            
-            {store.getValue('embed_code') &&
-                <>
-                    <h2></h2>
-                    <Col className='mb-2 border border-1 rounded m-2 p-2 ' >
-                    
-                    <HlsPlayer id={store.getValue('embed_code')} />
+            <Card>
+                <Card.Header className='fw-semibold'>
+                    <FontAwesomeIcon icon={['fas', 'image']} className='me-2 text-secondary' />
+                    Poster Image
+                </Card.Header>
+                <Card.Body>
+                    <p className='text-muted small mb-2'>
+                        Upload a thumbnail image displayed on the video player before playback starts.
+                    </p>
+                    {filename && !replacing ? (
+                        <>
+                            <Figure className='w-100 mb-2'>
+                                <Figure.Image
+                                    className='w-100 rounded'
+                                    src={`${serverUrl}/storage/videos/${filename}`}
+                                    alt='Poster'
+                                />
+                            </Figure>
+                            <Button
+                                size='sm'
+                                variant='outline-secondary'
+                                disabled={isLoading}
+                                onClick={() => setReplacing(true)}
+                            >
+                                <FontAwesomeIcon icon={['fas', 'arrows-rotate']} className='me-1' />
+                                Replace poster
+                            </Button>
+                        </>
+                    ) : (
+                        <>
+                            <InputGroup>
+                                <InputGroup.Text>
+                                    <FontAwesomeIcon icon={['fas', 'upload']} />
+                                </InputGroup.Text>
+                                <Form.Control
+                                    type='file'
+                                    accept='image/*'
+                                    disabled={isLoading}
+                                    isInvalid={!!errors?.poster}
+                                    onChange={(e) => onPosterChange(e.target.files[0])}
+                                />
+                                {errors?.poster && (
+                                    <Form.Control.Feedback type='invalid'>{errors.poster[0]}</Form.Control.Feedback>
+                                )}
+                            </InputGroup>
+                            {filename && (
+                                <Button
+                                    size='sm'
+                                    variant='link'
+                                    className='ps-0 mt-1 text-secondary'
+                                    onClick={handleCancelReplace}
+                                >
+                                    Cancel replace
+                                </Button>
+                            )}
+                        </>
+                    )}
+                </Card.Body>
+            </Card>
 
-                    {/* <iframe 
-                        width="750px"
-                        height={(750 * 9) / 16} // Calculate height for 16:9 aspect ratio
-                        className="embed-responsive embed-responsive-16by9" 
-                        src={`https://www.youtube.com/embed/${store.getValue('embed_code')}`} 
-                        //title="Old World - Announcement Trailer | 4X Turn-Based Strategy Game" 
-                        frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                        referrerpolicy="strict-origin-when-cross-origin" 
-                        allowfullscreen>
+        </div>
+    )
+}
 
-                    </iframe>     */}
-                </Col>
-                </>
-            } 
-        
-            
-        </Row>
-        </>
-    );
-};
-
-export default HtmlForm;
+export default HtmlForm

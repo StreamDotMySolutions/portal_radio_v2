@@ -11,6 +11,7 @@ use App\Http\Controllers\Frontend\{
     VideoController,
     FooterController,
     DirectoryController,
+    AnalyticsController,
 };
 
 // prefix frontend/...
@@ -32,4 +33,7 @@ Route::get('/home-videos', [VideoController::class, 'index']);
 Route::post('/directories/search', [DirectoryController::class, 'search']);
 Route::get('/directories/{id}', [DirectoryController::class, 'index']);
 Route::get('/directories/{directory}/show', [DirectoryController::class, 'show']);
+
+// Analytics tracking (fire-and-forget, no auth)
+Route::post('/track', [AnalyticsController::class, 'store']);
 

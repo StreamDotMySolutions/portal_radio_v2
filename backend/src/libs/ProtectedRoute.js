@@ -1,19 +1,14 @@
 import React from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
-//import { useAuthStore } from "../stores/AuthStore"
-import useAuthStore from '../pages/Auth/stores/AuthStore' // zustand store management
 
 const ProtectedRoute = () => {
+    const token = localStorage.getItem('token')
 
-    //const isLoggedIn = useAuthStore(state => state.isLoggedIn) // using zustand
-    const store = useAuthStore()
-
-
-    //if(!isLoggedIn){
-    if(!store.isAuthenticated){
+    if (!token) {
         return <Navigate to='/sign-in' replace />
     }
 
     return <Outlet />
 }
+
 export default ProtectedRoute

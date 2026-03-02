@@ -26,4 +26,9 @@ class ArticleData extends Model
     {
         return $this->hasMany(ArticleGallery::class);
     }
+
+    public function articlePdf()
+    {
+        return $this->hasOne(ArticlePdf::class);
+    }
 }

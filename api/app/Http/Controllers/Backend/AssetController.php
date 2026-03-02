@@ -3,28 +3,34 @@
 namespace App\Http\Controllers\Backend;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use App\Models\Asset;
 use App\Services\CommonService;
 
 class AssetController extends Controller
 {
 
-    public function index($parentId){
+    public function index(Request $request, $parentId){
 
-       
-        if (!is_null($parentId) && !empty($parentId)) {
-            $paginate = Asset::query()->where('parent_id', $parentId);
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query = Asset::query()->where('name', 'like', "%{$search}%");
+        } elseif (!is_null($parentId) && !empty($parentId)) {
+            $query = Asset::query()->where('parent_id', $parentId);
         } else {
-            $paginate = Asset::query()->where('parent_id', null);;
+            $query = Asset::query()->whereNull('parent_id');
         }
-        
 
-        $assets = $paginate->with(['descendants'])->defaultOrder()->paginate(10)->withQueryString();   
+        $assets = $query->with(['descendants'])->defaultOrder()->paginate(10)->withQueryString();
 
         return response()->json(['assets' => $assets]);
     }
 
     public function show(Asset $asset){
+        if ($asset->type === 'folder') {
+            $asset->load(['descendants' => fn($q) => $q->defaultOrder()]);
+        }
         return response()->json(['asset' => $asset]);
     }
 
@@ -48,10 +54,13 @@ class AssetController extends Controller
         }
 
         if($request->input('type') == 'file'){
+            $file = $request->file('name');
             $asset = Asset::create([
-                'user_id' =>  auth('sanctum')->user()->id,
-                'type' => 'file',
-                'name' => CommonService::handleStoreFile($request->file('name'), $directory = 'assets'),
+                'user_id'  => auth('sanctum')->user()->id,
+                'type'     => 'file',
+                'name'     => CommonService::handleStoreFile($file, $directory = 'assets'),
+                'mimetype' => $file->getMimeType(),
+                'filesize' => $file->getSize(),
             ]);
         }
 
@@ -75,37 +84,47 @@ class AssetController extends Controller
         
     }
 
-    public function update(Request $request,Asset $asset)
+    public function update(Request $request, Asset $asset)
     {
-        // validation
-        $data = $request->validate([
-            'name' => 'sometimes',
-            //'poster' => 'sometimes|image|mimes:jpeg,png,jpg,gif'
+        $request->validate([
+            'name'   => 'sometimes|string',
+            'rename' => 'sometimes|string',
+            'file'   => 'sometimes|file|mimes:pdf,doc,docx,ppt,pptx,jpeg,jpg,png,gif,webp',
         ]);
 
-        // $asset = Asset::where('id', $asset->id)->update(
-        //     $request->except(['_method','id'])
-        // );
-         // Prepare the data array for updating
-        $updateData = [
-            'user_id' => auth('sanctum')->user()->id,
-            'name' => $request->input('name'),
-        ];
+        $updateData = ['user_id' => auth('sanctum')->user()->id];
 
-        // Conditionally add 'filename' if 'poster' is present in the request
-        // if ($request->hasFile('poster')) {
-        //     $updateData['filename'] = CommonService::handleStoreFile($request->file('poster'), 'assets');
-        // }
+        if ($asset->type === 'folder') {
+            $updateData['name'] = $request->input('name');
+        }
 
-        // Perform the update
+        if ($asset->type === 'file') {
+
+            // Rename file on disk
+            if ($request->filled('rename')) {
+                $ext     = pathinfo($asset->name, PATHINFO_EXTENSION);
+                $newName = Str::slug(pathinfo($request->input('rename'), PATHINFO_FILENAME)) . '.' . $ext;
+
+                if ($newName !== $asset->name) {
+                    Storage::disk('public')->move("assets/{$asset->name}", "assets/{$newName}");
+                    $updateData['name'] = $newName;
+                }
+            }
+
+            // Replace file content
+            if ($request->hasFile('file')) {
+                $currentName = $updateData['name'] ?? $asset->name;
+                CommonService::handleDeleteFile($currentName, 'assets');
+                $file = $request->file('file');
+                $updateData['name']     = CommonService::handleStoreFile($file, 'assets');
+                $updateData['mimetype'] = $file->getMimeType();
+                $updateData['filesize'] = $file->getSize();
+            }
+        }
+
         $asset->where('id', $asset->id)->update($updateData);
 
-        // Check if the update was successful
-        if ($asset) {
-            return response()->json(['message' => 'Asset successfully created']);
-        } else {
-            return response()->json(['message' => 'Asset update failed'], 500);
-        }
+        return response()->json(['message' => 'Asset successfully updated']);
     }
 
     public function delete(Request $request,Asset $asset){

@@ -22,6 +22,8 @@ import EditHtml from './EditHtml';
 import EditVisual from './EditVisual';
 import EditGallery from './EditGallery';
 import ShowGallery from './ShowGallery';
+import EditPdf from './EditPdf';
+import ShowPdf from './ShowPdf';
 
 
 const ContentData = () => {
@@ -66,39 +68,51 @@ const ContentData = () => {
  
                     {Array.isArray(items) && items.map((item, index) => (
 
-                        <div className='mt-2 mb-2'>
+                        <div key={item.id} className='mt-2 mb-2'>
                             <Col className="d-flex justify-content-center border border-3 border-dotted bg-light mb-2 p-2">
                                 <Col>
-                                    <Col className="text-end">
-                                        <Ordering id={item.id} direction='up' disabled={index === 0}/>
-                                        {' '}
-                                        <Ordering id={item.id} direction='down' disabled={index === items.length - 1 }/>
-                                        {' '}
-                        
-                                        {' '}
-                                        {item.contents == 'gallery' ? (
-                                            <EditGallery id={item.id} />
-                                        ) : (
-                                            <>
-                                            <EditVisual id={item.id} />
-                                            {' '}                      
-                                            <EditHtml id={item.id} />
-                                            </>
-                                        )}
-                                         
-                                        {' '} 
-                                        <DeleteModal id={item.id} /> 
-                                  
+                                    <Col className="d-flex align-items-center justify-content-between">
+                                        <div>
+                                            {item.contents === 'pdf' ? (
+                                                <Badge bg='warning' text='dark'>PDF</Badge>
+                                            ) : item.contents === 'gallery' ? (
+                                                <Badge bg='secondary'>Gallery</Badge>
+                                            ) : (
+                                                <Badge bg='info'>HTML</Badge>
+                                            )}
+                                        </div>
+                                        <div>
+                                            <Ordering id={item.id} direction='up' disabled={index === 0}/>
+                                            {' '}
+                                            <Ordering id={item.id} direction='down' disabled={index === items.length - 1 }/>
+                                            {' '}
+
+                                            {' '}
+                                            {item.contents === 'pdf' ? (
+                                                <EditPdf id={item.id} />
+                                            ) : item.contents === 'gallery' ? (
+                                                <EditGallery id={item.id} />
+                                            ) : (
+                                                <>
+                                                <EditVisual id={item.id} />
+                                                {' '}
+                                                <EditHtml id={item.id} />
+                                                </>
+                                            )}
+
+                                            {' '}
+                                            <DeleteModal id={item.id} />
+                                        </div>
                                     </Col>
                                     <hr />
                         
-                                    {item.contents === 'gallery' ? (
-                                    <>
+                                    {item.contents === 'pdf' ? (
+                                        <ShowPdf article_data_id={item.id} />
+                                    ) : item.contents === 'gallery' ? (
                                         <ShowGallery article_data_id={item.id} />
-                                    </>
                                     ) : (
-                                    <Col 
-                                        className='p-3 border-1 border-dark' 
+                                    <Col
+                                        className='p-3 border-1 border-dark'
                                         style={{ backgroundColor: '#fff', borderStyle: 'dashed' }}
                                     >
                                         {/* Render HTML content */}

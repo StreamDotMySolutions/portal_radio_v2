@@ -1,128 +1,143 @@
 import React, { useState, useEffect } from 'react'
-import { Table,Button } from 'react-bootstrap'
+import { Button, Form, InputGroup, Table } from 'react-bootstrap'
 import { Link, useParams } from 'react-router-dom'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useStore from '../../../store'
 import axios from '../../../../libs/axios'
 import PaginatorLink from '../../../../libs/PaginatorLink'
-import CreateButton from '../../../../libs/CreateButton'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import CreateModal from '../modals/Create'
+import ShowModal from '../modals/Show'
 import EditModal from '../modals/Edit'
 import DeleteModal from '../modals/Delete'
 import Ordering from './Ordering'
 
-const Index = () => {
-    const store = useStore() // store management
-    const { parentId } = useParams() // parentid
-    const url = store.url + '/assets/node/' + parentId // set the index url to /api/assets/node/{parentId}
-    const [items, setItems] = useState([]) // data placeholder
-    
-    const serverUrl = process.env.REACT_APP_SERVER_URL;
+const formatBytes = (bytes) => {
+    if (!bytes) return '-'
+    if (bytes < 1024) return `${bytes} B`
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+}
+
+const DataTable = () => {
+    const store = useStore()
+    const { parentId } = useParams()
+
+    const serverUrl = process.env.REACT_APP_SERVER_URL
     const path = `${serverUrl}/storage/assets`
-    
-    // to get items data
-    // console.log( store.getValue('url'))
-    // console.log( parentId )
 
-    // if user browsing the node
-    useEffect( () => {
+    const [query, setQuery] = useState('')
+    const [search, setSearch] = useState('')
+    const [items, setItems] = useState([])
+
+    // Debounce: commit typed query after 400ms idle
+    useEffect(() => {
+        const timer = setTimeout(() => setSearch(query), 400)
+        return () => clearTimeout(timer)
+    }, [query])
+
+    // Reset URL when parentId or search changes
+    useEffect(() => {
+        const base = `${store.url}/assets/node/${parentId}`
+        const url = search ? `${base}?search=${encodeURIComponent(search)}` : base
         store.setValue('url', url)
-    },[parentId])
-    
-    useEffect( () => 
-        {
-            // console.log(url)
-            // console.log(  store.getValue('url') )
+    }, [parentId, search])
 
-            
-            // modified axios to prepend Bearer Token on header
-            axios( 
-                {
-                    method: 'get', // method is GET
-                    url: store.getValue('url')  ?  store.getValue('url') : url
-                } 
-            )
-            .then( response => { // response block
-                console.log(response)
-                setItems(response.data.assets) // get the data
-                store.setValue('refresh', false ) // reset the refresh state to false
-                
+    // Fetch when url or refresh changes
+    useEffect(() => {
+        const url = store.getValue('url') ?? `${store.url}/assets/node/${parentId}`
+        axios({ method: 'get', url })
+            .then((response) => {
+                setItems(response.data.assets)
+                store.setValue('refresh', false)
             })
-            .catch( error => { // error block
-                console.warn(error) // output to console
-            })
-      },
-        [
-            store.getValue('url'), // listener when url changed by pagination click
-            store.getValue('refresh'), // listener when create / update / delete / search performed
-            parentId // when use navigate to parent
-        ] 
+            .catch((error) => console.warn(error))
+    }, [store.getValue('url'), store.getValue('refresh'), parentId])
 
-    ) // useEffect()
-
-
+    const handleClearSearch = () => setQuery('')
 
     return (
         <div>
-    
-            <CreateButton>
+            {/* Toolbar */}
+            <div className='d-flex align-items-center justify-content-between mb-3 gap-2'>
+                <InputGroup style={{ maxWidth: '340px' }}>
+                    <InputGroup.Text>
+                        <FontAwesomeIcon icon={['fas', 'magnifying-glass']} />
+                    </InputGroup.Text>
+                    <Form.Control
+                        placeholder='Search by name...'
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                    />
+                    {query && (
+                        <Button variant='outline-secondary' onClick={handleClearSearch}>
+                            <FontAwesomeIcon icon={['fas', 'xmark']} />
+                        </Button>
+                    )}
+                </InputGroup>
                 <CreateModal />
-            </CreateButton>
-            <Table>
-                <thead>
+            </div>
+
+            {/* Result count */}
+            {items?.total !== undefined && (
+                <p className='text-muted small mb-2'>
+                    {items.total} item{items.total !== 1 ? 's' : ''} found
+                    {search && <> for <strong>"{search}"</strong></>}
+                </p>
+            )}
+
+            <Table hover responsive style={{ '--bs-table-cell-padding-y': '0.85rem' }}>
+                <thead className='table-light'>
                     <tr>
-                        <th className='text-center' style={{ 'width': '20px'}}><FontAwesomeIcon icon={['fas', 'hashtag']} /></th>
-                        <th className='text-center' style={{ 'width': '50px'}}>Ordering</th>
-                  
+                        <th style={{ width: '100px' }}>Order</th>
                         <th>Name</th>
-                        <th  style={{ 'width': '230px'}} className='text-center'> <FontAwesomeIcon icon={['fas', 'bolt']} /></th>
+                        <th style={{ width: '180px' }}>Mimetype</th>
+                        <th style={{ width: '100px' }}>Size</th>
+                        <th className='text-center' style={{ width: '160px' }}>Action</th>
                     </tr>
                 </thead>
-
                 <tbody>
-                    {items?.data?.map((item,index) => (
-                        
-                        <tr key={index}>
-                            <td><span className="badge bg-primary">{item.id}</span></td>
-                            <td className='text-center' style={{'width':'100px'}}>
-
-                                <Ordering id={item.id} direction='up' disabled={index === 0}/>
+                    {items?.data?.map((item, index) => (
+                        <tr key={item.id}>
+                            <td className='text-nowrap'>
+                                <Ordering id={item.id} direction='up' disabled={index === 0} />
                                 {' '}
-                                <Ordering id={item.id} direction='down' disabled={index === items.data.length - 1 }/>
-                            
+                                <Ordering id={item.id} direction='down' disabled={index === items.data.length - 1} />
                             </td>
-                           
                             <td>
-                  
-                                {item.type === 'folder' ?
-                                    <FontAwesomeIcon className='me-2 text-warning' icon={['fas', 'fa-folder']} /> 
-                                :
-                                    <FontAwesomeIcon className='me-2 text-secondary' icon={['fas', 'fa-file']} />
+                                {item.type === 'folder'
+                                    ? <FontAwesomeIcon className='me-2 text-warning' icon={['fas', 'folder']} />
+                                    : <FontAwesomeIcon className='me-2 text-secondary' icon={['fas', 'file']} />
                                 }
-
-                                {item.type == 'file' ? (
-                                    <a target='_blank' href={`${path}/${item.name}`}>{item.name}</a>    
-                                ) : (
-                                    <Link to={`/administration/assets/${item.id}`}>{item.name}</Link>  
-                                )}
-                              
+                                {item.type === 'file'
+                                    ? <a target='_blank' rel='noreferrer' href={`${path}/${item.name}`}>{item.name}</a>
+                                    : <Link to={`/administration/assets/${item.id}`}>{item.name}</Link>
+                                }
                             </td>
-                            <td className='text-center'>
-                               
-                     
-                                    
-                                
-                                {' '}
-                                {/* <EditModal id={item.id} /> */}
-                                {' '}
-                                <DeleteModal id={item.id} /> 
+                            <td className='text-muted small'>{item.type === 'file' ? item.mimetype : '-'}</td>
+                            <td className='text-muted small'>{item.type === 'file' ? formatBytes(item.filesize) : '-'}</td>
+                            <td className='text-center text-nowrap'>
+                                <ShowModal id={item.id} />{' '}
+                                <EditModal id={item.id} />{' '}
+                                <DeleteModal id={item.id} name={item.name} type={item.type} />
                             </td>
                         </tr>
                     ))}
+                    {items?.data?.length === 0 && (
+                        <tr>
+                            <td colSpan='5' className='text-center text-muted py-4'>
+                                {search
+                                    ? <>No items found matching <strong>"{search}"</strong>.</>
+                                    : 'No items found.'
+                                }
+                            </td>
+                        </tr>
+                    )}
                 </tbody>
             </Table>
+
             <PaginatorLink store={store} items={items} />
         </div>
-    );
-};
-export default Index
+    )
+}
+
+export default DataTable

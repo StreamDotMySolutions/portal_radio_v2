@@ -29,28 +29,33 @@ const SingleArticle = ({id}) => {
             });
     }, [id]);
 
+    const serverUrl = process.env.REACT_APP_SERVER_URL;
+
     const contentItems = () => {
         if(items.length > 0)
             {
-                return items.map((item, index) => (
-                    <>
-                    {/* <div className='mb-2' key={index} dangerouslySetInnerHTML={{ __html: item.contents }} /> */}
-
-                    {item.contents === 'gallery' ? (
-                        <>
-                            <PageGallery article_data_id={item.id} />
-                        </>
-                        ) : (
-                            <div key={index} className='mb-2' >
-                                {/* Render HTML content */}
-                                <div dangerouslySetInnerHTML={{ __html: item.contents }} />
+                return items.map((item, index) => {
+                    if (item.contents === 'pdf') {
+                        if (!item.article_pdf) return null;
+                        const pdfUrl = `${serverUrl}/storage/article_pdf/${item.article_pdf.filename}`;
+                        return (
+                            <div className='mb-4' key={index}>
+                                <embed src={pdfUrl} type="application/pdf" width="100%" height="600px" />
                             </div>
-                        )}
-                    </>
-                ));
+                        );
+                    }
+                    if (item.contents === 'gallery') {
+                        return <PageGallery key={index} article_data_id={item.id} />;
+                    }
+                    return (
+                        <div key={index} className='mb-2'>
+                            <div dangerouslySetInnerHTML={{ __html: item.contents }} />
+                        </div>
+                    );
+                });
             }
         return null;
-     
+
     };
 
     return (

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { trackEvent } from '../../libs/analytics';
 
 import Menu1 from '../components/Menu1';
 import Menu2 from '../components/Menu2';
@@ -19,6 +20,10 @@ import MenuBar from '../components/MenuBar';
 
 
 const HomeLayout = () => {
+
+    useEffect(() => {
+        trackEvent('pageview', 'home');
+    }, []);
 
     return (
         <>

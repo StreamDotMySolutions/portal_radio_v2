@@ -7,8 +7,7 @@ import Footer2 from '../components/Footer2';
 import { useParams } from 'react-router-dom';
 
 const DirectoryLayout = () => {
-    const { id } = useParams(); // parentid
-    // Set id to 0 if it's undefined
+    const { id } = useParams();
     const parentId = id === undefined ? null : id;
 
     return (

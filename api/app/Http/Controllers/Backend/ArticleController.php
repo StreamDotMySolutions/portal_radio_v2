@@ -12,10 +12,9 @@ use App\Http\Requests\Articles\OrderingRequest;
 
 class ArticleController extends Controller
 {
-    public function index($parentId)
+    public function index(Request $request, $parentId)
     {
-        //\Log::info($parentId);
-        $articles = ArticleService::index($parentId);
+        $articles = ArticleService::index($parentId, $request->query('search'));
         return response()->json(['articles' => $articles]);
     }
 

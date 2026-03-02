@@ -1,123 +1,91 @@
 import { useState } from 'react'
-import { Button, Modal, Form, Col} from 'react-bootstrap'
-import { appendFormData, InputTextarea } from '../../../../../../libs/FormInput'
+import { Button, Modal, Form} from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from '../../../../../../libs/axios'
 import useStore from '../../../../../store'
 
 export default function DeleteModal({id}) {
     const store = useStore()
-    const errors = store.getValue('errors')
-   
+
     const [show, setShow] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
-    const handleClose = () => setShow(false)
-    const handleShow = () => setShow(true)
+    const [acknowledged, setAcknowledged] = useState(false)
+
     const handleCloseClick = () => {
-        handleClose()
+        setAcknowledged(false)
+        setShow(false)
     }
 
-    const handleShowClick = () =>{
-      //store.emptyData() // empty store data
-      store.setValue('errors', null)
-      store.setValue('acknowledge', null)
-
-      setShow(true)
-
-        // fetch data from server using given id
-        axios({ 
-            method: 'get', 
-            url: `${store.url}/article-data/${id}`,
-            })
-        .then( response => { // success 200
-            console.log(response)
-            if( response?.data?.article_data?.hasOwnProperty('contents') ){
-              store.setValue('contents', response?.data?.article_data?.contents )
-            }
-            setIsLoading(false) // animation
-            })
-        .catch( error => {
-            console.warn(error)
-            setIsLoading(false) // animation
-        })
-    } 
+    const handleShowClick = () => {
+        store.setValue('errors', null)
+        setAcknowledged(false)
+        setShow(true)
+    }
 
     /**
      * When user click submit button
      */
     const handleSubmitClick = () => {
-        
-        const formData = new FormData() // data container
-       
-        if (store.getValue('acknowledge') != null ) {  // get role acknowledge entered by user
-            formData.append('acknowledge', store.getValue('acknowledge')); // append to formData
-        }
 
-        // Laravel special
-        formData.append('_method', 'delete'); // get|post|put|patch|delete
+        const formData = new FormData()
+        formData.append('_method', 'delete')
+        formData.append('acknowledge', true)
 
-        // send to Laravel
-        axios({ 
-            method: 'post', 
+        axios({
+            method: 'post',
             url: `${store.url}/article-data/${id}`,
             data: formData
           })
-          .then( response => { // success 200
-            //console.log(response)
-            store.setValue('refresh', true) // to force useEffect get new data for index
-            setIsLoading(false) // animation
-            handleClose() // close the modal
+          .then( response => {
+            store.setValue('refresh', true)
+            setIsLoading(false)
+            handleCloseClick()
           })
           .catch( error => {
-            //console.warn(error)
-            
-            if( error.response?.status == 422 ){ // detect 422 errors by Laravel
-              //console.log(error.response.data.errors)
-              store.setValue('errors', error.response.data.errors ) // set the errors to store
+            if( error.response?.status == 422 ){
+              store.setValue('errors', error.response.data.errors )
             }
-            setIsLoading(false) // animation
+            setIsLoading(false)
           })
     }
-  
+
     return (
       <>
         <Button size="sm" variant="outline-danger" onClick={handleShowClick}>
-          Delete
+          <FontAwesomeIcon icon={['fas', 'trash']} />
         </Button>
-  
-        <Modal size={'lg'} show={show} onHide={handleCloseClick}>
+
+        <Modal show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
-            <Modal.Title>Delete Article</Modal.Title>
+            <Modal.Title>Delete Content Block</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
-            <Col className="p-2 border border-2 border-dotted rounded" style={{'backgroundColor': 'lightcyan'}}>
-              <div dangerouslySetInnerHTML={{ __html: store.getValue('contents') }} />
-            </Col>
+            Are you sure you want to delete this content block?
           </Modal.Body>
-          
+
           <Modal.Footer>
 
             <Form.Check
               className='me-4'
-              isInvalid={errors?.hasOwnProperty('acknowledge')}
               reverse
               disabled={isLoading}
               label="acknowledge"
               type="checkbox"
-              onClick={ () => store.setValue('errors', null) }
-              onChange={ (e) => store.setValue('acknowledge', true) }
+              checked={acknowledged}
+              onChange={e => setAcknowledged(e.target.checked)}
             />
 
-            <Button 
+            <Button
               disabled={isLoading}
-              variant="secondary" 
+              variant="secondary"
               onClick={handleCloseClick}>
               Close
             </Button>
 
-            <Button 
-              disabled={isLoading}
-              variant="danger" 
+            <Button
+              disabled={isLoading || !acknowledged}
+              variant="danger"
               onClick={handleSubmitClick}>
               Delete
             </Button>

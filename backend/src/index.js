@@ -37,6 +37,7 @@ import VideoManagement from './pages/Administration/Videos'
 import DirectoryManagement from './pages/Administration/Directories'
 import AssetManagement from './pages/Administration/Assets'
 import VodManagement from './pages/Administration/Vods'
+import Analytics from './pages/Administration/Analytics'
 
 library.add(fas)
 
@@ -74,6 +75,7 @@ export default function App() {
                 <Route path="/administration/directories/:parentId" element={<DirectoryManagement />} />
                 <Route path="/administration/assets/:parentId" element={<AssetManagement />} />
                 <Route path="/administration/vods/:parentId" element={<VodManagement />} />
+                <Route path="/administration/analytics" element={<Analytics />} />
               </Route>
             </Route>
         </Routes>
