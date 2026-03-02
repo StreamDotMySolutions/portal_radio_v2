@@ -3,6 +3,7 @@ ul.breadcrumb2 {
   padding: 10px 16px;
   list-style: none;
   background-color: #171717;
+  border-radius: .25rem;
 }
 ul.breadcrumb2 li {
   display: inline;
