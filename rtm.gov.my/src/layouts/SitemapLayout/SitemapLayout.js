@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Menu1 from '../components/Menu1';
@@ -7,6 +6,10 @@ import Menu2 from '../components/Menu2';
 import Menu3 from '../components/Menu3';
 import Footer from '../components/Footer';
 import Footer2 from '../components/Footer2';
+import useFetch from '../../libs/useFetch';
+import LoadingSpinner from '../components/LoadingSpinner';
+
+const url = process.env.REACT_APP_API_URL;
 
 const TreeNode = ({ node, depth = 0 }) => {
     const children = node.children || [];
@@ -37,22 +40,8 @@ const TreeNode = ({ node, depth = 0 }) => {
 };
 
 const SitemapLayout = () => {
-    const url = process.env.REACT_APP_API_URL;
-    const [items, setItems] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-
-    useEffect(() => {
-        axios(`${url}/sitemap`)
-            .then((response) => {
-                setItems(response.data.items || []);
-            })
-            .catch((error) => {
-                console.warn(error);
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
-    }, [url]);
+    const { data, isLoading } = useFetch(`${url}/sitemap`);
+    const items = data?.items || [];
 
     return (
         <>
@@ -73,9 +62,7 @@ const SitemapLayout = () => {
             <div className="container py-5">
                 <h1 className="mb-4">Peta Laman</h1>
 
-                {isLoading && (
-                    <p className="text-muted">Memuatkan...</p>
-                )}
+                {isLoading && <LoadingSpinner />}
 
                 {!isLoading && items.length === 0 && (
                     <p className="text-muted">Tiada kandungan untuk dipaparkan.</p>

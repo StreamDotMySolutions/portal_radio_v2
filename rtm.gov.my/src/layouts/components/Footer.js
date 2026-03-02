@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import LoadFooter from './LoadFooter';
+import LoadingSpinner from './LoadingSpinner';
 
 const Footer = ({ variant = 'desktop' }) => {
     const url = process.env.REACT_APP_API_URL;
@@ -89,7 +90,7 @@ const Footer = ({ variant = 'desktop' }) => {
                     </div>
 
                     {isLoading ? (
-                        <div>Loading...</div>
+                        <LoadingSpinner />
                     ) : (
                         footerID && <LoadFooter id={footerID} />
                     )}

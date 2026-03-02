@@ -1,21 +1,15 @@
-import React from 'react'
-import { Link} from 'react-router-dom'
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-const BreadCrumb = ({items}) => {
+const BreadCrumb = ({ items, className = 'breadcrumb' }) => {
     return (
-        
-        <nav aria-label="breadcrumb">
-            <ol className="breadcrumb">
-                {/* Mapping over items.links */}
-                {items?.map((page, index) => (
-                        // Each iteration renders a list item with a link
-                    <li key={index} className="breadcrumb-item">
-                        <Link to={page.url}>{page.label}</Link>
-                    </li>
-                ))}
-            </ol>
-        </nav>
-        
+        <ul className={className} style={{ marginTop: '40px' }}>
+            {items?.map((page, index) => (
+                <li key={index}>
+                    {page.url ? <Link to={page.url}>{page.label}</Link> : page.label}
+                </li>
+            ))}
+        </ul>
     );
 };
 

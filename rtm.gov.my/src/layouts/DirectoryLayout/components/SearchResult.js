@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 
-import { useParams,Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import axios from 'axios';
-//import { Table } from 'react-bootstrap';
 import Search from './Search';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import StaffListing from './StaffListing';
+import BreadCrumb from '../../../libs/BreadCrumb';
 
 const SearchResult = () => {
 
@@ -31,26 +31,15 @@ const SearchResult = () => {
 
     //console.log(query)
 
-    const breadcrumbs = () => {
-
-    
-        return (
-
-            <ul className="breadcrumb2" style={{ "marginTop": "40px" }}>
-                <li><Link to="/">Utama</Link></li>
-                <li><Link to="/directories">Direktori</Link></li>
-                <li>Hasil Carian</li>
-            </ul>
-        );
-
-    };
-    
-    
-
+    const breadcrumbItems = [
+        { url: '/', label: 'Utama' },
+        { url: '/directories', label: 'Direktori' },
+        { url: null, label: 'Hasil Carian' },
+    ];
 
     return (
             <div className='container-fluid col-md-10'>
-                { breadcrumbs() }
+                <BreadCrumb items={breadcrumbItems} className="breadcrumb2" />
                 <h1><FontAwesomeIcon icon={faSearch} /> Hasil Carian</h1>
                 <Search />
                 {data?.length > 0 ?  <StaffListing items={data} /> : <p className='text-muted'>Tiada data dalam rekod kami.</p>}
