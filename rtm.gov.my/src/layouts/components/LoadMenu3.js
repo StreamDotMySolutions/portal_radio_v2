@@ -6,6 +6,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import { truncateTitleWithBreaks } from '../../libs/utils';
 
 //import Spinner from 'react-bootstrap/Spinner'; // Import Spinner component
 
@@ -29,35 +30,6 @@ function LoadMenu3({id}) {
     })
   },[])
 
-  function truncateTitle(title, wordLimit) {
-    const words = title.split(' ');
-    
-    if (words.length > wordLimit) {
-      return words.slice(0, wordLimit).join(' ') + '...';
-    } else {
-      return title;
-    }
-  }
-
-  function truncateTitleWithBreaks(title, wordLimit) {
-    const words = title.split(' ');
-  
-    if (words.length > wordLimit) {
-      let truncatedTitle = '';
-      for (let i = 0; i < words.length; i++) {
-        truncatedTitle += words[i];
-        if ((i + 1) % wordLimit === 0 && i !== words.length - 1) {
-          truncatedTitle += ' <br /> ';
-        } else {
-          truncatedTitle += ' ';
-        }
-      }
-      return truncatedTitle.trim(); // Remove trailing whitespace
-    } else {
-      return title;
-    }
-  }
-  
 
   // const items = () => {
   //   if (articles.length === 0) {
