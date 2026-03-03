@@ -129,10 +129,6 @@ class AssetController extends Controller
 
     public function delete(Request $request,Asset $asset){
 
-        $data = $request->validate([
-            'acknowledge' => 'required',
-        ]);
-
         if($asset->type == 'file'){
             CommonService::handleDeleteFile($asset->name, $directory = 'assets');
         }

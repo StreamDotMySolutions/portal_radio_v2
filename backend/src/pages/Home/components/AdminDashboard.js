@@ -139,7 +139,7 @@ const AdminDashboard = () => {
                             <StatCard title='Pageviews This Week' value={v(analytics.week)}     icon='calendar-week' color='success' />
                         </Col>
                         <Col md={4}>
-                            <StatCard title='Sessions (30 days)'  value={v(analytics.sessions)} icon='signal'        color='info' />
+                            <StatCard title='Unique Visitors (30d)' value={v(analytics.visitors)} icon='users'  color='info' />
                         </Col>
                     </Row>
                 </div>

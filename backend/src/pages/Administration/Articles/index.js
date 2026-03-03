@@ -6,6 +6,7 @@ import { Link, useParams } from 'react-router-dom'
 import useStore from '../../store'
 import axios from '../../../libs/axios'
 import React, { useState, useEffect } from 'react'
+import AdminSearch from '../../../libs/AdminSearch'
 
 const Index = () => {
     const { parentId } = useParams() // parentid
@@ -73,6 +74,7 @@ const Index = () => {
     return(
         <>
             <BreadCrumb items={items} />
+            <AdminSearch />
 
             {parentId === '0' && (
                 <Alert variant='warning' className='mb-3'>

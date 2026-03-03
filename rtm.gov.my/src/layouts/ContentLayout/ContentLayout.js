@@ -4,6 +4,7 @@ import Footer from '../components/Footer';
 import PageContent from './components/PageContent';
 import Menu3 from '../components/Menu3';
 import Footer2 from '../components/Footer2';
+import SiteSearch from '../components/SiteSearch';
 import { useParams } from 'react-router-dom';
 
 const ContentLayout = () => {
@@ -15,11 +16,15 @@ const ContentLayout = () => {
                 <Menu1 />
                 <Menu2 />
             </div>
-            
+
             <div className="d-md-none" id="menu-mobile">
                 <Menu3 />
             </div>
-       
+
+            <div className="container">
+                <SiteSearch />
+            </div>
+
             <PageContent id={id} />
 
             <div className="d-none d-md-block" id="footer-desktop">

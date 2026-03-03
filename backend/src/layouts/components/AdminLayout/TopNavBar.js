@@ -58,6 +58,9 @@ function TopNavbar() {
               <NavDropdown.Item as={NavLink} to="/administration/users">
                 <FontAwesomeIcon icon={['fas', 'users']} />{' '}Users
               </NavDropdown.Item>
+              <NavDropdown.Item as={NavLink} to="/administration/activity">
+                <FontAwesomeIcon icon={['fas', 'clock-rotate-left']} />{' '}Activity Log
+              </NavDropdown.Item>
             </NavDropdown>
 
           </Nav>

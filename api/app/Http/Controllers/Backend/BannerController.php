@@ -92,10 +92,6 @@ class BannerController extends Controller
 
     public function delete(Request $request,Banner $banner){
 
-        $data = $request->validate([
-            'acknowledge' => 'required',
-        ]);
-
         //\Log::info($banner);
         CommonService::handleDeleteFile($banner->filename, $directory = 'banners');
 

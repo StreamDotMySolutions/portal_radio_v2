@@ -24,6 +24,7 @@ use App\Http\Controllers\Backend\{
     DirectorySyncController,
     VodController,
     AnalyticsController,
+    ActivityController,
 };
 
 Route::get('/', function () {
@@ -70,6 +71,8 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
 
 // Manage Articles
 Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
+    Route::get('/articles/tree', [ArticleController::class, 'tree']);
+    Route::get('/articles/search', [ArticleController::class, 'search']);
     Route::get('/articles/node/{parentId}', [ArticleController::class, 'index']);
     Route::post('/articles', [ArticleController::class, 'store']);
     Route::get('/articles/{article}', [ArticleController::class, 'show']);
@@ -123,6 +126,7 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     // Article Settings
     Route::get('/article-settings/{article}', [ArticleSettingController::class, 'show']);
     Route::put('/article-settings/{article}', [ArticleSettingController::class, 'update']);
+    Route::patch('/article-settings/{article}/toggle', [ArticleSettingController::class, 'toggle']);
 
     
     // Banner Settings
@@ -183,6 +187,11 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
 // Analytics
 Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::get('/analytics', [AnalyticsController::class, 'index']);
+});
+
+// Activity Log
+Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
+    Route::get('/activity', [ActivityController::class, 'index']);
 });
 
 // Manage Directories

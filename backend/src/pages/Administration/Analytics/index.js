@@ -115,7 +115,7 @@ const Analytics = () => {
                         <StatCard title='This Month'     value={summary.month}    icon='calendar'     color='info' />
                     </Col>
                     <Col md={3}>
-                        <StatCard title='Sessions (30d)' value={summary.sessions} icon='users'        color='warning' />
+                        <StatCard title='Unique Visitors (30d)' value={summary.visitors} icon='users' color='warning' />
                     </Col>
                 </Row>
 
