@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { trackEvent } from '../../libs/analytics';
+import SiteSearch from '../components/SiteSearch';
 
 import Menu1 from '../components/Menu1';
 import Menu2 from '../components/Menu2';
@@ -32,11 +33,13 @@ const HomeLayout = () => {
                 <Menu2 />
                 {/* <MenuBar /> */}
             </div>
-            
+
             <div className="d-md-none" id="menu-mobile">
                 <MenuMobile />
             </div>
-       
+
+            <SiteSearch />
+
             <BannerCarousel />
 
             {/* <SimpleCarousel /> */}

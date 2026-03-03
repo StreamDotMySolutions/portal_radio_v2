@@ -22,9 +22,7 @@ const DirectoryLayout = () => {
                 <Menu3 />
             </div>
 
-            <div className="container">
-                <SiteSearch />
-            </div>
+            <SiteSearch />
 
             <PageContent id={parentId} />
 

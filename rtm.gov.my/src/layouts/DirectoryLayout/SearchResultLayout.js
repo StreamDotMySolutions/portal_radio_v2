@@ -25,9 +25,7 @@ const SearchResultLayout = () => {
                 <Menu3 />
             </div>
 
-            <div className="container">
-                <SiteSearch />
-            </div>
+            <SiteSearch />
 
            <SearchResult />
 

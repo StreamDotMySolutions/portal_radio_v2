@@ -4,6 +4,10 @@ const useStore  = create((set) => ({
     url: process.env.REACT_APP_BACKEND_URL,
     server: process.env.REACT_APP_SERVER_URL,
     
+    searchOpen: false,
+    toggleSearch: () => set(state => ({ searchOpen: !state.searchOpen })),
+    closeSearch: () => set({ searchOpen: false }),
+
     refresh: false,
     errors: null,
     latestId: null,

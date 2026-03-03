@@ -3,9 +3,11 @@ import axios from 'axios';
 import LoadMenu from './LoadMenu1';
 import { Link, NavLink } from 'react-router-dom';
 import SocialLinks from './SocialLinks';
+import useStore from '../../pages/store';
 
 const Menu1 = () => {
     const url = process.env.REACT_APP_API_URL;
+    const { searchOpen, toggleSearch } = useStore();
     const [items, setItems] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
         
@@ -72,6 +74,14 @@ const Menu1 = () => {
 
                 <div className="d-flex align-items-center" style={{ gap: '10px' }}>
                     <SocialLinks />
+                    <button
+                        onClick={toggleSearch}
+                        className="btn btn-link text-white p-1 ms-1"
+                        title={searchOpen ? 'Tutup carian' : 'Cari'}
+                        style={{ fontSize: '1.1rem', lineHeight: 1 }}
+                    >
+                        <i className={`bi ${searchOpen ? 'bi-x-lg' : 'bi-search'}`} />
+                    </button>
                 </div>
             </div>
         </nav>

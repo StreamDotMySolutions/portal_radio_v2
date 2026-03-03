@@ -3,9 +3,11 @@ import axios from 'axios';
 import { NavLink,Link } from 'react-router-dom';
 import LoadMenu3 from './LoadMenu3';
 import SocialLinks from './SocialLinks';
+import useStore from '../../pages/store';
 
 const Menu3 = () => {
     const url = process.env.REACT_APP_API_URL;
+    const { searchOpen, toggleSearch } = useStore();
     const [items, setItems] = useState([]);
     const [menu1Items, setMenu1Items] = useState([]);
     const [menu2Items, setMenu2Items] = useState([]);
@@ -143,6 +145,15 @@ const Menu3 = () => {
 
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbaratas" aria-controls="navbaratas" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
+            </button>
+
+            <button
+                onClick={toggleSearch}
+                className="btn btn-link text-white p-1 ms-1"
+                title={searchOpen ? 'Tutup carian' : 'Cari'}
+                style={{ fontSize: '1.1rem', lineHeight: 1 }}
+            >
+                <i className={`bi ${searchOpen ? 'bi-x-lg' : 'bi-search'}`} />
             </button>
 
             <div className="collapse navbar-collapse" id="navbaratas">

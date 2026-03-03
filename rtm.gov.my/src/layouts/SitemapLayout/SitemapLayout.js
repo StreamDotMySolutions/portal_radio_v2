@@ -133,10 +133,10 @@ const SitemapLayout = () => {
                 <Menu3 />
             </div>
 
+            <SiteSearch />
+
             <div className="container py-5">
                 <h1 className="mb-4">Peta Laman</h1>
-
-                <SiteSearch />
 
                 {/* Sitemap tree */}
                 {isLoading && <p className="text-muted small">Memuatkan peta laman...</p>}
