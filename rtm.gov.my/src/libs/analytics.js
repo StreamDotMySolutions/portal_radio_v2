@@ -1,7 +1,7 @@
 const BASE_URL = process.env.REACT_APP_API_URL; // http://localhost:8000/api/frontend
 
-function getSessionId() {
-    let id = sessionStorage.getItem('rtm_sid');
+function getVisitorId() {
+    let id = localStorage.getItem('rtm_uid');
     if (!id) {
         // Simple UUID v4 generation
         id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
@@ -9,7 +9,7 @@ function getSessionId() {
             const v = c === 'x' ? r : (r & 0x3) | 0x8;
             return v.toString(16);
         });
-        sessionStorage.setItem('rtm_sid', id);
+        localStorage.setItem('rtm_uid', id);
     }
     return id;
 }
@@ -36,7 +36,7 @@ export function trackEvent(eventType, pageType = null, referenceId = null, refer
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                session_id:      getSessionId(),
+                session_id:      getVisitorId(),
                 event_type:      eventType,
                 page_type:       pageType,
                 reference_id:    referenceId ? Number(referenceId) : null,

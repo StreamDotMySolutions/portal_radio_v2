@@ -81,7 +81,20 @@ class ArticleService
 
     public static function update(Request $request, $article)
     {
-        return Article::where('id', $article->id)->update($request->except(['_method','id']));
+        $data = $request->except(['_method', 'id', 'parent_id']);
+        if (!empty($data)) {
+            $article->fill($data)->save();
+        }
+
+        if ($request->has('parent_id')) {
+            $parentId = $request->input('parent_id');
+            if (!empty($parentId) && (int) $parentId !== $article->id) {
+                $parent = Article::find($parentId);
+                if ($parent) {
+                    $article->appendToNode($parent)->save();
+                }
+            }
+        }
     }
 
     public static function show($article)

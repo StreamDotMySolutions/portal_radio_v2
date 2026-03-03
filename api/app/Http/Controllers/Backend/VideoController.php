@@ -77,10 +77,6 @@ class VideoController extends Controller
 
     public function delete(Request $request,Video $video){
 
-        $data = $request->validate([
-            'acknowledge' => 'required',
-        ]);
-
         CommonService::handleDeleteFile($video->filename, $directory = 'videos');
 
 

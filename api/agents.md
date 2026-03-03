@@ -436,6 +436,28 @@ DirectoryController accepts structured JSON from a spreadsheet and recursively c
 
 ---
 
+## Artisan Commands
+
+### `articles:fix-types`
+
+Backfill the `type` column on the `articles` table for existing data that was created before the `type` field existed.
+
+**Logic:**
+- Article has children → `folder`
+- Article has no children (leaf node) → `file`
+
+```bash
+# Preview changes without saving
+php artisan articles:fix-types --dry-run
+
+# Apply
+php artisan articles:fix-types
+```
+
+The dry-run prints a table showing every article's current type vs the computed new type, so you can verify before committing.
+
+---
+
 ## Packages
 
 | Package | Version | Purpose |

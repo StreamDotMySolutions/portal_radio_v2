@@ -131,10 +131,6 @@ class VodController extends Controller
 
     public function delete(Request $request,Vod $vod){
 
-        $data = $request->validate([
-            'acknowledge' => 'required',
-        ]);
-
         if($vod->type == 'file'){
             //\Log::info( $vod->name . ' file deleted');
             CommonService::handleDeleteFile($vod->name, $directory = 'vods');

@@ -75,11 +75,7 @@ class ProgrammeController extends Controller
         return response()->json(['message' => 'Programme successfully updated']);
     }
 
-    public function delete(Request $request,Programme $programme){
-
-        $data = $request->validate([
-            'acknowledge' => 'required',
-        ]);
+    public function delete(Request $request, Programme $programme){
 
         //\Log::info($programme);
         CommonService::handleDeleteFile($programme->filename, $directory = 'programmes');

@@ -19,7 +19,7 @@ class AnalyticsService
             'month'    => AnalyticsEvent::where('event_type', 'pageview')
                               ->where('created_at', '>=', now()->startOfMonth())
                               ->count(),
-            'sessions' => AnalyticsEvent::where('created_at', '>=', now()->subDays(30))
+            'visitors' => AnalyticsEvent::where('created_at', '>=', now()->subDays(30))
                               ->distinct('session_id')
                               ->count('session_id'),
         ];

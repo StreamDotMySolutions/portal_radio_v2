@@ -13,8 +13,8 @@ const HtmlForm = ({ isLoading, mode = 'create' }) => {
     return (
         <div className='d-flex flex-column gap-3'>
 
-            {/* Type selector — create only */}
-            {mode === 'create' && (
+            {/* Type selector */}
+            {(
                 <Card>
                     <Card.Header><strong>Type</strong></Card.Header>
                     <Card.Body>

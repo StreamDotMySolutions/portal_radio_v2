@@ -4,10 +4,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const HtmlForm = ({ form, onChange, filename, onImageChange, serverUrl, errors, isLoading }) => {
     const [replacing, setReplacing] = useState(false)
+    const [preview, setPreview] = useState(null)
 
     const handleCancelReplace = () => {
         setReplacing(false)
+        setPreview(null)
         onImageChange(null)
+    }
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0]
+        if (!file) return
+        onImageChange(file)
+        setPreview(URL.createObjectURL(file))
     }
 
     return (
@@ -91,7 +100,7 @@ const HtmlForm = ({ form, onChange, filename, onImageChange, serverUrl, errors, 
                                     accept='image/*'
                                     disabled={isLoading}
                                     isInvalid={!!errors?.programme}
-                                    onChange={(e) => onImageChange(e.target.files[0])}
+                                    onChange={handleFileChange}
                                 />
                                 {errors?.programme && (
                                     <Form.Control.Feedback type='invalid'>
@@ -99,6 +108,11 @@ const HtmlForm = ({ form, onChange, filename, onImageChange, serverUrl, errors, 
                                     </Form.Control.Feedback>
                                 )}
                             </InputGroup>
+                            {preview && (
+                                <Figure className='mt-2 mb-0'>
+                                    <Figure.Image className='rounded' src={preview} />
+                                </Figure>
+                            )}
                             {filename && (
                                 <Button
                                     size='sm'

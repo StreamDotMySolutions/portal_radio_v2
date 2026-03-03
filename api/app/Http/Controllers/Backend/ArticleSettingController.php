@@ -43,6 +43,20 @@ class ArticleSettingController extends Controller
         }
     }
 
+    public function toggle(Article $article)
+    {
+        $setting = $article->articleSetting;
+
+        if (!$setting) {
+            return response()->json(['message' => 'Article setting not found'], 404);
+        }
+
+        $setting->active = !$setting->active;
+        $setting->save();
+
+        return response()->json(['active' => $setting->active]);
+    }
+
     public function show(Article $article){
         //\Log::info($article);
         if($article->articleSetting){

@@ -12,6 +12,31 @@ use App\Http\Requests\Articles\OrderingRequest;
 
 class ArticleController extends Controller
 {
+    public function tree()
+    {
+        $tree = Article::defaultOrder()->get(['id', 'title', 'type', 'parent_id', '_lft', '_rgt'])->toTree();
+        return response()->json(['tree' => $tree]);
+    }
+
+    public function search(Request $request)
+    {
+        $q = trim($request->input('q', ''));
+
+        if (strlen($q) < 2) {
+            return response()->json(['results' => []]);
+        }
+
+        $byTitle = Article::where('title', 'LIKE', "%{$q}%")
+            ->get(['id', 'title', 'type', 'parent_id']);
+
+        $byContent = Article::whereHas('articleData', fn($sq) => $sq->where('contents', 'LIKE', "%{$q}%"))
+            ->get(['id', 'title', 'type', 'parent_id']);
+
+        $results = $byTitle->merge($byContent)->unique('id')->values();
+
+        return response()->json(['results' => $results]);
+    }
+
     public function index(Request $request, $parentId)
     {
         $articles = ArticleService::index($parentId, $request->query('search'));

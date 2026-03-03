@@ -10,9 +10,6 @@ class DeleteRequest extends FormRequest
     public function rules(): array
     {
        //\Log::info($this->user);
-        return [
-            'acknowledge' => 'required',
-           
-        ];
+        return [];
     }
 }
