@@ -257,6 +257,56 @@ protected $casts = [
 - Use Bootstrap classes for styling — avoid inline styles
 - Zustand for cross-component state; local `useState` for form/UI state
 
+### DataTable Toolbar Layout (all CRUD sections)
+
+Every DataTable toolbar must follow this three-section layout on one row:
+
+```
+[Sort ButtonGroup]     [🔍 Search InputGroup]     [+ Create]
+```
+
+```jsx
+<div className='d-flex align-items-center justify-content-between mb-3 gap-2'>
+    {/* Left: sort buttons */}
+    <ButtonGroup>
+        <Button variant={sortBy === 'name' ? 'primary' : 'outline-secondary'} onClick={() => handleToggleSort('name')}>
+            <FontAwesomeIcon icon={['fas', 'a']} className='me-1' />
+            Name {sortBy === 'name' && <FontAwesomeIcon icon={['fas', sortDir === 'desc' ? 'arrow-down' : 'arrow-up']} className='ms-1' />}
+        </Button>
+        <Button variant={sortBy === 'date' ? 'primary' : 'outline-secondary'} onClick={() => handleToggleSort('date')}>
+            <FontAwesomeIcon icon={['fas', 'calendar']} className='me-1' />
+            Date {sortBy === 'date' && <FontAwesomeIcon icon={['fas', sortDir === 'desc' ? 'arrow-down' : 'arrow-up']} className='ms-1' />}
+        </Button>
+    </ButtonGroup>
+
+    {/* Middle: search */}
+    <InputGroup style={{ maxWidth: '340px' }}>
+        <InputGroup.Text><FontAwesomeIcon icon={['fas', 'magnifying-glass']} /></InputGroup.Text>
+        <Form.Control placeholder='Search by name...' value={query} onChange={e => setQuery(e.target.value)} />
+        {query && <Button variant='outline-secondary' onClick={() => setQuery('')}><FontAwesomeIcon icon={['fas', 'xmark']} /></Button>}
+    </InputGroup>
+
+    {/* Right: create */}
+    <CreateModal />
+</div>
+```
+
+**Sort toggle logic** (`handleToggleSort(field)`):
+- Same field active: desc → asc → off (null); different field: switch to that field at desc
+- Active button uses `variant='primary'`; inactive uses `variant='outline-secondary'`
+- Show direction arrow icon only when that field is active
+
+**API sort support** (Laravel controller):
+```php
+if ($sortBy === 'name') {
+    $query->orderBy('name', $sortDir);
+} elseif ($sortBy === 'date') {
+    $query->orderBy('created_at', $sortDir);
+} else {
+    $query->defaultOrder(); // or no ordering for non-nested models
+}
+```
+
 ---
 
 ## Adding a New Feature (Typical Workflow)

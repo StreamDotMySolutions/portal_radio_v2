@@ -20,7 +20,28 @@ class DirectoryController extends Controller
             $query = Directory::query()->whereIsRoot();
         }
 
-        $directories = $query->with(['descendants'])->defaultOrder()->paginate(100)->withQueryString();
+        $sortBy  = $request->input('sort_by');
+        $sortDir = $request->input('sort_dir', 'desc');
+
+        if ($sortBy === 'date') {
+            $query->orderBy('created_at', $sortDir);
+        } elseif ($sortBy === 'name') {
+            $query->orderBy('name', $sortDir);
+        } else {
+            $query->defaultOrder();
+        }
+
+        $allowed = [10, 25, 50, 100];
+        $perPage = (int) $request->input('per_page', 25);
+        if (!in_array($perPage, $allowed)) {
+            $perPage = 25;
+        }
+
+        if ($request->filled('search')) {
+            $directories = $query->with(['ancestors' => fn($q) => $q->defaultOrder(), 'descendants'])->paginate($perPage)->withQueryString();
+        } else {
+            $directories = $query->with(['descendants'])->paginate($perPage)->withQueryString();
+        }
 
         return response()->json(['directories' => $directories]);
     }

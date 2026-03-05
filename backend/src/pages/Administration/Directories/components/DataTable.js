@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Badge, Button, Form, InputGroup, Table } from 'react-bootstrap'
+import { Badge, Button, ButtonGroup, Form, InputGroup, Table } from 'react-bootstrap'
 import { Link, useParams } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useStore from '../../../store'
@@ -17,6 +17,9 @@ const DataTable = () => {
 
     const [query, setQuery] = useState('')
     const [search, setSearch] = useState('')
+    const [sortBy, setSortBy] = useState(null)
+    const [sortDir, setSortDir] = useState('desc')
+    const [perPage, setPerPage] = useState(25)
     const [items, setItems] = useState([])
 
     // Debounce: commit typed query after 400ms idle
@@ -25,12 +28,19 @@ const DataTable = () => {
         return () => clearTimeout(timer)
     }, [query])
 
-    // Reset URL when parentId or search changes
+    // Reset URL when parentId, search, sortBy, sortDir, or perPage changes
     useEffect(() => {
         const base = `${store.url}/directories/node/${parentId}`
-        const url = search ? `${base}?search=${encodeURIComponent(search)}` : base
+        const params = new URLSearchParams()
+        if (search) params.append('search', search)
+        if (sortBy) {
+            params.append('sort_by', sortBy)
+            params.append('sort_dir', sortDir)
+        }
+        params.append('per_page', perPage)
+        const url = params.toString() ? `${base}?${params.toString()}` : base
         store.setValue('url', url)
-    }, [parentId, search])
+    }, [parentId, search, sortBy, sortDir, perPage])
 
     // Fetch when url or refresh changes
     useEffect(() => {
@@ -45,10 +55,47 @@ const DataTable = () => {
 
     const handleClearSearch = () => setQuery('')
 
+    const handleToggleSort = (field) => {
+        if (sortBy === field) {
+            if (sortDir === 'desc') {
+                setSortDir('asc')
+            } else {
+                setSortBy(null)
+                setSortDir('desc')
+            }
+        } else {
+            setSortBy(field)
+            setSortDir('desc')
+        }
+    }
+
+    const buildPath = (item) => {
+        if (!item.ancestors || item.ancestors.length === 0) return ''
+        return item.ancestors.map(a => a.name).join(' > ')
+    }
+
     return (
         <div>
             {/* Toolbar */}
             <div className='d-flex align-items-center justify-content-between mb-3 gap-2'>
+                <ButtonGroup>
+                    <Button
+                        variant={sortBy === 'name' ? 'primary' : 'outline-secondary'}
+                        onClick={() => handleToggleSort('name')}
+                        title={sortBy === 'name' ? `Name (${sortDir === 'desc' ? 'Z → A' : 'A → Z'})` : 'Sort by Name'}
+                    >
+                        <FontAwesomeIcon icon={['fas', 'a']} className='me-1' />
+                        Name {sortBy === 'name' && <FontAwesomeIcon icon={['fas', sortDir === 'desc' ? 'arrow-down' : 'arrow-up']} className='ms-1' />}
+                    </Button>
+                    <Button
+                        variant={sortBy === 'date' ? 'primary' : 'outline-secondary'}
+                        onClick={() => handleToggleSort('date')}
+                        title={sortBy === 'date' ? `Date (${sortDir === 'desc' ? 'newest first' : 'oldest first'})` : 'Sort by Date'}
+                    >
+                        <FontAwesomeIcon icon={['fas', 'calendar']} className='me-1' />
+                        Date {sortBy === 'date' && <FontAwesomeIcon icon={['fas', sortDir === 'desc' ? 'arrow-down' : 'arrow-up']} className='ms-1' />}
+                    </Button>
+                </ButtonGroup>
                 <InputGroup style={{ maxWidth: '340px' }}>
                     <InputGroup.Text>
                         <FontAwesomeIcon icon={['fas', 'magnifying-glass']} />
@@ -78,20 +125,23 @@ const DataTable = () => {
             <Table hover responsive style={{ '--bs-table-cell-padding-y': '0.85rem' }}>
                 <thead className='table-light'>
                     <tr>
-                        <th style={{ width: '110px' }}>Order</th>
+                        {sortBy === null && <th style={{ width: '110px' }}>Order</th>}
                         <th style={{ width: '100px' }}>Type</th>
                         <th>Name</th>
+                        {search && <th>Path</th>}
                         <th className='text-center' style={{ width: '160px' }}>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     {items?.data?.map((item, index) => (
                         <tr key={item.id}>
-                            <td className='text-nowrap'>
-                                <Ordering id={item.id} direction='up' disabled={index === 0} />
-                                {' '}
-                                <Ordering id={item.id} direction='down' disabled={index === items.data.length - 1} />
-                            </td>
+                            {sortBy === null && (
+                                <td className='text-nowrap'>
+                                    <Ordering id={item.id} direction='up' disabled={index === 0} />
+                                    {' '}
+                                    <Ordering id={item.id} direction='down' disabled={index === items.data.length - 1} />
+                                </td>
+                            )}
                             <td>
                                 {item.type === 'folder'
                                     ? <Badge bg='warning' text='dark'>Department</Badge>
@@ -113,6 +163,11 @@ const DataTable = () => {
                                     )
                                 }
                             </td>
+                            {search && (
+                                <td className='text-muted small'>
+                                    {buildPath(item)}
+                                </td>
+                            )}
                             <td className='text-center text-nowrap'>
                                 {item.type === 'spreadsheet' && (
                                     <>
@@ -128,7 +183,7 @@ const DataTable = () => {
                     ))}
                     {items?.data?.length === 0 && (
                         <tr>
-                            <td colSpan='4' className='text-center text-muted py-4'>
+                            <td colSpan={sortBy === null ? (search ? 5 : 4) : (search ? 4 : 3)} className='text-center text-muted py-4'>
                                 {search
                                     ? <>No items found matching <strong>"{search}"</strong>.</>
                                     : 'No items found.'
@@ -139,7 +194,19 @@ const DataTable = () => {
                 </tbody>
             </Table>
 
-            <PaginatorLink store={store} items={items} />
+            <div className='d-flex align-items-center justify-content-end gap-3'>
+                <Form.Select
+                    style={{ width: 'auto' }}
+                    value={perPage}
+                    onChange={e => setPerPage(Number(e.target.value))}
+                >
+                    <option value={10}>10 / page</option>
+                    <option value={25}>25 / page</option>
+                    <option value={50}>50 / page</option>
+                    <option value={100}>100 / page</option>
+                </Form.Select>
+                <PaginatorLink store={store} items={items} />
+            </div>
         </div>
     )
 }

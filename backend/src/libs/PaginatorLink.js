@@ -25,9 +25,9 @@
         )
     
         return  (
-            <div className="d-flex bd-highlight mb-3">
-                <div className="ms-auto p-2 bd-highlight">
-                    <Pagination className='mt-3'>
+            <div className="d-flex">
+                <div className="ms-auto">
+                    <Pagination className='mb-0'>
                     {links}
                     </Pagination>
                 </div>
