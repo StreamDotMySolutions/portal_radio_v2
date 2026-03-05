@@ -40,7 +40,7 @@ function TopNavbar() {
 
             <NavDropdown title={<span><FontAwesomeIcon icon={['fas', 'tv']} />{' '}Homepage</span>} id="nav-homepage">
               <NavDropdown.Item as={NavLink} to="/administration/banners">
-                <FontAwesomeIcon icon={['fas', 'image']} />{' '}Carousel
+                <FontAwesomeIcon icon={['fas', 'image']} />{' '}Banners
               </NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to="/administration/programmes">
                 <FontAwesomeIcon icon={['fas', 'list']} />{' '}Programmes
