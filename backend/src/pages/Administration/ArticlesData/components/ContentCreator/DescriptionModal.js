@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Badge, Button, Col, Modal} from 'react-bootstrap'
-import { InputTextarea,appendFormData } from '../../../../../libs/FormInput'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Button, Col, Modal} from 'react-bootstrap'
+import { TextEditorWithEdit, appendFormData } from '../../../../../libs/FormInput'
 import axios from '../../../../../libs/axios'
 import useStore from '../../../../store'
 
@@ -86,34 +87,24 @@ export default function DescriptionModal() {
           Add Content
         </Button> */}
 
-        {store.getValue('description') ?
-
-        <Col onClick={handleShowClick} className="d-flex justify-content-center border border-3 border-dotted bg-light hover-effect" style={{ height: '250px' }}>
-          <p className="text-left m-auto p-3">
-              {store.getValue('description')}
-          </p>
-        </Col>
-        :
-        <Col onClick={handleShowClick} className="d-flex justify-content-center border border-3 border-dotted bg-light hover-effect" style={{ height: '250px' }}>
-          <p className="text-left m-auto ">
-              <Badge>Description</Badge>
-          </p>
-        </Col>
-        }
+        <div onClick={handleShowClick} className="border rounded bg-white shadow-sm p-3" style={{ height: '220px', cursor: 'pointer', overflow: 'auto' }}>
+          {store.getValue('description') ? (
+            <div className="text-muted small mb-0 preview-content" style={{ lineHeight: '1.6' }} dangerouslySetInnerHTML={{ __html: store.getValue('description') }} />
+          ) : (
+            <div className='text-muted text-center d-flex flex-column align-items-center justify-content-center h-100'>
+              <FontAwesomeIcon icon={['fas', 'pen-to-square']} size='2x' className='mb-2' />
+              <small>Click to add description</small>
+            </div>
+          )}
+        </div>
   
-        <Modal size={'lg'} show={show} onHide={handleCloseClick}>
+        <Modal size={'xl'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>
             <Modal.Title>Description</Modal.Title>
           </Modal.Header>
 
           <Modal.Body>
-              <InputTextarea
-                fieldName='description' 
-                placeholder='Enter description'  
-                icon='fa-solid fa-pen-to-square'
-                rows={6}
-                isLoading={isLoading}
-            />
+              <TextEditorWithEdit fieldName='description' />
           </Modal.Body>
           
           <Modal.Footer>

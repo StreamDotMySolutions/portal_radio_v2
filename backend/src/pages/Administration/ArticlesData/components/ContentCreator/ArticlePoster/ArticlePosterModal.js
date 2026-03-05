@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Badge, Button, Col, Modal} from 'react-bootstrap'
+import { Button, Col, Modal} from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { InputFile,appendFormData } from '../../../../../../libs/FormInput'
 import axios from '../../../../../../libs/axios'
 import useStore from '../../../../../store'
@@ -92,20 +93,16 @@ export default function ArticlePosterModal() {
           Add Content
         </Button> */}
 
-        {store.getValue('article_poster_image') ?
-
-        <Col onClick={handleShowClick} className="d-flex justify-content-center border border-3 border-dotted bg-light hover-effect" style={{ height: '250px' }}>
-          <p className="text-left m-auto p-3">
-            <img style={{'height':'220px'}} className='img-thumbnail img-fluid' src={`${store.server}/storage/article_poster/${store.getValue('article_poster_image')?.filename}`} alt="Image" />
-          </p>
-        </Col>
-        :
-        <Col onClick={handleShowClick} className="d-flex justify-content-center border border-3 border-dotted bg-light hover-effect" style={{ height: '250px' }}>
-          <p className="text-left m-auto ">
-              <Badge>Poster</Badge>
-          </p>
-        </Col>
-        }
+        <div onClick={handleShowClick} className="border rounded bg-white shadow-sm d-flex align-items-center justify-content-center overflow-hidden" style={{ height: '220px', cursor: 'pointer' }}>
+          {store.getValue('article_poster_image') ? (
+            <img className='img-fluid' src={`${store.server}/storage/article_poster/${store.getValue('article_poster_image')?.filename}`} alt="Poster" style={{ maxHeight: '220px', objectFit: 'contain' }} />
+          ) : (
+            <div className='text-muted text-center'>
+              <FontAwesomeIcon icon={['fas', 'image']} size='2x' className='mb-2 d-block mx-auto' />
+              <small>Click to add poster</small>
+            </div>
+          )}
+        </div>
   
         <Modal size={'lg'} show={show} onHide={handleCloseClick}>
           <Modal.Header closeButton>

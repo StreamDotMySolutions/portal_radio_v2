@@ -1,18 +1,16 @@
 import React, { useEffect } from 'react';
-import {Card, Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Row } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ContentData from './ContentCreator/ArticleContent/ContentData';
 import DescriptionModal from './ContentCreator/DescriptionModal';
 import useStore from '../../../store';
 import { useParams } from 'react-router-dom'
 import axios from '../../../../libs/axios';
 import ArticlePosterModal from './ContentCreator/ArticlePoster/ArticlePosterModal';
-import CreateContent from './ContentCreator/ArticleContent/Create'
 import CreateContentWithEditor from './ContentCreator/ArticleContent/CreateWithEditor'
 import CreateContentWithGallery from './ContentCreator/ArticleContent/CreateGallery'
 import CreateContentWithPdf from './ContentCreator/ArticleContent/CreatePdf'
 import ArticleSetting from './ContentCreator/ArticleSetting/ArticleSetting';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
 import './App.css'
 
 const ContentCreator = () => {
@@ -49,19 +47,16 @@ const ContentCreator = () => {
     return (
         <Container>
 
-            <Row>
-                <Col>
-                    <Card>
-                        <Card.Header>Article Settings</Card.Header>
-                        <Card.Body className='text-center'>
-                            <ArticleSetting />
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
-                
-            <Row className='mt-2'>
-                <Col xs={4} >
+            <div className='d-flex align-items-center justify-content-between mb-3'>
+                <small className='text-muted'>
+                    <FontAwesomeIcon icon={['fas', 'cube']} className='me-1' />
+                    Content Builder
+                </small>
+                <ArticleSetting />
+            </div>
+
+            <Row className='mb-4'>
+                <Col xs={4}>
                     <ArticlePosterModal />
                 </Col>
                 <Col xs={8}>
@@ -69,24 +64,16 @@ const ContentCreator = () => {
                 </Col>
             </Row>
 
-            <Row className='mt-2'>
-                <Col>
-                    <ContentData />
-                </Col>
-            </Row>
+            <ContentData />
 
-            <Row>
-                <Col>
-                    <Card>
-                        <Card.Header>
-                            <FontAwesomeIcon icon={['fas', 'plus']} />{' '}Add Content
-                        </Card.Header>
-                        <Card.Body className='text-center'>
-                            <CreateContentWithEditor />{' '}<CreateContentWithGallery />{' '}<CreateContentWithPdf />
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
+            <div className='border-2 border-dashed rounded p-3 text-center bg-light' style={{ borderStyle: 'dashed' }}>
+                <small className='text-muted d-block mb-2'>Add content block</small>
+                <div className='d-flex justify-content-center gap-2'>
+                    <CreateContentWithEditor />
+                    <CreateContentWithGallery />
+                    <CreateContentWithPdf />
+                </div>
+            </div>
 
         </Container>
     );
