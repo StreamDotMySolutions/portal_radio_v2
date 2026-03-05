@@ -28,6 +28,14 @@ import { HelmetProvider } from "react-helmet-async";
 import './libs/globalLoadingInterceptor';
 import LoadingBarProvider from './components/LoadingBarProvider';
 
+/** Accessibility */
+import { AccessibilityProvider } from './context/AccessibilityContext';
+import AccessibilityToggle from './components/AccessibilityToggle';
+import './styles/accessibility.css';
+
+/** GovBanner */
+import GovBanner from './components/GovBanner';
+
 library.add(fas)
 
 export default function App() {
@@ -35,20 +43,24 @@ export default function App() {
   return (
     <HelmetProvider>
       <LoadingBarProvider>
-        <BrowserRouter basename="/">
-          <Routes>            
-            <Route path="*" element={<Error404 />} />
-            <Route index element={<HomeLayout />}  />
-            <Route path="/contents/:id" element={<ContentLayout />}/>
-            <Route path="/listings/:id" element={<ListingLayout />}/>
+        <AccessibilityProvider>
+          <BrowserRouter basename="/">
+            <GovBanner />
+            <Routes>
+              <Route path="*" element={<Error404 />} />
+              <Route index element={<HomeLayout />}  />
+              <Route path="/contents/:id" element={<ContentLayout />}/>
+              <Route path="/listings/:id" element={<ListingLayout />}/>
 
-            <Route path="/directories" element={<DirectoryLayout />}/>
-            <Route path="/directories/:id" element={<DirectoryLayout />}/>
-            <Route path="/directories/:id/show" element={<ShowStaffLayout />}/>
-            <Route path="/directories/search/:query" element={<SearchResultLayout /> } />
-            <Route path="/sitemap" element={<SitemapLayout />}/>
-          </Routes>
-        </BrowserRouter>
+              <Route path="/directories" element={<DirectoryLayout />}/>
+              <Route path="/directories/:id" element={<DirectoryLayout />}/>
+              <Route path="/directories/:id/show" element={<ShowStaffLayout />}/>
+              <Route path="/directories/search/:query" element={<SearchResultLayout /> } />
+              <Route path="/sitemap" element={<SitemapLayout />}/>
+            </Routes>
+          </BrowserRouter>
+          <AccessibilityToggle />
+        </AccessibilityProvider>
       </LoadingBarProvider>
     </HelmetProvider>
   );

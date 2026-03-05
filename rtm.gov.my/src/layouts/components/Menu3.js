@@ -147,15 +147,6 @@ const Menu3 = () => {
                 <span className="navbar-toggler-icon"></span>
             </button>
 
-            <button
-                onClick={toggleSearch}
-                className="btn btn-link text-white p-1 ms-1"
-                title={searchOpen ? 'Tutup carian' : 'Cari'}
-                style={{ fontSize: '1.1rem', lineHeight: 1 }}
-            >
-                <i className={`bi ${searchOpen ? 'bi-x-lg' : 'bi-search'}`} />
-            </button>
-
             <div className="collapse navbar-collapse" id="navbaratas">
 
                 <ul className="navbar-nav mx-auto">

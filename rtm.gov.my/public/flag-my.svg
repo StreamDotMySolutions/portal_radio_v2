@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 56 28">
+  <!-- Red and white stripes -->
+  <rect width="56" height="2" y="0" fill="#cc0001"/>
+  <rect width="56" height="2" y="2" fill="#fff"/>
+  <rect width="56" height="2" y="4" fill="#cc0001"/>
+  <rect width="56" height="2" y="6" fill="#fff"/>
+  <rect width="56" height="2" y="8" fill="#cc0001"/>
+  <rect width="56" height="2" y="10" fill="#fff"/>
+  <rect width="56" height="2" y="12" fill="#cc0001"/>
+  <rect width="56" height="2" y="14" fill="#fff"/>
+  <rect width="56" height="2" y="16" fill="#cc0001"/>
+  <rect width="56" height="2" y="18" fill="#fff"/>
+  <rect width="56" height="2" y="20" fill="#cc0001"/>
+  <rect width="56" height="2" y="22" fill="#fff"/>
+  <rect width="56" height="2" y="24" fill="#cc0001"/>
+  <rect width="56" height="2" y="26" fill="#fff"/>
+  <!-- Blue canton -->
+  <rect width="22" height="14" fill="#010066"/>
+  <!-- Crescent -->
+  <circle cx="10" cy="7" r="4.5" fill="#fc0"/>
+  <circle cx="11.2" cy="7" r="3.8" fill="#010066"/>
+  <!-- Star -->
+  <polygon points="16,4.2 16.8,6.6 19.2,6.6 17.2,8.1 17.9,10.5 16,9 14.1,10.5 14.8,8.1 12.8,6.6 15.2,6.6" fill="#fc0"/>
+</svg>

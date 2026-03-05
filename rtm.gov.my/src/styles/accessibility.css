@@ -1,0 +1,152 @@
+/* Font Size Adjustments */
+[data-a11y-font-size='small'] {
+  font-size: 0.85rem;
+}
+
+[data-a11y-font-size='large'] {
+  font-size: 1.15rem;
+}
+
+[data-a11y-font-size='xlarge'] {
+  font-size: 1.3rem;
+}
+
+/* High Contrast Mode */
+[data-a11y-high-contrast='true'] {
+  filter: contrast(1.2);
+  background-color: #000;
+  color: #fff;
+}
+
+[data-a11y-high-contrast='true'] body {
+  background-color: #000;
+  color: #fff;
+}
+
+[data-a11y-high-contrast='true'] a {
+  color: #ffff00;
+}
+
+[data-a11y-high-contrast='true'] button {
+  color: #000;
+  background-color: #ffff00;
+  border-color: #ffff00;
+}
+
+[data-a11y-high-contrast='true'] .btn-outline-secondary {
+  color: #ffff00;
+  border-color: #ffff00;
+}
+
+[data-a11y-high-contrast='true'] .btn-outline-secondary:hover {
+  color: #000;
+  background-color: #ffff00;
+}
+
+[data-a11y-high-contrast='true'] h1,
+[data-a11y-high-contrast='true'] h2,
+[data-a11y-high-contrast='true'] h3,
+[data-a11y-high-contrast='true'] h4,
+[data-a11y-high-contrast='true'] h5,
+[data-a11y-high-contrast='true'] h6 {
+  color: #ffff00;
+}
+
+[data-a11y-high-contrast='true'] .text-secondary {
+  color: #cccccc !important;
+}
+
+[data-a11y-high-contrast='true'] .text-light {
+  color: #fff !important;
+}
+
+[data-a11y-high-contrast='true'] .card {
+  background-color: #1a1a1a;
+  border: 2px solid #ffff00;
+}
+
+[data-a11y-high-contrast='true'] .navbar {
+  background-color: #000 !important;
+  border-bottom: 2px solid #ffff00;
+}
+
+/* Link Tracking - Underline all links */
+[data-a11y-link-tracking='true'] a {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+[data-a11y-link-tracking='true'] a:focus {
+  outline: 3px solid #0d6efd;
+  outline-offset: 2px;
+}
+
+/* Title Tracking - Highlight headings */
+[data-a11y-title-tracking='true'] h1,
+[data-a11y-title-tracking='true'] h2,
+[data-a11y-title-tracking='true'] h3,
+[data-a11y-title-tracking='true'] h4,
+[data-a11y-title-tracking='true'] h5,
+[data-a11y-title-tracking='true'] h6 {
+  background-color: rgba(13, 110, 253, 0.2);
+  padding: 4px 8px;
+  border-left: 4px solid #0d6efd;
+  padding-left: 8px;
+}
+
+/* Dyslexia-Friendly Font */
+@import url('https://fonts.googleapis.com/css2?family=OpenDyslexic:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+[data-a11y-dyslexia-font='true'] {
+  font-family: 'OpenDyslexic', cursive;
+  letter-spacing: 0.05em;
+  word-spacing: 0.1em;
+}
+
+[data-a11y-dyslexia-font='true'] body {
+  line-height: 1.6;
+}
+
+/* Reduced Motion */
+[data-a11y-reduced-motion='true'] * {
+  animation: none !important;
+  transition: none !important;
+}
+
+[data-a11y-reduced-motion='true'] .carousel {
+  transition: none;
+}
+
+[data-a11y-reduced-motion='true'] button,
+[data-a11y-reduced-motion='true'] a {
+  transition: none;
+}
+
+/* Enhanced Focus Indicators (always visible) */
+[data-a11y-link-tracking='true'] :focus-visible,
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid #0d6efd;
+  outline-offset: 2px;
+}
+
+/* Skip to Main Content Link (optional) */
+.skip-to-main {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #0d6efd;
+  color: white;
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 0 0 4px 0;
+  z-index: 100;
+}
+
+.skip-to-main:focus {
+  top: 0;
+}

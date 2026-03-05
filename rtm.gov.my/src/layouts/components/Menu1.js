@@ -53,6 +53,11 @@ const Menu1 = () => {
                     <Link to="/" className="navbar-brand">
                         <img src="/img/logortmbaharu2.png" alt="Logo RTM" />
                     </Link>
+                    <div className="d-none d-lg-block ms-2" style={{ lineHeight: '1.2' }}>
+                        <div className="text-secondary" style={{ fontSize: '0.65rem', letterSpacing: '0.05em' }}>LAMAN WEB RASMI</div>
+                        <div className="text-light fw-bold" style={{ fontSize: '0.8rem' }}>JABATAN PENYIARAN</div>
+                        <div className="text-light fw-bold" style={{ fontSize: '0.8rem' }}>MALAYSIA</div>
+                    </div>
                     <button
                         className="navbar-toggler ms-2"
                         type="button"
@@ -72,16 +77,8 @@ const Menu1 = () => {
                     </ul>
                 </div>
 
-                <div className="d-flex align-items-center" style={{ gap: '10px' }}>
+                <div className="d-none d-lg-flex align-items-center" style={{ gap: '10px' }}>
                     <SocialLinks />
-                    <button
-                        onClick={toggleSearch}
-                        className="btn btn-link text-white p-1 ms-1"
-                        title={searchOpen ? 'Tutup carian' : 'Cari'}
-                        style={{ fontSize: '1.1rem', lineHeight: 1 }}
-                    >
-                        <i className={`bi ${searchOpen ? 'bi-x-lg' : 'bi-search'}`} />
-                    </button>
                 </div>
             </div>
         </nav>
