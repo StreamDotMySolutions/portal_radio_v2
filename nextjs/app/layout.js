@@ -1,4 +1,5 @@
 import './globals.css'
+import Header from '@/components/Header'
 
 export const metadata = {
   title: 'RTM Portal',
@@ -9,6 +10,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="dark">
       <body className="bg-gray-900 text-gray-100">
+        <Header />
         {children}
       </body>
     </html>
