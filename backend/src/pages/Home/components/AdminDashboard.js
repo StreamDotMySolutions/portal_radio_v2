@@ -48,6 +48,14 @@ const StatCard = ({ title, value, icon, color }) => (
     </Card>
 )
 
+const formatFileSize = (bytes) => {
+    if (!bytes || bytes === 0) return '0 B'
+    const k = 1024
+    const sizes = ['B', 'KB', 'MB', 'GB']
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
+    return (bytes / Math.pow(k, i)).toFixed(2) + ' ' + sizes[i]
+}
+
 const AdminDashboard = () => {
     const navigate = useNavigate()
     const { user } = useAuthStore()
@@ -133,10 +141,40 @@ const AdminDashboard = () => {
                             </Card>
                         </Col>
                         <Col md={3}>
-                            <ContentCard title='Assets'      value={v(counts.assets)}      icon='folder-open'  color='warning'   to='/administration/assets/0' />
+                            <Card className='h-100' onClick={() => navigate('/administration/assets/0')} style={{ cursor: 'pointer' }}>
+                                <Card.Body className='d-flex align-items-center gap-3'>
+                                    <div
+                                        className='text-warning bg-warning bg-opacity-10 rounded p-3 fs-4'
+                                        style={{ lineHeight: 1 }}
+                                    >
+                                        <FontAwesomeIcon icon={['fas', 'folder-open']} />
+                                    </div>
+                                    <div>
+                                        <div className='text-muted small'>Assets</div>
+                                        <div className='fw-bold'>
+                                            {isLoading ? '…' : formatFileSize(counts.assets_filesize)}
+                                        </div>
+                                    </div>
+                                </Card.Body>
+                            </Card>
                         </Col>
                         <Col md={3}>
-                            <ContentCard title='VODs'        value={v(counts.vods)}        icon='film'         color='danger'    to='/administration/vods/0' />
+                            <Card className='h-100' onClick={() => navigate('/administration/vods')} style={{ cursor: 'pointer' }}>
+                                <Card.Body className='d-flex align-items-center gap-3'>
+                                    <div
+                                        className='text-danger bg-danger bg-opacity-10 rounded p-3 fs-4'
+                                        style={{ lineHeight: 1 }}
+                                    >
+                                        <FontAwesomeIcon icon={['fas', 'film']} />
+                                    </div>
+                                    <div>
+                                        <div className='text-muted small'>VODs</div>
+                                        <div className='fw-bold'>
+                                            {isLoading ? '…' : formatFileSize(counts.vods_filesize)}
+                                        </div>
+                                    </div>
+                                </Card.Body>
+                            </Card>
                         </Col>
                     </Row>
                 </div>

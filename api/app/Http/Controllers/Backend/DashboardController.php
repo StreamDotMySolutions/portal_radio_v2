@@ -32,6 +32,9 @@ class DashboardController extends Controller
             })
             ->count();
 
+        $assetsFilesize = Asset::sum('filesize') ?? 0;
+        $vodsFilesize = Vod::sum('filesize') ?? 0;
+
         return response()->json([
             'counts' => [
                 'articles'    => Article::count(),
@@ -44,7 +47,9 @@ class DashboardController extends Controller
                 'programmes'  => Programme::count(),
                 'videos'      => Video::count(),
                 'assets'      => Asset::count(),
+                'assets_filesize' => $assetsFilesize,
                 'vods'        => Vod::count(),
+                'vods_filesize' => $vodsFilesize,
                 'directories' => Directory::count(),
                 'directories_breakdown' => [
                     'departments' => $departmentsCount,
