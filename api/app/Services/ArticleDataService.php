@@ -30,7 +30,7 @@ class ArticleDataService
     {
      
         $paginate = ArticleData::query()->where('article_id', $parentId);
-        $articles = $paginate->with('ancestors')->defaultOrder()->get();
+        $articles = $paginate->with(['ancestors', 'articlePdf', 'vod'])->defaultOrder()->get();
         
         return $articles;
     }
@@ -41,6 +41,8 @@ class ArticleDataService
             'article_id' => $request->input('parent_id'),
             'title' => $request->input('title'),
             'contents' => $request->input('contents'),
+            'vod_id' => $request->input('vod_id'),
+            'video_poster' => $request->input('video_poster'),
             'user_id' => $user->id
         ]);
 
@@ -54,7 +56,7 @@ class ArticleDataService
 
     public static function show($articleData)
     {
-        $data = ArticleData::with(['ancestors'])->where('id',$articleData->id)->first();
+        $data = ArticleData::with(['ancestors', 'vod'])->where('id',$articleData->id)->first();
         return $data;
     }
 

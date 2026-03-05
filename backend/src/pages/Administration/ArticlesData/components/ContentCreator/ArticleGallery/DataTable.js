@@ -1,193 +1,119 @@
-import React, { useState, useEffect } from 'react'
-import { Table,Button,Form } from 'react-bootstrap'
-import { Link, useParams } from 'react-router-dom'
+import React, { useState, useEffect, useRef } from 'react'
+import { Table, Button, Form } from 'react-bootstrap'
 import useStore from '../../../../../store'
 import axios from '../../../../../../libs/axios'
-import PaginatorLink from '../../../../../../libs/PaginatorLink'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { InputFile,appendFormData } from '../../../../../../libs/FormInput'
 
 
-const DataTable = ({article_data_id}) => {
-    const store = useStore() // store management
-   
- 
-    const url = store.url + '/article-galleries/' + article_data_id // set the index url to /api/article-galleries/{parentId}
-    const [isLoading, setIsLoading] = useState(false)
+const DataTable = ({ article_data_id }) => {
+    const store = useStore()
+    const url = store.url + '/article-galleries/' + article_data_id
+    const [uploading, setUploading] = useState(false)
     const [refresh, setRefresh] = useState(false)
-    const [items, setItems] = useState([]) // data placeholder
+    const [items, setItems] = useState([])
+    const fileRef = useRef(null)
 
-    const serverUrl = process.env.REACT_APP_SERVER_URL;
+    const serverUrl = process.env.REACT_APP_SERVER_URL
     const path = `${serverUrl}/storage/article_galleries`
-    
-    // to get items data
-    useEffect( () => 
-        {
-            // modified axios to prepend Bearer Token on header
-            axios( 
-                {
-                    method: 'get', // method is GET
-                    url: store.getValue('url') ? store.getValue('url') : url
-                } 
-            )
-            .then( response => { // response block
-                //console.log(response.data.article_galleries)
+
+    useEffect(() => {
+        axios({ method: 'get', url })
+            .then(response => {
                 setRefresh(false)
                 setItems(response.data.article_galleries)
-                //setItems(response.data.articles) // get the data
-                //store.setValue('refresh', false ) // reset the refresh state to false
             })
-            .catch( error => { // error block
-                console.warn(error) // output to console
-            })
-      },[refresh] ) // useEffect()
+            .catch(error => console.warn(error))
+    }, [refresh])
 
-    // upload
-    useEffect( () => {
-        if(store.getValue('article_gallery') !== null && store.getValue('article_gallery') !== ''){
-            //console.log('upload')
+    const handleFileChange = (e) => {
+        const file = e.target.files[0]
+        if (!file) return
 
-            const formData = new FormData();
-            const dataArray = [
-                { key: 'article_gallery', value: store.getValue('article_gallery') }, // the image file
-                { key: 'article_data_id', value: article_data_id }, // which parent_id that gallery belongs to
-            ];
-            
-            appendFormData(formData, dataArray);
+        setUploading(true)
+        const formData = new FormData()
+        formData.append('article_gallery', file)
+        formData.append('article_data_id', article_data_id)
 
-            // Laravel special
-            formData.append('_method', 'post'); // get|post|put|patch|delete
-
-            // send to Laravel
-            axios({ 
-                method: 'post', 
-                url: `${store.url}/article-galleries`,
-                data: formData
-            })
-            .then( response => { // success 200
-                // console.log('upload for ' . article_data_id)
-                // console.log(response)
-                store.setValue('article_gallery', null )
-                //store.setValue('article_data_id', null )
-                store.setValue('refresh', false )
-                setRefresh(true)
-            })
-            .catch( error => {
-                //console.warn(error)
-                
-                if( error.response?.status == 422 ){ // detect 422 errors by Laravel
+        axios({ method: 'post', url: `${store.url}/article-galleries`, data: formData })
+            .then(() => setRefresh(true))
+            .catch(error => {
+                if (error.response?.status === 422) {
                     console.warn(error.response.data.errors)
-                    store.setValue('errors', error.response.data.errors ) // set the errors to store
                 }
-
             })
-        }
-
-    },[store.getValue('article_gallery')])
-
-    
-
-
-    const handleDeleteClick = (id) => {
-        const formData = new FormData() // data container  
-        
-        // Laravel special
-        formData.append('_method', 'delete'); // get|post|put|patch|delete
-
-         // send to Laravel
-         axios({ 
-                method: 'post', 
-                url: `${store.url}/article-galleries/${id}`,
-                data: formData
-           })
-           .then( response => { // success 200
-                setRefresh(true)
-           })
-           .catch( error => {
-                console.warn(error)
-           })
+            .finally(() => {
+                setUploading(false)
+                if (fileRef.current) fileRef.current.value = ''
+            })
     }
 
+    const handleDeleteClick = (id) => {
+        const formData = new FormData()
+        formData.append('_method', 'delete')
+
+        axios({ method: 'post', url: `${store.url}/article-galleries/${id}`, data: formData })
+            .then(() => setRefresh(true))
+            .catch(error => console.warn(error))
+    }
 
     return (
         <div>
-            
-            <Table>
-                <thead>
+            <Table hover responsive>
+                <thead className='table-light'>
                     <tr>
-                        <th className='text-center' style={{ 'width': '20px'}}><FontAwesomeIcon icon={['fas', 'hashtag']} /></th>
-                    
-                        <th className='text-center' style={{ 'width': '100px'}}><FontAwesomeIcon icon={['fas', 'image']} /></th>
-                        <th className='text-start' style={{ 'width': '100vH'}}>URL</th>
-                        <th className='text-center' style={{ 'width': '100px'}}><FontAwesomeIcon icon={['fas', 'bolt']} /></th>
+                        <th className='text-center' style={{ width: '80px' }}><FontAwesomeIcon icon={['fas', 'image']} /></th>
+                        <th className='text-start'>Filename</th>
+                        <th className='text-center' style={{ width: '80px' }}><FontAwesomeIcon icon={['fas', 'bolt']} /></th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    
-                    {items?.map((item,index) => (
-          
-                        <tr key={index}>
-                            <td><span className="badge bg-primary">{item.id}</span></td>
-                 
-                            <td>
-                             
-                               {/* <img     
-                                    className='img-fluid rounded' 
-                                    src={`${store.server}/storage/article_assets/${item.filename}`} 
-                                    alt="Image" 
-                                /> */}
-
-                                {item.filename && /\.(jpg|gif|png|jpeg)$/.test(item.filename) ? (
+                    {items?.map((item) => (
+                        <tr key={item.id}>
+                            <td className='text-center align-middle'>
+                                {item.filename && /\.(jpg|jpeg|gif|png|webp)$/i.test(item.filename) ? (
                                     <img
-                                        className='img-fluid rounded'
+                                        className='rounded'
                                         src={`${path}/${item.filename}`}
-                                        alt="Image"
+                                        alt={item.filename}
+                                        style={{ width: '50px', height: '50px', objectFit: 'cover' }}
                                     />
                                 ) : (
-                                    // Render something else if the filename extension is not jpg, gif, or png
-                                    <div>Not an image</div>
+                                    <FontAwesomeIcon icon={['fas', 'file']} className='text-secondary' />
                                 )}
-
-       
                             </td>
-                            <td className="align-middle">
-                                <Form.Control 
-                                    value={`/storage/article_assets/${item.filename}`} 
-                                    style={{'backgroundColor':'lightCyan'}}
-                                />
+                            <td className='align-middle'>
+                                <small>{item.filename}</small>
                             </td>
-                            <td className="align-middle text-center" style={{width:"200px"}}>
-                                {/* <Button 
-                                    size='sm' 
-                                    onClick={() => handleCopyClick(`/storage/article_assets/${item.filename}`)}
-                                    variant='outline-primary'>
-                                    <FontAwesomeIcon icon={['fas', 'copy']} />
-                                </Button>
-                                {' '} */}
-                                <Button 
-                                    size='sm' 
+                            <td className='align-middle text-center'>
+                                <Button
+                                    size='sm'
                                     onClick={() => handleDeleteClick(item.id)}
                                     variant='outline-danger'>
                                     <FontAwesomeIcon icon={['fas', 'trash']} />
                                 </Button>
-                                
                             </td>
                         </tr>
                     ))}
-
-
+                    {items?.length === 0 && (
+                        <tr>
+                            <td colSpan='3' className='text-center text-muted py-4'>No images in gallery</td>
+                        </tr>
+                    )}
                 </tbody>
             </Table>
-            <PaginatorLink store={store} items={items} />
             <hr />
-            <InputFile
-                fieldName='article_gallery' 
-                placeholder='Choose image'  
-                icon='fa-solid fa-image'
-                isLoading={isLoading}
-            />
+            <div className='d-flex align-items-center gap-2'>
+                <Form.Control
+                    ref={fileRef}
+                    type='file'
+                    accept='image/*'
+                    onChange={handleFileChange}
+                    disabled={uploading}
+                />
+                {uploading && <FontAwesomeIcon icon={['fas', 'spinner']} spin />}
+            </div>
         </div>
-    );
-};
+    )
+}
 export default DataTable

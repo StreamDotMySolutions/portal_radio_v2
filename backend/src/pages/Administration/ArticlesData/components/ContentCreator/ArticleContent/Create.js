@@ -88,6 +88,7 @@ export default function Create() {
           <Tabs
               defaultActiveKey="wysiwyg"
               className="mb-3"
+              unmountOnExit
             >
 
               <Tab eventKey="wysiwyg" title="EDITOR">

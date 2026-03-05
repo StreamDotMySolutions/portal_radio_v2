@@ -39,27 +39,14 @@ const ShowGallery = ({article_data_id}) => {
         setModalInfo({ show: false, src: '', width: 0, height: 0 });
     };
     
-    // to get items data
-    useEffect( () => 
-        {
-            // modified axios to prepend Bearer Token on header
-            axios( 
-                {
-                    method: 'get', // method is GET
-                    url: store.getValue('url') ? store.getValue('url') : url
-                } 
-            )
-            .then( response => { // response block
-                //console.log(response.data.article_galleries)
+    useEffect(() => {
+        axios({ method: 'get', url })
+            .then(response => {
                 setRefresh(false)
                 setItems(response.data.article_galleries)
-                //setItems(response.data.articles) // get the data
-                store.setValue('refresh', false ) // reset the refresh state to false
             })
-            .catch( error => { // error block
-                console.warn(error) // output to console
-            })
-      },[refresh, store.getValue('refresh')] ) // useEffect()
+            .catch(error => console.warn(error))
+    }, [refresh, store.getValue('refresh')])
 
     return (
       <div>

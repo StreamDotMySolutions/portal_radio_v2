@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react'
-import { Badge, Button, Col, Modal, Tabs, Tab} from 'react-bootstrap'
-import { appendFormData, InputTextarea, TextEditor } from '../../../../../../libs/FormInput'
-import axios from '../../../../../../libs/axios'
+import { useState } from 'react'
+import { Button, Modal } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useStore from '../../../../../store'
 import DataTable from '../ArticleGallery/DataTable'
 
@@ -36,7 +35,7 @@ export default function EditGallery({id}) {
     return (
       <>
         <Button size="sm" variant="outline-primary" onClick={handleShowClick}>
-          Edit GALLERY
+          <FontAwesomeIcon icon={['fas', 'pen-to-square']} />
         </Button>
   
         <Modal size={'xl'} show={show} onHide={handleCloseClick}>

@@ -89,7 +89,7 @@ export default function ShowModal({ id }) {
                 <FontAwesomeIcon icon={['fas', 'eye']} />
             </Button>
 
-            <Modal size='lg' show={show} onHide={handleClose}>
+            <Modal size={asset?.type === 'file' ? 'xl' : 'lg'} show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>
                         {asset?.type === 'folder'
@@ -107,6 +107,39 @@ export default function ShowModal({ id }) {
                         </div>
                     ) : asset.type === 'file' ? (
                         <>
+                            {/* File preview */}
+                            {asset.mimetype?.startsWith('image/') && (
+                                <div className='bg-light rounded p-3 mb-3 text-center'>
+                                    <img src={fileUrl} alt={asset.name} className='rounded' style={{ maxWidth: '100%', maxHeight: '400px', objectFit: 'contain' }} />
+                                </div>
+                            )}
+
+                            {asset.mimetype === 'application/pdf' && (
+                                <div className='mb-3'>
+                                    <iframe src={fileUrl} title={asset.name} width='100%' height='500px' className='rounded border' />
+                                </div>
+                            )}
+
+                            {(asset.mimetype === 'text/html' || asset.name?.endsWith('.html') || asset.name?.endsWith('.htm')) && (
+                                <div className='bg-light p-3 rounded mb-3'>
+                                    <div className='bg-white shadow-sm rounded p-4 mx-auto' style={{ maxWidth: '800px' }}>
+                                        <iframe src={fileUrl} title={asset.name} width='100%' height='400px' style={{ border: 'none' }} />
+                                    </div>
+                                </div>
+                            )}
+
+                            {(asset.mimetype?.startsWith('video/')) && (
+                                <div className='mb-3'>
+                                    <video src={fileUrl} controls className='rounded w-100' style={{ maxHeight: '400px' }} />
+                                </div>
+                            )}
+
+                            {(asset.mimetype?.startsWith('audio/')) && (
+                                <div className='mb-3'>
+                                    <audio src={fileUrl} controls className='w-100' />
+                                </div>
+                            )}
+
                             <Table borderless className='mb-3'>
                                 <tbody>
                                     <tr>

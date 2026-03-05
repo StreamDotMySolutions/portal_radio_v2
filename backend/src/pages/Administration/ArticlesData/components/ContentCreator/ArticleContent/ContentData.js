@@ -20,6 +20,8 @@ import EditGallery from './EditGallery';
 import ShowGallery from './ShowGallery';
 import EditPdf from './EditPdf';
 import ShowPdf from './ShowPdf';
+import EditVideo from './EditVideo';
+import ShowVideo from './ShowVideo';
 
 
 const ContentData = () => {
@@ -78,6 +80,8 @@ const ContentData = () => {
                                     <Badge bg='warning' text='dark'><FontAwesomeIcon icon={['fas', 'file-pdf']} className='me-1' />PDF</Badge>
                                 ) : item.contents === 'gallery' ? (
                                     <Badge bg='secondary'><FontAwesomeIcon icon={['fas', 'images']} className='me-1' />Gallery</Badge>
+                                ) : item.contents === 'video' ? (
+                                    <Badge bg='danger'><FontAwesomeIcon icon={['fas', 'video']} className='me-1' />Video</Badge>
                                 ) : (
                                     <Badge bg='info'><FontAwesomeIcon icon={['fas', 'code']} className='me-1' />HTML</Badge>
                                 )}
@@ -89,6 +93,8 @@ const ContentData = () => {
                                     <EditPdf id={item.id} />
                                 ) : item.contents === 'gallery' ? (
                                     <EditGallery id={item.id} />
+                                ) : item.contents === 'video' ? (
+                                    <EditVideo id={item.id} />
                                 ) : (
                                     <EditVisual id={item.id} />
                                 )}
@@ -101,6 +107,8 @@ const ContentData = () => {
                                 <ShowPdf article_data_id={item.id} />
                             ) : item.contents === 'gallery' ? (
                                 <ShowGallery article_data_id={item.id} />
+                            ) : item.contents === 'video' ? (
+                                <ShowVideo article_data_id={item.id} vod={item.vod} videoPoster={item.video_poster} />
                             ) : (
                                 <div className='preview-content' dangerouslySetInnerHTML={{ __html: item.contents }} />
                             )}

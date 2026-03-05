@@ -10,6 +10,7 @@ import ArticlePosterModal from './ContentCreator/ArticlePoster/ArticlePosterModa
 import CreateContentWithEditor from './ContentCreator/ArticleContent/CreateWithEditor'
 import CreateContentWithGallery from './ContentCreator/ArticleContent/CreateGallery'
 import CreateContentWithPdf from './ContentCreator/ArticleContent/CreatePdf'
+import CreateContentWithVideo from './ContentCreator/ArticleContent/CreateVideo'
 import ArticleSetting from './ContentCreator/ArticleSetting/ArticleSetting';
 import './App.css'
 
@@ -72,6 +73,7 @@ const ContentCreator = () => {
                     <CreateContentWithEditor />
                     <CreateContentWithGallery />
                     <CreateContentWithPdf />
+                    <CreateContentWithVideo />
                 </div>
             </div>
 

@@ -8,6 +8,7 @@ import PaginatorLink from '../../../../libs/PaginatorLink'
 import CreateModal from '../modals/Create'
 import EditModal from '../modals/Edit'
 import DeleteModal from '../modals/Delete'
+import PreviewModal from '../modals/Preview'
 import Ordering from './Ordering'
 
 const DataTable = () => {
@@ -170,14 +171,14 @@ const DataTable = () => {
                                 }
                             </td>
                             <td>
-                                <Link to={`/administration/articles/${item.id}`}>
-                                    {item.type === 'folder' ? (
+                                {item.type === 'folder' ? (
+                                    <Link to={`/administration/articles/${item.id}`}>
                                         <FontAwesomeIcon icon={['fas', 'folder']} className='me-2 text-warning' />
-                                    ) : (
-                                        <FontAwesomeIcon icon={['fas', 'file']} className='me-2 text-secondary' />
-                                    )}
-                                    {item.title}
-                                </Link>
+                                        {item.title}
+                                    </Link>
+                                ) : (
+                                    <PreviewModal id={item.id} title={item.title} asLink />
+                                )}
                             </td>
                             <td className='text-center'>
                                 {item.analytics_views_count > 0 ? (
@@ -208,9 +209,7 @@ const DataTable = () => {
                                     </>
                                 ) : (
                                     <>
-                                        <Button size='sm' variant='outline-secondary' disabled>
-                                            <FontAwesomeIcon icon={['fas', 'file']} />
-                                        </Button>
+                                        <PreviewModal id={item.id} title={item.title} />
                                         {' '}
                                     </>
                                 )}

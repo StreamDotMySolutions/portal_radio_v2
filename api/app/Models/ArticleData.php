@@ -31,4 +31,9 @@ class ArticleData extends Model
     {
         return $this->hasOne(ArticlePdf::class);
     }
+
+    public function vod()
+    {
+        return $this->belongsTo(Vod::class);
+    }
 }
