@@ -44,6 +44,13 @@ class Directory extends Model
     //                 ->orderByDesc('relevancy');
     // }
 
+    public function analyticsViews()
+    {
+        return $this->hasMany(AnalyticsEvent::class, 'reference_id')
+            ->where('event_type', 'pageview')
+            ->where('page_type', 'directory');
+    }
+
     public function scopeFullTextSearch($query, $term)
     {
         $escapedTerm = '+' . addslashes($term) . '*';

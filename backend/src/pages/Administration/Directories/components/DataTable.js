@@ -132,6 +132,7 @@ const DataTable = () => {
                         {sortBy === null && <th style={{ width: '110px' }}>Order</th>}
                         <th style={{ width: '100px' }}>Type</th>
                         <th style={{ width: '200px' }}>Name</th>
+                        <th className='text-center' style={{ width: '80px' }}>Views</th>
                         {search && <th>Path</th>}
                         <th className='text-center' style={{ width: '160px' }}>Action</th>
                     </tr>
@@ -163,6 +164,16 @@ const DataTable = () => {
                                     )
                                 }
                             </td>
+                            <td className='text-center'>
+                                {item.analytics_views_count > 0 ? (
+                                    <Badge bg='light' text='dark'>
+                                        <FontAwesomeIcon icon={['fas', 'eye']} className='me-1 text-muted' />
+                                        {item.analytics_views_count.toLocaleString()}
+                                    </Badge>
+                                ) : (
+                                    <span className='text-muted'>—</span>
+                                )}
+                            </td>
                             {search && (
                                 <td className='text-muted small'>
                                     {buildPath(item)}
@@ -183,7 +194,7 @@ const DataTable = () => {
                     ))}
                     {items?.data?.length === 0 && (
                         <tr>
-                            <td colSpan={sortBy === null ? (search ? 5 : 4) : (search ? 4 : 3)} className='text-center text-muted py-4'>
+                            <td colSpan={sortBy === null ? (search ? 6 : 5) : (search ? 5 : 4)} className='text-center text-muted py-4'>
                                 {search
                                     ? <>No items found matching <strong>"{search}"</strong>.</>
                                     : 'No items found.'

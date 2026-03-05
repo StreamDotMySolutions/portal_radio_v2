@@ -41,9 +41,9 @@ class DirectoryController extends Controller
         $staffsCount      = (clone $query)->where('type', '!=', 'folder')->count();
 
         if ($request->filled('search')) {
-            $directories = $query->with(['ancestors' => fn($q) => $q->defaultOrder(), 'descendants'])->paginate($perPage)->withQueryString();
+            $directories = $query->with(['ancestors' => fn($q) => $q->defaultOrder(), 'descendants'])->withCount('analyticsViews')->paginate($perPage)->withQueryString();
         } else {
-            $directories = $query->with(['descendants'])->paginate($perPage)->withQueryString();
+            $directories = $query->with(['descendants'])->withCount('analyticsViews')->paginate($perPage)->withQueryString();
         }
 
         return response()->json([
