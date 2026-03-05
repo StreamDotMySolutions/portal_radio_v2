@@ -184,7 +184,26 @@ const AdminDashboard = () => {
                     <p className='text-muted small fw-semibold text-uppercase mb-2'>Homepage</p>
                     <Row className='g-3'>
                         <Col md={4}>
-                            <ContentCard title='Banners'    value={v(counts.banners)}    icon='image'  color='success'   to='/administration/banners' />
+                            <Card className='h-100' onClick={() => navigate('/administration/banners')} style={{ cursor: 'pointer' }}>
+                                <Card.Body className='d-flex align-items-center gap-3'>
+                                    <div
+                                        className='text-success bg-success bg-opacity-10 rounded p-3 fs-4'
+                                        style={{ lineHeight: 1 }}
+                                    >
+                                        <FontAwesomeIcon icon={['fas', 'image']} />
+                                    </div>
+                                    <div>
+                                        <div className='text-muted small'>Banners</div>
+                                        <div className='fw-bold'>
+                                            {isLoading ? '…' : (
+                                                <>
+                                                    {counts.banners_breakdown?.active || 0} Active / {counts.banners_breakdown?.inactive || 0} Inactive
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+                                </Card.Body>
+                            </Card>
                         </Col>
                         <Col md={4}>
                             <ContentCard title='Programmes' value={v(counts.programmes)} icon='list'   color='secondary' to='/administration/programmes' />

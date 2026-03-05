@@ -33,6 +33,9 @@ class DashboardController extends Controller
             })
             ->count();
 
+        $bannersActive = Banner::where('active', 1)->count();
+        $bannersInactive = Banner::where('active', 0)->count();
+
         $assetsFilesize = Asset::sum('filesize') ?? 0;
         $vodsFilesize = Vod::sum('filesize') ?? 0;
 
@@ -65,6 +68,10 @@ class DashboardController extends Controller
                 'users'       => User::count(),
                 'users_list'  => $users,
                 'banners'     => Banner::count(),
+                'banners_breakdown' => [
+                    'active'   => $bannersActive,
+                    'inactive' => $bannersInactive,
+                ],
                 'programmes'  => Programme::count(),
                 'videos'      => Video::count(),
                 'assets'      => Asset::count(),
