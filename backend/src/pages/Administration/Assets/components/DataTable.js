@@ -23,7 +23,7 @@ const DataTable = () => {
     const { parentId } = useParams()
 
     const serverUrl = process.env.REACT_APP_SERVER_URL
-    const downloadPath = `${serverUrl}/api/frontend/download/asset`
+    const path = `${serverUrl}/storage/assets`
 
     const [query, setQuery] = useState('')
     const [search, setSearch] = useState('')
@@ -110,7 +110,7 @@ const DataTable = () => {
                                     : <FontAwesomeIcon className='me-2 text-secondary' icon={['fas', 'file']} />
                                 }
                                 {item.type === 'file'
-                                    ? <a target='_blank' rel='noreferrer' href={`${downloadPath}/${item.name}`}>{item.name}</a>
+                                    ? <a target='_blank' rel='noreferrer' href={`${path}/${item.name}`}>{item.name}</a>
                                     : <Link to={`/administration/assets/${item.id}`}>{item.name}</Link>
                                 }
                             </td>

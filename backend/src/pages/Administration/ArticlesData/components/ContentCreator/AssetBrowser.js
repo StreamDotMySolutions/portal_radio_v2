@@ -5,7 +5,7 @@ import axios from '../../../../../libs/axios'
 import useStore from '../../../../store'
 
 const serverUrl = process.env.REACT_APP_SERVER_URL
-const downloadPath = `${serverUrl}/api/frontend/download/asset`
+const storagePath = `${serverUrl}/storage/assets`
 
 const TreeNode = ({ node, selectedId, onSelect, depth = 0 }) => {
     const [open, setOpen] = useState(depth < 1)
@@ -72,7 +72,7 @@ const AssetBrowser = () => {
     }, [selectedFolder])
 
     const handleCopy = (filename, id) => {
-        const url = `${downloadPath}/${filename}`
+        const url = `${storagePath}/${filename}`
         navigator.clipboard.writeText(url).then(() => {
             setCopiedId(id)
             setTimeout(() => setCopiedId(null), 2000)
