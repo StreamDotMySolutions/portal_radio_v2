@@ -35,6 +35,8 @@ class DashboardController extends Controller
         $assetsFilesize = Asset::sum('filesize') ?? 0;
         $vodsFilesize = Vod::sum('filesize') ?? 0;
 
+        $users = User::select('id', 'name', 'email')->get();
+
         return response()->json([
             'counts' => [
                 'articles'    => Article::count(),
@@ -43,6 +45,7 @@ class DashboardController extends Controller
                     'pages'   => $pagesCount,
                 ],
                 'users'       => User::count(),
+                'users_list'  => $users,
                 'banners'     => Banner::count(),
                 'programmes'  => Programme::count(),
                 'videos'      => Video::count(),

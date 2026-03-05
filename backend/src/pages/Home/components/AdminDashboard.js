@@ -198,11 +198,33 @@ const AdminDashboard = () => {
                 {/* System */}
                 <div>
                     <p className='text-muted small fw-semibold text-uppercase mb-2'>System</p>
-                    <Row className='g-3'>
-                        <Col md={3}>
-                            <ContentCard title='Users' value={v(counts.users)} icon='users' color='dark' to='/administration/users' />
-                        </Col>
-                    </Row>
+                    <Card>
+                        <Card.Header className='d-flex align-items-center justify-content-between'>
+                            <h6 className='mb-0'>
+                                <FontAwesomeIcon icon={['fas', 'users']} className='me-2' />
+                                Users
+                            </h6>
+                            <Badge bg='dark'>{counts.users}</Badge>
+                        </Card.Header>
+                        <Card.Body>
+                            {isLoading ? (
+                                <p className='text-muted'>Loading…</p>
+                            ) : counts.users_list && counts.users_list.length > 0 ? (
+                                <div className='d-flex flex-column gap-2'>
+                                    {counts.users_list.map((user) => (
+                                        <div key={user.id} className='d-flex justify-content-between align-items-center p-2 border-bottom'>
+                                            <div>
+                                                <div className='fw-semibold'>{user.name}</div>
+                                                <div className='text-muted small'>{user.email}</div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className='text-muted mb-0'>No users found.</p>
+                            )}
+                        </Card.Body>
+                    </Card>
                 </div>
 
                 {/* Public portal live stats */}
