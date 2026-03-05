@@ -76,11 +76,20 @@ export default function Header() {
               >
                 Pengumuman
               </a>
-              <ul className="dropdown-menu dropdown-menu-dark">
-                <li><Link href="/announcements/tender" className="dropdown-item">Tender / Sebutharga</Link></li>
-                <li><Link href="/announcements/procurement" className="dropdown-item">Perolehan Pembekalan Program</Link></li>
-                <li><Link href="/announcements/careers" className="dropdown-item">Kerjaya</Link></li>
-              </ul>
+              <div className="dropdown-menu dropdown-menu-dark p-3" style={{ minWidth: '500px' }}>
+                <div className="row">
+                  <div className="col-6">
+                    <Link href="/announcements/tender" className="dropdown-item rounded">Tender / Sebutharga</Link>
+                    <Link href="/announcements/procurement" className="dropdown-item rounded">Perolehan Pembekalan Program</Link>
+                    <Link href="/announcements/careers" className="dropdown-item rounded">Kerjaya</Link>
+                  </div>
+                  <div className="col-6">
+                    <Link href="/announcements/tv-swasta" className="dropdown-item rounded">TV Swasta</Link>
+                    <Link href="/announcements/baharu" className="dropdown-item rounded">Baharu Fasa 1</Link>
+                    <Link href="/announcements/tahun" className="dropdown-item rounded">Tahun 2026</Link>
+                  </div>
+                </div>
+              </div>
             </li>
             <li className="nav-item dropdown">
               <a
@@ -92,10 +101,20 @@ export default function Header() {
               >
                 Warga RTM
               </a>
-              <ul className="dropdown-menu dropdown-menu-dark">
-                <li><Link href="/staff/portal" className="dropdown-item">Portal Warga</Link></li>
-                <li><Link href="/staff/directory" className="dropdown-item">Direktori Kakitangan</Link></li>
-              </ul>
+              <div className="dropdown-menu dropdown-menu-dark p-3" style={{ minWidth: '500px' }}>
+                <div className="row">
+                  <div className="col-6">
+                    <Link href="/staff/portal" className="dropdown-item rounded">Portal Warga</Link>
+                    <Link href="/staff/directory" className="dropdown-item rounded">Direktori Kakitangan</Link>
+                    <Link href="/staff/emel" className="dropdown-item rounded">Emel Rasmi</Link>
+                  </div>
+                  <div className="col-6">
+                    <Link href="/staff/latihan" className="dropdown-item rounded">Latihan</Link>
+                    <Link href="/staff/pekeliling" className="dropdown-item rounded">Pekeliling</Link>
+                    <Link href="/staff/borang" className="dropdown-item rounded">Borang</Link>
+                  </div>
+                </div>
+              </div>
             </li>
             <li className="nav-item dropdown">
               <a
@@ -107,10 +126,20 @@ export default function Header() {
               >
                 Swasta / Awam
               </a>
-              <ul className="dropdown-menu dropdown-menu-dark">
-                <li><Link href="/public/services" className="dropdown-item">Perkhidmatan</Link></li>
-                <li><Link href="/public/downloads" className="dropdown-item">Muat Turun</Link></li>
-              </ul>
+              <div className="dropdown-menu dropdown-menu-dark p-3" style={{ minWidth: '500px' }}>
+                <div className="row">
+                  <div className="col-6">
+                    <Link href="/public/services" className="dropdown-item rounded">Perkhidmatan</Link>
+                    <Link href="/public/downloads" className="dropdown-item rounded">Muat Turun</Link>
+                    <Link href="/public/soalan" className="dropdown-item rounded">Soalan Lazim</Link>
+                  </div>
+                  <div className="col-6">
+                    <Link href="/public/aduan" className="dropdown-item rounded">Aduan & Cadangan</Link>
+                    <Link href="/public/piagam" className="dropdown-item rounded">Piagam Pelanggan</Link>
+                    <Link href="/public/hubungi" className="dropdown-item rounded">Hubungi Kami</Link>
+                  </div>
+                </div>
+              </div>
             </li>
             <li className="nav-item">
               <Link href="/feedback" className="nav-link text-uppercase fw-semibold px-3">
