@@ -1,4 +1,5 @@
 import './globals.css'
+import Script from 'next/script'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
@@ -9,12 +10,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body style={{ backgroundColor: '#212529', color: '#f8f9fa' }}>
+    <html lang="en" data-bs-theme="dark">
+      <body>
         <Header />
         <main>{children}</main>
         <Footer />
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <Script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   )
