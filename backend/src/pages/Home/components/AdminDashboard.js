@@ -199,19 +199,19 @@ const AdminDashboard = () => {
                 <div>
                     <p className='text-muted small fw-semibold text-uppercase mb-2'>System</p>
                     <Card>
-                        <Card.Header className='d-flex align-items-center justify-content-between'>
-                            <h6 className='mb-0'>
+                        <Card.Header className='d-flex align-items-center justify-content-between bg-light'>
+                            <h5 className='mb-0'>
                                 <FontAwesomeIcon icon={['fas', 'users']} className='me-2' />
                                 Users
-                            </h6>
-                            <Badge bg='dark'>{counts.users}</Badge>
+                            </h5>
+                            <Badge bg='dark' style={{ fontSize: '1.1rem', padding: '0.5rem 0.75rem' }}>{counts.users}</Badge>
                         </Card.Header>
-                        <Card.Body>
+                        <Card.Body className='p-0'>
                             {isLoading ? (
-                                <p className='text-muted'>Loading…</p>
+                                <div className='p-4 text-center text-muted'>Loading…</div>
                             ) : counts.users_list && counts.users_list.length > 0 ? (
-                                <div className='d-flex flex-column gap-2'>
-                                    {counts.users_list.map((user) => {
+                                <div style={{ maxHeight: '500px', overflowY: 'auto' }}>
+                                    {counts.users_list.map((user, index) => {
                                         const lastLoginDate = user.last_login_at
                                             ? new Date(user.last_login_at).toLocaleString('en-US', {
                                                 year: '2-digit',
@@ -222,19 +222,32 @@ const AdminDashboard = () => {
                                               })
                                             : 'Never'
                                         return (
-                                            <div key={user.id} className='d-flex justify-content-between align-items-center p-2 border-bottom'>
+                                            <div
+                                                key={user.id}
+                                                className='d-flex justify-content-between align-items-center p-4'
+                                                style={{
+                                                    borderBottom: index < counts.users_list.length - 1 ? '1px solid #dee2e6' : 'none',
+                                                    backgroundColor: index % 2 === 0 ? '#fff' : '#f8f9fa'
+                                                }}
+                                            >
                                                 <div className='flex-grow-1'>
-                                                    <div className='fw-semibold'>{user.name}</div>
-                                                    <div className='text-muted small'>{user.email}</div>
-                                                    <div className='text-muted small'>Last login: {lastLoginDate}</div>
+                                                    <div className='fw-bold fs-5'>{user.name}</div>
+                                                    <div className='text-muted mb-2'>{user.email}</div>
+                                                    <div className='text-muted small'>
+                                                        <FontAwesomeIcon icon={['fas', 'clock']} className='me-2' />
+                                                        Last login: <span className='fw-semibold'>{lastLoginDate}</span>
+                                                    </div>
                                                 </div>
-                                                <Badge bg='secondary' className='ms-2'>{user.activities_count} activity{user.activities_count !== 1 ? 'ies' : ''}</Badge>
+                                                <Badge bg='secondary' style={{ fontSize: '0.95rem', padding: '0.5rem 0.75rem', marginLeft: '1rem', whiteSpace: 'nowrap' }}>
+                                                    <FontAwesomeIcon icon={['fas', 'chart-line']} className='me-1' />
+                                                    {user.activities_count} activity{user.activities_count !== 1 ? 'ies' : ''}
+                                                </Badge>
                                             </div>
                                         )
                                     })}
                                 </div>
                             ) : (
-                                <p className='text-muted mb-0'>No users found.</p>
+                                <div className='p-4 text-center text-muted'>No users found.</div>
                             )}
                         </Card.Body>
                     </Card>
