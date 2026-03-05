@@ -1,13 +1,46 @@
 'use client'
 
+import { useEffect } from 'react'
 import Link from 'next/link'
 
 export default function Header() {
+  useEffect(() => {
+    const dropdowns = document.querySelectorAll('.navbar .nav-item.dropdown')
+    const showDropdown = (e) => {
+      const menu = e.currentTarget.querySelector('.dropdown-menu')
+      const toggle = e.currentTarget.querySelector('.dropdown-toggle')
+      if (menu && window.innerWidth >= 992) {
+        menu.classList.add('show')
+        toggle?.classList.add('show')
+        toggle?.setAttribute('aria-expanded', 'true')
+      }
+    }
+    const hideDropdown = (e) => {
+      const menu = e.currentTarget.querySelector('.dropdown-menu')
+      const toggle = e.currentTarget.querySelector('.dropdown-toggle')
+      if (menu) {
+        menu.classList.remove('show')
+        toggle?.classList.remove('show')
+        toggle?.setAttribute('aria-expanded', 'false')
+      }
+    }
+    dropdowns.forEach((el) => {
+      el.addEventListener('mouseenter', showDropdown)
+      el.addEventListener('mouseleave', hideDropdown)
+    })
+    return () => {
+      dropdowns.forEach((el) => {
+        el.removeEventListener('mouseenter', showDropdown)
+        el.removeEventListener('mouseleave', hideDropdown)
+      })
+    }
+  }, [])
+
   return (
     <nav className="navbar navbar-expand-lg navbar-dark sticky-top" style={{ backgroundColor: '#2d2d2d' }}>
       <div className="container">
-        <Link href="/" className="navbar-brand fw-bold">
-          RTM
+        <Link href="/" className="navbar-brand">
+          <img src="/logo-rtm.png" alt="RTM" height={90} />
         </Link>
         <button
           className="navbar-toggler"
@@ -152,6 +185,20 @@ export default function Header() {
               </Link>
             </li>
           </ul>
+        </div>
+        <div className="d-none d-lg-block text-end ms-3">
+          <div className="d-flex justify-content-end gap-2 mb-1">
+            <a href="#" className="text-secondary"><i className="bi bi-facebook"></i></a>
+            <a href="#" className="text-secondary"><i className="bi bi-twitter-x"></i></a>
+            <a href="#" className="text-secondary"><i className="bi bi-instagram"></i></a>
+            <a href="#" className="text-secondary"><i className="bi bi-youtube"></i></a>
+            <a href="#" className="text-secondary"><i className="bi bi-tiktok"></i></a>
+          </div>
+          <div style={{ lineHeight: '1.2' }}>
+            <div className="text-secondary" style={{ fontSize: '0.65rem', letterSpacing: '0.05em' }}>LAMAN WEB RASMI</div>
+            <div className="text-light fw-bold" style={{ fontSize: '0.8rem' }}>JABATAN PENYIARAN</div>
+            <div className="text-light fw-bold" style={{ fontSize: '0.8rem' }}>MALAYSIA</div>
+          </div>
         </div>
       </div>
     </nav>

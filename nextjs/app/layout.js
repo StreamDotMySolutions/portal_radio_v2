@@ -1,7 +1,11 @@
 import './globals.css'
+import GovBanner from '@/components/GovBanner'
 import Header from '@/components/Header'
+import SubNav from '@/components/SubNav'
 import Footer from '@/components/Footer'
 import BootstrapClient from '@/components/BootstrapClient'
+import AccessibilityToggle from '@/components/AccessibilityToggle'
+import { AccessibilityProvider } from '@/context/AccessibilityContext'
 
 export const metadata = {
   title: 'RTM Portal',
@@ -13,9 +17,14 @@ export default function RootLayout({ children }) {
     <html lang="en" data-bs-theme="dark">
       <body>
         <BootstrapClient />
-        <Header />
-        <main>{children}</main>
-        <Footer />
+        <AccessibilityProvider>
+          <GovBanner />
+          <Header />
+          <SubNav />
+          <main>{children}</main>
+          <Footer />
+          <AccessibilityToggle />
+        </AccessibilityProvider>
       </body>
     </html>
   )
