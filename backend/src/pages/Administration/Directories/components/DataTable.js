@@ -21,6 +21,8 @@ const DataTable = () => {
     const [sortDir, setSortDir] = useState('desc')
     const [perPage, setPerPage] = useState(25)
     const [items, setItems] = useState([])
+    const [departmentsCount, setDepartmentsCount] = useState(0)
+    const [staffsCount, setStaffsCount] = useState(0)
 
     // Debounce: commit typed query after 400ms idle
     useEffect(() => {
@@ -48,6 +50,8 @@ const DataTable = () => {
         axios({ method: 'get', url })
             .then(response => {
                 setItems(response.data.directories)
+                setDepartmentsCount(response.data.departments_count ?? 0)
+                setStaffsCount(response.data.staffs_count ?? 0)
                 store.setValue('refresh', false)
             })
             .catch(error => console.warn(error))
@@ -127,7 +131,7 @@ const DataTable = () => {
                     <tr>
                         {sortBy === null && <th style={{ width: '110px' }}>Order</th>}
                         <th style={{ width: '100px' }}>Type</th>
-                        <th>Name</th>
+                        <th style={{ width: '200px' }}>Name</th>
                         {search && <th>Path</th>}
                         <th className='text-center' style={{ width: '160px' }}>Action</th>
                     </tr>
@@ -152,14 +156,10 @@ const DataTable = () => {
                                 {item.type === 'folder'
                                     ? (
                                         <Link to={`/administration/directories/${item.id}`}>
-                                            <FontAwesomeIcon className='me-2 text-warning' icon={['fas', item.descendants?.length > 0 ? 'folder-open' : 'folder']} />
                                             {item.name}
                                         </Link>
                                     ) : (
-                                        <>
-                                            <FontAwesomeIcon className='me-2 text-secondary' icon={['fas', 'user']} />
-                                            {item.name}
-                                        </>
+                                        item.name
                                     )
                                 }
                             </td>
@@ -194,18 +194,30 @@ const DataTable = () => {
                 </tbody>
             </Table>
 
-            <div className='d-flex align-items-center justify-content-end gap-3'>
-                <Form.Select
-                    style={{ width: 'auto' }}
-                    value={perPage}
-                    onChange={e => setPerPage(Number(e.target.value))}
-                >
-                    <option value={10}>10 / page</option>
-                    <option value={25}>25 / page</option>
-                    <option value={50}>50 / page</option>
-                    <option value={100}>100 / page</option>
-                </Form.Select>
-                <PaginatorLink store={store} items={items} />
+            <div className='d-flex align-items-center justify-content-between mt-2'>
+                <div className='d-flex align-items-center gap-3 text-muted small'>
+                    <span>
+                        <Badge bg='warning' text='dark' className='me-1'>Department</Badge>
+                        {departmentsCount}
+                    </span>
+                    <span>
+                        <Badge bg='secondary' className='me-1'>Staff</Badge>
+                        {staffsCount}
+                    </span>
+                </div>
+                <div className='d-flex align-items-center gap-3'>
+                    <Form.Select
+                        style={{ width: 'auto' }}
+                        value={perPage}
+                        onChange={e => setPerPage(Number(e.target.value))}
+                    >
+                        <option value={10}>10 / page</option>
+                        <option value={25}>25 / page</option>
+                        <option value={50}>50 / page</option>
+                        <option value={100}>100 / page</option>
+                    </Form.Select>
+                    <PaginatorLink store={store} items={items} />
+                </div>
             </div>
         </div>
     )

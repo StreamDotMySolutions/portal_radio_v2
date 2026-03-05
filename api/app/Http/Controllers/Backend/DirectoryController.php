@@ -37,13 +37,20 @@ class DirectoryController extends Controller
             $perPage = 25;
         }
 
+        $departmentsCount = (clone $query)->where('type', 'folder')->count();
+        $staffsCount      = (clone $query)->where('type', '!=', 'folder')->count();
+
         if ($request->filled('search')) {
             $directories = $query->with(['ancestors' => fn($q) => $q->defaultOrder(), 'descendants'])->paginate($perPage)->withQueryString();
         } else {
             $directories = $query->with(['descendants'])->paginate($perPage)->withQueryString();
         }
 
-        return response()->json(['directories' => $directories]);
+        return response()->json([
+            'directories'       => $directories,
+            'departments_count' => $departmentsCount,
+            'staffs_count'      => $staffsCount,
+        ]);
     }
 
     public function show(Directory $directory)
