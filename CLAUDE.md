@@ -1,17 +1,56 @@
-# CLAUDE.md — RTM Portal Boilerplate
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+---
 
 ## Project Overview
 
 Full-stack CMS and public portal for RTM (Radio Televisyen Malaysia).
-Three applications communicate via a central Laravel REST API.
+Two React applications communicate via a central Laravel REST API.
 
 ```
 MySQL (portalrtm)
        ↓
 api/          Laravel 10 — REST API server (port 8000)
        ↓
-backend/      React 18   — Admin panel  (served at /backend)
-rtm.gov.my/   React 18   — Public site  (served at /)
+backend/      React 18   — Admin panel  (port 3000, served at /backend)
+rtm.gov.my/   React 18   — Public site  (port 3000, served at /)
+```
+
+**Note:** The `frontend/` directory is legacy/unused; all public-facing content uses `rtm.gov.my/`.
+
+---
+
+## Environment Configuration
+
+Each application needs its own `.env` file. Use `.env.example` as a template.
+
+### api/.env
+```env
+APP_URL=http://localhost
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=portalrtm
+DB_USERNAME=root
+DB_PASSWORD=
+
+FRONTEND_URL=http://localhost:3000
+```
+
+### backend/.env
+```env
+REACT_APP_BACKEND_URL=http://localhost:8000/api
+REACT_APP_FRONTEND_URL=http://localhost:3000/backend
+REACT_APP_SERVER_URL=http://localhost:8000
+REACT_APP_MODE=production
+```
+
+### rtm.gov.my/.env
+```env
+REACT_APP_API_URL=http://localhost:8000/api/frontend
+REACT_APP_SERVER_URL=http://localhost:8000
 ```
 
 ---
@@ -62,13 +101,6 @@ rtm.gov.my/   React 18   — Public site  (served at /)
 - `spatie/laravel-backup` ^8.5 — Automated backups
 - `laravel/sanctum` ^3.2 — API token auth
 
-**ENV vars (api/.env):**
-```
-APP_URL=http://localhost
-DB_DATABASE=portalrtm
-DB_USERNAME=root
-FRONTEND_URL=http://localhost:3000
-```
 
 ---
 
@@ -76,142 +108,137 @@ FRONTEND_URL=http://localhost:3000
 
 **Purpose:** Dashboard for admins/content managers to create and manage all content.
 
-**Run:** `npm start` (port 3000, served at `/backend`)
+**Auth:** Bearer token in `localStorage`, injected by Axios interceptor. 401/403 auto-redirects to `/backend/sign-in`.
 
-**Build:** `react-scripts build` (homepage `/backend`)
+**Key dependencies:** react-router-dom (ProtectedRoute), zustand, bootstrap, react-quill, video.js, FontAwesome icons
 
-**API base:** `http://localhost:8000/api` (env: `REACT_APP_BACKEND_URL`)
-
-**Auth:** Bearer token stored in `localStorage`, injected by Axios interceptor.
-401/403 → auto-redirect to `/backend/sign-in`.
-
-**Key dependencies:**
-- `react-router-dom` ^6.12.1 — All routes wrapped in `<ProtectedRoute>`
-- `zustand` ^4.3.8 — Global state management
-- `bootstrap` ^5.3.0 — UI framework
-- `quill` / `react-quill` — Rich text editing
-- `video.js` ^8.21.0 + `@videojs/http-streaming` — HLS video playback
-- `@fortawesome/*` — Icons
-
-**Route structure:**
-```
-/sign-in, /sign-out, /unauthorized      — Auth pages
-/home                                    — Dashboard
-/account                                 — Account settings
-/administration/roles                    — Role management
-/administration/users                    — User management
-/administration/articles/:parentId       — Article tree management
-/administration/articles-data/:parentId  — Sub-article management
-/administration/banners                  — Homepage banners
-/administration/programmes               — Programme listings
-/administration/videos                   — Video content
-/administration/directories/:parentId    — Staff directory
-/administration/assets/:parentId         — File/asset management
-/administration/vods/:parentId           — Video-on-Demand
-```
-
-**Directory layout:**
-```
-src/
-├── components/   — Reusable UI (Pagination, DisplayMessage, BreadCrumb, forms)
-├── layouts/      — Layout wrappers (AdminLayout, UserLayout)
-├── libs/         — axios.js, ProtectedRoute.js, FormInput.js, Logout.js
-├── pages/        — Page components grouped by feature
-└── index.js      — Entry point with router
-```
-
-**ENV vars (backend/.env):**
-```
-REACT_APP_BACKEND_URL=http://localhost:8000/api
-REACT_APP_FRONTEND_URL=http://localhost:3000/backend
-REACT_APP_SERVER_URL=http://localhost:8000
-REACT_APP_MODE=production
-```
+**Protected routes:** `/backend/administration/*` for all CRUD operations (articles, users, roles, banners, programmes, videos, assets, directories, VODs)
 
 ---
 
 ### 3. `rtm.gov.my/` — React 18 Public Site
 
-**Purpose:** Public-facing portal for end users to browse content, watch videos, and search directory.
+**Purpose:** Public-facing portal. No authentication required.
 
-**Run:** `npm start` (port 3000, served at `/`)
+**Key dependencies:** react-router-dom, bootstrap, hls.js, react-helmet-async, react-slick, react-youtube, zustand
 
-**Build:** `GENERATE_SOURCEMAP=false react-scripts build`
+**Routes:** Home (`/`), Content pages (`/contents/:id`), Listings (`/listings/:id`), Directory search (`/directories/search/:query`), Sitemap (`/sitemap`)
 
-**API base:** `http://localhost:8000/api/frontend` (env: `REACT_APP_API_URL`)
 
-**Server URL:** `http://localhost:8000` (env: `REACT_APP_SERVER_URL`) — for serving stored assets
 
-**No authentication required** — all endpoints are public.
+## Directory Structure
 
-**Key dependencies:**
-- `react-router-dom` ^6.12.1
-- `bootstrap` ^5.3.3 + `react-bootstrap`
-- `hls.js` ^1.5.20 — HLS video streaming
-- `react-helmet-async` ^2.0.5 — SEO meta tags
-- `react-slick` + `slick-carousel` — Carousels/banners
-- `react-youtube` ^10.1.0 — YouTube embed
-- `react-icons` ^5.5.0 — Icon library
-- `react-placeholder-loading` — Skeleton loaders
-- `zustand` ^4.3.8
-
-**Route structure:**
+### API (api/)
 ```
-/                           — Home (banners, programmes, videos)
-/contents/:id               — Single article/content page
-/listings/:id               — Article listing/collection page
-/directories                — Staff directory root
-/directories/:id            — Directory category
-/directories/:id/show       — Individual staff profile
-/directories/search/:query  — Directory search results
-/sitemap                    — Hierarchical site map
-```
-
-**Layouts:** `src/layouts/`
-```
-HomeLayout/       — Home page with BannerCarousel, BannerProgramme, HomeVideo
-ContentLayout/    — Single article with PageContent, PageGallery
-ListingLayout/    — Article listing with SingleArticle cards
-DirectoryLayout/  — Directory tree, SearchResultLayout, ShowStaff
-SitemapLayout/    — Recursive hierarchical tree display
-components/       — Menu1, Menu2, Menu3, Footer, Footer2, HlsPlayer, MenuGenerator
+api/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── Backend/     — Admin-facing endpoints
+│   │   │   └── Frontend/    — Public-facing endpoints
+│   │   └── Requests/        — Form request validation
+│   ├── Models/              — Eloquent models (Article, User, Banner, etc.)
+│   ├── Services/            — Business logic (ArticleService, UserService, etc.)
+│   └── Traits/              — Shared functionality
+├── database/
+│   ├── migrations/          — Schema changes
+│   └── seeders/             — Database seeders
+├── routes/
+│   ├── api.php              — Admin endpoints (/api, requires auth + role:admin)
+│   └── frontend.php         — Public endpoints (/api/frontend, no auth)
+├── tests/
+│   ├── Feature/             — Integration tests (HTTP requests)
+│   └── Unit/                — Unit tests
+└── storage/                 — Uploaded files and logs
 ```
 
-**API endpoints consumed:**
+### Backend Admin (backend/)
 ```
-/frontend/home-menu, /home-menu-1, /home-menu-2   — Navigation
-/frontend/sitemap                                  — Sitemap tree
-/frontend/home-banners                             — Carousel banners
-/frontend/home-programmes                          — Programme listings
-/frontend/home-videos                              — Video listings
-/frontend/home-footer                              — Footer links
-/frontend/articles/:id                             — Single article
-/frontend/listings/:id                             — Article collection
-/frontend/article-galleries/:articleDataId         — Image gallery
-/frontend/directories                              — Directory root
-/frontend/directories/:id                          — Directory by ID
-/frontend/directories/:id/show                     — Staff member
-/frontend/directories/search  (POST)               — Search
+backend/src/
+├── components/              — Reusable UI (buttons, forms, tables, modals)
+├── layouts/                 — Page layout wrappers (AdminLayout, ProtectedRoute)
+├── pages/                   — Page components organized by feature
+│   ├── Administration/
+│   ├── Account/
+│   └── ...
+├── libs/                    — Utilities (axios.js, constants)
+└── index.js                 — Router and app entry point
 ```
 
-**ENV vars (rtm.gov.my/.env):**
+### RTM Public Site (rtm.gov.my/)
 ```
-REACT_APP_API_URL=http://localhost:8000/api/frontend
-REACT_APP_SERVER_URL=http://localhost:8000
+rtm.gov.my/src/
+├── components/              — Reusable UI (Menu, Footer, HlsPlayer, carousels)
+├── layouts/                 — Page layout wrappers
+│   ├── HomeLayout/
+│   ├── ContentLayout/
+│   ├── ListingLayout/
+│   ├── DirectoryLayout/
+│   └── SitemapLayout/
+├── pages/                   — Page components (Home, Content, Listings, Directory)
+├── libs/                    — Utilities and API client
+└── index.js                 — Router and app entry point
 ```
 
 ---
 
-## Content Architecture
+## Testing
 
-All content is built on the **Article** model using nested sets (hierarchical tree):
+### API (Pest + PHPUnit)
+- Test files live in `tests/Feature/` and `tests/Unit/`
+- Uses **Pest** testing framework (newer, more expressive than PHPUnit)
+- Check `api/Pest.php` for global test helpers and setup
 
-- Menus are driven by the article tree structure
-- `ArticleSetting.show_children` controls whether children appear in menus
-- `ArticleSetting.listing_type` determines how content renders (listing vs single page)
-- `ArticleSetting.active` toggles visibility
-- `ArticleData` holds ordered sub-content within an article
-- Assets, Vods, and Directories are also nested set trees (independently)
+Run tests:
+```bash
+cd api
+./vendor/bin/pest                    # All tests
+./vendor/bin/pest tests/Feature      # Only feature tests
+./vendor/bin/pest --filter=LoginTest # Specific test
+```
+
+### React Apps (Jest)
+- Tests run via `npm test` in each app
+- Jest is configured through `react-scripts` (no need to configure manually)
+- Can write unit tests for components, utils, hooks, etc.
+
+---
+
+## Database & Models
+
+### Hierarchical Content (Nested Sets)
+Several models use **nested sets** for hierarchical tree structures via `kalnoy/nestedset`:
+- **Article** — Main content hierarchy (pages, sections, categories)
+- **Asset** — File/document management
+- **Vod** — Video-on-Demand categories
+- **Directory** — Staff/organizational hierarchy
+
+Key methods on nested set models:
+- `->children()` — Get direct child nodes
+- `->descendants()` — Get all descendants
+- `->ancestor()` — Get parent
+- `->ancestors()` — Get all parents up to root
+- `->createChild([ 'name' => 'Child' ])` — Add child node
+- Ordering via `getOrderedBy()` and `setOrderBy()` methods
+
+### Core Models
+- **Article** + **ArticleData** — Main content with sub-items
+- **ArticleContent** — Rich text body for articles
+- **ArticleSetting** — Per-article flags (`active`, `show_children`, `listing_type`)
+- **ArticlePoster** — Featured image
+- **ArticleAsset** — Media attachments
+- **ArticleGallery** — Image galleries
+- **Banner**, **Programme**, **Video** — Homepage content
+- **User**, **Role** — Auth (uses Spatie Permission for RBAC)
+
+### Date Formats
+All models cast dates to `datetime:d/m/Y H:i` format via `$casts`:
+```php
+protected $casts = [
+    'created_at' => 'datetime:d/m/Y H:i',
+    'updated_at' => 'datetime:d/m/Y H:i',
+];
+```
 
 ---
 
@@ -232,21 +259,87 @@ All content is built on the **Article** model using nested sets (hierarchical tr
 
 ---
 
+## Adding a New Feature (Typical Workflow)
+
+### Example: Add a new "Press Release" management section to admin
+
+**1. API Setup (Laravel)**
+- Create model: `php artisan make:model PressRelease -m` (or add to migration manually)
+- Create controller: `php artisan make:controller Backend/PressReleaseController --resource`
+- Register routes in `routes/api.php` with `['auth:sanctum', 'role:admin']` middleware
+- Add service logic to `app/Services/PressReleaseService.php` (business logic stays out of controller)
+- Test with `./vendor/bin/pest tests/Feature/PressReleaseTest.php`
+
+**2. Backend UI Setup (React)**
+- Create page component: `backend/src/pages/Administration/PressReleases/`
+- Create form component: `backend/src/pages/Administration/PressReleases/PressReleaseForm.jsx`
+- Add route in `backend/src/index.js` wrapped in `<ProtectedRoute>`
+- Use Axios from `src/libs/axios.js` to call API endpoints
+- Add to navigation menu (if needed)
+
+**3. Frontend (Public Site)**
+- If press releases should be public, add endpoint to `routes/frontend.php`
+- Create page/layout in `rtm.gov.my/src/pages/` to display content
+- Add route to `rtm.gov.my/src/index.js`
+- Fetch from `REACT_APP_API_URL/frontend/press-releases`
+
+**4. Testing**
+- API: Test the controller/service with `./vendor/bin/pest`
+- React: Test UI with `npm test` in backend/ or rtm.gov.my/
+
+---
+
 ## Common Commands
 
-### API
+### API (Laravel)
 ```bash
 cd api
-php artisan serve          # Start dev server on :8000
-php artisan migrate        # Run migrations
-php artisan migrate:fresh --seed  # Reset and seed DB
-php artisan tinker         # REPL
-php artisan route:list     # List all routes
+
+# Development
+php artisan serve                    # Start dev server on :8000
+
+# Database
+php artisan migrate                  # Run pending migrations
+php artisan migrate:fresh --seed     # Reset DB and run seeders
+php artisan db:seed                  # Run seeders only
+php artisan tinker                   # Interactive REPL
+
+# Testing & Quality
+./vendor/bin/pest                    # Run all tests (Pest)
+./vendor/bin/pest --filter=TestName  # Run specific test
+php artisan test                     # Alternative: run tests with artisan
+php artisan pint                     # Fix code style with Pint (Laravel's code formatter)
+
+# Utilities
+php artisan route:list               # List all routes
+php artisan storage:link             # Create storage symlink for public files
 ```
 
-### Backend / RTM.GOV.MY
+### Backend Admin Panel (React 18)
 ```bash
-cd backend        # or cd rtm.gov.my
-npm start         # Dev server
-npm run build     # Production build
+cd backend
+
+# Development
+npm install      # Install dependencies
+npm start        # Dev server on :3000 (served at /backend)
+
+# Building & Testing
+npm run build    # Production build (outputs to build/)
+npm test         # Run Jest tests
+npm test -- --watch  # Run tests in watch mode
+npm test -- --coverage  # Run tests with coverage report
+```
+
+### RTM Public Website (React 18)
+```bash
+cd rtm.gov.my
+
+# Development
+npm install      # Install dependencies
+npm start        # Dev server on :3000 (served at /)
+
+# Building & Testing
+npm run build    # Production build without source maps (GENERATE_SOURCEMAP=false)
+npm test         # Run Jest tests
+npm test -- --watch  # Run tests in watch mode
 ```
