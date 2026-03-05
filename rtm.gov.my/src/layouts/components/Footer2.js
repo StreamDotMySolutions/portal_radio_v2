@@ -1,5 +1,5 @@
-import Footer from './Footer';
+import MobileFooter from './MobileFooter';
 
-const Footer2 = () => <Footer variant="mobile" />;
+const Footer2 = () => <MobileFooter />;
 
 export default Footer2;

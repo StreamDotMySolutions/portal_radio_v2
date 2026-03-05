@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import LoadMenu from './LoadMenu1';
 import { Link, NavLink } from 'react-router-dom';
-import SocialLinks from './SocialLinks';
 import useStore from '../../pages/store';
+import SiteSearch from './SiteSearch';
 
 const Menu1 = () => {
     const url = process.env.REACT_APP_API_URL;
@@ -47,6 +47,7 @@ const Menu1 = () => {
     };
     
     return (
+        <>
         <nav className="navbar navbar-expand-lg navbar-dark" style={{ backgroundColor: "#171717" }} id="navbardiatas">
             <div className="container-fluid d-flex align-items-center justify-content-between">
                 <div className="d-flex align-items-center">
@@ -77,11 +78,20 @@ const Menu1 = () => {
                     </ul>
                 </div>
 
-                <div className="d-none d-lg-flex align-items-center" style={{ gap: '10px' }}>
-                    <SocialLinks />
+                <div className="d-none d-lg-flex align-items-center">
+                    <button
+                        className="btn btn-link text-light p-0"
+                        onClick={toggleSearch}
+                        aria-label="Search"
+                        style={{ fontSize: '1.5rem' }}
+                    >
+                        <i className={`bi ${searchOpen ? 'bi-x-lg' : 'bi-search'}`}></i>
+                    </button>
                 </div>
             </div>
         </nav>
+        <SiteSearch />
+        </>
     );
 };
 

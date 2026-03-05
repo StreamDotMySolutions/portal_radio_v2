@@ -4,8 +4,6 @@ import Footer from '../components/Footer';
 import PageContent from './components/PageContent';
 import Menu3 from '../components/Menu3';
 import Footer2 from '../components/Footer2';
-import SiteSearch from '../components/SiteSearch';
-
 const ListingLayout = () => {
 
     return (
@@ -18,8 +16,6 @@ const ListingLayout = () => {
             <div className="d-md-none" id="menu-mobile">
                 <Menu3 />
             </div>
-
-            <SiteSearch />
 
             <PageContent />
 

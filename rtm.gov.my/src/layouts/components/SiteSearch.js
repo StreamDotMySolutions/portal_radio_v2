@@ -59,17 +59,17 @@ const SiteSearch = () => {
     return (
         <div
             style={{
-                maxHeight: searchOpen ? '500px' : '0',
+                maxHeight: searchOpen ? '600px' : '0',
                 overflow: 'hidden',
                 transition: 'max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
-                backgroundColor: '#f8f9fa',
-                borderBottom: searchOpen ? '1px solid #dee2e6' : 'none',
+                backgroundColor: '#1a2744',
+                borderBottom: searchOpen ? '1px solid rgba(255,255,255,0.1)' : 'none',
             }}
         >
             <div className="container py-3">
                 <div className="input-group">
-                    <span className="input-group-text bg-white">
-                        <i className="bi bi-search text-muted" />
+                    <span className="input-group-text" style={{ backgroundColor: '#0f1b33', border: '1px solid rgba(255,255,255,0.15)' }}>
+                        <i className="bi bi-search" style={{ color: '#7b9cc7' }} />
                     </span>
                     <input
                         ref={inputRef}
@@ -78,9 +78,18 @@ const SiteSearch = () => {
                         placeholder="Cari tajuk atau kandungan..."
                         value={query}
                         onChange={e => setQuery(e.target.value)}
+                        style={{
+                            backgroundColor: '#0f1b33',
+                            border: '1px solid rgba(255,255,255,0.15)',
+                            color: '#e8edf3',
+                        }}
                     />
                     {query && (
-                        <button className="btn btn-outline-secondary" onClick={() => { setQuery(''); setResults([]); }}>
+                        <button
+                            className="btn d-flex align-items-center"
+                            style={{ backgroundColor: '#0f1b33', border: '1px solid rgba(255,255,255,0.15)', color: '#7b9cc7' }}
+                            onClick={() => { setQuery(''); setResults([]); }}
+                        >
                             <i className="bi bi-x-lg" />
                         </button>
                     )}
@@ -89,28 +98,36 @@ const SiteSearch = () => {
                 {query.trim().length >= 2 && (
                     <div className="mt-2">
                         {searching && (
-                            <p className="text-muted small mb-0">Mencari...</p>
+                            <p className="small mb-0" style={{ color: '#7b9cc7' }}>Mencari...</p>
                         )}
                         {!searching && results.length === 0 && (
-                            <p className="text-muted small mb-0">Tiada hasil ditemui untuk "<strong>{query}</strong>".</p>
+                            <p className="small mb-0" style={{ color: '#7b9cc7' }}>
+                                Tiada hasil ditemui untuk "<strong className="text-light">{query}</strong>".
+                            </p>
                         )}
                         {!searching && results.length > 0 && (
                             <>
-                                <p className="text-muted small mb-1">{results.length} hasil ditemui</p>
-                                <ul className="list-group list-group-flush border rounded">
-                                    {results.map(r => (
-                                        <li key={r.id} className="list-group-item">
-                                            <i className="bi bi-file-earmark me-2 text-muted" />
-                                            <NavLink
-                                                to={resolveLink(r)}
-                                                className="text-decoration-none text-dark"
-                                                onClick={closeSearch}
-                                            >
-                                                {r.title}
-                                            </NavLink>
-                                        </li>
+                                <p className="small mb-2" style={{ color: '#7b9cc7' }}>{results.length} hasil ditemui</p>
+                                <div style={{ maxHeight: '350px', overflowY: 'auto', borderRadius: '6px', backgroundColor: '#0f1b33' }}>
+                                    {results.map((r, idx) => (
+                                        <NavLink
+                                            key={r.id}
+                                            to={resolveLink(r)}
+                                            className="d-flex align-items-center text-decoration-none px-3 py-2"
+                                            style={{
+                                                color: '#c9d6e5',
+                                                borderBottom: idx < results.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
+                                                transition: 'background-color 0.15s',
+                                            }}
+                                            onClick={closeSearch}
+                                            onMouseEnter={e => e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.07)'}
+                                            onMouseLeave={e => e.currentTarget.style.backgroundColor = 'transparent'}
+                                        >
+                                            <i className="bi bi-file-earmark me-2" style={{ color: '#4a6fa5' }} />
+                                            {r.title}
+                                        </NavLink>
                                     ))}
-                                </ul>
+                                </div>
                             </>
                         )}
                     </div>

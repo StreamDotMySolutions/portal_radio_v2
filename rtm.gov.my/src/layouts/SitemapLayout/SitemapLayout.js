@@ -7,8 +7,6 @@ import Menu3 from '../components/Menu3';
 import Footer from '../components/Footer';
 import Footer2 from '../components/Footer2';
 import useFetch from '../../libs/useFetch';
-import SiteSearch from '../components/SiteSearch';
-
 const url = process.env.REACT_APP_API_URL;
 
 const STYLES = `
@@ -132,8 +130,6 @@ const SitemapLayout = () => {
             <div className="d-md-none" id="menu-mobile">
                 <Menu3 />
             </div>
-
-            <SiteSearch />
 
             <div className="container py-5">
                 <h1 className="mb-4">Peta Laman</h1>
