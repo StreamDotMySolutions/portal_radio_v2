@@ -20,11 +20,10 @@ const DataTable = () => {
     const path = `${serverUrl}/storage/article_assets`
 
     useEffect(() => {
-        axios({ method: 'get', url: store.getValue('url') || url })
+        axios({ method: 'get', url })
             .then(response => {
                 setRefresh(false)
                 setItems(response.data.article_assets)
-                store.setValue('refresh', false)
             })
             .catch(error => console.warn(error))
     }, [refresh])
