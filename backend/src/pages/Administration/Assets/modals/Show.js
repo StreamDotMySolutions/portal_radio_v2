@@ -6,6 +6,7 @@ import axios from '../../../../libs/axios'
 
 const serverUrl = process.env.REACT_APP_SERVER_URL
 const storagePath = `${serverUrl}/storage/assets`
+const downloadPath = `${serverUrl}/api/frontend/download/asset`
 
 const formatBytes = (bytes) => {
     if (!bytes) return '-'
@@ -34,7 +35,7 @@ const TreeNode = ({ node, depth = 0 }) => (
                 <>
                     <FontAwesomeIcon icon={['fas', 'file']} className='text-secondary me-2' />
                     <a
-                        href={`${storagePath}/${node.name}`}
+                        href={`${downloadPath}/${node.name}`}
                         target='_blank'
                         rel='noreferrer'
                         className='me-2 text-truncate'
@@ -72,7 +73,7 @@ export default function ShowModal({ id }) {
 
     const handleClose = () => setShow(false)
 
-    const fileUrl = asset ? `${storagePath}/${asset.name}` : ''
+    const fileUrl = asset ? `${downloadPath}/${asset.name}` : ''
 
     const handleCopy = () => {
         navigator.clipboard.writeText(fileUrl).then(() => {
