@@ -37,12 +37,34 @@ export default function Header() {
               >
                 Mengenai Kami
               </a>
-              <ul className="dropdown-menu dropdown-menu-dark">
-                <li><Link href="/about" className="dropdown-item">Latar Belakang</Link></li>
-                <li><Link href="/about/vision" className="dropdown-item">Visi & Misi</Link></li>
-                <li><Link href="/about/organisation" className="dropdown-item">Carta Organisasi</Link></li>
-                <li><Link href="/about/management" className="dropdown-item">Pengurusan Tertinggi</Link></li>
-              </ul>
+              <div className="dropdown-menu dropdown-menu-dark p-3" style={{ minWidth: '500px' }}>
+                <div className="row">
+                  <div className="col-6">
+                    <Link href="/about" className="dropdown-item rounded">Latar Belakang</Link>
+                    <Link href="/about/vision" className="dropdown-item rounded">Visi & Misi</Link>
+                    <Link href="/about/organisation" className="dropdown-item rounded">Carta Organisasi</Link>
+                    <Link href="/about/management" className="dropdown-item rounded">Pengurusan Tertinggi</Link>
+                    <Link href="/about/history" className="dropdown-item rounded">Sejarah RTM</Link>
+                    <Link href="/about/piagam" className="dropdown-item rounded">Piagam Pelanggan</Link>
+                    <Link href="/about/dasar" className="dropdown-item rounded">Dasar Penyiaran</Link>
+                    <Link href="/about/akta" className="dropdown-item rounded">Akta & Perundangan</Link>
+                    <Link href="/about/anugerah" className="dropdown-item rounded">Anugerah & Pencapaian</Link>
+                    <Link href="/about/galeri" className="dropdown-item rounded">Galeri</Link>
+                  </div>
+                  <div className="col-6">
+                    <Link href="/about/logo" className="dropdown-item rounded">Logo & Identiti</Link>
+                    <Link href="/about/rangkaian" className="dropdown-item rounded">Rangkaian RTM</Link>
+                    <Link href="/about/tv1" className="dropdown-item rounded">TV1</Link>
+                    <Link href="/about/tv2" className="dropdown-item rounded">TV2</Link>
+                    <Link href="/about/tvokidz" className="dropdown-item rounded">TV Okey</Link>
+                    <Link href="/about/sukan" className="dropdown-item rounded">Sukan RTM</Link>
+                    <Link href="/about/nasional" className="dropdown-item rounded">Nasional FM</Link>
+                    <Link href="/about/traxx" className="dropdown-item rounded">TraXX FM</Link>
+                    <Link href="/about/minnal" className="dropdown-item rounded">Minnal FM</Link>
+                    <Link href="/about/aifm" className="dropdown-item rounded">Ai FM</Link>
+                  </div>
+                </div>
+              </div>
             </li>
             <li className="nav-item dropdown">
               <a
