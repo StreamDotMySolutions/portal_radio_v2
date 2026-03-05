@@ -5,6 +5,7 @@ import useStore from '../../../store'
 
 const HtmlForm = ({ isLoading, mode = 'create' }) => {
     const store = useStore()
+    const data = store.data // Subscribe to store.data changes
     const options = [
         { label: 'Folder', value: 'folder' },
         { label: 'File', value: 'file' },

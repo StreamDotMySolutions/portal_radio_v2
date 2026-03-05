@@ -12,6 +12,7 @@ const formatBytes = (bytes) => {
 
 const HtmlForm = ({ isLoading, mode = 'create' }) => {
     const store = useStore()
+    const data = store.data // Subscribe to store.data changes
     const options = [
         { label: 'File', value: 'file' },
         { label: 'Folder', value: 'folder' },
