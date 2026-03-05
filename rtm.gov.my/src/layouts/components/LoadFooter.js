@@ -7,7 +7,7 @@ function resolveHref(article) {
         const isInternal = setting.redirect_url.startsWith('/')
         return { href: setting.redirect_url, external: !isInternal }
     }
-    if (setting?.listing_type === 'single_article') return { href: `/contents/${article.id}`, external: false }
+    if (setting?.listing_type === 'single_article') return { href: `/listings/${article.id}`, external: false }
     return { href: `/listings/${article.id}`, external: false }
 }
 

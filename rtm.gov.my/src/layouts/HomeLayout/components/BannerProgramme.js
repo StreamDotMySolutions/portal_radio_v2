@@ -17,10 +17,10 @@ const BannerProgramme = ({ variant = 'desktop' }) => {
     const programmeImage = (item, index) => (
         <Link className="nav-link" to={item.redirect_url} key={index}>
             <img
-                className="rounded-3"
                 className="img-fluid"
                 src={`${serverUrl}/storage/programmes/${item.filename}`}
                 alt={item.title}
+                style={{ borderRadius: '4px' }}
             />
         </Link>
     );
