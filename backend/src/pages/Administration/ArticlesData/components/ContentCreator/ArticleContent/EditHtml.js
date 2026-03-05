@@ -125,7 +125,7 @@ export default function EditHtml({id}) {
                     icon={'fa fa-code'}
                   />
               </Tab> */}
-              <Tab eventKey="assets" title="ASSETS">
+              <Tab eventKey="assets" title="IMAGE">
                 <DataTable />
               </Tab>
 

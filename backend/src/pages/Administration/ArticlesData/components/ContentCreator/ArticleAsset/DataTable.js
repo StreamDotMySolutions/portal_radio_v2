@@ -1,86 +1,56 @@
-import React, { useState, useEffect } from 'react'
-import { Table,Button,Form } from 'react-bootstrap'
-import { Link, useParams } from 'react-router-dom'
+import React, { useState, useEffect, useRef } from 'react'
+import { Table, Button, Form } from 'react-bootstrap'
+import { useParams } from 'react-router-dom'
 import useStore from '../../../../../store'
 import axios from '../../../../../../libs/axios'
 import PaginatorLink from '../../../../../../libs/PaginatorLink'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { InputFile,appendFormData } from '../../../../../../libs/FormInput'
 
 
 const DataTable = () => {
-    const store = useStore() // store management
-   
-    const { parentId } = useParams() // parentid
-    const url = store.url + '/article-assets/' + parentId // set the index url to /api/article-assets/{parentId}
-    const [isLoading, setIsLoading] = useState(false)
+    const store = useStore()
+    const { parentId } = useParams()
+    const url = store.url + '/article-assets/' + parentId
+    const [uploading, setUploading] = useState(false)
     const [refresh, setRefresh] = useState(false)
-    const [items, setItems] = useState([]) // data placeholder
+    const [items, setItems] = useState([])
+    const fileRef = useRef(null)
 
-    const serverUrl = process.env.REACT_APP_SERVER_URL;
+    const serverUrl = process.env.REACT_APP_SERVER_URL
     const path = `${serverUrl}/storage/article_assets`
-    
-    // to get items data
-    useEffect( () => 
-        {
-            // modified axios to prepend Bearer Token on header
-            axios( 
-                {
-                    method: 'get', // method is GET
-                    url: store.getValue('url') ? store.getValue('url') : url
-                } 
-            )
-            .then( response => { // response block
-                //console.log(response)
+
+    useEffect(() => {
+        axios({ method: 'get', url: store.getValue('url') || url })
+            .then(response => {
                 setRefresh(false)
                 setItems(response.data.article_assets)
-                //setItems(response.data.articles) // get the data
-                store.setValue('refresh', false ) // reset the refresh state to false
+                store.setValue('refresh', false)
             })
-            .catch( error => { // error block
-                console.warn(error) // output to console
-            })
-      },[refresh] ) // useEffect()
+            .catch(error => console.warn(error))
+    }, [refresh])
 
-    // upload
-    useEffect( () => {
-        if(store.getValue('article_asset') !== null && store.getValue('article_asset') !== ''){
-            //console.log('upload')
+    const handleFileChange = (e) => {
+        const file = e.target.files[0]
+        if (!file) return
 
-            const formData = new FormData();
-            const dataArray = [
-                { key: 'article_asset', value: store.getValue('article_asset') },
-                { key: 'article_id', value: parentId },
-            ];
-            
-            appendFormData(formData, dataArray);
+        setUploading(true)
+        const formData = new FormData()
+        formData.append('article_asset', file)
+        formData.append('article_id', parentId)
+        formData.append('_method', 'post')
 
-            // Laravel special
-            formData.append('_method', 'post'); // get|post|put|patch|delete
-
-            // send to Laravel
-            axios({ 
-                method: 'post', 
-                url: `${store.url}/article-assets`,
-                data: formData
-            })
-            .then( response => { // success 200
-                //console.log(response)
-                store.setValue('article_asset', null )
-                setRefresh(true)
-            })
-            .catch( error => {
-                //console.warn(error)
-                
-                if( error.response?.status == 422 ){ // detect 422 errors by Laravel
+        axios({ method: 'post', url: `${store.url}/article-assets`, data: formData })
+            .then(() => setRefresh(true))
+            .catch(error => {
+                if (error.response?.status === 422) {
                     console.warn(error.response.data.errors)
-                    store.setValue('errors', error.response.data.errors ) // set the errors to store
                 }
-
             })
-        }
-
-    },[store.getValue('article_asset')])
+            .finally(() => {
+                setUploading(false)
+                if (fileRef.current) fileRef.current.value = ''
+            })
+    }
 
     
     const handleCopyClick = (value) => {
@@ -182,12 +152,15 @@ const DataTable = () => {
             </Table>
             <PaginatorLink store={store} items={items} />
             <hr />
-            <InputFile
-                fieldName='article_asset' 
-                placeholder='Choose image'  
-                icon='fa-solid fa-image'
-                isLoading={isLoading}
-            />
+            <div className='d-flex align-items-center gap-2'>
+                <Form.Control
+                    ref={fileRef}
+                    type='file'
+                    onChange={handleFileChange}
+                    disabled={uploading}
+                />
+                {uploading && <FontAwesomeIcon icon={['fas', 'spinner']} spin />}
+            </div>
         </div>
     );
 };
