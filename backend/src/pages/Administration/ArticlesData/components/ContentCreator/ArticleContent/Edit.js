@@ -128,12 +128,23 @@ export default function EditModal({id}) {
               </Tab>
 
               <Tab eventKey="preview" title="PREVIEW">
-                <Col className='p-3 border border-2 border-dashed' style={{'backgroundColor': 'lightcyan'}}>
-                    {/* {item.article_content?.contents} */}
-                    {/* Render HTML content */}
-                    <div className='preview-content' dangerouslySetInnerHTML={{ __html: store.getValue('contents')}} />
-                    <style>{`.preview-content img { max-width: 100%; height: auto; }`}</style>
-                </Col>
+                <div className='bg-light p-3 rounded' style={{ minHeight: '300px' }}>
+                    <div className='bg-white shadow-sm rounded p-4 mx-auto' style={{ maxWidth: '800px' }}>
+                        {store.getValue('contents') ? (
+                            <div className='preview-content' dangerouslySetInnerHTML={{ __html: store.getValue('contents')}} />
+                        ) : (
+                            <p className='text-muted text-center my-5'>No content to preview</p>
+                        )}
+                    </div>
+                </div>
+                <style>{`
+                    .preview-content img { max-width: 100%; height: auto; }
+                    .preview-content h1, .preview-content h2, .preview-content h3 { margin-top: 0.5em; margin-bottom: 0.5em; }
+                    .preview-content p { line-height: 1.7; }
+                    .preview-content a { color: #0d6efd; }
+                    .preview-content table { width: 100%; border-collapse: collapse; margin: 1em 0; }
+                    .preview-content table td, .preview-content table th { border: 1px solid #dee2e6; padding: 0.5rem; }
+                `}</style>
               </Tab>
           
             </Tabs>
