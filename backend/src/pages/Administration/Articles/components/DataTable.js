@@ -142,6 +142,7 @@ const DataTable = () => {
                         <th style={{ width: '100px' }}>Status</th>
                         <th className='text-center' style={{ width: '80px' }}>Type</th>
                         <th style={{ width: '200px' }}>Title</th>
+                        <th className='text-center' style={{ width: '80px' }}>Views</th>
                         <th className='text-center' style={{ width: '80px' }}>Content</th>
                         <th className='text-center' style={{ width: '160px' }}>Action</th>
                     </tr>
@@ -179,6 +180,16 @@ const DataTable = () => {
                                 </Link>
                             </td>
                             <td className='text-center'>
+                                {item.analytics_views_count > 0 ? (
+                                    <Badge bg='light' text='dark'>
+                                        <FontAwesomeIcon icon={['fas', 'eye']} className='me-1 text-muted' />
+                                        {item.analytics_views_count.toLocaleString()}
+                                    </Badge>
+                                ) : (
+                                    <span className='text-muted'>—</span>
+                                )}
+                            </td>
+                            <td className='text-center'>
                                 <Link to={`/administration/articles-data/${item.id}`}>
                                     <Button size='sm' variant='outline-info' title='Edit content'>
                                         <FontAwesomeIcon icon={['fas', 'pen']} />
@@ -211,7 +222,7 @@ const DataTable = () => {
                     ))}
                     {items?.data?.length === 0 && (
                         <tr>
-                            <td colSpan='6' className='text-center text-muted py-4'>No articles found.</td>
+                            <td colSpan='7' className='text-center text-muted py-4'>No articles found.</td>
                         </tr>
                     )}
                 </tbody>

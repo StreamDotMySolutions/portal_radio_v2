@@ -52,6 +52,13 @@ class Article extends Model
         return $this->hasMany(ArticleAssets::class);
     }
 
+    public function analyticsViews()
+    {
+        return $this->hasMany(AnalyticsEvent::class, 'reference_id')
+            ->where('event_type', 'pageview')
+            ->whereIn('page_type', ['article', 'listing']);
+    }
+
     // Define relationship to fetch children
     public function children()
     {

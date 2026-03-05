@@ -67,7 +67,7 @@ class ArticleController extends Controller
         $foldersCount = (clone $query)->where('type', 'folder')->count();
         $pagesCount   = (clone $query)->where('type', '!=', 'folder')->count();
 
-        $articles = $query->with(['articleSetting', 'descendants'])->paginate($perPage)->withQueryString();
+        $articles = $query->with(['articleSetting', 'descendants'])->withCount('analyticsViews')->paginate($perPage)->withQueryString();
 
         return response()->json([
             'articles'      => $articles,

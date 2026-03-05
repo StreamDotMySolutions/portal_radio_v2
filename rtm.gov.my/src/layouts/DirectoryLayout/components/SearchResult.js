@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import StaffListing from './StaffListing';
 import BreadCrumb from '../../../libs/BreadCrumb';
+import { trackEvent } from '../../../libs/analytics';
 
 const SearchResult = () => {
 
@@ -15,10 +16,9 @@ const SearchResult = () => {
     const url = process.env.REACT_APP_API_URL;
 
     useEffect(() => {
-        if (!query) {
-            // Query is empty, handle it appropriately
-            return;
-        }
+        if (!query) return;
+
+        trackEvent('search', 'directory', null, query);
 
         axios.post(`${url}/directories/search`, { query: query })
             .then(response => {
