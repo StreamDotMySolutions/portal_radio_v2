@@ -1,8 +1,10 @@
 export default function Home() {
   return (
-    <main style={{ padding: '2rem' }}>
-      <h1>RTM Portal</h1>
-      <p>Welcome to Radio Televisyen Malaysia</p>
+    <main className="min-h-screen flex items-center justify-center p-8 bg-gradient-to-br from-blue-50 to-indigo-100">
+      <div className="text-center">
+        <h1 className="text-5xl font-bold text-gray-900 mb-4">RTM Portal</h1>
+        <p className="text-xl text-gray-600">Welcome to Radio Televisyen Malaysia</p>
+      </div>
     </main>
   )
 }
