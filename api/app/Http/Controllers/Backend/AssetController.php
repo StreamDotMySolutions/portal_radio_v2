@@ -105,11 +105,13 @@ class AssetController extends Controller
 
         $updateData = ['user_id' => auth('sanctum')->user()->id];
 
+        // Move to new parent (both folders and files)
+        if ($request->filled('parent_id')) {
+            $updateData['parent_id'] = $request->input('parent_id');
+        }
+
         if ($asset->type === 'folder') {
             $updateData['name'] = $request->input('name');
-            if ($request->filled('parent_id')) {
-                $updateData['parent_id'] = $request->input('parent_id');
-            }
         }
 
         if ($asset->type === 'file') {
