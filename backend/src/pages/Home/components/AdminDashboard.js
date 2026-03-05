@@ -213,10 +213,11 @@ const AdminDashboard = () => {
                                 <div className='d-flex flex-column gap-2'>
                                     {counts.users_list.map((user) => (
                                         <div key={user.id} className='d-flex justify-content-between align-items-center p-2 border-bottom'>
-                                            <div>
+                                            <div className='flex-grow-1'>
                                                 <div className='fw-semibold'>{user.name}</div>
                                                 <div className='text-muted small'>{user.email}</div>
                                             </div>
+                                            <Badge bg='secondary' className='ms-2'>{user.activities_count} activity{user.activities_count !== 1 ? 'ies' : ''}</Badge>
                                         </div>
                                     ))}
                                 </div>
