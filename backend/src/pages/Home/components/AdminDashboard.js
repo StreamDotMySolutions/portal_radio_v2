@@ -240,7 +240,7 @@ const AdminDashboard = () => {
                                                 </div>
                                                 <Badge bg='secondary' style={{ fontSize: '0.95rem', padding: '0.5rem 0.75rem', marginLeft: '1rem', whiteSpace: 'nowrap' }}>
                                                     <FontAwesomeIcon icon={['fas', 'chart-line']} className='me-1' />
-                                                    {user.activities_count} activity{user.activities_count !== 1 ? 'ies' : ''}
+                                                    {user.activities_count} {user.activities_count !== 1 ? 'activities' : 'activity'}
                                                 </Badge>
                                             </div>
                                         )
