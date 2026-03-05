@@ -211,15 +211,27 @@ const AdminDashboard = () => {
                                 <p className='text-muted'>Loading…</p>
                             ) : counts.users_list && counts.users_list.length > 0 ? (
                                 <div className='d-flex flex-column gap-2'>
-                                    {counts.users_list.map((user) => (
-                                        <div key={user.id} className='d-flex justify-content-between align-items-center p-2 border-bottom'>
-                                            <div className='flex-grow-1'>
-                                                <div className='fw-semibold'>{user.name}</div>
-                                                <div className='text-muted small'>{user.email}</div>
+                                    {counts.users_list.map((user) => {
+                                        const lastLoginDate = user.last_login_at
+                                            ? new Date(user.last_login_at).toLocaleString('en-US', {
+                                                year: '2-digit',
+                                                month: '2-digit',
+                                                day: '2-digit',
+                                                hour: '2-digit',
+                                                minute: '2-digit'
+                                              })
+                                            : 'Never'
+                                        return (
+                                            <div key={user.id} className='d-flex justify-content-between align-items-center p-2 border-bottom'>
+                                                <div className='flex-grow-1'>
+                                                    <div className='fw-semibold'>{user.name}</div>
+                                                    <div className='text-muted small'>{user.email}</div>
+                                                    <div className='text-muted small'>Last login: {lastLoginDate}</div>
+                                                </div>
+                                                <Badge bg='secondary' className='ms-2'>{user.activities_count} activity{user.activities_count !== 1 ? 'ies' : ''}</Badge>
                                             </div>
-                                            <Badge bg='secondary' className='ms-2'>{user.activities_count} activity{user.activities_count !== 1 ? 'ies' : ''}</Badge>
-                                        </div>
-                                    ))}
+                                        )
+                                    })}
                                 </div>
                             ) : (
                                 <p className='text-muted mb-0'>No users found.</p>

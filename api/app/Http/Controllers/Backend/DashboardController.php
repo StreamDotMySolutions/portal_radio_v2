@@ -37,19 +37,21 @@ class DashboardController extends Controller
         $vodsFilesize = Vod::sum('filesize') ?? 0;
 
         $users = User::select('id', 'name', 'email')
-            ->withCount(['activities' => function($q) {
-                $q->where('causer_type', User::class)->where('causer_id', User::getModel()->getKeyName());
-            }])
             ->get()
             ->map(function($user) {
                 $activitiesCount = Activity::where('causer_id', $user->id)
                     ->where('causer_type', User::class)
                     ->count();
+                $lastActivity = Activity::where('causer_id', $user->id)
+                    ->where('causer_type', User::class)
+                    ->latest('created_at')
+                    ->first();
                 return [
                     'id'    => $user->id,
                     'name'  => $user->name,
                     'email' => $user->email,
                     'activities_count' => $activitiesCount,
+                    'last_login_at' => $lastActivity?->created_at,
                 ];
             });
 
