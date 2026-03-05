@@ -37,8 +37,8 @@ Route::get('/directories/{id}', [DirectoryController::class, 'index']);
 Route::get('/directories/{directory}/show', [DirectoryController::class, 'show']);
 
 // Tracked downloads
-Route::get('/download/asset/{filename}', [DownloadController::class, 'asset']);
-Route::get('/download/article-pdf/{filename}', [DownloadController::class, 'articlePdf']);
+Route::get('/download/asset/{filename}', [DownloadController::class, 'asset'])->where('filename', '.*');
+Route::get('/download/article-pdf/{filename}', [DownloadController::class, 'articlePdf'])->where('filename', '.*');
 
 // Analytics tracking (fire-and-forget, no auth)
 Route::post('/track', [AnalyticsController::class, 'store']);
