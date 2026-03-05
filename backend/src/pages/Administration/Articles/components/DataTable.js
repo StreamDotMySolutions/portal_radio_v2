@@ -169,7 +169,14 @@ const DataTable = () => {
                                 }
                             </td>
                             <td>
-                                <Link to={`/administration/articles/${item.id}`}>{item.title}</Link>
+                                <Link to={`/administration/articles/${item.id}`}>
+                                    {item.type === 'folder' ? (
+                                        <FontAwesomeIcon icon={['fas', 'folder']} className='me-2 text-warning' />
+                                    ) : (
+                                        <FontAwesomeIcon icon={['fas', 'file']} className='me-2 text-secondary' />
+                                    )}
+                                    {item.title}
+                                </Link>
                             </td>
                             <td className='text-center'>
                                 <Link to={`/administration/articles-data/${item.id}`}>
