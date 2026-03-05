@@ -104,14 +104,18 @@ class VodController extends Controller
     public function update(Request $request, Vod $vod)
     {
         $request->validate([
-            'name'   => 'sometimes|string',
-            'rename' => 'sometimes|string',
+            'name'      => 'sometimes|string',
+            'rename'    => 'sometimes|string',
+            'parent_id' => 'nullable|integer|exists:vods,id',
         ]);
 
         $updateData = ['user_id' => auth('sanctum')->user()->id];
 
         if ($vod->type === 'folder') {
             $updateData['name'] = $request->input('name');
+            if ($request->filled('parent_id')) {
+                $updateData['parent_id'] = $request->input('parent_id');
+            }
         }
 
         if ($vod->type === 'file' && $request->filled('rename')) {
@@ -163,7 +167,28 @@ class VodController extends Controller
                 $vod->down(); //  // vod ordering down
             break;
         }
-        
+
+    }
+
+    public function tree()
+    {
+        // Only show folders as potential parents, not files
+        $roots = Vod::whereIsRoot()->where('type', 'folder')->defaultOrder()->with(['children'])->get();
+        $tree = $roots->map(fn($root) => $this->buildTreeNode($root))->toArray();
+        return response()->json(['tree' => $tree]);
+    }
+
+    private function buildTreeNode(Vod $vod): array
+    {
+        // Only include folder children
+        $folderChildren = $vod->children->filter(fn($child) => $child->type === 'folder');
+
+        return [
+            'id' => $vod->id,
+            'name' => $vod->name,
+            'type' => $vod->type,
+            'children' => $folderChildren->map(fn($child) => $this->buildTreeNode($child))->toArray(),
+        ];
     }
 
 }

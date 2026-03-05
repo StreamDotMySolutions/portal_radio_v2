@@ -1,10 +1,12 @@
 import React from 'react'
-import { Card } from 'react-bootstrap'
+import { Card, Badge } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { InputRadio, InputText, InputTextarea } from '../../../../libs/FormInput'
 import useStore from '../../../store'
 
 const HtmlForm = ({ isLoading, mode = 'create' }) => {
     const store = useStore()
+    const data = store.data // Subscribe to store.data changes
 
     const typeOptions = [
         { label: 'Department', value: 'folder' },
@@ -22,6 +24,19 @@ const HtmlForm = ({ isLoading, mode = 'create' }) => {
                     <Card.Header><strong>Type</strong></Card.Header>
                     <Card.Body>
                         <InputRadio fieldName='type' label='Type' options={typeOptions} />
+                    </Card.Body>
+                </Card>
+            )}
+
+            {/* Type display — edit only */}
+            {mode === 'edit' && type && (
+                <Card>
+                    <Card.Header><strong>Type</strong></Card.Header>
+                    <Card.Body>
+                        <Badge bg={type === 'folder' ? 'warning' : 'secondary'}>
+                            <FontAwesomeIcon icon={['fas', type === 'folder' ? 'folder' : 'user']} className='me-2' />
+                            {type === 'folder' ? 'Department' : 'Staff'}
+                        </Badge>
                     </Card.Body>
                 </Card>
             )}

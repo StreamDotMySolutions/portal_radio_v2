@@ -157,6 +157,7 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::get('/videos/ordering/{video}', [VideoController::class, 'ordering']);
 
     // Assets
+    Route::get('/assets/tree', [AssetController::class, 'tree']);
     Route::get('/assets/node/{parentId}', [AssetController::class, 'index']);
     Route::get('/assets', [AssetController::class, 'index']);
     Route::get('/assets/{asset}', [AssetController::class, 'show']);
@@ -167,6 +168,7 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::get('/assets/ordering/{asset}', [AssetController::class, 'ordering']);
 
     // Vods
+    Route::get('/vods/tree', [VodController::class, 'tree']);
     Route::get('/vods/node/{parentId}', [VodController::class, 'index']);
     Route::get('/vods', [VodController::class, 'index']);
     Route::get('/vods/list-videos', [VodController::class, 'listVideos']);
@@ -196,6 +198,7 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
 
 // Manage Directories
 Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
+    Route::get('/directories/tree', [DirectoryController::class, 'tree']);
     Route::get('/directories/node/{parentId}', [DirectoryController::class, 'index']);
     Route::post('/directories', [DirectoryController::class, 'storeRecord']);
     Route::get('/directories/ordering/{directory}', [DirectoryController::class, 'ordering']);

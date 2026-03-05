@@ -87,15 +87,19 @@ class AssetController extends Controller
     public function update(Request $request, Asset $asset)
     {
         $request->validate([
-            'name'   => 'sometimes|string',
-            'rename' => 'sometimes|string',
-            'file'   => 'sometimes|file|mimes:pdf,doc,docx,ppt,pptx,jpeg,jpg,png,gif,webp',
+            'name'      => 'sometimes|string',
+            'rename'    => 'sometimes|string',
+            'file'      => 'sometimes|file|mimes:pdf,doc,docx,ppt,pptx,jpeg,jpg,png,gif,webp',
+            'parent_id' => 'nullable|integer|exists:assets,id',
         ]);
 
         $updateData = ['user_id' => auth('sanctum')->user()->id];
 
         if ($asset->type === 'folder') {
             $updateData['name'] = $request->input('name');
+            if ($request->filled('parent_id')) {
+                $updateData['parent_id'] = $request->input('parent_id');
+            }
         }
 
         if ($asset->type === 'file') {
@@ -152,7 +156,28 @@ class AssetController extends Controller
                 $asset->down(); //  // asset ordering down
             break;
         }
-        
+
+    }
+
+    public function tree()
+    {
+        // Only show folders as potential parents, not files
+        $roots = Asset::whereIsRoot()->where('type', 'folder')->defaultOrder()->with(['children'])->get();
+        $tree = $roots->map(fn($root) => $this->buildTreeNode($root))->toArray();
+        return response()->json(['tree' => $tree]);
+    }
+
+    private function buildTreeNode(Asset $asset): array
+    {
+        // Only include folder children
+        $folderChildren = $asset->children->filter(fn($child) => $child->type === 'folder');
+
+        return [
+            'id' => $asset->id,
+            'name' => $asset->name,
+            'type' => $asset->type,
+            'children' => $folderChildren->map(fn($child) => $this->buildTreeNode($child))->toArray(),
+        ];
     }
 
 }

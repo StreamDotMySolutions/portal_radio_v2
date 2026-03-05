@@ -3,9 +3,9 @@ import { Button, Modal, Nav } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { appendFormData } from '../../../../libs/FormInput'
 import axios from '../../../../libs/axios'
+import ParentPicker from '../../../../libs/ParentPicker'
 import useStore from '../../../store'
 import HtmlForm from '../components/HtmlForm'
-import ParentPicker from '../components/ParentPicker'
 
 export default function EditModal({ id }) {
     const store = useStore()
@@ -42,7 +42,10 @@ export default function EditModal({ id }) {
                     store.setValue('instagram', d.instagram)
                 }
             })
-            .catch(error => console.warn(error))
+            .catch(error => {
+                console.error('Error fetching directory:', error)
+                alert('Failed to load directory data')
+            })
     }
 
     const handleSubmitClick = () => {
@@ -117,9 +120,12 @@ export default function EditModal({ id }) {
 
                     {activeTab === 'move' && (
                         <ParentPicker
+                            endpoint="/directories/tree"
                             currentId={id}
                             value={parentId}
                             onChange={setParentId}
+                            selectionLabel="Move to parent"
+                            instructionText="Select a folder to move this directory into. The current directory is disabled."
                         />
                     )}
                 </Modal.Body>

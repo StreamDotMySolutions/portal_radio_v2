@@ -82,6 +82,7 @@ class DirectoryController extends Controller
         if ($directory->type === 'folder') {
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
+                'parent_id' => 'nullable|integer|exists:directories,id',
             ]);
         } else {
             $validatedData = $request->validate([
@@ -94,6 +95,7 @@ class DirectoryController extends Controller
                 'instagram'  => 'nullable|string',
                 'twitter'    => 'nullable|string',
                 'photo'      => 'nullable|string|max:255',
+                'parent_id'  => 'nullable|integer|exists:directories,id',
             ]);
         }
 
@@ -118,6 +120,27 @@ class DirectoryController extends Controller
                 $directory->down();
                 break;
         }
+    }
+
+    public function tree()
+    {
+        // Only show folders as potential parents, not staff entries
+        $roots = Directory::whereIsRoot()->where('type', 'folder')->defaultOrder()->with(['children'])->get();
+        $tree = $roots->map(fn($root) => $this->buildTreeNode($root))->toArray();
+        return response()->json(['tree' => $tree]);
+    }
+
+    private function buildTreeNode(Directory $directory): array
+    {
+        // Only include folder children
+        $folderChildren = $directory->children->filter(fn($child) => $child->type === 'folder');
+
+        return [
+            'id' => $directory->id,
+            'name' => $directory->name,
+            'type' => $directory->type,
+            'children' => $folderChildren->map(fn($child) => $this->buildTreeNode($child))->toArray(),
+        ];
     }
 
     // Bulk import from Google Apps Script
