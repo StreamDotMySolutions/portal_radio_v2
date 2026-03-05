@@ -105,7 +105,7 @@ const AdminDashboard = () => {
                                         <div className='fw-bold'>
                                             {isLoading ? '…' : (
                                                 <>
-                                                    {counts.directories_breakdown?.departments || 0} Dept{counts.directories_breakdown?.departments !== 1 ? 's' : ''} / {counts.directories_breakdown?.staffs || 0} Staff{counts.directories_breakdown?.staffs !== 1 ? 's' : ''} / {counts.directories_breakdown?.empty_staffs || 0} Empty
+                                                    {counts.directories_breakdown?.departments || 0} Dept{counts.directories_breakdown?.departments !== 1 ? 's' : ''} / {counts.directories_breakdown?.staffs || 0} Staff{counts.directories_breakdown?.staffs !== 1 ? 's' : ''}
                                                 </>
                                             )}
                                         </div>
