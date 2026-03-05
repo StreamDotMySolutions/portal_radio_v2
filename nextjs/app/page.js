@@ -1,60 +1,109 @@
+'use client'
+
+import Carousel from '@/components/Carousel'
+
 export default function Home() {
   return (
-    <main className="min-h-[calc(100vh-4rem)] p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Hero Section */}
-        <div className="text-center mb-16">
-          <h1 className="text-6xl font-bold mb-6">RTM Portal</h1>
-          <p className="text-xl mb-8">Welcome to Radio Televisyen Malaysia</p>
-          <p className="text-base-content/70">Your gateway to news, programs, and more</p>
+    <div>
+      {/* Carousel */}
+      <div className="container mt-4">
+        <Carousel />
+      </div>
+
+      {/* Featured Content */}
+      <div className="container py-5">
+        <div className="row mb-5">
+          <div className="col-lg-12">
+            <h2 className="display-5 fw-bold mb-4">Featured Content</h2>
+          </div>
         </div>
 
-        {/* DaisyUI Components Demo */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        {/* Cards */}
+        <div className="row g-4">
           {/* Card 1 */}
-          <div className="card bg-base-200 shadow-xl">
-            <div className="card-body">
-              <h2 className="card-title">News & Updates</h2>
-              <p>Stay informed with the latest news and updates from RTM.</p>
-              <div className="card-actions justify-end">
+          <div className="col-lg-4 col-md-6">
+            <div className="card border-0 h-100" style={{ backgroundColor: '#2d2d2d' }}>
+              <div
+                style={{
+                  backgroundColor: '#0d6efd',
+                  height: '180px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <i className="bi bi-newspaper" style={{ fontSize: '48px', color: 'white' }}></i>
+              </div>
+              <div className="card-body">
+                <h5 className="card-title text-light">Latest News</h5>
+                <p className="card-text text-secondary">Stay updated with breaking news and important updates from RTM.</p>
                 <button className="btn btn-primary btn-sm">Read More</button>
               </div>
             </div>
           </div>
 
           {/* Card 2 */}
-          <div className="card bg-base-200 shadow-xl">
-            <div className="card-body">
-              <h2 className="card-title">Programs</h2>
-              <p>Explore our wide range of television and radio programs.</p>
-              <div className="card-actions justify-end">
-                <button className="btn btn-primary btn-sm">Browse</button>
+          <div className="col-lg-4 col-md-6">
+            <div className="card border-0 h-100" style={{ backgroundColor: '#2d2d2d' }}>
+              <div
+                style={{
+                  backgroundColor: '#198754',
+                  height: '180px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <i className="bi bi-play-circle" style={{ fontSize: '48px', color: 'white' }}></i>
+              </div>
+              <div className="card-body">
+                <h5 className="card-title text-light">Programs</h5>
+                <p className="card-text text-secondary">Explore our diverse range of television and radio programs.</p>
+                <button className="btn btn-success btn-sm">Browse</button>
               </div>
             </div>
           </div>
 
           {/* Card 3 */}
-          <div className="card bg-base-200 shadow-xl">
-            <div className="card-body">
-              <h2 className="card-title">Directory</h2>
-              <p>Find contact information and directory listings.</p>
-              <div className="card-actions justify-end">
-                <button className="btn btn-primary btn-sm">Search</button>
+          <div className="col-lg-4 col-md-6">
+            <div className="card border-0 h-100" style={{ backgroundColor: '#2d2d2d' }}>
+              <div
+                style={{
+                  backgroundColor: '#0dcaf0',
+                  height: '180px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center'
+                }}
+              >
+                <i className="bi bi-people" style={{ fontSize: '48px', color: 'white' }}></i>
+              </div>
+              <div className="card-body">
+                <h5 className="card-title text-light">Directory</h5>
+                <p className="card-text text-secondary">Find contact information and staff directory listings here.</p>
+                <button className="btn btn-info btn-sm">Search</button>
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Buttons Demo */}
-        <div className="flex flex-wrap gap-4 justify-center">
-          <button className="btn btn-primary">Primary</button>
-          <button className="btn btn-secondary">Secondary</button>
-          <button className="btn btn-accent">Accent</button>
-          <button className="btn btn-success">Success</button>
-          <button className="btn btn-warning">Warning</button>
-          <button className="btn btn-error">Error</button>
+      {/* CTA Section */}
+      <div
+        style={{
+          backgroundColor: '#1a1a1a',
+          padding: '60px 0',
+          marginTop: '40px',
+          borderTop: '1px solid #333',
+          borderBottom: '1px solid #333'
+        }}
+      >
+        <div className="container text-center">
+          <h3 className="display-6 fw-bold mb-4 text-light">Join Us Today</h3>
+          <p className="lead text-secondary mb-4">Subscribe to get the latest news and updates delivered to your inbox.</p>
+          <button className="btn btn-primary btn-lg">Subscribe Now</button>
         </div>
       </div>
-    </main>
+    </div>
   )
 }
