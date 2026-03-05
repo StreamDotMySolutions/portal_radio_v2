@@ -88,8 +88,6 @@ const DataTable = () => {
             <Table>
                 <thead>
                     <tr>
-                        <th className='text-center' style={{ 'width': '20px'}}><FontAwesomeIcon icon={['fas', 'hashtag']} /></th>
-                    
                         <th className='text-center' style={{ 'width': '100px'}}><FontAwesomeIcon icon={['fas', 'image']} /></th>
                         <th className='text-start' style={{ 'width': '100vH'}}>URL</th>
                         <th className='text-center' style={{ 'width': '100px'}}><FontAwesomeIcon icon={['fas', 'bolt']} /></th>
@@ -100,8 +98,6 @@ const DataTable = () => {
                     {items?.data?.map((item,index) => (
                        
                         <tr key={index}>
-                            <td><span className="badge bg-primary">{item.id}</span></td>
-                 
                             <td>
                                {/* <img     
                                     className='img-fluid rounded' 
