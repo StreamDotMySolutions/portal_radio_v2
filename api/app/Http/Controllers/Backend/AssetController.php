@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Backend;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use App\Models\Asset;
+use App\Models\AnalyticsEvent;
 use App\Services\CommonService;
 
 class AssetController extends Controller
@@ -23,7 +25,14 @@ class AssetController extends Controller
             $query = Asset::query()->whereNull('parent_id');
         }
 
-        $assets = $query->with(['descendants'])->defaultOrder()->paginate(10)->withQueryString();
+        $assets = $query->with(['descendants'])
+            ->addSelect(['downloads_count' => AnalyticsEvent::query()
+                ->whereColumn('reference_title', 'assets.name')
+                ->where('event_type', 'download')
+                ->where('page_type', 'asset')
+                ->selectRaw('count(*)')
+            ])
+            ->defaultOrder()->paginate(10)->withQueryString();
 
         return response()->json(['assets' => $assets]);
     }

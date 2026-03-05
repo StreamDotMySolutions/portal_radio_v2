@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Button, Form, InputGroup, Table } from 'react-bootstrap'
+import { Badge, Button, Form, InputGroup, Table } from 'react-bootstrap'
 import { Link, useParams } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import useStore from '../../../store'
@@ -23,7 +23,7 @@ const DataTable = () => {
     const { parentId } = useParams()
 
     const serverUrl = process.env.REACT_APP_SERVER_URL
-    const path = `${serverUrl}/storage/assets`
+    const downloadPath = `${serverUrl}/api/frontend/download/asset`
 
     const [query, setQuery] = useState('')
     const [search, setSearch] = useState('')
@@ -92,6 +92,7 @@ const DataTable = () => {
                         <th>Name</th>
                         <th style={{ width: '180px' }}>Mimetype</th>
                         <th style={{ width: '100px' }}>Size</th>
+                        <th className='text-center' style={{ width: '100px' }}>Downloads</th>
                         <th className='text-center' style={{ width: '160px' }}>Action</th>
                     </tr>
                 </thead>
@@ -109,12 +110,22 @@ const DataTable = () => {
                                     : <FontAwesomeIcon className='me-2 text-secondary' icon={['fas', 'file']} />
                                 }
                                 {item.type === 'file'
-                                    ? <a target='_blank' rel='noreferrer' href={`${path}/${item.name}`}>{item.name}</a>
+                                    ? <a target='_blank' rel='noreferrer' href={`${downloadPath}/${item.name}`}>{item.name}</a>
                                     : <Link to={`/administration/assets/${item.id}`}>{item.name}</Link>
                                 }
                             </td>
                             <td className='text-muted small'>{item.type === 'file' ? item.mimetype : '-'}</td>
                             <td className='text-muted small'>{item.type === 'file' ? formatBytes(item.filesize) : '-'}</td>
+                            <td className='text-center'>
+                                {item.type === 'file' && item.downloads_count > 0 ? (
+                                    <Badge bg='light' text='dark'>
+                                        <FontAwesomeIcon icon={['fas', 'download']} className='me-1 text-muted' />
+                                        {item.downloads_count.toLocaleString()}
+                                    </Badge>
+                                ) : (
+                                    <span className='text-muted'>—</span>
+                                )}
+                            </td>
                             <td className='text-center text-nowrap'>
                                 <ShowModal id={item.id} />{' '}
                                 <EditModal id={item.id} />{' '}
@@ -124,7 +135,7 @@ const DataTable = () => {
                     ))}
                     {items?.data?.length === 0 && (
                         <tr>
-                            <td colSpan='5' className='text-center text-muted py-4'>
+                            <td colSpan='6' className='text-center text-muted py-4'>
                                 {search
                                     ? <>No items found matching <strong>"{search}"</strong>.</>
                                     : 'No items found.'
