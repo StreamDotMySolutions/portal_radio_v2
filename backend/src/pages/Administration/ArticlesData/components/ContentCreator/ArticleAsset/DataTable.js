@@ -37,7 +37,6 @@ const DataTable = () => {
         const formData = new FormData()
         formData.append('article_asset', file)
         formData.append('article_id', parentId)
-        formData.append('_method', 'post')
 
         axios({ method: 'post', url: `${store.url}/article-assets`, data: formData })
             .then(() => setRefresh(true))

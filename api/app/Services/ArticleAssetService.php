@@ -18,7 +18,7 @@ class ArticleAssetService
     public static function store(Request $request)
     {        
         //\Log::info($request);
-        if($request->has('article_asset')){
+        if($request->hasFile('article_asset')){
             //\Log::info('asset created');
             $articleAsset = new \App\Models\ArticleAsset([
                 'user_id' =>  auth('sanctum')->user()->id,
