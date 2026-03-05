@@ -16,6 +16,19 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $departmentsCount = Directory::where('type', 'folder')->count();
+        $staffsCount = Directory::where('type', '!=', 'folder')->count();
+        $emptyStaffsCount = Directory::where('type', '!=', 'folder')
+            ->where(function($q) {
+                $q->whereNull('name')
+                  ->orWhere('name', '')
+                  ->orWhere(function($subQ) {
+                      $subQ->whereNull('photo')
+                           ->orWhere('photo', '');
+                  });
+            })
+            ->count();
+
         return response()->json([
             'counts' => [
                 'articles'    => Article::count(),
@@ -26,6 +39,11 @@ class DashboardController extends Controller
                 'assets'      => Asset::count(),
                 'vods'        => Vod::count(),
                 'directories' => Directory::count(),
+                'directories_breakdown' => [
+                    'departments' => $departmentsCount,
+                    'staffs'      => $staffsCount,
+                    'empty_staffs' => $emptyStaffsCount,
+                ],
             ],
             'analytics' => AnalyticsService::summary(),
         ]);

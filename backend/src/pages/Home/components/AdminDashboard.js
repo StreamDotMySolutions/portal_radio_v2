@@ -49,6 +49,7 @@ const StatCard = ({ title, value, icon, color }) => (
 )
 
 const AdminDashboard = () => {
+    const navigate = useNavigate()
     const { user } = useAuthStore()
     const url = process.env.REACT_APP_BACKEND_URL + '/dashboard'
 
@@ -91,7 +92,26 @@ const AdminDashboard = () => {
                             <ContentCard title='Articles'    value={v(counts.articles)}    icon='newspaper'    color='primary'   to='/administration/articles/0' />
                         </Col>
                         <Col md={3}>
-                            <ContentCard title='Directories' value={v(counts.directories)} icon='address-book' color='info'      to='/administration/directories/0' />
+                            <Card className='h-100' onClick={() => navigate('/administration/directories/0')} style={{ cursor: 'pointer' }}>
+                                <Card.Body className='d-flex align-items-center gap-3'>
+                                    <div
+                                        className='text-info bg-info bg-opacity-10 rounded p-3 fs-4'
+                                        style={{ lineHeight: 1 }}
+                                    >
+                                        <FontAwesomeIcon icon={['fas', 'address-book']} />
+                                    </div>
+                                    <div>
+                                        <div className='text-muted small'>Directories</div>
+                                        <div className='fw-bold'>
+                                            {isLoading ? '…' : (
+                                                <>
+                                                    {counts.directories_breakdown?.departments || 0} Dept{counts.directories_breakdown?.departments !== 1 ? 's' : ''} / {counts.directories_breakdown?.staffs || 0} Staff{counts.directories_breakdown?.staffs !== 1 ? 's' : ''} / {counts.directories_breakdown?.empty_staffs || 0} Empty
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+                                </Card.Body>
+                            </Card>
                         </Col>
                         <Col md={3}>
                             <ContentCard title='Assets'      value={v(counts.assets)}      icon='folder-open'  color='warning'   to='/administration/assets/0' />
