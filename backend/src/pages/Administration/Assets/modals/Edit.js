@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function EditModal({id}) {
     const store = useStore()
+    const data = store.data // Subscribe to store.data changes
 
     const [show, setShow] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
