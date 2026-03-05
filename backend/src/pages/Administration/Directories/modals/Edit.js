@@ -106,12 +106,14 @@ export default function EditModal({ id }) {
                                 Details
                             </Nav.Link>
                         </Nav.Item>
-                        <Nav.Item>
-                            <Nav.Link eventKey='move'>
-                                <FontAwesomeIcon icon={['fas', 'folder-tree']} className='me-2' />
-                                Move To
-                            </Nav.Link>
-                        </Nav.Item>
+                        {store.getValue('type') === 'folder' && (
+                            <Nav.Item>
+                                <Nav.Link eventKey='move'>
+                                    <FontAwesomeIcon icon={['fas', 'folder-tree']} className='me-2' />
+                                    Move To
+                                </Nav.Link>
+                            </Nav.Item>
+                        )}
                     </Nav>
 
                     {activeTab === 'details' && (
