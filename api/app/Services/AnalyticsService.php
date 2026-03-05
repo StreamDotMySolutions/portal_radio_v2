@@ -70,6 +70,17 @@ class AnalyticsService
             ->get();
     }
 
+    public static function topDownloads(int $limit = 10)
+    {
+        return AnalyticsEvent::where('event_type', 'download')
+            ->whereNotNull('reference_title')
+            ->select('reference_title as filename', 'page_type', DB::raw('count(*) as count'))
+            ->groupBy('reference_title', 'page_type')
+            ->orderByDesc('count')
+            ->limit($limit)
+            ->get();
+    }
+
     public static function deviceSplit()
     {
         return AnalyticsEvent::where('event_type', 'pageview')

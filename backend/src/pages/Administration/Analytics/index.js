@@ -93,7 +93,7 @@ const Analytics = () => {
     if (isLoading) return <div className='p-3 text-muted'>Loading...</div>
     if (!data)     return <div className='p-3 text-danger'>Failed to load analytics.</div>
 
-    const { summary, top_articles, top_searches, top_directory_searches, daily_views, device_split } = data
+    const { summary, top_articles, top_searches, top_directory_searches, top_downloads, daily_views, device_split } = data
 
     const totalDevices = device_split.reduce((s, d) => s + d.count, 0) || 1
 
@@ -176,6 +176,41 @@ const Analytics = () => {
                             </Card.Body>
                         </Card>
                     </Col>
+
+                    {/* Top Downloads */}
+                    {top_downloads.length > 0 && (
+                        <Col md={6}>
+                            <Card className='h-100'>
+                                <Card.Header className='fw-semibold'>
+                                    <FontAwesomeIcon icon={['fas', 'download']} className='me-2 text-secondary' />
+                                    Top Downloads
+                                </Card.Header>
+                                <Card.Body className='p-0'>
+                                    <Table hover responsive className='mb-0'>
+                                        <thead className='table-light'>
+                                            <tr>
+                                                <th style={{ '--bs-table-cell-padding-y': '0.85rem' }}>#</th>
+                                                <th style={{ '--bs-table-cell-padding-y': '0.85rem' }}>File</th>
+                                                <th style={{ '--bs-table-cell-padding-y': '0.85rem' }} className='text-end'>Downloads</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {top_downloads.map((item, i) => (
+                                                <tr key={i}>
+                                                    <td className='text-muted'>{i + 1}</td>
+                                                    <td className='text-truncate' style={{ maxWidth: '250px' }}>
+                                                        <FontAwesomeIcon icon={['fas', 'file-pdf']} className='me-2 text-danger' />
+                                                        {item.filename}
+                                                    </td>
+                                                    <td className='text-end fw-semibold'>{item.count}</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </Table>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    )}
 
                     {/* Top Searches + Device split */}
                     <Col md={6} className='d-flex flex-column gap-3'>

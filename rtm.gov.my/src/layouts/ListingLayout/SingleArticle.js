@@ -37,7 +37,7 @@ const SingleArticle = ({id}) => {
                 return items.map((item, index) => {
                     if (item.contents === 'pdf') {
                         if (!item.article_pdf) return null;
-                        const pdfUrl = `${serverUrl}/storage/article_pdf/${item.article_pdf.filename}`;
+                        const pdfUrl = `${url}/download/article-pdf/${item.article_pdf.filename}`;
                         return (
                             <div className='mb-4' key={index}>
                                 <embed src={pdfUrl} type="application/pdf" width="100%" height="600px" />

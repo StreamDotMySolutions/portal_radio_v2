@@ -12,6 +12,7 @@ use App\Http\Controllers\Frontend\{
     FooterController,
     DirectoryController,
     AnalyticsController,
+    DownloadController,
 };
 
 // prefix frontend/...
@@ -34,6 +35,10 @@ Route::get('/home-videos', [VideoController::class, 'index']);
 Route::post('/directories/search', [DirectoryController::class, 'search']);
 Route::get('/directories/{id}', [DirectoryController::class, 'index']);
 Route::get('/directories/{directory}/show', [DirectoryController::class, 'show']);
+
+// Tracked downloads
+Route::get('/download/asset/{filename}', [DownloadController::class, 'asset']);
+Route::get('/download/article-pdf/{filename}', [DownloadController::class, 'articlePdf']);
 
 // Analytics tracking (fire-and-forget, no auth)
 Route::post('/track', [AnalyticsController::class, 'store']);

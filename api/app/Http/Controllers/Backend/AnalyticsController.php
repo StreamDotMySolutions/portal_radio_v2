@@ -13,6 +13,7 @@ class AnalyticsController extends Controller
             'top_articles'           => AnalyticsService::topArticles(),
             'top_searches'           => AnalyticsService::topSearches(),
             'top_directory_searches' => AnalyticsService::topDirectorySearches(),
+            'top_downloads'          => AnalyticsService::topDownloads(),
             'daily_views'            => AnalyticsService::dailyViews(),
             'device_split'           => AnalyticsService::deviceSplit(),
         ]);
