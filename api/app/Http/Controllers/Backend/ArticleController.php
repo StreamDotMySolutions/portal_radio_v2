@@ -39,8 +39,41 @@ class ArticleController extends Controller
 
     public function index(Request $request, $parentId)
     {
-        $articles = ArticleService::index($parentId, $request->query('search'));
-        return response()->json(['articles' => $articles]);
+        if ($request->filled('search')) {
+            $query = Article::query()->where('title', 'like', "%{$request->input('search')}%");
+        } elseif (!is_null($parentId) && !empty($parentId)) {
+            $query = Article::query()->where('parent_id', $parentId);
+        } else {
+            $query = Article::query()->where('parent_id', null);
+        }
+
+        $sortBy  = $request->input('sort_by');
+        $sortDir = $request->input('sort_dir', 'desc');
+
+        if ($sortBy === 'date') {
+            $query->orderBy('created_at', $sortDir);
+        } elseif ($sortBy === 'name') {
+            $query->orderBy('title', $sortDir);
+        } else {
+            $query->defaultOrder();
+        }
+
+        $allowed = [10, 25, 50, 100];
+        $perPage = (int) $request->input('per_page', 25);
+        if (!in_array($perPage, $allowed)) {
+            $perPage = 25;
+        }
+
+        $foldersCount = (clone $query)->where('type', 'folder')->count();
+        $pagesCount   = (clone $query)->where('type', '!=', 'folder')->count();
+
+        $articles = $query->with(['articleSetting', 'descendants'])->paginate($perPage)->withQueryString();
+
+        return response()->json([
+            'articles'      => $articles,
+            'folders_count' => $foldersCount,
+            'pages_count'   => $pagesCount,
+        ]);
     }
 
 
