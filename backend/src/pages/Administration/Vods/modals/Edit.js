@@ -47,13 +47,15 @@ export default function EditModal({ id }) {
 
         if (store.getValue('type') === 'folder') {
             formData.append('name', store.getValue('name'))
-            if (parentId) {
-                formData.append('parent_id', parentId)
-            }
         }
 
         if (store.getValue('type') === 'file' && store.getValue('rename')) {
             formData.append('rename', store.getValue('rename'))
+        }
+
+        // Allow moving both folders and files
+        if (parentId) {
+            formData.append('parent_id', parentId)
         }
 
         axios({ method: 'post', url: `${store.url}/vods/${id}`, data: formData })
@@ -88,14 +90,12 @@ export default function EditModal({ id }) {
                                 Details
                             </Nav.Link>
                         </Nav.Item>
-                        {store.getValue('type') === 'folder' && (
-                            <Nav.Item>
-                                <Nav.Link eventKey='move'>
-                                    <FontAwesomeIcon icon={['fas', 'folder-tree']} className='me-2' />
-                                    Move To
-                                </Nav.Link>
-                            </Nav.Item>
-                        )}
+                        <Nav.Item>
+                            <Nav.Link eventKey='move'>
+                                <FontAwesomeIcon icon={['fas', 'folder-tree']} className='me-2' />
+                                Move To
+                            </Nav.Link>
+                        </Nav.Item>
                     </Nav>
 
                     {activeTab === 'details' && (
