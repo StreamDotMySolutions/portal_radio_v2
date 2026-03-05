@@ -6,6 +6,7 @@ import { appendFormData, TextEditor,InputTextarea } from '../../../../../../libs
 import axios from '../../../../../../libs/axios'
 import useStore from '../../../../../store'
 import DataTable from '../ArticleAsset/DataTable'
+import AssetBrowser from '../AssetBrowser'
 
 
 export default function Create() {
@@ -103,6 +104,10 @@ export default function Create() {
               </Tab>
               <Tab eventKey="assets" title="ASSETS">
                 <DataTable />
+              </Tab>
+
+              <Tab eventKey="asset-browser" title="ASSET BROWSER">
+                <AssetBrowser />
               </Tab>
 
               <Tab eventKey="preview" title="PREVIEW">
