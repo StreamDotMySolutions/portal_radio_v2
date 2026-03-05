@@ -127,8 +127,8 @@ const DataTable = () => {
                             </td>
                             <td>
                                 {item.active == 1
-                                    ? <Badge bg='success'>Active</Badge>
-                                    : <Badge bg='secondary'>Inactive</Badge>
+                                    ? <Badge bg='success' pill>Active</Badge>
+                                    : <Badge bg='secondary' pill>Inactive</Badge>
                                 }
                             </td>
                             <td>{item.title}</td>
