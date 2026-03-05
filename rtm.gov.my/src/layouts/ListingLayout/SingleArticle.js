@@ -61,11 +61,10 @@ const SingleArticle = ({id}) => {
     return (
 
         <div className="mt-5">
-         
-            {/* Render contentItems if shouldRenderContent returns true */}
             <h2>{title}</h2>
-            <br />
-            {contentItems()}
+            <div className="mt-3">
+                {contentItems()}
+            </div>
             <hr />
             <p className='text-muted'>Tarikh akhir kemaskini: {updatedAt}</p>
         </div>
