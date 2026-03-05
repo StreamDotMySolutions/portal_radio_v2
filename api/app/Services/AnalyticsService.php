@@ -48,6 +48,18 @@ class AnalyticsService
             ->get();
     }
 
+    public static function topDirectorySearches(int $limit = 10)
+    {
+        return AnalyticsEvent::where('event_type', 'search')
+            ->where('page_type', 'directory')
+            ->whereNotNull('reference_title')
+            ->select('reference_title as query', DB::raw('count(*) as count'))
+            ->groupBy('reference_title')
+            ->orderByDesc('count')
+            ->limit($limit)
+            ->get();
+    }
+
     public static function dailyViews()
     {
         return AnalyticsEvent::where('event_type', 'pageview')
