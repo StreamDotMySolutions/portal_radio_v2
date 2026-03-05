@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use Illuminate\Http\Request;
 use App\Models\Directory;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class DirectoryController extends Controller
 {
@@ -125,8 +126,10 @@ class DirectoryController extends Controller
     public function tree()
     {
         // Only show folders as potential parents, not staff entries
-        $roots = Directory::whereIsRoot()->where('type', 'folder')->defaultOrder()->with(['children'])->get();
-        $tree = $roots->map(fn($root) => $this->buildTreeNode($root))->toArray();
+        $tree = Cache::remember('backend.directory.tree', 86400, function () {
+            $roots = Directory::whereIsRoot()->where('type', 'folder')->defaultOrder()->with(['children'])->get();
+            return $roots->map(fn($root) => $this->buildTreeNode($root))->toArray();
+        });
         return response()->json(['tree' => $tree]);
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use App\Models\Vod;
 use App\Services\CommonService;
@@ -173,8 +174,10 @@ class VodController extends Controller
     public function tree()
     {
         // Only show folders as potential parents, not files
-        $roots = Vod::whereIsRoot()->where('type', 'folder')->defaultOrder()->with(['children'])->get();
-        $tree = $roots->map(fn($root) => $this->buildTreeNode($root))->toArray();
+        $tree = Cache::remember('backend.vod.tree', 86400, function () {
+            $roots = Vod::whereIsRoot()->where('type', 'folder')->defaultOrder()->with(['children'])->get();
+            return $roots->map(fn($root) => $this->buildTreeNode($root))->toArray();
+        });
         return response()->json(['tree' => $tree]);
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use App\Models\Asset;
 use App\Services\CommonService;
@@ -162,8 +163,10 @@ class AssetController extends Controller
     public function tree()
     {
         // Only show folders as potential parents, not files
-        $roots = Asset::whereIsRoot()->where('type', 'folder')->defaultOrder()->with(['children'])->get();
-        $tree = $roots->map(fn($root) => $this->buildTreeNode($root))->toArray();
+        $tree = Cache::remember('backend.asset.tree', 86400, function () {
+            $roots = Asset::whereIsRoot()->where('type', 'folder')->defaultOrder()->with(['children'])->get();
+            return $roots->map(fn($root) => $this->buildTreeNode($root))->toArray();
+        });
         return response()->json(['tree' => $tree]);
     }
 
