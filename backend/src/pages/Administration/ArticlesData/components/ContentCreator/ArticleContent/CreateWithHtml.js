@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Badge, Button, Col, Modal, Tabs, Tab} from 'react-bootstrap'
-import { appendFormData, TextEditor,InputTextarea } from '../../../../../../libs/FormInput'
+import { appendFormData, TextEditorWithEdit, InputTextarea } from '../../../../../../libs/FormInput'
 import axios from '../../../../../../libs/axios'
 import useStore from '../../../../../store'
 import DataTable from '../ArticleAsset/DataTable'
@@ -92,7 +92,7 @@ export default function Create() {
             >
 
               {/* <Tab eventKey="wysiwyg" title="EDITOR">
-                  <TextEditor  fieldName={'contents'} />
+                  <TextEditorWithEdit fieldName={'contents'} />
               </Tab> */}
 
               <Tab eventKey="html" title="HTML">
@@ -114,7 +114,8 @@ export default function Create() {
                 <Col className='p-3 border border-2 border-dashed' style={{'backgroundColor': 'lightcyan'}}>
                     {/* {item.article_content?.contents} */}
                     {/* Render HTML content */}
-                    <div dangerouslySetInnerHTML={{ __html: store.getValue('contents')}} />
+                    <div className='preview-content' dangerouslySetInnerHTML={{ __html: store.getValue('contents')}} />
+                    <style>{`.preview-content img { max-width: 100%; height: auto; }`}</style>
                 </Col>
               </Tab>
           

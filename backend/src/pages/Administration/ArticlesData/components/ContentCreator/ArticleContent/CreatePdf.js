@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useParams } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button, Modal } from 'react-bootstrap'
-import { appendFormData, InputFile } from '../../../../../../libs/FormInput'
+import { Button, Form, Modal } from 'react-bootstrap'
+import { appendFormData } from '../../../../../../libs/FormInput'
 import axios from '../../../../../../libs/axios'
 import useStore from '../../../../../store'
 
@@ -15,6 +15,9 @@ export default function CreatePdf() {
     const [isLoading, setIsLoading] = useState(false)
     const [articleDataId, setArticleDataId] = useState(null)
     const [showUpload, setShowUpload] = useState(false)
+    const [uploading, setUploading] = useState(false)
+    const [uploaded, setUploaded] = useState(false)
+    const fileRef = useRef(null)
 
     const handleShowClick = () => {
         store.setValue('errors', null)
@@ -57,27 +60,30 @@ export default function CreatePdf() {
     }
 
     /**
-     * Step 2: Upload the PDF file
+     * Step 2: Auto-upload PDF on file select
      */
-    const handleUploadClick = () => {
-        const fileInput = document.querySelector('input[name="article_pdf"]')
-        if (!fileInput?.files[0]) return
+    const handleFileChange = (e) => {
+        const file = e.target.files[0]
+        if (!file) return
 
-        setIsLoading(true)
+        setUploading(true)
         const formData = new FormData()
-        formData.append('article_pdf', fileInput.files[0])
+        formData.append('article_pdf', file)
         formData.append('article_data_id', articleDataId)
 
         axios({ method: 'post', url: `${store.url}/article-pdf`, data: formData })
             .then(() => {
-                setIsLoading(false)
-                handleCloseClick()
+                setUploading(false)
+                setUploaded(true)
             })
             .catch(error => {
                 if (error.response?.status === 422) {
                     store.setValue('errors', error.response.data.errors)
                 }
-                setIsLoading(false)
+                setUploading(false)
+            })
+            .finally(() => {
+                if (fileRef.current) fileRef.current.value = ''
             })
     }
 
@@ -94,14 +100,25 @@ export default function CreatePdf() {
 
                 <Modal.Body>
                     {showUpload ? (
-                        <>
-                            <InputFile fieldName='article_pdf' accept='.pdf' icon={['fas', 'file-pdf']} />
-                            <div className='text-center mt-3'>
-                                <Button disabled={isLoading} variant='primary' onClick={handleUploadClick}>
-                                    Upload PDF
-                                </Button>
-                            </div>
-                        </>
+                        <div className='text-center py-3'>
+                            {uploaded ? (
+                                <div className='text-success'>
+                                    <FontAwesomeIcon icon={['fas', 'check-circle']} size='2x' />
+                                    <p className='mt-2'>PDF uploaded successfully</p>
+                                </div>
+                            ) : (
+                                <div className='d-flex align-items-center gap-2'>
+                                    <Form.Control
+                                        ref={fileRef}
+                                        type='file'
+                                        accept='.pdf'
+                                        onChange={handleFileChange}
+                                        disabled={uploading}
+                                    />
+                                    {uploading && <FontAwesomeIcon icon={['fas', 'spinner']} spin />}
+                                </div>
+                            )}
+                        </div>
                     ) : (
                         <div className='text-center py-4'>
                             <h5 className='mb-3'>Create PDF block?</h5>

@@ -18,7 +18,6 @@ import DeleteModal from './Delete'
 // import ShowModal from '../modals/Show'
 
 import Ordering from './Ordering'
-import EditHtml from './EditHtml';
 import EditVisual from './EditVisual';
 import EditGallery from './EditGallery';
 import ShowGallery from './ShowGallery';
@@ -93,11 +92,7 @@ const ContentData = () => {
                                             ) : item.contents === 'gallery' ? (
                                                 <EditGallery id={item.id} />
                                             ) : (
-                                                <>
                                                 <EditVisual id={item.id} />
-                                                {' '}
-                                                <EditHtml id={item.id} />
-                                                </>
                                             )}
 
                                             {' '}

@@ -1,7 +1,6 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Button, Modal } from 'react-bootstrap'
-import { InputFile } from '../../../../../../libs/FormInput'
+import { Button, Form, Modal } from 'react-bootstrap'
 import axios from '../../../../../../libs/axios'
 import useStore from '../../../../../store'
 
@@ -10,8 +9,9 @@ export default function EditPdf({ id }) {
     const store = useStore()
 
     const [show, setShow] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
+    const [uploading, setUploading] = useState(false)
     const [currentFilename, setCurrentFilename] = useState(null)
+    const fileRef = useRef(null)
 
     const handleShowClick = () => {
         store.setValue('errors', null)
@@ -28,25 +28,28 @@ export default function EditPdf({ id }) {
         setShow(false)
     }
 
-    const handleSubmitClick = () => {
-        const fileInput = document.querySelector('input[name="article_pdf"]')
-        if (!fileInput?.files[0]) return
+    const handleFileChange = (e) => {
+        const file = e.target.files[0]
+        if (!file) return
 
-        setIsLoading(true)
+        setUploading(true)
         const formData = new FormData()
-        formData.append('article_pdf', fileInput.files[0])
+        formData.append('article_pdf', file)
         formData.append('article_data_id', id)
 
         axios({ method: 'post', url: `${store.url}/article-pdf`, data: formData })
             .then(() => {
-                setIsLoading(false)
-                handleCloseClick()
+                setUploading(false)
+                setCurrentFilename(file.name)
             })
             .catch(error => {
                 if (error.response?.status === 422) {
                     store.setValue('errors', error.response.data.errors)
                 }
-                setIsLoading(false)
+                setUploading(false)
+            })
+            .finally(() => {
+                if (fileRef.current) fileRef.current.value = ''
             })
     }
 
@@ -63,19 +66,28 @@ export default function EditPdf({ id }) {
 
                 <Modal.Body>
                     {currentFilename ? (
-                        <p className='text-muted small mb-3'>Current file: {currentFilename}</p>
+                        <p className='text-muted small mb-3'>
+                            <FontAwesomeIcon icon={['fas', 'file-pdf']} className='me-1 text-danger' />
+                            {currentFilename}
+                        </p>
                     ) : (
                         <p className='text-muted small mb-3'>No PDF attached</p>
                     )}
-                    <InputFile fieldName='article_pdf' accept='.pdf' icon={['fas', 'file-pdf']} />
+                    <div className='d-flex align-items-center gap-2'>
+                        <Form.Control
+                            ref={fileRef}
+                            type='file'
+                            accept='.pdf'
+                            onChange={handleFileChange}
+                            disabled={uploading}
+                        />
+                        {uploading && <FontAwesomeIcon icon={['fas', 'spinner']} spin />}
+                    </div>
                 </Modal.Body>
 
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseClick}>
                         Close
-                    </Button>
-                    <Button disabled={isLoading} variant="primary" onClick={handleSubmitClick}>
-                        Upload
                     </Button>
                 </Modal.Footer>
             </Modal>

@@ -1,32 +1,33 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Table, Button, Form } from 'react-bootstrap'
+import { Table, Button, Form, Pagination } from 'react-bootstrap'
 import { useParams } from 'react-router-dom'
 import useStore from '../../../../../store'
 import axios from '../../../../../../libs/axios'
-import PaginatorLink from '../../../../../../libs/PaginatorLink'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 
 const DataTable = () => {
     const store = useStore()
     const { parentId } = useParams()
-    const url = store.url + '/article-assets/' + parentId
+    const baseUrl = store.url + '/article-assets/' + parentId
     const [uploading, setUploading] = useState(false)
     const [refresh, setRefresh] = useState(false)
     const [items, setItems] = useState([])
+    const [copiedId, setCopiedId] = useState(null)
+    const [fetchUrl, setFetchUrl] = useState(baseUrl)
     const fileRef = useRef(null)
 
     const serverUrl = process.env.REACT_APP_SERVER_URL
     const path = `${serverUrl}/storage/article_assets`
 
     useEffect(() => {
-        axios({ method: 'get', url })
+        axios({ method: 'get', url: fetchUrl })
             .then(response => {
                 setRefresh(false)
                 setItems(response.data.article_assets)
             })
             .catch(error => console.warn(error))
-    }, [refresh])
+    }, [refresh, fetchUrl])
 
     const handleFileChange = (e) => {
         const file = e.target.files[0]
@@ -38,7 +39,7 @@ const DataTable = () => {
         formData.append('article_id', parentId)
 
         axios({ method: 'post', url: `${store.url}/article-assets`, data: formData })
-            .then(() => setRefresh(true))
+            .then(() => { setFetchUrl(baseUrl); setRefresh(true) })
             .catch(error => {
                 if (error.response?.status === 422) {
                     console.warn(error.response.data.errors)
@@ -50,12 +51,11 @@ const DataTable = () => {
             })
     }
 
-    
-    const handleCopyClick = (value) => {
-        navigator.clipboard.writeText(value)
+    const handleCopyClick = (filename, id) => {
+        navigator.clipboard.writeText(`${serverUrl}/storage/article_assets/${filename}`)
             .then(() => {
-               // console.log('Text copied to clipboard:', value);
-                // Optionally, you can show a message to the user indicating the successful copy.
+                setCopiedId(id)
+                setTimeout(() => setCopiedId(null), 2000)
             })
             .catch((error) => {
                 console.error('Failed to copy text to clipboard:', error);
@@ -85,66 +85,66 @@ const DataTable = () => {
 
     return (
         <div>
-            <Table>
-                <thead>
+            <Table hover responsive>
+                <thead className='table-light'>
                     <tr>
-                        <th className='text-center' style={{ 'width': '100px'}}><FontAwesomeIcon icon={['fas', 'image']} /></th>
-                        <th className='text-start' style={{ 'width': '100vH'}}>URL</th>
-                        <th className='text-center' style={{ 'width': '100px'}}><FontAwesomeIcon icon={['fas', 'bolt']} /></th>
+                        <th className='text-start'>Filename</th>
+                        <th className='text-center' style={{ width: '120px' }}><FontAwesomeIcon icon={['fas', 'bolt']} /></th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    {items?.data?.map((item,index) => (
-                       
-                        <tr key={index}>
-                            <td>
-                               {/* <img     
-                                    className='img-fluid rounded' 
-                                    src={`${store.server}/storage/article_assets/${item.filename}`} 
-                                    alt="Image" 
-                                /> */}
-
-                                {item.filename && /\.(jpg|gif|png)$/.test(item.filename) ? (
+                    {items?.data?.map((item) => (
+                        <tr key={item.id}>
+                            <td className="align-middle">
+                                {item.filename && /\.(jpg|jpeg|gif|png|webp)$/i.test(item.filename) ? (
                                     <img
-                                        className='img-fluid rounded'
+                                        className='rounded me-2'
                                         src={`${path}/${item.filename}`}
-                                        alt="Image"
+                                        alt={item.filename}
+                                        style={{ width: '40px', height: '40px', objectFit: 'cover' }}
                                     />
                                 ) : (
-                                    // Render something else if the filename extension is not jpg, gif, or png
-                                    <div>Not an image</div>
+                                    <FontAwesomeIcon icon={['fas', 'file']} className='me-2 text-secondary' />
                                 )}
-
-       
+                                <small>{item.filename}</small>
                             </td>
-                            <td className="align-middle">
-                                <Form.Control 
-                                    value={`/storage/article_assets/${item.filename}`} 
-                                    style={{'backgroundColor':'lightCyan'}}
-                                />
-                            </td>
-                            <td className="align-middle text-center" style={{width:"200px"}}>
-                                {/* <Button 
-                                    size='sm' 
-                                    onClick={() => handleCopyClick(`/storage/article_assets/${item.filename}`)}
-                                    variant='outline-primary'>
-                                    <FontAwesomeIcon icon={['fas', 'copy']} />
+                            <td className="align-middle text-center">
+                                <Button
+                                    size='sm'
+                                    variant={copiedId === item.id ? 'success' : 'outline-secondary'}
+                                    onClick={() => handleCopyClick(item.filename, item.id)}
+                                    className='me-1'>
+                                    <FontAwesomeIcon icon={['fas', copiedId === item.id ? 'check' : 'copy']} />
                                 </Button>
-                                {' '} */}
-                                <Button 
-                                    size='sm' 
+                                <Button
+                                    size='sm'
                                     onClick={() => handleDeleteClick(item.id)}
                                     variant='outline-danger'>
                                     <FontAwesomeIcon icon={['fas', 'trash']} />
                                 </Button>
-                                
                             </td>
                         </tr>
                     ))}
                 </tbody>
             </Table>
-            <PaginatorLink store={store} items={items} />
+            {items?.last_page > 1 && (
+                <div className="d-flex">
+                    <div className="ms-auto">
+                        <Pagination className='mb-0'>
+                            {items.links?.map((page, index) => (
+                                <Pagination.Item
+                                    key={index}
+                                    active={page.active}
+                                    disabled={page.url === null}
+                                    onClick={() => page.url && setFetchUrl(page.url)}>
+                                    <span dangerouslySetInnerHTML={{ __html: page.label }} />
+                                </Pagination.Item>
+                            ))}
+                        </Pagination>
+                    </div>
+                </div>
+            )}
             <hr />
             <div className='d-flex align-items-center gap-2'>
                 <Form.Control

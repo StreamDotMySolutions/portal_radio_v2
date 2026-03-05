@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Badge, Button, Col, Modal, Tabs, Tab} from 'react-bootstrap'
-import { appendFormData, InputTextarea, TextEditor } from '../../../../../../libs/FormInput'
+import { appendFormData, InputTextarea, TextEditorWithEdit } from '../../../../../../libs/FormInput'
 import axios from '../../../../../../libs/axios'
 import useStore from '../../../../../store'
 import DataTable from '../ArticleAsset/DataTable'
@@ -107,7 +107,7 @@ export default function EditModal({id}) {
 
               <Tab eventKey="wysiwyg" title="EDITOR">
                 
-                  <TextEditor fieldName={'contents'} />
+                  <TextEditorWithEdit fieldName={'contents'} />
                   {/* <InputTextarea
                     fieldName={'contents'}
                     rows={'15'}
@@ -116,13 +116,13 @@ export default function EditModal({id}) {
                   
               </Tab>
 
-              {/* <Tab eventKey="html" title="HTML">
+              <Tab eventKey="html" title="HTML">
                   <InputTextarea
                     fieldName={'contents'}
                     rows={'15'}
                     icon={'fa fa-code'}
                   />
-              </Tab> */}
+              </Tab>
               <Tab eventKey="assets" title="IMAGE">
                 <DataTable />
               </Tab>
@@ -131,7 +131,8 @@ export default function EditModal({id}) {
                 <Col className='p-3 border border-2 border-dashed' style={{'backgroundColor': 'lightcyan'}}>
                     {/* {item.article_content?.contents} */}
                     {/* Render HTML content */}
-                    <div dangerouslySetInnerHTML={{ __html: store.getValue('contents')}} />
+                    <div className='preview-content' dangerouslySetInnerHTML={{ __html: store.getValue('contents')}} />
+                    <style>{`.preview-content img { max-width: 100%; height: auto; }`}</style>
                 </Col>
               </Tab>
           

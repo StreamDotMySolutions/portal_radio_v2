@@ -8,7 +8,6 @@ import axios from '../../../../libs/axios';
 import ArticlePosterModal from './ContentCreator/ArticlePoster/ArticlePosterModal';
 import CreateContent from './ContentCreator/ArticleContent/Create'
 import CreateContentWithEditor from './ContentCreator/ArticleContent/CreateWithEditor'
-import CreateContentWithHtml from './ContentCreator/ArticleContent/CreateWithHtml'
 import CreateContentWithGallery from './ContentCreator/ArticleContent/CreateGallery'
 import CreateContentWithPdf from './ContentCreator/ArticleContent/CreatePdf'
 import ArticleSetting from './ContentCreator/ArticleSetting/ArticleSetting';
@@ -83,7 +82,7 @@ const ContentCreator = () => {
                             <FontAwesomeIcon icon={['fas', 'plus']} />{' '}Add Content
                         </Card.Header>
                         <Card.Body className='text-center'>
-                            <CreateContentWithEditor />{' '}<CreateContentWithHtml />{' '}<CreateContentWithGallery />{' '}<CreateContentWithPdf />
+                            <CreateContentWithEditor />{' '}<CreateContentWithGallery />{' '}<CreateContentWithPdf />
                         </Card.Body>
                     </Card>
                 </Col>
