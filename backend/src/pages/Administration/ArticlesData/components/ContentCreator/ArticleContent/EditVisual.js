@@ -4,6 +4,7 @@ import { appendFormData, InputTextarea, TextEditor } from '../../../../../../lib
 import axios from '../../../../../../libs/axios'
 import useStore from '../../../../../store'
 import DataTable from '../ArticleAsset/DataTable'
+import AssetBrowser from '../AssetBrowser'
 
 export default function EditVisual({id}) {
     const store = useStore()
@@ -125,6 +126,10 @@ export default function EditVisual({id}) {
               </Tab> */}
               <Tab eventKey="assets" title="ASSETS">
                 <DataTable />
+              </Tab>
+
+              <Tab eventKey="asset-browser" title="ASSET BROWSER">
+                <AssetBrowser />
               </Tab>
 
               <Tab eventKey="preview" title="PREVIEW">
