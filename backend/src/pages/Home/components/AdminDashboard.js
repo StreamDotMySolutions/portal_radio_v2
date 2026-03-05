@@ -89,7 +89,26 @@ const AdminDashboard = () => {
                     <p className='text-muted small fw-semibold text-uppercase mb-2'>Content</p>
                     <Row className='g-3'>
                         <Col md={3}>
-                            <ContentCard title='Articles'    value={v(counts.articles)}    icon='newspaper'    color='primary'   to='/administration/articles/0' />
+                            <Card className='h-100' onClick={() => navigate('/administration/articles/0')} style={{ cursor: 'pointer' }}>
+                                <Card.Body className='d-flex align-items-center gap-3'>
+                                    <div
+                                        className='text-primary bg-primary bg-opacity-10 rounded p-3 fs-4'
+                                        style={{ lineHeight: 1 }}
+                                    >
+                                        <FontAwesomeIcon icon={['fas', 'newspaper']} />
+                                    </div>
+                                    <div>
+                                        <div className='text-muted small'>Articles</div>
+                                        <div className='fw-bold'>
+                                            {isLoading ? '…' : (
+                                                <>
+                                                    {counts.articles_breakdown?.folders || 0} Folder{counts.articles_breakdown?.folders !== 1 ? 's' : ''} / {counts.articles_breakdown?.pages || 0} Page{counts.articles_breakdown?.pages !== 1 ? 's' : ''}
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+                                </Card.Body>
+                            </Card>
                         </Col>
                         <Col md={3}>
                             <Card className='h-100' onClick={() => navigate('/administration/directories/0')} style={{ cursor: 'pointer' }}>

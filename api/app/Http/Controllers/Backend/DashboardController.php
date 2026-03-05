@@ -16,6 +16,9 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        $foldersCount = Article::where('type', 'folder')->count();
+        $pagesCount = Article::where('type', '!=', 'folder')->count();
+
         $departmentsCount = Directory::where('type', 'folder')->count();
         $staffsCount = Directory::where('type', '!=', 'folder')->count();
         $emptyStaffsCount = Directory::where('type', '!=', 'folder')
@@ -32,6 +35,10 @@ class DashboardController extends Controller
         return response()->json([
             'counts' => [
                 'articles'    => Article::count(),
+                'articles_breakdown' => [
+                    'folders' => $foldersCount,
+                    'pages'   => $pagesCount,
+                ],
                 'users'       => User::count(),
                 'banners'     => Banner::count(),
                 'programmes'  => Programme::count(),
