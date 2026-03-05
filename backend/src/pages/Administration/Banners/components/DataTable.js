@@ -26,6 +26,31 @@ const DataTable = () => {
     const [query, setQuery] = useState(search)
     const [items, setItems] = useState([])
 
+    const handleToggleActive = (itemId) => {
+        // Optimistic update
+        setItems(prev => ({
+            ...prev,
+            data: prev.data.map(item =>
+                item.id === itemId
+                    ? { ...item, active: item.active == 1 ? 0 : 1 }
+                    : item
+            )
+        }))
+
+        axios({ method: 'patch', url: `${apiBase}/banners/${itemId}/toggle` })
+            .catch(() => {
+                // Revert on failure
+                setItems(prev => ({
+                    ...prev,
+                    data: prev.data.map(item =>
+                        item.id === itemId
+                            ? { ...item, active: item.active == 1 ? 0 : 1 }
+                            : item
+                    )
+                }))
+            })
+    }
+
     // Debounce: commit typed query to store after 400ms idle
     useEffect(() => {
         const timer = setTimeout(() => setSearch(query), 400)
@@ -126,10 +151,12 @@ const DataTable = () => {
                                 />
                             </td>
                             <td>
-                                {item.active == 1
-                                    ? <Badge bg='success' pill>Active</Badge>
-                                    : <Badge bg='secondary' pill>Inactive</Badge>
-                                }
+                                <Form.Check
+                                    type='switch'
+                                    checked={item.active == 1}
+                                    onChange={() => handleToggleActive(item.id)}
+                                    title={item.active == 1 ? 'Active' : 'Inactive'}
+                                />
                             </td>
                             <td>{item.title}</td>
                             <td className='text-end text-nowrap'>

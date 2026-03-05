@@ -115,7 +115,13 @@ class BannerController extends Controller
                 $banner->down(); //  // banner ordering down
             break;
         }
-        
+
+    }
+
+    public function toggle(Banner $banner)
+    {
+        $banner->update(['active' => $banner->active == 1 ? 0 : 1]);
+        return response()->json(['message' => 'Banner updated successfully']);
     }
 
 }
