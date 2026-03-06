@@ -8,6 +8,7 @@ function LoadMenu3({id}) {
   const url = process.env.REACT_APP_API_URL
   const [title, setTitle] = useState('')
   const [articles, setArticles] = useState([])
+  const [settings, setSettings] = useState([])
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
@@ -16,6 +17,7 @@ function LoadMenu3({id}) {
       //console.log(response.data)
       setTitle(response.data.title)
       setArticles(response.data.articles)
+      setSettings(response.data.settings)
     })
     .catch(error => {
       console.warn(error)
@@ -58,7 +60,7 @@ function LoadMenu3({id}) {
   if (articles.length === 0) {
     return (
       <li className='nav-item' style={halfWidth}>
-        <NavLink className="nav-link text-light" to={`/listings/${id}`}>{title}</NavLink>
+        <NavLink className="nav-link text-light" to={settings.redirect_url ? settings.redirect_url : `/listings/${id}`}>{title}</NavLink>
       </li>
     )
   }

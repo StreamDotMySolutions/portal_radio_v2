@@ -112,7 +112,8 @@ const PageContent = ({id}) => {
                                             <h3 id="linkdirektori">
                                                 <FontAwesomeIcon
                                                     icon={'fa-solid fa-building'}
-                                                    className='text-dark mr-2'
+                                                    className='mr-2'
+                                                    style={{ color: '#303381' }}
                                                 />
                                                 {item.name.toUpperCase()}
                                             </h3>

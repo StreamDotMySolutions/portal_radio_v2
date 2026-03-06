@@ -36,7 +36,7 @@ const DepartmentItems = ({ departments }) => {
                             <FontAwesomeIcon
                                 icon={isVisible ? faMinusCircle : faPlusCircle}
                                 onClick={() => toggleChildren(itemIndex)}
-                                style={{ cursor: 'pointer', marginLeft: '10px' }}
+                                style={{ cursor: 'pointer', marginLeft: '10px', color: '#303381' }}
                                 size="lg"
                             />
                         )}
