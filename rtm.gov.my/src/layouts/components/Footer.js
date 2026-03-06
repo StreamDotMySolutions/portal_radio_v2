@@ -29,7 +29,7 @@ const Footer = () => {
                     <div className="col-md-4">
                         <ul className="footer-contact mb10">
                             <li><span><i className="fa-solid fa-building"></i></span><span>Radio Televisyen Malaysia · Angkasapuri Kota Media · 50614 Kuala Lumpur</span></li>
-                            <li><span><i className="fa-solid fa-envelope"></i></span><span>aduan [at] rtm.gov.my</span></li>
+                            <li><span><i className="fa-solid fa-envelope"></i></span><span><img src="/img/email-aduan.svg" alt="Email Aduan" style={{ height: '18px', verticalAlign: 'middle' }} /></span></li>
                             <li><span><i className="fa-solid fa-phone"></i></span><span>Tel: 03 - 2282 5333</span></li>
                             <li><span><i className="fa-solid fa-fax"></i></span><span>Faks: 03 - 2284 7591</span></li>
                         </ul>
