@@ -37,9 +37,9 @@ const Footer = () => {
 
                     <div className="col-md-4">
                         <div className="d-flex flex-wrap mb-3" style={{ gap: '10px' }}>
-                            <a href="https://apps.apple.com/my/app/rtmklik/id777391399"><img src="/asset/footer/apps.png" alt="App Store" style={{ height: '34px' }} /></a>
-                            <a href="https://play.google.com/store/apps/details?id=my.gov.rtm.mobile"><img src="/asset/footer/googleplay-bm.png" alt="Google Play" style={{ height: '34px' }} /></a>
-                            <a href="https://appgallery.huawei.com/app/C101841473"><img src="/asset/footer/huawei_appsgaleryedit1.png" alt="AppGallery" style={{ height: '34px' }} /></a>
+                            <a href="https://apps.apple.com/my/app/rtmklik/id777391399"><img src="/asset/footer/app_store_hires.png" alt="App Store" style={{ height: '34px' }} /></a>
+                            <a href="https://play.google.com/store/apps/details?id=my.gov.rtm.mobile"><img src="/asset/footer/google_play_hires.png" alt="Google Play" style={{ height: '34px' }} /></a>
+                            <a href="https://appgallery.huawei.com/app/C101841473"><img src="/asset/footer/huawei-1.png" alt="AppGallery" style={{ height: '34px' }} /></a>
                         </div>
                     </div>
                 </div>
