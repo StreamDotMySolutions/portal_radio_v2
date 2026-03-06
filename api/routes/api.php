@@ -25,6 +25,7 @@ use App\Http\Controllers\Backend\{
     VodController,
     AnalyticsController,
     ActivityController,
+    ComplaintController,
 };
 
 Route::get('/', function () {
@@ -209,3 +210,10 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
 
 // Directory bulk import (external, e.g. Google Apps Script)
 Route::post('/directories/sync/{root}', [DirectoryController::class, 'store']);
+
+// Manage Complaints
+Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
+    Route::get('/complaints', [ComplaintController::class, 'index']);
+    Route::get('/complaints/{complaint}', [ComplaintController::class, 'show']);
+    Route::delete('/complaints/{complaint}', [ComplaintController::class, 'destroy']);
+});

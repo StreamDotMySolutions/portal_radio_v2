@@ -13,6 +13,7 @@ use App\Http\Controllers\Frontend\{
     DirectoryController,
     AnalyticsController,
     DownloadController,
+    ComplaintController,
 };
 
 // prefix frontend/...
@@ -42,4 +43,7 @@ Route::get('/download/article-pdf/{filename}', [DownloadController::class, 'arti
 
 // Analytics tracking (fire-and-forget, no auth)
 Route::post('/track', [AnalyticsController::class, 'store']);
+
+// Complaints submission (public, protected by reCAPTCHA)
+Route::post('/complaints', [ComplaintController::class, 'store']);
 

@@ -39,6 +39,7 @@ import AssetManagement from './pages/Administration/Assets'
 import VodManagement from './pages/Administration/Vods'
 import Analytics from './pages/Administration/Analytics'
 import Activity from './pages/Administration/Activity'
+import ComplaintManagement from './pages/Administration/Complaints'
 
 library.add(fas)
 
@@ -78,6 +79,7 @@ export default function App() {
                 <Route path="/administration/vods/:parentId" element={<VodManagement />} />
                 <Route path="/administration/analytics" element={<Analytics />} />
                 <Route path="/administration/activity" element={<Activity />} />
+                <Route path="/administration/complaints" element={<ComplaintManagement />} />
               </Route>
             </Route>
         </Routes>

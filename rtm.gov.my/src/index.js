@@ -12,6 +12,7 @@ import SitemapLayout from './layouts/SitemapLayout/SitemapLayout';
 import HomeLayout from "./layouts/HomeLayout/HomeLayout";
 import ContentLayout from "./layouts/ContentLayout/ContentLayout";
 import ListingLayout from "./layouts/ListingLayout/ListingLayout";
+import ComplaintLayout from "./layouts/ComplaintLayout/ComplaintLayout";
 
 /** Error */
 import Error404 from "./pages/Error404"
@@ -57,6 +58,7 @@ export default function App() {
               <Route path="/directories/:id/show" element={<ShowStaffLayout />}/>
               <Route path="/directories/search/:query" element={<SearchResultLayout /> } />
               <Route path="/sitemap" element={<SitemapLayout />}/>
+              <Route path="/borang-aduan" element={<ComplaintLayout />}/>
             </Routes>
           </BrowserRouter>
           <AccessibilityToggle />
