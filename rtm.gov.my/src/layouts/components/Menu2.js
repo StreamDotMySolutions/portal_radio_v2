@@ -86,7 +86,8 @@ const Menu2 = () => {
     };
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-light shadow-sm" style={{ backgroundColor: "white" , color: "black"}} id="navbardibawah">
+        <nav className="navbar navbar-expand-lg navbar-light shadow-sm" style={{ backgroundColor: "white" }} id="navbardibawah">
+            <style>{`#navbardibawah .nav-link { color: #303381 !important; } #navbardibawah .nav-link:hover { color: #F8A131 !important; } #navbardibawah .nav-link.active { color: white !important; }`}</style>
             <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarbawah" aria-controls="navbarbawah" aria-expanded="false" aria-label="Toggle navigation">
                 <span className="navbar-toggler-icon"></span>
             </button>

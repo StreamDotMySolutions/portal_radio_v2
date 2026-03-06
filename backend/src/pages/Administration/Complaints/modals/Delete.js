@@ -7,8 +7,7 @@ import { useComplaintStore } from '../store'
 
 export default function DeleteModal({ id, name }) {
     const { url: apiBase } = useStore()
-    const setRefreshKey = useComplaintStore((s) => s.setRefreshKey)
-    const refreshKey = useComplaintStore((s) => s.refreshKey)
+    const setRefresh = useComplaintStore((s) => s.setRefresh)
 
     const [show, setShow] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
@@ -28,7 +27,7 @@ export default function DeleteModal({ id, name }) {
 
         axios({ method: 'post', url: `${apiBase}/complaints/${id}`, data: formData })
             .then(() => {
-                setRefreshKey(refreshKey + 1)
+                setRefresh()
                 handleClose()
             })
             .catch((error) => console.warn(error))

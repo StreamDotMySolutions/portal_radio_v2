@@ -2,14 +2,14 @@ import { create } from 'zustand';
 
 export const useComplaintStore = create((set) => ({
     refreshKey: 0,
-    paginatorUrl: '/api/complaints',
-    search: '',
-    categoryFilter: '',
-    platformFilter: '',
+    setRefresh: () => set((state) => ({ refreshKey: state.refreshKey + 1 })),
 
-    setRefreshKey: (key) => set({ refreshKey: key }),
+    paginatorUrl: null,
     setPaginatorUrl: (url) => set({ paginatorUrl: url }),
-    setSearch: (search) => set({ search }),
-    setCategoryFilter: (filter) => set({ categoryFilter: filter }),
-    setPlatformFilter: (filter) => set({ platformFilter: filter }),
+
+    search: '',
+    setSearch: (search) => set({ search, paginatorUrl: null }),
+
+    categoryFilter: '',
+    setCategoryFilter: (filter) => set({ categoryFilter: filter, paginatorUrl: null }),
 }));

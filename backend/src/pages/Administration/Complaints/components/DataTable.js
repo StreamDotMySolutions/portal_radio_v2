@@ -70,8 +70,13 @@ const DataTable = () => {
 
     useEffect(() => {
         axios({ method: 'get', url: effectiveUrl })
-            .then((response) => setItems(response.data.complaints))
-            .catch((error) => console.warn(error))
+            .then((response) => {
+                setItems(response.data.complaints)
+            })
+            .catch((error) => {
+                console.error('API Error:', error)
+                console.error('URL was:', effectiveUrl)
+            })
     }, [refreshKey, paginatorUrl, search, categoryFilter, sortBy, sortDir])
 
     const paginatorAdapter = {

@@ -105,8 +105,6 @@ const ComplaintForm = () => {
                     recaptchaRef.current.reset();
                 }
                 setCaptchaToken(null);
-                // Auto-hide success message after 10 seconds
-                setTimeout(() => setSuccess(false), 10000);
             }
         } catch (error) {
             if (error.response?.status === 422) {
@@ -144,21 +142,44 @@ const ComplaintForm = () => {
                             </p>
                         </div>
 
-                        {success && (
-                            <div className="alert alert-success alert-dismissible fade show" role="alert" style={{ borderRadius: '8px', borderLeft: '4px solid #28a745' }}>
-                                <div style={{ display: 'flex', alignItems: 'center' }}>
-                                    <FontAwesomeIcon icon={['fas', 'check-circle']} style={{ marginRight: '1rem', fontSize: '1.3rem', color: '#F8A131' }} />
-                                    <div>
-                                        <strong style={{ color: '#303381' }}>Berjaya!</strong> Aduan anda telah diterima.
-                                        <br />
-                                        <strong>Nombor Rujukan:</strong> <span style={{ fontSize: '1.1rem', fontFamily: 'monospace', color: '#303381' }}>{referenceNumber}</span>
-                                    </div>
+                        {success ? (
+                            <div style={{ backgroundColor: 'white', borderRadius: '10px', padding: '3rem', boxShadow: '0 2px 10px rgba(0,0,0,0.1)', textAlign: 'center' }}>
+                                <div style={{ fontSize: '4rem', color: '#28a745', marginBottom: '1.5rem' }}>
+                                    <FontAwesomeIcon icon={['fas', 'circle-check']} />
                                 </div>
-                                <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClick={() => setSuccess(false)}>
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                                <h3 style={{ color: '#303381', fontWeight: '700', marginBottom: '1rem' }}>
+                                    Aduan Berjaya Dihantar!
+                                </h3>
+                                <p style={{ color: '#666', fontSize: '1.05rem', marginBottom: '1.5rem' }}>
+                                    Terima kasih kerana menghantar aduan anda. Pihak kami akan menyemak dan mengambil tindakan sewajarnya.
+                                </p>
+                                <div style={{ backgroundColor: '#303381', borderRadius: '8px', padding: '1.5rem', marginBottom: '2rem', display: 'inline-block', boxShadow: '0 4px 15px rgba(248, 161, 49, 0.4)' }}>
+                                    <small style={{ color: 'rgba(255,255,255,0.7)', display: 'block', marginBottom: '0.5rem' }}>Nombor Rujukan Anda</small>
+                                    <span style={{ fontSize: '1.4rem', fontFamily: 'monospace', fontWeight: '700', color: '#F8A131' }}>
+                                        {referenceNumber}
+                                    </span>
+                                </div>
+                                <p style={{ color: '#999', fontSize: '0.9rem', marginBottom: '2rem' }}>
+                                    Sila simpan nombor rujukan ini untuk semakan status aduan anda.
+                                </p>
+                                <a
+                                    href="/"
+                                    className="btn"
+                                    style={{
+                                        backgroundColor: '#303381',
+                                        color: 'white',
+                                        padding: '0.75rem 2rem',
+                                        borderRadius: '6px',
+                                        fontWeight: '600',
+                                        fontSize: '1rem',
+                                        textDecoration: 'none'
+                                    }}
+                                >
+                                    <FontAwesomeIcon icon={['fas', 'arrow-left']} style={{ color: '#F8A131', marginRight: '3px' }} />
+                                    Kembali ke Laman Utama
+                                </a>
                             </div>
-                        )}
+                        ) : <>
 
                         {errors.form && (
                             <div className="alert alert-danger alert-dismissible fade show" role="alert" style={{ borderRadius: '8px', borderLeft: '4px solid #dc3545' }}>
@@ -428,6 +449,7 @@ const ComplaintForm = () => {
                             </div>
                         </form>
                         </div>
+                        </>}
                     </div>
                 </div>
             </div>
