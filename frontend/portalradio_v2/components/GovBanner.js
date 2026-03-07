@@ -6,7 +6,7 @@ export default function GovBanner() {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <div style={{ backgroundColor: '#141438', borderBottom: '1px solid #333', fontSize: '0.8rem' }}>
+    <div style={{ backgroundColor: '#1e1e4a', borderBottom: '1px solid #333', fontSize: '0.8rem' }}>
       <div className="container">
         <div className="d-flex align-items-center justify-content-between py-1">
           <div className="d-flex align-items-center">

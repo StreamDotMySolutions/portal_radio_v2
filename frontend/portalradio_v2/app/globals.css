@@ -118,9 +118,9 @@ body {
 
 /* Navbar styling */
 .navbar-portal {
-  background: #2A2A6A;
+  background: #141438;
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(63, 63, 143, 0.2);
+  border-bottom: none;
 }
 
 .navbar-portal .navbar-brand {

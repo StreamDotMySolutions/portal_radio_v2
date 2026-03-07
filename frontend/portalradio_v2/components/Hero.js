@@ -2,10 +2,14 @@
 
 export default function Hero() {
   const slides = [
-    { id: 0, image: '/hero-banner.png', alt: 'Hero Banner 1' },
+    { id: 0, image: '/hero-banner.png', alt: 'Hero Banner' },
     { id: 1, image: '/carausel-banner.png', alt: 'Carousel Banner' },
-    { id: 2, image: '/nasional-fm.png', alt: 'NASIONALfm' },
-    { id: 3, image: '/asyik-fm.png', alt: 'AsyikFM' },
+    { id: 2, image: '/ramadan.jpg', alt: 'Ramadan' },
+    { id: 3, image: '/carousel-1.jpg', alt: 'Carousel 1' },
+    { id: 4, image: '/carousel-2.jpg', alt: 'Carousel 2' },
+    { id: 5, image: '/carousel-3.jpg', alt: 'Carousel 3' },
+    { id: 6, image: '/carousel-4.jpg', alt: 'Carousel 4' },
+    { id: 7, image: '/carousel-5.jpg', alt: 'Carousel 5' },
   ];
 
   return (
