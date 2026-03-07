@@ -2,8 +2,8 @@ export default function Footer() {
   return (
     <footer className="py-5" style={{ backgroundColor: 'var(--color-surface)', borderTop: '1px solid rgba(63, 63, 143, 0.3)' }}>
       <div className="container-fluid px-4">
-        <div className="row row-cols-1 row-cols-md-4 mb-5 g-4 justify-content-center">
-          <div>
+        <div className="row mb-5 g-3 g-md-4 justify-content-center">
+          <div className="col-12 col-md-3">
             <h5 className="mb-3">
               <i className="bi bi-broadcast me-2"></i>Tentang RTM
             </h5>
@@ -11,7 +11,7 @@ export default function Footer() {
               Radio Televisyen Malaysia (RTM) adalah penyiar nasional yang menghadirkan konten berkualitas, mendidik, dan menghibur masyarakat Malaysia sejak 1963.
             </p>
           </div>
-          <div>
+          <div className="col-6 col-md-3">
             <h5 className="mb-3">Pautan Pantas</h5>
             <ul className="list-unstyled small">
               <li className="mb-2">
@@ -36,7 +36,7 @@ export default function Footer() {
               </li>
             </ul>
           </div>
-          <div>
+          <div className="col-6 col-md-3">
             <h5 className="mb-3">Radio</h5>
             <ul className="list-unstyled small">
               <li className="mb-2">
@@ -61,7 +61,7 @@ export default function Footer() {
               </li>
             </ul>
           </div>
-          <div>
+          <div className="col-12 col-md-3">
             <h5 className="mb-3">Hubungi Kami</h5>
             <p className="text-muted small">
               <i className="bi bi-telephone me-2"></i>

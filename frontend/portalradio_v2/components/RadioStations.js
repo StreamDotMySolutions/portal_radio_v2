@@ -1,3 +1,5 @@
+'use client';
+
 export default function RadioStations() {
   const nasionalStations = [
     { name: 'NASIONALfm', genre: 'Muzik & Berita', frequency: '88.9 FM', accent: '#3F3F8F', initial: 'N', banner: '/nasional-fm.png' },

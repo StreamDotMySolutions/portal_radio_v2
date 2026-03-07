@@ -3,7 +3,9 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import './globals.css';
 import './accessibility.css';
 import GovBanner from '@/components/GovBanner';
+import Responsive from '@/components/Responsive';
 import Navbar from '@/components/Navbar';
+import NavbarMobile from '@/components/Navbar.mobile';
 import Footer from '@/components/Footer';
 import BootstrapClient from '@/components/BootstrapClient';
 import AccessibilityToggle from '@/components/AccessibilityToggle';
@@ -25,7 +27,7 @@ export default function RootLayout({ children }) {
         <AccessibilityProvider>
           <header className="header-overlay">
             <GovBanner />
-            <Navbar />
+            <Responsive mobile={NavbarMobile} desktop={Navbar} />
           </header>
           <BootstrapClient />
           {children}
