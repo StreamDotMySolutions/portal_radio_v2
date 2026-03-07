@@ -1,5 +1,5 @@
 :root {
-  --color-bg: #0B0F1A;
+  --color-bg: #141438;
   --color-surface: #111827;
   --color-brand: #3F3F8F;
   --color-accent: #FF5A1F;
@@ -118,7 +118,7 @@ body {
 
 /* Navbar styling */
 .navbar-portal {
-  background: rgba(11, 15, 26, 0.85);
+  background: #2A2A6A;
   backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(63, 63, 143, 0.2);
 }

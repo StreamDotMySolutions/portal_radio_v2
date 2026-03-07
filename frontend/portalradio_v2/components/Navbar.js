@@ -41,10 +41,13 @@ export default function Navbar() {
               </a>
             </li>
           </ul>
-          <div className="d-flex gap-2">
-            <button className="btn btn-outline-light" type="button">
-              <i className="bi bi-search"></i>
-            </button>
+          <div className="d-flex">
+            <div className="input-group" style={{ minWidth: '300px' }}>
+              <input type="search" className="form-control bg-dark text-light" placeholder="Carian..." style={{ borderColor: '#ff6600' }} />
+              <button className="btn btn-outline-secondary" type="button" style={{ color: '#ff6600', borderColor: '#ff6600' }}>
+                <i className="bi bi-search"></i>
+              </button>
+            </div>
           </div>
         </div>
       </div>
