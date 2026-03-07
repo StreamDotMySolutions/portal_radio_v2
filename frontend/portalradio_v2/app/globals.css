@@ -225,6 +225,23 @@ section {
   padding-bottom: 3rem !important;
 }
 
+/* Hero top fade overlay */
+#heroCarousel {
+  position: relative;
+}
+
+#heroCarousel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: linear-gradient(to bottom, rgba(20, 20, 56, 0.8) 0%, transparent 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+
 /* Hero gradient */
 .hero-gradient {
   background: linear-gradient(135deg, #0B0F1A 0%, #3F3F8F 50%, #FF5A1F 100%);
