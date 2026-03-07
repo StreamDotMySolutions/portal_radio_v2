@@ -19,7 +19,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ms">
       <head>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=OpenDyslexic:ital,wght@0,400;0,700;1,400;1,700&display=swap" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=OpenDyslexic:ital,wght@0,400;0,700;1,400;1,700&display=swap" />
       </head>
       <body>
         <AccessibilityProvider>
