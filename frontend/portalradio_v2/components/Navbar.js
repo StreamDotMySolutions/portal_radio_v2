@@ -2,7 +2,7 @@
 
 export default function Navbar() {
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark navbar-portal sticky-top">
+    <nav className="navbar navbar-expand-lg navbar-dark navbar-portal">
       <div className="container-fluid px-4 py-1">
         <a className="navbar-brand" href="/">
           <img src="/logo-rtm-transparent.png" alt="RTM" height="65" style={{ objectFit: 'contain' }} />
@@ -43,8 +43,8 @@ export default function Navbar() {
           </ul>
           <div className="d-flex">
             <div className="input-group" style={{ minWidth: '300px' }}>
-              <input type="search" className="form-control bg-dark text-light" placeholder="Carian..." style={{ borderColor: '#ff6600' }} />
-              <button className="btn btn-outline-secondary" type="button" style={{ color: '#ff6600', borderColor: '#ff6600' }}>
+              <input type="search" className="form-control bg-dark text-light" placeholder="Carian..." style={{ border: '2px solid #ff6600' }} />
+              <button className="btn btn-outline-secondary" type="button" style={{ color: '#ff6600', border: '2px solid #ff6600' }}>
                 <i className="bi bi-search"></i>
               </button>
             </div>

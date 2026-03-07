@@ -13,7 +13,7 @@ export default function Hero() {
   ];
 
   return (
-    <section style={{ minHeight: '90vh' }}>
+    <section style={{ minHeight: '100vh', paddingTop: 0 }}>
       <div
         id="heroCarousel"
         className="carousel slide h-100"

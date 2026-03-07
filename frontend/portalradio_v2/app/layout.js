@@ -23,8 +23,10 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <AccessibilityProvider>
-          <GovBanner />
-          <Navbar />
+          <header className="header-overlay">
+            <GovBanner />
+            <Navbar />
+          </header>
           <BootstrapClient />
           {children}
           <Footer />
