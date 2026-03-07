@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const messages = [
   { user: 'Ahmad', color: '#3F3F8F', text: 'Selamat pagi semua!', time: '8:01' },
@@ -26,7 +26,11 @@ const messages = [
 ];
 
 export default function LiveStream() {
-  const [chatOpen, setChatOpen] = useState(true);
+  const [chatOpen, setChatOpen] = useState(false);
+
+  useEffect(() => {
+    setChatOpen(window.innerWidth > 768);
+  }, []);
 
   return (
     <section className="py-5">
