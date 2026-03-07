@@ -14,8 +14,9 @@ export default function Navbar() {
   return (
     <nav className={`navbar navbar-expand-lg navbar-dark navbar-portal${scrolled ? ' scrolled' : ''}`}>
       <div className={`container-fluid px-4 ${scrolled ? 'py-0' : 'py-1'}`}>
-        <a className="navbar-brand" href="/">
+        <a className="navbar-brand d-flex align-items-center gap-2" href="/">
           <img src="/logo-rtm-transparent.png" alt="RTM" height={scrolled ? 40 : 65} style={{ objectFit: 'contain', transition: 'height 0.3s ease' }} />
+          <img src="/jabatan-penyiaran.svg" alt="Jabatan Penyiaran Malaysia" height={scrolled ? 25 : 35} style={{ transition: 'height 0.3s ease' }} />
         </a>
         <button
           className="navbar-toggler"
