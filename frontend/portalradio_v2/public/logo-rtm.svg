@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 150">
+  <!-- RTM Logo -->
+  <g>
+    <!-- Curved arc (orange) -->
+    <path d="M 40 70 Q 100 20 200 50" stroke="#ff6600" stroke-width="20" fill="none" stroke-linecap="round"/>
+
+    <!-- Yellow circle -->
+    <circle cx="200" cy="35" r="12" fill="#ffcc00"/>
+
+    <!-- Purple/dark accent line -->
+    <path d="M 30 80 Q 80 40 140 70" stroke="#663399" stroke-width="15" fill="none" stroke-linecap="round"/>
+
+    <!-- RTM Text in dark blue -->
+    <text x="25" y="85" font-family="Arial, sans-serif" font-size="70" font-weight="bold" fill="#001a66" letter-spacing="-2">RTM</text>
+
+    <!-- Teman Setia Anda in white italic -->
+    <text x="25" y="120" font-family="Brush Script MT, cursive" font-size="28" font-style="italic" fill="white">Teman Setia Anda</text>
+  </g>
+</svg>
