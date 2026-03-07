@@ -13,9 +13,9 @@ export default function Navbar() {
 
   return (
     <nav className={`navbar navbar-expand-lg navbar-dark navbar-portal${scrolled ? ' scrolled' : ''}`}>
-      <div className="container-fluid px-4 py-1">
+      <div className={`container-fluid px-4 ${scrolled ? 'py-0' : 'py-1'}`}>
         <a className="navbar-brand" href="/">
-          <img src="/logo-rtm-transparent.png" alt="RTM" height="65" style={{ objectFit: 'contain' }} />
+          <img src="/logo-rtm-transparent.png" alt="RTM" height={scrolled ? 40 : 65} style={{ objectFit: 'contain', transition: 'height 0.3s ease' }} />
         </a>
         <button
           className="navbar-toggler"
@@ -29,7 +29,7 @@ export default function Navbar() {
           <span className="navbar-toggler-icon"></span>
         </button>
         <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav mx-auto" style={{ fontSize: '1.5em', textTransform: 'uppercase' }}>
+          <ul className="navbar-nav mx-auto" style={{ fontSize: scrolled ? '1.1em' : '1.5em', textTransform: 'uppercase', transition: 'font-size 0.3s ease' }}>
             <li className="nav-item">
               <a className="nav-link" href="/">
                 Home
