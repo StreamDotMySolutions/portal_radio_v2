@@ -15,10 +15,10 @@ MySQL (portalrtm)
 api/          Laravel 10 — REST API server (port 8000)
        ↓
 backend/      React 18   — Admin panel  (port 3000, served at /backend)
-rtm.gov.my/   React 18   — Public site  (port 3000, served at /)
+frontend/
+  ├── rtm.gov.my/   React 18   — Public site  (port 3000, served at /)
+  └── nextjs/       Next.js    — Alternative public site
 ```
-
-**Note:** The `frontend/` directory is legacy/unused; all public-facing content uses `rtm.gov.my/`.
 
 ---
 
@@ -47,7 +47,7 @@ REACT_APP_SERVER_URL=http://localhost:8000
 REACT_APP_MODE=production
 ```
 
-### rtm.gov.my/.env
+### frontend/rtm.gov.my/.env
 ```env
 REACT_APP_API_URL=http://localhost:8000/api/frontend
 REACT_APP_SERVER_URL=http://localhost:8000
@@ -116,7 +116,7 @@ REACT_APP_SERVER_URL=http://localhost:8000
 
 ---
 
-### 3. `rtm.gov.my/` — React 18 Public Site
+### 3. `frontend/rtm.gov.my/` — React 18 Public Site
 
 **Purpose:** Public-facing portal. No authentication required.
 
@@ -165,9 +165,9 @@ backend/src/
 └── index.js                 — Router and app entry point
 ```
 
-### RTM Public Site (rtm.gov.my/)
+### RTM Public Site (frontend/rtm.gov.my/)
 ```
-rtm.gov.my/src/
+frontend/rtm.gov.my/src/
 ├── components/              — Reusable UI (Menu, Footer, HlsPlayer, carousels)
 ├── layouts/                 — Page layout wrappers
 │   ├── HomeLayout/
@@ -329,13 +329,13 @@ if ($sortBy === 'name') {
 
 **3. Frontend (Public Site)**
 - If press releases should be public, add endpoint to `routes/frontend.php`
-- Create page/layout in `rtm.gov.my/src/pages/` to display content
-- Add route to `rtm.gov.my/src/index.js`
+- Create page/layout in `frontend/rtm.gov.my/src/pages/` to display content
+- Add route to `frontend/rtm.gov.my/src/index.js`
 - Fetch from `REACT_APP_API_URL/frontend/press-releases`
 
 **4. Testing**
 - API: Test the controller/service with `./vendor/bin/pest`
-- React: Test UI with `npm test` in backend/ or rtm.gov.my/
+- React: Test UI with `npm test` in backend/ or frontend/rtm.gov.my/
 
 ---
 
@@ -382,7 +382,7 @@ npm test -- --coverage  # Run tests with coverage report
 
 ### RTM Public Website (React 18)
 ```bash
-cd rtm.gov.my
+cd frontend/rtm.gov.my
 
 # Development
 npm install      # Install dependencies
