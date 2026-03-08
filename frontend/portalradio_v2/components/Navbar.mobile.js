@@ -16,7 +16,7 @@ export default function NavbarMobile() {
   const isActive = (href) => pathname === href;
 
   return (
-    <nav className={`navbar navbar-expand-lg navbar-dark navbar-portal${scrolled ? ' scrolled' : ''}`}>
+    <nav className={`navbar navbar-expand-lg navbar-dark navbar-portal${scrolled ? ' scrolled' : ''}`} style={{ background: '#141438' }}>
       <div className="container-fluid px-3 py-0">
         <a className="navbar-brand" href="/">
           <img src="/logo-rtm-transparent.png" alt="RTM" height={scrolled ? 30 : 40} style={{ objectFit: 'contain', transition: 'height 0.3s ease' }} />
@@ -35,19 +35,19 @@ export default function NavbarMobile() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav" style={{ fontSize: '1rem', textTransform: 'uppercase' }}>
             <li className="nav-item">
-              <a className="nav-link py-2" href="/" style={{ borderBottom: isActive('/') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease' }}>Utama</a>
+              <a className="nav-link py-2" href="/" style={{ borderBottom: isActive('/') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease', display: 'inline-block' }}>Utama</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link py-2" href="/senarai-radio" style={{ borderBottom: isActive('/senarai-radio') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease' }}>Senarai Radio</a>
+              <a className="nav-link py-2" href="/senarai-radio" style={{ borderBottom: isActive('/senarai-radio') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease', display: 'inline-block' }}>Senarai Radio</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link py-2" href="/chat" style={{ borderBottom: isActive('/chat') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease' }}>Chat</a>
+              <a className="nav-link py-2" href="/chat" style={{ borderBottom: isActive('/chat') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease', display: 'inline-block' }}>Chat</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link py-2" href="/mengenai-kami" style={{ borderBottom: isActive('/mengenai-kami') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease' }}>Mengenai Kami</a>
+              <a className="nav-link py-2" href="/mengenai-kami" style={{ borderBottom: isActive('/mengenai-kami') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease', display: 'inline-block' }}>Mengenai Kami</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link py-2" href="/hubungi" style={{ borderBottom: isActive('/hubungi') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease' }}>Hubungi</a>
+              <a className="nav-link py-2" href="/hubungi" style={{ borderBottom: isActive('/hubungi') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease', display: 'inline-block' }}>Hubungi</a>
             </li>
           </ul>
           <div className="py-2">
