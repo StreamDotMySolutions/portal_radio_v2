@@ -22,6 +22,8 @@ export default function Footer() {
             <h6 className="mb-2">Pautan Pantas</h6>
             <ul className="list-unstyled small mb-0">
               <li className="mb-1"><a href="/" style={{ color: isActive('/') ? '#17a2b8' : 'var(--color-accent)', transition: 'color 0.3s ease' }}>Beranda</a></li>
+              <li className="mb-1"><a href="/senarai-radio" style={{ color: isActive('/senarai-radio') ? '#17a2b8' : 'var(--color-accent)', transition: 'color 0.3s ease' }}>Senarai Radio</a></li>
+              <li className="mb-1"><a href="/chat" style={{ color: isActive('/chat') ? '#17a2b8' : 'var(--color-accent)', transition: 'color 0.3s ease' }}>Chat</a></li>
               <li className="mb-1"><a href="/mengenai-kami" style={{ color: isActive('/mengenai-kami') ? '#17a2b8' : 'var(--color-accent)', transition: 'color 0.3s ease' }}>Tentang Kami</a></li>
               <li><a href="/hubungi" style={{ color: isActive('/hubungi') ? '#17a2b8' : 'var(--color-accent)', transition: 'color 0.3s ease' }}>Hubungi Kami</a></li>
             </ul>

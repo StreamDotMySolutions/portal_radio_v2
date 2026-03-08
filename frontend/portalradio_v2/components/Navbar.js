@@ -41,6 +41,16 @@ export default function Navbar() {
               </a>
             </li>
             <li className="nav-item">
+              <a className="nav-link" href="/senarai-radio" style={{ borderBottom: isActive('/senarai-radio') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease' }}>
+                Senarai Radio
+              </a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link" href="/chat" style={{ borderBottom: isActive('/chat') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease' }}>
+                Chat
+              </a>
+            </li>
+            <li className="nav-item">
               <a className="nav-link" href="/mengenai-kami" style={{ borderBottom: isActive('/mengenai-kami') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease' }}>
                 Mengenai Kami
               </a>

@@ -38,6 +38,12 @@ export default function NavbarMobile() {
               <a className="nav-link py-2" href="/" style={{ borderBottom: isActive('/') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease' }}>Utama</a>
             </li>
             <li className="nav-item">
+              <a className="nav-link py-2" href="/senarai-radio" style={{ borderBottom: isActive('/senarai-radio') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease' }}>Senarai Radio</a>
+            </li>
+            <li className="nav-item">
+              <a className="nav-link py-2" href="/chat" style={{ borderBottom: isActive('/chat') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease' }}>Chat</a>
+            </li>
+            <li className="nav-item">
               <a className="nav-link py-2" href="/mengenai-kami" style={{ borderBottom: isActive('/mengenai-kami') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease' }}>Mengenai Kami</a>
             </li>
             <li className="nav-item">
