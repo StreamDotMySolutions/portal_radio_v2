@@ -1,15 +1,19 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 100);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  const isActive = (href) => pathname === href;
 
   return (
     <nav className={`navbar navbar-expand-lg navbar-dark navbar-portal${scrolled ? ' scrolled' : ''}`}>
@@ -32,23 +36,18 @@ export default function Navbar() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav mx-auto" style={{ fontSize: scrolled ? '1.1em' : '1.5em', textTransform: 'uppercase', transition: 'font-size 0.3s ease' }}>
             <li className="nav-item">
-              <a className="nav-link" href="/">
-                Home
+              <a className="nav-link" href="/" style={{ borderBottom: isActive('/') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease' }}>
+                Utama
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#radio">
-                Radio
+              <a className="nav-link" href="/mengenai-kami" style={{ borderBottom: isActive('/mengenai-kami') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease' }}>
+                Mengenai Kami
               </a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" href="#schedule">
-                Jadual
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="#about">
-                Tentang Kami
+              <a className="nav-link" href="/hubungi" style={{ borderBottom: isActive('/hubungi') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease' }}>
+                Hubungi
               </a>
             </li>
           </ul>

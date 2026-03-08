@@ -1,4 +1,11 @@
+'use client';
+
+import { usePathname } from 'next/navigation';
+
 export default function Footer() {
+  const pathname = usePathname();
+  const isActive = (href) => pathname === href;
+
   return (
     <footer className="py-4" style={{ backgroundColor: 'var(--color-surface)', borderTop: '1px solid rgba(63, 63, 143, 0.3)' }}>
       <div className="container">
@@ -14,19 +21,17 @@ export default function Footer() {
           <div>
             <h6 className="mb-2">Pautan Pantas</h6>
             <ul className="list-unstyled small mb-0">
-              <li className="mb-1"><a href="#" className="text-accent">Beranda</a></li>
-              <li className="mb-1"><a href="#" className="text-accent">Tentang Kami</a></li>
-              <li className="mb-1"><a href="#" className="text-accent">Hubungi Kami</a></li>
-              <li><a href="#" className="text-accent">Syarat dan Ketentuan</a></li>
+              <li className="mb-1"><a href="/" style={{ color: isActive('/') ? '#17a2b8' : 'var(--color-accent)', transition: 'color 0.3s ease' }}>Beranda</a></li>
+              <li className="mb-1"><a href="/mengenai-kami" style={{ color: isActive('/mengenai-kami') ? '#17a2b8' : 'var(--color-accent)', transition: 'color 0.3s ease' }}>Tentang Kami</a></li>
+              <li><a href="/hubungi" style={{ color: isActive('/hubungi') ? '#17a2b8' : 'var(--color-accent)', transition: 'color 0.3s ease' }}>Hubungi Kami</a></li>
             </ul>
           </div>
           <div>
-            <h6 className="mb-2">Radio</h6>
+            <h6 className="mb-2">Rangkaian RTM</h6>
             <ul className="list-unstyled small mb-0">
-              <li className="mb-1"><a href="#" className="text-accent">RTM FM1</a></li>
-              <li className="mb-1"><a href="#" className="text-accent">RTM FM2</a></li>
-              <li className="mb-1"><a href="#" className="text-accent">RTM FM3</a></li>
-              <li><a href="#" className="text-accent">RTM World Service</a></li>
+              <li className="mb-1"><a href="#" className="text-accent">Portal Rasmi RTM</a></li>
+              <li className="mb-1"><a href="#" className="text-accent">Berita RTM</a></li>
+              <li><a href="#" className="text-accent">RTM Klik</a></li>
             </ul>
           </div>
           <div>

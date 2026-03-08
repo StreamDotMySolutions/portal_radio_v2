@@ -1,15 +1,19 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function NavbarMobile() {
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  const isActive = (href) => pathname === href;
 
   return (
     <nav className={`navbar navbar-expand-lg navbar-dark navbar-portal${scrolled ? ' scrolled' : ''}`}>
@@ -31,16 +35,13 @@ export default function NavbarMobile() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav" style={{ fontSize: '1rem', textTransform: 'uppercase' }}>
             <li className="nav-item">
-              <a className="nav-link py-2" href="/">Home</a>
+              <a className="nav-link py-2" href="/" style={{ borderBottom: isActive('/') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease' }}>Utama</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link py-2" href="#radio">Radio</a>
+              <a className="nav-link py-2" href="/mengenai-kami" style={{ borderBottom: isActive('/mengenai-kami') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease' }}>Mengenai Kami</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link py-2" href="#schedule">Jadual</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link py-2" href="#about">Tentang Kami</a>
+              <a className="nav-link py-2" href="/hubungi" style={{ borderBottom: isActive('/hubungi') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease' }}>Hubungi</a>
             </li>
           </ul>
           <div className="py-2">
