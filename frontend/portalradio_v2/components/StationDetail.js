@@ -91,10 +91,10 @@ export default function StationDetail({ station }) {
                 textDecoration: 'none',
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '8px',
+                gap: '10px',
               }}
             >
-              <i className="bi bi-play-fill"></i>
+              <img src="/rtmklik.png" alt="RTM Klik" style={{ height: '24px', width: 'auto' }} />
               Dengarkan di RTM Klik
             </a>
           </div>

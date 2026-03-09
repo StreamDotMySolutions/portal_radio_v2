@@ -64,10 +64,10 @@ export default function StationDetailMobile({ station }) {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '6px',
+                gap: '8px',
               }}
             >
-              <i className="bi bi-play-fill"></i>
+              <img src="/rtmklik.png" alt="RTM Klik" style={{ height: '20px', width: 'auto' }} />
               Dengarkan di RTM Klik
             </a>
           </div>
