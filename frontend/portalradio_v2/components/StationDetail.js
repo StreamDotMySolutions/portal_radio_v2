@@ -94,7 +94,7 @@ export default function StationDetail({ station }) {
                 gap: '10px',
               }}
             >
-              <img src="/rtmklik.png" alt="RTM Klik" style={{ height: '24px', width: 'auto' }} />
+              <img src="/rtmklik.png" alt="RTM Klik" style={{ height: '32px', width: 'auto' }} />
               Dengarkan di RTM Klik
             </a>
           </div>
