@@ -39,39 +39,37 @@ export default function StationDetailMobile({ station }) {
           <i className="bi bi-arrow-left"></i> Kembali
         </Link>
 
-        {/* Audio Player */}
-        <div className="mb-3">
-          <AudioPlayer streamUrl={station.streamUrl} accent={station.accent} />
-        </div>
-
-        {/* RTM Klik Link */}
-        {station.rtmKlikUrl && (
-          <div className="mb-3">
+        {/* Audio Player with RTM Klik Button */}
+        <div className="mb-3 d-flex gap-2 align-items-flex-end flex-wrap">
+          <div style={{ flex: 1, minWidth: '200px' }}>
+            <AudioPlayer streamUrl={station.streamUrl} accent={station.accent} />
+          </div>
+          {station.rtmKlikUrl && (
             <a
               href={station.rtmKlikUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn w-100"
+              className="btn"
               style={{
-                backgroundColor: '#1CB659',
-                color: '#fff',
+                backgroundColor: '#CCFF00',
+                color: '#000',
                 border: 'none',
                 borderRadius: '8px',
                 padding: '2px 16px 2px 6px',
                 fontWeight: '600',
-                fontSize: '0.9rem',
+                fontSize: '0.85rem',
                 textDecoration: 'none',
-                display: 'flex',
+                display: 'inline-flex',
                 alignItems: 'center',
-                justifyContent: 'center',
                 gap: '4px',
+                whiteSpace: 'nowrap',
               }}
             >
-              <i className="bi bi-play-circle-fill" style={{ fontSize: '24px' }}></i>
-              Dengarkan di RTM Klik
+              <i className="bi bi-play-circle-fill" style={{ fontSize: '20px' }}></i>
+              Dengarkan
             </a>
-          </div>
-        )}
+          )}
+        </div>
 
         {/* Social Media Links */}
         {station.social && (Object.values(station.social).some(link => link !== '#')) && (
