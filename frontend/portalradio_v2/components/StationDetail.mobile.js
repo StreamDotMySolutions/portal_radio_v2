@@ -44,6 +44,35 @@ export default function StationDetailMobile({ station }) {
           <AudioPlayer streamUrl={station.streamUrl} accent={station.accent} />
         </div>
 
+        {/* RTM Klik Link */}
+        {station.rtmKlikUrl && (
+          <div className="mb-3">
+            <a
+              href={station.rtmKlikUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn w-100"
+              style={{
+                backgroundColor: station.accent,
+                color: '#fff',
+                border: 'none',
+                borderRadius: '8px',
+                padding: '10px 16px',
+                fontWeight: '600',
+                fontSize: '0.9rem',
+                textDecoration: 'none',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px',
+              }}
+            >
+              <i className="bi bi-play-fill"></i>
+              Dengarkan di RTM Klik
+            </a>
+          </div>
+        )}
+
         {/* Social Media Links */}
         {station.social && (Object.values(station.social).some(link => link !== '#')) && (
           <div className="mb-3">
