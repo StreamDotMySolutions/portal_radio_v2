@@ -94,7 +94,7 @@ export default function StationDetail({ station }) {
                 gap: '4px',
               }}
             >
-              <img src="/rtmklik.png" alt="RTM Klik" style={{ height: '44px', width: 'auto' }} />
+              <i className="bi bi-play-circle-fill" style={{ fontSize: '28px' }}></i>
               Dengarkan di RTM Klik
             </a>
           </div>
