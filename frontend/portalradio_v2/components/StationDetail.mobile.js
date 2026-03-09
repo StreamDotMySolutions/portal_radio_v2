@@ -1,12 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import Link from 'next/link';
 import AudioPlayer from './AudioPlayer';
-import DeeJayModal from './DeeJayModal';
 
 export default function StationDetailMobile({ station }) {
-  const [selectedDJ, setSelectedDJ] = useState(null);
 
   return (
     <div style={{ backgroundColor: 'var(--color-bg)', paddingTop: '100px' }}>
@@ -47,52 +44,6 @@ export default function StationDetailMobile({ station }) {
           <AudioPlayer streamUrl={station.streamUrl} accent={station.accent} />
         </div>
 
-        {/* Penyampai — full width, below Siaran Langsung */}
-        {station.deejays && station.deejays.length > 0 && (
-          <div className="mb-3">
-            <h5 style={{ color: 'var(--color-text)', fontWeight: '600', marginBottom: '0.75rem', fontSize: '1rem' }}>Penyampai</h5>
-            <div className="d-flex flex-wrap gap-2">
-              {station.deejays.map(dj => (
-                <div
-                  key={dj.id}
-                  className="deejay-card card-dark text-center"
-                  style={{ width: 'calc(33.333% - 8px)', minWidth: '100px', borderRadius: '6px', overflow: 'hidden', cursor: 'pointer' }}
-                  onClick={() => setSelectedDJ(dj)}
-                >
-                  <div
-                    className="position-relative"
-                    style={{ width: '100%', aspectRatio: '3/4', backgroundColor: '#1a1a3e' }}
-                  >
-                    <div
-                      className="d-flex align-items-center justify-content-center w-100 h-100"
-                      style={{
-                        background: `linear-gradient(135deg, ${station.accent}44, ${station.accent}22)`,
-                        fontSize: '1.8rem',
-                        fontWeight: '700',
-                        color: '#fff',
-                      }}
-                    >
-                      {dj.name.charAt(0)}
-                    </div>
-                    <div
-                      className="position-absolute bottom-0 start-0 w-100"
-                      style={{ height: '50%', background: 'linear-gradient(to top, rgba(0,0,0,0.85), transparent)' }}
-                    />
-                  </div>
-                  <div className="p-1">
-                    <h6 style={{ color: 'var(--color-text)', fontWeight: '600', fontSize: '0.7rem', marginBottom: '0.1rem' }}>{dj.name}</h6>
-                    <p style={{ color: 'var(--color-muted)', fontSize: '0.6rem', marginBottom: '0.25rem' }}>{dj.role}</p>
-                    <div className="d-flex justify-content-center gap-1">
-                      {dj.social?.instagram && <span style={{ color: 'var(--color-muted)', fontSize: '0.7rem' }}><i className="bi bi-instagram"></i></span>}
-                      {dj.social?.twitter && <span style={{ color: 'var(--color-muted)', fontSize: '0.7rem' }}><i className="bi bi-twitter-x"></i></span>}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
         {/* About */}
         <div className="card-dark p-3 mb-3" style={{ borderRadius: '8px' }}>
           <h5 style={{ color: 'var(--color-text)', fontWeight: '600', marginBottom: '0.75rem', fontSize: '1rem' }}>Tentang Stesen</h5>
@@ -129,8 +80,6 @@ export default function StationDetailMobile({ station }) {
           )}
         </div>
       </div>
-
-      <DeeJayModal deejay={selectedDJ} accent={station.accent} show={!!selectedDJ} onClose={() => setSelectedDJ(null)} />
     </div>
   );
 }
