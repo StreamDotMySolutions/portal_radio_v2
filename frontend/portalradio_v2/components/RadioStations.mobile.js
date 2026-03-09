@@ -1,9 +1,68 @@
 'use client';
 
 import Link from 'next/link';
+import { useState, useRef, useEffect } from 'react';
 import { nasionalStations, negeriStations } from '@/data/stations';
 
 export default function RadioStationsMobile() {
+  const [playingSlug, setPlayingSlug] = useState(null);
+  const audioRef = useRef(null);
+  const hlsRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+        hlsRef.current = null;
+      }
+    };
+  }, []);
+
+  const toggleStation = async (station, e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const disabled = !station.streamUrl || station.streamUrl === '#';
+    if (disabled) return;
+
+    const audio = audioRef.current;
+
+    // Same station — pause and stop
+    if (playingSlug === station.slug) {
+      audio.pause();
+      setPlayingSlug(null);
+      return;
+    }
+
+    // Stop previous
+    if (hlsRef.current) {
+      hlsRef.current.destroy();
+      hlsRef.current = null;
+    }
+    audio.pause();
+    setPlayingSlug(station.slug);
+
+    // Load new stream
+    try {
+      const HLS = (await import('hls.js')).default;
+      if (HLS.isSupported()) {
+        const hls = new HLS();
+        hlsRef.current = hls;
+        hls.loadSource(station.streamUrl);
+        hls.attachMedia(audio);
+        hls.on(HLS.Events.MANIFEST_PARSED, () => audio.play());
+      } else if (audio.canPlayType('application/vnd.apple.mpegurl')) {
+        audio.src = station.streamUrl;
+        audio.play();
+      }
+    } catch {
+      if (audio.canPlayType('application/vnd.apple.mpegurl')) {
+        audio.src = station.streamUrl;
+        audio.play();
+      }
+    }
+  };
+
   const renderStationCards = (stations) => (
     <div className="row row-cols-2 g-2">
       {stations.map((station) => (
@@ -37,7 +96,7 @@ export default function RadioStationsMobile() {
                   left: 0,
                   right: 0,
                   bottom: 0,
-                  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                  backgroundColor: '#000',
                   display: 'none',
                   flexDirection: 'column',
                   alignItems: 'center',
@@ -51,11 +110,69 @@ export default function RadioStationsMobile() {
                   <h6 style={{ color: '#fff', fontSize: '0.75rem', fontWeight: '600', marginBottom: '0.25rem' }}>
                     {station.name}
                   </h6>
-                  <span style={{ color: '#fff', fontSize: '0.65rem' }}>
-                    {station.frequency}
-                  </span>
                 </div>
               </div>
+
+              {/* Mini player strip */}
+              {(() => {
+                const isPlaying = playingSlug === station.slug;
+                const isDisabled = !station.streamUrl || station.streamUrl === '#';
+                // Mock listener count (consistent per station)
+                const listenerCount = Math.abs(station.slug.charCodeAt(0) * 47) % 5000 + 500;
+                return (
+                  <div style={{
+                    borderTop: `1px solid rgba(255,255,255,0.08)`,
+                    padding: '5px 8px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                  }}>
+                    <button
+                      onClick={(e) => toggleStation(station, e)}
+                      style={{
+                        width: '24px',
+                        height: '24px',
+                        borderRadius: '50%',
+                        backgroundColor: isDisabled ? '#555' : station.accent,
+                        border: 'none',
+                        color: '#fff',
+                        fontSize: '0.65rem',
+                        cursor: isDisabled ? 'not-allowed' : 'pointer',
+                        opacity: isDisabled ? 0.4 : 1,
+                        flexShrink: 0,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}
+                    >
+                      <i className={`bi ${isPlaying ? 'bi-pause-fill' : 'bi-play-fill'}`}></i>
+                    </button>
+                    {isPlaying && (
+                      <div className="d-flex align-items-end gap-1" style={{ height: '12px' }}>
+                        {[1, 2, 3].map(i => (
+                          <div key={i} style={{
+                            width: '2px',
+                            backgroundColor: station.accent,
+                            borderRadius: '1px',
+                            animation: `audioBar 0.${3 + i}s ease-in-out infinite alternate`,
+                          }} />
+                        ))}
+                      </div>
+                    )}
+                    <div style={{ flex: 1 }} />
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '3px',
+                      fontSize: '0.7rem',
+                      color: 'var(--color-muted)',
+                    }}>
+                      <i className="bi bi-headphones" style={{ fontSize: '0.75rem' }}></i>
+                      <span>{(listenerCount / 1000).toFixed(1)}K</span>
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
           </Link>
         </div>
@@ -64,14 +181,17 @@ export default function RadioStationsMobile() {
   );
 
   return (
-    <section id="radio-stations" style={{ backgroundColor: 'var(--color-bg)' }} className="py-4">
-      <div className="container px-3">
-        <h2 className="section-heading" style={{ fontSize: '1.5rem' }}>Saluran Nasional</h2>
-        {renderStationCards(nasionalStations)}
+    <>
+      <audio ref={audioRef} />
+      <section id="radio-stations" style={{ backgroundColor: 'var(--color-bg)' }} className="py-4">
+        <div className="container px-3">
+          <h2 className="section-heading" style={{ fontSize: '1.5rem' }}>Saluran Nasional</h2>
+          {renderStationCards(nasionalStations)}
 
-        <h2 className="section-heading" style={{ marginTop: '2rem', fontSize: '1.5rem' }}>Saluran Negeri</h2>
-        {renderStationCards(negeriStations)}
-      </div>
-    </section>
+          <h2 className="section-heading" style={{ marginTop: '2rem', fontSize: '1.5rem' }}>Saluran Negeri</h2>
+          {renderStationCards(negeriStations)}
+        </div>
+      </section>
+    </>
   );
 }
