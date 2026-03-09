@@ -72,6 +72,35 @@ export default function StationDetail({ station }) {
           <AudioPlayer streamUrl={station.streamUrl} accent={station.accent} />
         </div>
 
+        {/* Social Media Links */}
+        {station.social && (Object.values(station.social).some(link => link !== '#')) && (
+          <div className="mb-4">
+            <h5 style={{ color: 'var(--color-text)', fontWeight: '600', marginBottom: '1rem' }}>Ikuti Kami</h5>
+            <div className="d-flex gap-3">
+              {station.social.facebook && station.social.facebook !== '#' && (
+                <a href={station.social.facebook} target="_blank" rel="noopener noreferrer" style={{ color: station.accent, fontSize: '1.5rem' }}>
+                  <i className="bi bi-facebook"></i>
+                </a>
+              )}
+              {station.social.instagram && station.social.instagram !== '#' && (
+                <a href={station.social.instagram} target="_blank" rel="noopener noreferrer" style={{ color: station.accent, fontSize: '1.5rem' }}>
+                  <i className="bi bi-instagram"></i>
+                </a>
+              )}
+              {station.social.twitter && station.social.twitter !== '#' && (
+                <a href={station.social.twitter} target="_blank" rel="noopener noreferrer" style={{ color: station.accent, fontSize: '1.5rem' }}>
+                  <i className="bi bi-twitter-x"></i>
+                </a>
+              )}
+              {station.social.youtube && station.social.youtube !== '#' && (
+                <a href={station.social.youtube} target="_blank" rel="noopener noreferrer" style={{ color: station.accent, fontSize: '1.5rem' }}>
+                  <i className="bi bi-youtube"></i>
+                </a>
+              )}
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );
