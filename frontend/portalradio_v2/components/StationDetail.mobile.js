@@ -64,7 +64,7 @@ export default function StationDetailMobile({ station }) {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                gap: '8px',
+                gap: '4px',
               }}
             >
               <img src="/rtmklik.png" alt="RTM Klik" style={{ height: '40px', width: 'auto' }} />

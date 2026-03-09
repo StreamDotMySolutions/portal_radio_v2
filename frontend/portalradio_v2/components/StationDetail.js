@@ -91,7 +91,7 @@ export default function StationDetail({ station }) {
                 textDecoration: 'none',
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '10px',
+                gap: '4px',
               }}
             >
               <img src="/rtmklik.png" alt="RTM Klik" style={{ height: '44px', width: 'auto' }} />
