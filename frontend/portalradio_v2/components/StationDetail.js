@@ -85,7 +85,7 @@ export default function StationDetail({ station }) {
                 color: '#fff',
                 border: 'none',
                 borderRadius: '8px',
-                padding: '12px 24px',
+                padding: '2px 24px',
                 fontWeight: '600',
                 fontSize: '0.95rem',
                 textDecoration: 'none',
@@ -94,7 +94,7 @@ export default function StationDetail({ station }) {
                 gap: '10px',
               }}
             >
-              <img src="/rtmklik.png" alt="RTM Klik" style={{ height: '32px', width: 'auto' }} />
+              <img src="/rtmklik.png" alt="RTM Klik" style={{ height: '44px', width: 'auto' }} />
               Dengarkan di RTM Klik
             </a>
           </div>
