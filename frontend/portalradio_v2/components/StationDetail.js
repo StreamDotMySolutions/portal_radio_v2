@@ -81,7 +81,7 @@ export default function StationDetail({ station }) {
               rel="noopener noreferrer"
               className="btn"
               style={{
-                backgroundColor: station.accent,
+                backgroundColor: '#1CB659',
                 color: '#fff',
                 border: 'none',
                 borderRadius: '8px',
