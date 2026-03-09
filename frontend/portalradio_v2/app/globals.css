@@ -386,3 +386,16 @@ footer .social-icon:hover {
 .promo-popup-close:hover {
   background: rgba(0, 0, 0, 0.7);
 }
+
+/* Station card hover overlay */
+.card-dark .hover-overlay {
+  display: flex !important;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.card-dark:hover .hover-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
