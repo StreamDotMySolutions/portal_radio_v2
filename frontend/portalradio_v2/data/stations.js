@@ -8,7 +8,7 @@ export const nasionalStations = [
     initial: 'N',
     banner: '/nasional-fm.png',
     description: 'NASIONALfm adalah stesen radio utama RTM yang menyiarkan pelbagai rancangan muzik, berita, dan hiburan untuk seluruh rakyat Malaysia. Stesen ini menjadi pilihan utama pendengar sejak penubuhannya.',
-    streamUrl: '#',
+    streamUrl: 'https://nasionalfm.rtm.gov.my/hls/nasionalfm.m3u8',
     rtmKlikUrl: 'https://rtmklik.rtm.gov.my/radio/nasional/nasional-fm',
     social: { facebook: 'https://facebook.com/RTMMalaysia', instagram: 'https://instagram.com/RTMMalaysia', twitter: 'https://twitter.com/RTMMalaysia', youtube: 'https://youtube.com/RTMMalaysia' },
     deejays: [

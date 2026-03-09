@@ -1,14 +1,54 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 export default function AudioPlayer({ streamUrl, accent }) {
   const [playing, setPlaying] = useState(false);
+  const [error, setError] = useState(false);
   const audioRef = useRef(null);
+  const hlsRef = useRef(null);
   const disabled = !streamUrl || streamUrl === '#';
 
-  const toggle = () => {
+  useEffect(() => {
     if (disabled) return;
+    const audio = audioRef.current;
+    if (hlsRef.current) { hlsRef.current.destroy(); hlsRef.current = null; }
+    setPlaying(false);
+    setError(false);
+
+    if (streamUrl.includes('.m3u8')) {
+      (async () => {
+        try {
+          const HLS = (await import('hls.js')).default;
+          if (HLS.isSupported()) {
+            const hls = new HLS();
+            hlsRef.current = hls;
+            hls.loadSource(streamUrl);
+            hls.attachMedia(audio);
+            hls.on(HLS.Events.ERROR, (_, data) => { if (data.fatal) setError(true); });
+          } else if (audio?.canPlayType('application/vnd.apple.mpegurl')) {
+            audio.src = streamUrl;
+          } else {
+            setError(true);
+          }
+        } catch {
+          // HLS not available, try native support
+          if (audio?.canPlayType('application/vnd.apple.mpegurl')) {
+            audio.src = streamUrl;
+          } else {
+            setError(true);
+          }
+        }
+      })();
+    } else {
+      audio.src = streamUrl;
+    }
+
+    return () => { if (hlsRef.current) { hlsRef.current.destroy(); hlsRef.current = null; } };
+  }, [streamUrl, disabled]);
+
+  const toggle = () => {
+    if (disabled || error) return;
     if (playing) {
       audioRef.current?.pause();
     } else {
@@ -19,7 +59,7 @@ export default function AudioPlayer({ streamUrl, accent }) {
 
   return (
     <div className="card-dark p-3 d-flex align-items-center gap-3" style={{ borderRadius: '8px' }}>
-      {!disabled && <audio ref={audioRef} src={streamUrl} />}
+      {!disabled && <audio ref={audioRef} />}
 
       {/* RTM Klik logo */}
       <div style={{ width: '48px', height: '48px', borderRadius: '8px', overflow: 'hidden', flexShrink: 0 }}>
@@ -28,18 +68,18 @@ export default function AudioPlayer({ streamUrl, accent }) {
 
       <button
         onClick={toggle}
-        disabled={disabled}
+        disabled={disabled || error}
         className="btn d-flex align-items-center justify-content-center"
         style={{
           width: '48px',
           height: '48px',
           borderRadius: '50%',
-          backgroundColor: disabled ? '#555' : accent,
+          backgroundColor: disabled || error ? '#555' : accent,
           border: 'none',
           color: '#fff',
           fontSize: '1.2rem',
-          opacity: disabled ? 0.5 : 1,
-          cursor: disabled ? 'not-allowed' : 'pointer',
+          opacity: disabled || error ? 0.5 : 1,
+          cursor: disabled || error ? 'not-allowed' : 'pointer',
           flexShrink: 0,
         }}
       >
@@ -47,10 +87,10 @@ export default function AudioPlayer({ streamUrl, accent }) {
       </button>
       <div className="flex-grow-1">
         <div style={{ color: 'var(--color-text)', fontWeight: '600', fontSize: '0.9rem' }}>
-          {playing ? 'Sedang Dimainkan' : 'Siaran Langsung'}
+          {error || disabled ? 'Strim tidak tersedia' : playing ? 'Sedang Dimainkan' : 'Siaran Langsung'}
         </div>
         <div style={{ color: 'var(--color-muted)', fontSize: '0.8rem' }}>
-          {disabled ? 'Strim belum tersedia' : 'Klik untuk mula mendengar'}
+          {error ? 'Ralat sambungan' : disabled ? 'Strim belum tersedia' : 'Klik untuk mula mendengar'}
         </div>
       </div>
       {/* Animated bars when playing */}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 const messages = [
   { user: 'Ahmad', color: '#3F3F8F', text: 'Selamat pagi semua!', time: '8:01' },
@@ -13,6 +13,30 @@ const messages = [
 
 export default function LiveStreamMobile() {
   const [chatOpen, setChatOpen] = useState(false);
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    const STREAM = 'https://nasionalfm.rtm.gov.my/hls/nasionalfm.m3u8';
+
+    (async () => {
+      try {
+        const HLS = (await import('hls.js')).default;
+        if (HLS.isSupported()) {
+          const hls = new HLS();
+          hls.loadSource(STREAM);
+          hls.attachMedia(video);
+        } else if (video?.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = STREAM;
+        }
+      } catch {
+        // HLS not available, try native support
+        if (video?.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = STREAM;
+        }
+      }
+    })();
+  }, []);
 
   return (
     <section className="py-4">
@@ -26,23 +50,12 @@ export default function LiveStreamMobile() {
           backgroundColor: '#000',
           borderRadius: '8px 8px 0 0',
           overflow: 'hidden',
-          backgroundImage: 'url(/video-bg.png)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
         }}>
-          {/* Play icon */}
-          <div style={{
-            position: 'absolute',
-            inset: 0,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-            <svg width="60" height="60" viewBox="0 0 16 16" fill="#ff6600" style={{ cursor: 'pointer' }}>
-              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-              <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445"/>
-            </svg>
-          </div>
+          <video
+            ref={videoRef}
+            controls
+            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+          />
 
           {/* Chat toggle button */}
           <button
