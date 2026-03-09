@@ -34,7 +34,7 @@ export default function LiveStream() {
 
   return (
     <section className="py-5">
-      <div className="container-fluid px-4">
+      <div className="container">
         <h2 className="section-heading">Siaran Langsung</h2>
 
         <div className="d-flex livestream-wrapper">
