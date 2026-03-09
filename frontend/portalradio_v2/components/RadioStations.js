@@ -13,18 +13,18 @@ export default function RadioStations() {
               {/* Coloured top stripe */}
               <div style={{ height: '4px', backgroundColor: station.accent }}></div>
 
-              <div className="p-4 d-flex flex-column flex-grow-1">
-                {/* Banner image */}
+              <div className="p-3 d-flex flex-column flex-grow-1 align-items-center justify-content-center">
+                {/* Banner image only */}
                 <div style={{
                   width: '100%',
-                  height: '80px',
-                  marginBottom: '1rem',
+                  height: '100%',
                   borderRadius: '6px',
                   overflow: 'hidden',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   backgroundColor: '#000',
+                  minHeight: '120px',
                 }}>
                   <img
                     src={station.banner}
@@ -36,29 +36,6 @@ export default function RadioStations() {
                     }}
                   />
                 </div>
-
-                {/* Station name */}
-                <h5 className="mb-2" style={{ color: 'var(--color-text)', fontSize: '0.95rem', fontWeight: '600' }}>
-                  {station.name}
-                </h5>
-
-                {/* Genre label */}
-                <p className="text-muted mb-1" style={{ fontSize: '0.8rem' }}>
-                  {station.genre}
-                </p>
-
-                {/* Frequency */}
-                <p className="text-muted mb-3" style={{ fontSize: '0.8rem', marginTop: 'auto' }}>
-                  {station.frequency}
-                </p>
-
-                {/* Listen indicator */}
-                <span
-                  style={{ color: station.accent, fontWeight: '500', fontSize: '0.8rem', display: 'flex', alignItems: 'center', gap: '6px' }}
-                >
-                  <i className="bi bi-headphones"></i>
-                  Dengar Sekarang
-                </span>
               </div>
             </div>
           </Link>

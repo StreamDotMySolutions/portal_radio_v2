@@ -11,14 +11,17 @@ export default function RadioStationsMobile() {
           <Link href={`/station/${station.slug}`} style={{ textDecoration: 'none' }}>
             <div className="card-dark h-100 d-flex flex-column" style={{ borderRadius: '6px', overflow: 'hidden' }}>
               <div style={{ height: '3px', backgroundColor: station.accent }}></div>
-              <div className="p-2 d-flex flex-column flex-grow-1">
+              <div className="p-2 d-flex flex-column flex-grow-1 align-items-center justify-content-center">
                 <div style={{
                   width: '100%',
-                  height: '50px',
-                  marginBottom: '0.5rem',
+                  height: '100%',
                   borderRadius: '4px',
                   overflow: 'hidden',
                   backgroundColor: '#000',
+                  minHeight: '80px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}>
                   <img
                     src={station.banner}
@@ -26,15 +29,6 @@ export default function RadioStationsMobile() {
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                   />
                 </div>
-                <h6 className="mb-1" style={{ color: 'var(--color-text)', fontSize: '0.75rem', fontWeight: '600' }}>
-                  {station.name}
-                </h6>
-                <span
-                  style={{ color: station.accent, fontWeight: '500', fontSize: '0.65rem', display: 'flex', alignItems: 'center', gap: '4px' }}
-                >
-                  <i className="bi bi-headphones"></i>
-                  Dengar
-                </span>
               </div>
             </div>
           </Link>
