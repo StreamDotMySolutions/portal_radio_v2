@@ -85,7 +85,7 @@ export default function StationDetail({ station }) {
                 color: '#fff',
                 border: 'none',
                 borderRadius: '8px',
-                padding: '2px 24px',
+                padding: '2px 24px 2px 8px',
                 fontWeight: '600',
                 fontSize: '0.95rem',
                 textDecoration: 'none',

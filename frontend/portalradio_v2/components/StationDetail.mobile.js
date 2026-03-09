@@ -57,7 +57,7 @@ export default function StationDetailMobile({ station }) {
                 color: '#fff',
                 border: 'none',
                 borderRadius: '8px',
-                padding: '2px 16px',
+                padding: '2px 16px 2px 6px',
                 fontWeight: '600',
                 fontSize: '0.9rem',
                 textDecoration: 'none',
