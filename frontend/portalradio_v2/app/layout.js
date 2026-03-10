@@ -12,9 +12,32 @@ import AccessibilityToggle from '@/components/AccessibilityToggle';
 import { AccessibilityProvider } from '@/context/AccessibilityContext';
 
 export const metadata = {
+  metadataBase: new URL('https://portalradio.rtm.gov.my'),
   title: 'PortalRadio v2 — RTM',
   description: 'Platform digital penyiaran RTM — televisyen, radio, dan berita dalam satu tempat.',
   lang: 'ms',
+  openGraph: {
+    title: 'PortalRadio v2 — RTM',
+    description: 'Platform digital penyiaran RTM — televisyen, radio, dan berita dalam satu tempat.',
+    url: 'https://portalradio.rtm.gov.my',
+    siteName: 'PortalRadio RTM',
+    images: [
+      {
+        url: '/logo-rtm-transparent.png',
+        width: 1200,
+        height: 630,
+        alt: 'PortalRadio RTM',
+      },
+    ],
+    locale: 'ms_MY',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'PortalRadio v2 — RTM',
+    description: 'Platform digital penyiaran RTM — televisyen, radio, dan berita dalam satu tempat.',
+    images: ['/logo-rtm-transparent.png'],
+  },
 };
 
 export default function RootLayout({ children }) {
