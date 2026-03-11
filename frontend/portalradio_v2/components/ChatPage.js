@@ -201,12 +201,14 @@ export default function ChatPageComponent() {
         {/* Chat sidebar or full-screen */}
         {chatOpen && (
           <div className="chat-panel card-dark" style={{
-            borderRadius: '12px',
+            borderRadius: chatFullScreen ? '0' : '12px',
             display: 'flex',
             flexDirection: 'column',
             borderLeft: chatFullScreen ? 'none' : '1px solid rgba(63, 63, 143, 0.3)',
-            flex: chatFullScreen ? 1 : undefined,
-            minWidth: chatFullScreen ? 0 : undefined,
+            flex: chatFullScreen ? 1 : '0 0 auto',
+            minWidth: chatFullScreen ? '100%' : 'auto',
+            width: chatFullScreen ? '100%' : 'auto',
+            maxWidth: chatFullScreen ? 'none' : '400px',
           }}>
             {/* Chat header */}
             <div style={{
