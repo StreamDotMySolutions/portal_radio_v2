@@ -9,6 +9,7 @@ import NavbarMobile from '@/components/Navbar.mobile';
 import Footer from '@/components/Footer';
 import BootstrapClient from '@/components/BootstrapClient';
 import AccessibilityToggle from '@/components/AccessibilityToggle';
+import PageTracker from '@/components/PageTracker';
 import { AccessibilityProvider } from '@/context/AccessibilityContext';
 
 export const metadata = {
@@ -48,6 +49,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <AccessibilityProvider>
+          <PageTracker />
           <header className="header-overlay">
             <GovBanner />
             <Responsive mobile={NavbarMobile} desktop={Navbar} />
