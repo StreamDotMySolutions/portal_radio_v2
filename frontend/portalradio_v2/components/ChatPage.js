@@ -129,17 +129,21 @@ export default function ChatPageComponent() {
   return (
     <div className="container-fluid px-4 py-5">
       <div className="d-flex livestream-wrapper" style={{ height: 'calc(100vh - 200px)' }}>
-        {/* Show video only if chat is not in full-screen mode */}
-        {!chatFullScreen && (
-          <div className={`livestream-player ${chatOpen ? '' : 'chat-closed'}`} style={{ flexGrow: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
-            {/* Video player - match chat height */}
-            <div style={{
-              position: 'relative',
-              flex: 1,
-              backgroundColor: '#000',
-              borderRadius: '12px 12px 0 0',
-              overflow: 'hidden',
-            }}>
+        {/* Video player - always in DOM, hidden when chat full-screen */}
+        <div className={`livestream-player ${chatOpen ? '' : 'chat-closed'}`} style={{
+          flexGrow: chatFullScreen ? 0 : 1,
+          minWidth: 0,
+          display: chatFullScreen ? 'none' : 'flex',
+          flexDirection: 'column'
+        }}>
+          {/* Video player - match chat height */}
+          <div style={{
+            position: 'relative',
+            flex: 1,
+            backgroundColor: '#000',
+            borderRadius: '12px 12px 0 0',
+            overflow: 'hidden',
+          }}>
             {isOffline ? (
               <div style={{
                 position: 'absolute',
@@ -196,7 +200,6 @@ export default function ChatPageComponent() {
             </button>
           </div>
         </div>
-        )}
 
         {/* Chat sidebar or full-screen */}
         {chatOpen && (
