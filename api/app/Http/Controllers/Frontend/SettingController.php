@@ -13,6 +13,6 @@ class SettingController extends Controller
      */
     public function livestreamUrl(): JsonResponse
     {
-        return response()->json(['stream_url' => Setting::get('livestream_url', '')]);
+        return response()->json(['livestream_url' => Setting::get('livestream_url', '')]);
     }
 }

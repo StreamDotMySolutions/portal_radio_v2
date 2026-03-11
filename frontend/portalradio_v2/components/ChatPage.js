@@ -1,6 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
 
 const messages = [
   { user: 'Ahmad', color: '#3F3F8F', text: 'Selamat pagi semua!', time: '8:01' },
@@ -19,13 +21,83 @@ const messages = [
 
 export default function ChatPageComponent() {
   const [chatOpen, setChatOpen] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [livestreamUrl, setLivestreamUrl] = useState(null);
+  const audioRef = useRef(null);
+  const hlsRef = useRef(null);
 
   useEffect(() => {
     setChatOpen(window.innerWidth > 768);
   }, []);
 
+  // Fetch livestream URL
+  useEffect(() => {
+    const fetchLivestreamUrl = async () => {
+      try {
+        const res = await fetch(`${API_URL}/frontend/livestream-url`);
+        if (res.ok) {
+          const data = await res.json();
+          setLivestreamUrl(data.livestream_url);
+        }
+      } catch (error) {
+        console.warn('Failed to fetch livestream URL:', error);
+      }
+    };
+
+    fetchLivestreamUrl();
+  }, []);
+
+  // Cleanup HLS on unmount
+  useEffect(() => {
+    return () => {
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+        hlsRef.current = null;
+      }
+    };
+  }, []);
+
+  const togglePlayback = async (e) => {
+    e.stopPropagation();
+    if (!livestreamUrl) return;
+
+    const audio = audioRef.current;
+
+    if (isPlaying) {
+      // Stop playback
+      audio.pause();
+      setIsPlaying(false);
+      return;
+    }
+
+    // Start playback
+    setIsPlaying(true);
+    try {
+      const HLS = (await import('hls.js')).default;
+      if (HLS.isSupported()) {
+        if (hlsRef.current) {
+          hlsRef.current.destroy();
+        }
+        const hls = new HLS();
+        hlsRef.current = hls;
+        hls.loadSource(livestreamUrl);
+        hls.attachMedia(audio);
+        hls.on(HLS.Events.MANIFEST_PARSED, () => audio.play());
+      } else if (audio.canPlayType('application/vnd.apple.mpegurl')) {
+        audio.src = livestreamUrl;
+        audio.play();
+      }
+    } catch (error) {
+      if (audio.canPlayType('application/vnd.apple.mpegurl')) {
+        audio.src = livestreamUrl;
+        audio.play();
+      }
+    }
+  };
+
   return (
     <div className="container-fluid px-4 py-5">
+      <audio ref={audioRef} />
       <div className="d-flex livestream-wrapper" style={{ height: 'calc(100vh - 200px)' }}>
         {/* Video area */}
         <div className={`livestream-player ${chatOpen ? '' : 'chat-closed'}`} style={{ flexGrow: 1, minWidth: 0 }}>
@@ -50,10 +122,34 @@ export default function ChatPageComponent() {
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-              <svg width="80" height="80" viewBox="0 0 16 16" fill="#ff6600" style={{ cursor: 'pointer' }}>
-                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-                <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445"/>
-              </svg>
+              <button
+                onClick={togglePlayback}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: livestreamUrl ? 'pointer' : 'not-allowed',
+                  opacity: livestreamUrl ? 1 : 0.5,
+                  padding: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                title={livestreamUrl ? (isPlaying ? 'Stop livestream' : 'Play livestream') : 'Loading livestream...'}
+              >
+                <svg width="80" height="80" viewBox="0 0 16 16" fill="#ff6600" style={{ cursor: 'inherit' }}>
+                  {isPlaying ? (
+                    <>
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                      <path d="M5 6a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V7a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V7a1 1 0 0 1 1-1"/>
+                    </>
+                  ) : (
+                    <>
+                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                      <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445"/>
+                    </>
+                  )}
+                </svg>
+              </button>
             </div>
 
             {/* Chat toggle button */}
