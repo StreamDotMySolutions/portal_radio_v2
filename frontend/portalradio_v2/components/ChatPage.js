@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/frontend';
 
 const messages = [
   { user: 'Ahmad', color: '#3F3F8F', text: 'Selamat pagi semua!', time: '8:01' },
@@ -41,7 +41,7 @@ export default function ChatPageComponent() {
 
   // Fetch livestream URL
   useEffect(() => {
-    fetch(`${API_URL}/frontend/livestream-url`)
+    fetch(`${API_URL}/livestream-url`)
       .then(r => r.json())
       .then(d => setLivestreamUrl(d.livestream_url || null))
       .catch(() => setLivestreamUrl(null));
@@ -96,7 +96,7 @@ export default function ChatPageComponent() {
       if (playTracked) return;
       playTracked = true;
 
-      fetch(`${API_URL}/frontend/track`, {
+      fetch(`${API_URL}/track`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
