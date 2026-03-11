@@ -2,6 +2,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\GithubWebhookController;
 use App\Http\Controllers\Backend\{
     RoleController,
     UserController,
@@ -232,6 +233,9 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
 
 // Directory bulk import (external, e.g. Google Apps Script)
 Route::post('/directories/sync/{root}', [DirectoryController::class, 'store']);
+
+// GitHub Webhook (no auth — signature-verified in controller)
+Route::post('/github-webhook', [GithubWebhookController::class, 'handle']);
 
 // Manage Chat Users
 Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
