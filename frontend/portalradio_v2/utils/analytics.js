@@ -3,7 +3,7 @@
  * Tracks pageviews, searches, and other user interactions
  */
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/frontend';
 
 /**
  * Get or create a session ID stored in sessionStorage
@@ -49,7 +49,7 @@ export async function trackPageview(pageType, referenceId, referenceTitle) {
     };
 
     // Send analytics (fire-and-forget, don't block on this)
-    fetch(`${API_BASE}/frontend/track`, {
+    fetch(`${API_BASE}/track`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ export async function trackSearch(pageType, query) {
       referrer: document.referrer || null,
     };
 
-    fetch(`${API_BASE}/frontend/track`, {
+    fetch(`${API_BASE}/track`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ export async function trackDownload(pageType, filename) {
       referrer: document.referrer || null,
     };
 
-    fetch(`${API_BASE}/frontend/track`, {
+    fetch(`${API_BASE}/track`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

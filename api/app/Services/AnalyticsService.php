@@ -28,8 +28,7 @@ class AnalyticsService
     public static function topArticles(int $limit = 10)
     {
         return AnalyticsEvent::where('event_type', 'pageview')
-            ->whereIn('page_type', ['article', 'listing'])
-            ->whereNotNull('reference_id')
+            ->whereNotNull('reference_title')
             ->select('reference_id', 'reference_title', 'page_type', DB::raw('count(*) as views'))
             ->groupBy('reference_id', 'reference_title', 'page_type')
             ->orderByDesc('views')

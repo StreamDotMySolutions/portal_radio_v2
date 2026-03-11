@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { searchStations } from '@/utils/stationsApi';
 import { trackSearch } from '@/utils/analytics';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/frontend';
 
 export default function SearchResultPage() {
   const searchParams = useSearchParams();
@@ -25,6 +25,7 @@ export default function SearchResultPage() {
     if (!q) return;
 
     setLoading(true);
+    setHasTracked(false);
     searchStations(q)
       .then((stations) => {
         setResults(stations);
@@ -37,13 +38,13 @@ export default function SearchResultPage() {
       });
   }, [q]);
 
-  // Track search event once after results load
+  // Track search event once after search completes
   useEffect(() => {
-    if (results.length > 0 && !hasTracked) {
+    if (q && !loading && !hasTracked) {
       trackSearch('station_search', q);
       setHasTracked(true);
     }
-  }, [results, q, hasTracked]);
+  }, [q, loading, hasTracked]);
 
   // Infinite scroll observer
   useEffect(() => {
@@ -68,7 +69,7 @@ export default function SearchResultPage() {
 
   const handleStationClick = (stationSlug) => {
     // Track station click from search results
-    fetch(`${API_BASE}/frontend/track`, {
+    fetch(`${API_BASE}/track`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({

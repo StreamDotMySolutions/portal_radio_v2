@@ -11,7 +11,18 @@ const pageUrl = (pageType, referenceId) => {
     if (pageType === 'article')  return `${PUBLIC_URL}/contents/${referenceId}`
     if (pageType === 'listing')  return `${PUBLIC_URL}/listings/${referenceId}`
     if (pageType === 'directory') return `${PUBLIC_URL}/directories/${referenceId}`
+    if (pageType === 'station')  return `${PUBLIC_URL}/station/${referenceId}`
     return null
+}
+
+const pageIcon = (pageType) => {
+    if (pageType === 'home')     return 'house'
+    if (pageType === 'station')  return 'radio'
+    if (pageType === 'chat')     return 'comments'
+    if (pageType === 'contact')  return 'envelope'
+    if (pageType === 'about')    return 'circle-info'
+    if (pageType === 'stations_list') return 'list'
+    return 'file'
 }
 
 const breadcrumbItems = [
@@ -159,6 +170,7 @@ const Analytics = () => {
                                                 <tr key={i}>
                                                     <td className='text-muted'>{i + 1}</td>
                                                     <td>
+                                                        <FontAwesomeIcon icon={['fas', pageIcon(item.page_type)]} className='me-2 text-muted' />
                                                         {url ? (
                                                             <a href={url} target='_blank' rel='noreferrer'>
                                                                 {item.reference_title || `ID ${item.reference_id}`}
@@ -166,6 +178,7 @@ const Analytics = () => {
                                                         ) : (
                                                             item.reference_title || <span className='text-muted'>ID {item.reference_id}</span>
                                                         )}
+                                                        <Badge bg='secondary' className='ms-2 small'>{item.page_type}</Badge>
                                                     </td>
                                                     <td className='text-end fw-semibold'>{item.views}</td>
                                                 </tr>
