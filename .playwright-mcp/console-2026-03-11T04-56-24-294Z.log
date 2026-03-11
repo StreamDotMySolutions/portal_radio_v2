@@ -1,0 +1,38 @@
+[     460ms] [ERROR] Permissions policy violation: Geolocation access has been blocked because of a permissions policy applied to the current document. See https://crbug.com/414348233 for more details. @ https://sdk.listenlive.co/web/2.9/td-sdk.min.js:0
+[   19582ms] [ERROR] Permissions policy violation: Geolocation access has been blocked because of a permissions policy applied to the current document. See https://crbug.com/414348233 for more details. @ https://sdk.listenlive.co/web/2.9/td-sdk.min.js:0
+[   37545ms] [ERROR] Permissions policy violation: Geolocation access has been blocked because of a permissions policy applied to the current document. See https://crbug.com/414348233 for more details. @ https://sdk.listenlive.co/web/2.9/td-sdk.min.js:0
+[ 3941024ms] [ERROR] Permissions policy violation: Geolocation access has been blocked because of a permissions policy applied to the current document. See https://crbug.com/414348233 for more details. @ https://sdk.listenlive.co/web/2.9/td-sdk.min.js:0
+[ 3945765ms] [ERROR] Permissions policy violation: Geolocation access has been blocked because of a permissions policy applied to the current document. See https://crbug.com/414348233 for more details. @ https://sdk.listenlive.co/web/2.9/td-sdk.min.js:0
+[ 3995010ms] [ERROR] Permissions policy violation: Geolocation access has been blocked because of a permissions policy applied to the current document. See https://crbug.com/414348233 for more details. @ https://sdk.listenlive.co/web/2.9/td-sdk.min.js:0
+[ 4044326ms] [ERROR] ./frontend/portalradio_v2/components/StationDetail.js:149:1
+Parsing ecmascript source code failed
+  147 |     </div>
+  148 |   );
+> 149 | }
+      | ^
+  150 |
+
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+
+Import trace:
+  Server Component:
+    ./frontend/portalradio_v2/components/StationDetail.js
+    ./frontend/portalradio_v2/app/station/[slug]/page.js @ http://localhost:3000/_next/static/chunks/c6ae2_next_dist_2a304044._.js:3127
+[ 4044475ms] [ERROR] ./frontend/portalradio_v2/components/StationDetail.js:149:1
+Parsing ecmascript source code failed
+  147 |     </div>
+  148 |   );
+> 149 | }
+      | ^
+  150 |
+
+Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+
+Import trace:
+  Server Component:
+    ./frontend/portalradio_v2/components/StationDetail.js
+    ./frontend/portalradio_v2/app/station/[slug]/page.js @ http://localhost:3000/_next/static/chunks/c6ae2_next_dist_2a304044._.js:3127
+[ 4051261ms] [ERROR] Permissions policy violation: Geolocation access has been blocked because of a permissions policy applied to the current document. See https://crbug.com/414348233 for more details. @ https://sdk.listenlive.co/web/2.9/td-sdk.min.js:0
+[ 4070003ms] [ERROR] Permissions policy violation: Geolocation access has been blocked because of a permissions policy applied to the current document. See https://crbug.com/414348233 for more details. @ https://sdk.listenlive.co/web/2.9/td-sdk.min.js:0
+[ 4117732ms] [ERROR] Permissions policy violation: Geolocation access has been blocked because of a permissions policy applied to the current document. See https://crbug.com/414348233 for more details. @ https://sdk.listenlive.co/web/2.9/td-sdk.min.js:0
+[ 5761131ms] [ERROR] Permissions policy violation: Geolocation access has been blocked because of a permissions policy applied to the current document. See https://crbug.com/414348233 for more details. @ https://sdk.listenlive.co/web/2.9/td-sdk.min.js:0
