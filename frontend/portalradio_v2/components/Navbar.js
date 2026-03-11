@@ -1,13 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { nasionalStations, negeriStations } from '../data/stations';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [query, setQuery] = useState('');
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 100);
@@ -32,6 +34,14 @@ export default function Navbar() {
   }, []);
 
   const isActive = (href) => pathname === href;
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (query.trim()) {
+      router.push(`/search-result?q=${encodeURIComponent(query.trim())}`);
+      setQuery('');
+    }
+  };
 
   return (
     <nav className={`navbar navbar-expand-lg navbar-dark navbar-portal${scrolled ? ' scrolled' : ''}`}>
@@ -93,14 +103,23 @@ export default function Navbar() {
               </a>
             </li>
           </ul>
-          <div className="d-flex">
-            <div className="input-group" style={{ minWidth: '300px' }}>
-              <input type="search" className="form-control bg-dark text-light" placeholder="Carian..." style={{ border: '2px solid #ff6600' }} />
-              <button className="btn" type="button" style={{ backgroundColor: '#ff6600', color: '#fff', border: '2px solid #ff6600' }}>
-                <i className="bi bi-search"></i>
-              </button>
-            </div>
-          </div>
+          {!pathname.startsWith('/search-result') && (
+            <form className="d-flex" onSubmit={handleSearchSubmit}>
+              <div className="input-group" style={{ minWidth: '300px' }}>
+                <input
+                  type="search"
+                  className="form-control bg-dark text-light"
+                  placeholder="Carian..."
+                  style={{ border: '2px solid #ff6600' }}
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+                <button className="btn" type="submit" style={{ backgroundColor: '#ff6600', color: '#fff', border: '2px solid #ff6600' }}>
+                  <i className="bi bi-search"></i>
+                </button>
+              </div>
+            </form>
+          )}
         </div>
       </div>
     </nav>

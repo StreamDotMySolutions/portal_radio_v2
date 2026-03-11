@@ -1,13 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { nasionalStations, negeriStations } from '../data/stations';
 
 export default function NavbarMobile() {
   const [scrolled, setScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [query, setQuery] = useState('');
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
@@ -32,6 +34,14 @@ export default function NavbarMobile() {
   }, []);
 
   const isActive = (href) => pathname === href;
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (query.trim()) {
+      router.push(`/search-result?q=${encodeURIComponent(query.trim())}`);
+      setQuery('');
+    }
+  };
 
   return (
     <nav className={`navbar navbar-expand-lg navbar-dark navbar-portal${scrolled ? ' scrolled' : ''}`} style={{ background: '#141438' }}>
@@ -86,14 +96,23 @@ export default function NavbarMobile() {
               <a className={`nav-link py-2${isActive('/chat') ? ' nav-active' : ''}`} href="/chat">Chat</a>
             </li>
           </ul>
-          <div className="py-2">
-            <div className="input-group">
-              <input type="search" className="form-control form-control-sm bg-dark text-light" placeholder="Carian..." style={{ border: '2px solid #ff6600' }} />
-              <button className="btn btn-sm" type="button" style={{ backgroundColor: '#ff6600', color: '#fff', border: '2px solid #ff6600' }}>
-                <i className="bi bi-search"></i>
-              </button>
-            </div>
-          </div>
+          {!pathname.startsWith('/search-result') && (
+            <form className="py-2" onSubmit={handleSearchSubmit}>
+              <div className="input-group">
+                <input
+                  type="search"
+                  className="form-control form-control-sm bg-dark text-light"
+                  placeholder="Carian..."
+                  style={{ border: '2px solid #ff6600' }}
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                />
+                <button className="btn btn-sm" type="submit" style={{ backgroundColor: '#ff6600', color: '#fff', border: '2px solid #ff6600' }}>
+                  <i className="bi bi-search"></i>
+                </button>
+              </div>
+            </form>
+          )}
         </div>
       </div>
     </nav>
