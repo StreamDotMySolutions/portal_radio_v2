@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\{
     RoleController,
     UserController,
     ChatUserController,
+    ChatMessageController,
     AuthController,
     AccountController,
     DashboardController,
@@ -239,6 +240,13 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::put('/chat-users/{chatUser}', [ChatUserController::class, 'update']);
     Route::delete('/chat-users/{chatUser}', [ChatUserController::class, 'delete']);
     Route::patch('/chat-users/{chatUser}/toggle-ban', [ChatUserController::class, 'toggleBan']);
+});
+
+// Manage Chat Messages
+Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
+    Route::get('/chat-messages', [ChatMessageController::class, 'index']);
+    Route::delete('/chat-messages/{chatMessage}', [ChatMessageController::class, 'destroy']);
+    Route::delete('/chat-messages', [ChatMessageController::class, 'clear']);
 });
 
 // Manage Complaints

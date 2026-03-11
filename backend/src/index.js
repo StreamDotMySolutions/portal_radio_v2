@@ -44,6 +44,7 @@ import ComplaintManagement from './pages/Administration/Complaints'
 import LivestreamManagement from './pages/Administration/Livestream'
 import SettingsManagement from './pages/Administration/Settings'
 import ChatUserManagement from './pages/Administration/ChatUsers'
+import ChatMessageManagement from './pages/Administration/ChatMessages'
 
 library.add(fas)
 
@@ -88,6 +89,7 @@ export default function App() {
                 <Route path="/administration/complaints" element={<ComplaintManagement />} />
                 <Route path="/administration/settings" element={<SettingsManagement />} />
                 <Route path="/administration/chat-users" element={<ChatUserManagement />} />
+                <Route path="/administration/chat-messages" element={<ChatMessageManagement />} />
               </Route>
             </Route>
         </Routes>

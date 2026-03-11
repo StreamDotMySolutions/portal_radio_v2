@@ -64,6 +64,9 @@ function TopNavbar() {
               <NavDropdown.Item as={NavLink} to="/administration/chat-users">
                 <FontAwesomeIcon icon={['fas', 'comments']} />{' '}Chat Users
               </NavDropdown.Item>
+              <NavDropdown.Item as={NavLink} to="/administration/chat-messages">
+                <FontAwesomeIcon icon={['fas', 'message']} />{' '}Chat Messages
+              </NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to="/administration/activity">
                 <FontAwesomeIcon icon={['fas', 'clock-rotate-left']} />{' '}Activity Log
               </NavDropdown.Item>
