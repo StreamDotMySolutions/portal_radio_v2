@@ -35,6 +35,8 @@ class ChatController extends Controller
                 'username' => $user->username,
                 'color' => $user->color,
                 'token' => $user->token,
+                'email_verified_at' => $user->email_verified_at,
+                'avatar_filename' => $user->avatar_filename,
             ],
         ], 201);
     }
@@ -58,6 +60,8 @@ class ChatController extends Controller
                 'username' => $user->username,
                 'color' => $user->color,
                 'token' => $user->token,
+                'email_verified_at' => $user->email_verified_at,
+                'avatar_filename' => $user->avatar_filename,
             ],
         ]);
     }
@@ -146,5 +150,173 @@ class ChatController extends Controller
         }
 
         return response()->json(['message' => $result], 201);
+    }
+
+    public function sendActivation(Request $request)
+    {
+        $token = $request->header('X-Chat-Token');
+
+        if (!$token) {
+            return response()->json(['message' => 'Token diperlukan.'], 401);
+        }
+
+        $result = $this->chatService->sendActivationLink($token);
+
+        if ($result === null) {
+            return response()->json(['message' => 'Token tidak sah.'], 401);
+        }
+
+        if ($result === 'already_verified') {
+            return response()->json(['message' => 'Akaun sudah diaktifkan.']);
+        }
+
+        return response()->json(['message' => 'Pautan pengaktifan telah dihantar ke emel anda.']);
+    }
+
+    public function verifyEmail(Request $request, int $id, string $hash)
+    {
+        if (!$request->hasValidSignature()) {
+            $frontendUrl = rtrim(env('FRONTEND_URL', 'http://localhost:3000'), '/');
+            return redirect($frontendUrl . '/chat?verify_error=1');
+        }
+
+        $user = $this->chatService->verifyEmail($id, $hash);
+
+        if (!$user) {
+            $frontendUrl = rtrim(env('FRONTEND_URL', 'http://localhost:3000'), '/');
+            return redirect($frontendUrl . '/chat?verify_error=1');
+        }
+
+        $frontendUrl = rtrim(env('FRONTEND_URL', 'http://localhost:3000'), '/');
+        return redirect($frontendUrl . '/chat?verified=1');
+    }
+
+    public function profile(Request $request)
+    {
+        $token = $request->header('X-Chat-Token');
+
+        if (!$token) {
+            return response()->json(['message' => 'Token diperlukan.'], 401);
+        }
+
+        $user = $this->chatService->getProfile($token);
+
+        if (!$user) {
+            return response()->json(['message' => 'Token tidak sah.'], 401);
+        }
+
+        return response()->json([
+            'user' => [
+                'id' => $user->id,
+                'username' => $user->username,
+                'email' => $user->email,
+                'color' => $user->color,
+                'email_verified_at' => $user->email_verified_at,
+                'avatar_filename' => $user->avatar_filename,
+                'full_name' => $user->full_name,
+                'gender' => $user->gender,
+                'location' => $user->location,
+                'hobby' => $user->hobby,
+                'about_me' => $user->about_me,
+                'facebook_url' => $user->facebook_url,
+                'instagram_url' => $user->instagram_url,
+                'twitter_url' => $user->twitter_url,
+                'tiktok_url' => $user->tiktok_url,
+                'youtube_url' => $user->youtube_url,
+                'created_at' => $user->created_at,
+            ],
+        ]);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $token = $request->header('X-Chat-Token');
+
+        if (!$token) {
+            return response()->json(['message' => 'Token diperlukan.'], 401);
+        }
+
+        $request->validate([
+            'full_name' => ['nullable', 'string', 'max:100'],
+            'gender' => ['nullable', 'in:lelaki,perempuan'],
+            'location' => ['nullable', 'string', 'max:100'],
+            'hobby' => ['nullable', 'string', 'max:255'],
+            'about_me' => ['nullable', 'string', 'max:1000'],
+            'avatar' => ['nullable', 'image', 'mimes:png,jpg,jpeg', 'max:5120'],
+            'facebook_url' => ['nullable', 'string', 'max:255'],
+            'instagram_url' => ['nullable', 'string', 'max:255'],
+            'twitter_url' => ['nullable', 'string', 'max:255'],
+            'tiktok_url' => ['nullable', 'string', 'max:255'],
+            'youtube_url' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $result = $this->chatService->updateProfile(
+            $token,
+            $request->only([
+                'full_name', 'gender', 'location', 'hobby', 'about_me',
+                'facebook_url', 'instagram_url', 'twitter_url', 'tiktok_url', 'youtube_url',
+            ]),
+            $request->file('avatar')
+        );
+
+        if (isset($result['error'])) {
+            if ($result['error'] === 'unauthorized') {
+                return response()->json(['message' => 'Token tidak sah.'], 401);
+            }
+            if ($result['error'] === 'unverified') {
+                return response()->json(['message' => 'Sila aktifkan akaun anda terlebih dahulu.'], 403);
+            }
+        }
+
+        $user = $result['user'];
+
+        return response()->json([
+            'message' => 'Profil berjaya dikemaskini.',
+            'user' => [
+                'id' => $user->id,
+                'username' => $user->username,
+                'color' => $user->color,
+                'email_verified_at' => $user->email_verified_at,
+                'avatar_filename' => $user->avatar_filename,
+                'full_name' => $user->full_name,
+                'gender' => $user->gender,
+                'location' => $user->location,
+                'hobby' => $user->hobby,
+                'about_me' => $user->about_me,
+                'facebook_url' => $user->facebook_url,
+                'instagram_url' => $user->instagram_url,
+                'twitter_url' => $user->twitter_url,
+                'tiktok_url' => $user->tiktok_url,
+                'youtube_url' => $user->youtube_url,
+            ],
+        ]);
+    }
+
+    public function removeAvatar(Request $request)
+    {
+        $token = $request->header('X-Chat-Token');
+
+        if (!$token) {
+            return response()->json(['message' => 'Token diperlukan.'], 401);
+        }
+
+        $user = $this->chatService->removeAvatar($token);
+
+        if (!$user) {
+            return response()->json(['message' => 'Token tidak sah.'], 401);
+        }
+
+        return response()->json(['message' => 'Avatar berjaya dipadam.']);
+    }
+
+    public function publicProfile(int $userId)
+    {
+        $profile = $this->chatService->getPublicProfile($userId);
+
+        if (!$profile) {
+            return response()->json(['message' => 'Pengguna tidak ditemui.'], 404);
+        }
+
+        return response()->json(['user' => $profile]);
     }
 }

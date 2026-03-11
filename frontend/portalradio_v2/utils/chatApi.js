@@ -116,4 +116,128 @@ async function chatResetPassword(token, email, password, password_confirmation) 
   return data;
 }
 
-export { getChatUser, setChatUser, chatRegister, chatLogin, chatForgotPassword, chatResetPassword, fetchMessages, sendMessage };
+const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:8000';
+
+function getAvatarUrl(filename) {
+  if (!filename) return null;
+  return `${SERVER_URL}/storage/chat-avatars/${filename}`;
+}
+
+async function chatSendActivation() {
+  const user = getChatUser();
+  if (!user?.token) throw new Error('Not authenticated');
+
+  const res = await fetch(`${API_URL}/chat/send-activation`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'X-Chat-Token': user.token,
+    },
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw { status: res.status, data };
+  }
+
+  return data;
+}
+
+async function chatGetProfile() {
+  const user = getChatUser();
+  if (!user?.token) throw new Error('Not authenticated');
+
+  const res = await fetch(`${API_URL}/chat/profile`, {
+    headers: {
+      'Accept': 'application/json',
+      'X-Chat-Token': user.token,
+    },
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw { status: res.status, data };
+  }
+
+  return data.user;
+}
+
+async function chatUpdateProfile(formData) {
+  const user = getChatUser();
+  if (!user?.token) throw new Error('Not authenticated');
+
+  const res = await fetch(`${API_URL}/chat/profile`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'X-Chat-Token': user.token,
+    },
+    body: formData,
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw { status: res.status, data };
+  }
+
+  // Update local storage with new avatar info
+  if (data.user) {
+    const current = getChatUser();
+    if (current) {
+      setChatUser({ ...current, avatar_filename: data.user.avatar_filename, email_verified_at: data.user.email_verified_at });
+    }
+  }
+
+  return data;
+}
+
+async function chatRemoveAvatar() {
+  const user = getChatUser();
+  if (!user?.token) throw new Error('Not authenticated');
+
+  const res = await fetch(`${API_URL}/chat/profile/avatar`, {
+    method: 'DELETE',
+    headers: {
+      'Accept': 'application/json',
+      'X-Chat-Token': user.token,
+    },
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw { status: res.status, data };
+  }
+
+  // Update local storage
+  const current = getChatUser();
+  if (current) {
+    setChatUser({ ...current, avatar_filename: null });
+  }
+
+  return data;
+}
+
+async function chatGetPublicProfile(userId) {
+  const res = await fetch(`${API_URL}/chat/profile/${userId}`, {
+    headers: { 'Accept': 'application/json' },
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw { status: res.status, data };
+  }
+
+  return data.user;
+}
+
+export {
+  getChatUser, setChatUser, chatRegister, chatLogin, chatForgotPassword, chatResetPassword,
+  fetchMessages, sendMessage, getAvatarUrl,
+  chatSendActivation, chatGetProfile, chatUpdateProfile, chatRemoveAvatar, chatGetPublicProfile,
+};

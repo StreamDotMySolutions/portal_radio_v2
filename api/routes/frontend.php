@@ -61,5 +61,11 @@ Route::prefix('chat')->group(function () {
     Route::post('/reset-password', [ChatController::class, 'resetPassword']);
     Route::get('/messages', [ChatController::class, 'index']);
     Route::post('/messages', [ChatController::class, 'store'])->middleware('throttle:chat-send');
+    Route::post('/send-activation', [ChatController::class, 'sendActivation'])->middleware('throttle:3,5');
+    Route::get('/verify-email/{id}/{hash}', [ChatController::class, 'verifyEmail'])->name('chat.verify-email');
+    Route::get('/profile', [ChatController::class, 'profile']);
+    Route::post('/profile', [ChatController::class, 'updateProfile']);
+    Route::delete('/profile/avatar', [ChatController::class, 'removeAvatar']);
+    Route::get('/profile/{userId}', [ChatController::class, 'publicProfile']);
 });
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { getChatUser, setChatUser, chatRegister, chatLogin, chatForgotPassword, fetchMessages, sendMessage } from '../utils/chatApi';
+import { getChatUser, setChatUser, chatRegister, chatLogin, chatForgotPassword, fetchMessages, sendMessage, getAvatarUrl, chatGetPublicProfile } from '../utils/chatApi';
 
 /**
  * ChatAuthForm — renders login or register form. Used by parents to show in the video area.
@@ -321,6 +321,8 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
   const [forgotSent, setForgotSent] = useState(false);
   const [forgotLoading, setForgotLoading] = useState(false);
   const [hasNewMessages, setHasNewMessages] = useState(false);
+  const [profilePopup, setProfilePopup] = useState(null);
+  const [profileLoading, setProfileLoading] = useState(false);
 
   const isControlled = controlledUser !== undefined;
   const user = isControlled ? controlledUser : internalUser;
@@ -467,6 +469,23 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
     }
   };
 
+  const handleUsernameClick = async (chatUserId) => {
+    if (profilePopup?.id === chatUserId) {
+      setProfilePopup(null);
+      return;
+    }
+    setProfileLoading(true);
+    setProfilePopup(null);
+    try {
+      const profile = await chatGetPublicProfile(chatUserId);
+      setProfilePopup(profile);
+    } catch {
+      setProfilePopup(null);
+    } finally {
+      setProfileLoading(false);
+    }
+  };
+
   const inlineInputStyle = {
     width: '100%',
     background: 'var(--color-bg)',
@@ -485,11 +504,31 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
     }}>
       {user ? (
         <>
-          <span style={{ color: user.color, fontWeight: 700, fontSize: '0.85rem' }}>{user.username}</span>
-          <button onClick={handleLogout} style={{
-            background: 'none', border: 'none', color: 'var(--color-muted)',
-            cursor: 'pointer', fontSize: '0.8rem', textDecoration: 'underline',
-          }}>Log Keluar</button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{
+              width: '24px', height: '24px', borderRadius: '50%', overflow: 'hidden',
+              background: user.avatar_filename ? 'none' : user.color, flexShrink: 0,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              {user.avatar_filename ? (
+                <img src={getAvatarUrl(user.avatar_filename)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              ) : (
+                <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#fff' }}>{user.username.charAt(0).toUpperCase()}</span>
+              )}
+            </div>
+            <span style={{ color: user.color, fontWeight: 700, fontSize: '0.85rem' }}>{user.username}</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <a href="/chat/profile" title="Profil" style={{ color: 'var(--color-muted)', display: 'flex', alignItems: 'center' }}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+              </svg>
+            </a>
+            <button onClick={handleLogout} style={{
+              background: 'none', border: 'none', color: 'var(--color-muted)',
+              cursor: 'pointer', fontSize: '0.8rem', textDecoration: 'underline',
+            }}>Log Keluar</button>
+          </div>
         </>
       ) : (
         <div style={{ display: 'flex', gap: '12px', fontSize: '0.85rem' }}>
@@ -643,12 +682,12 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
 
   // Chat view (always shown when onAuthAction is provided, or when view === 'chat')
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: fullHeight ? '100%' : undefined, flex: fullHeight ? 1 : undefined }}>
+    <div style={{ display: 'flex', flexDirection: 'column', height: fullHeight ? '100%' : undefined, flex: fullHeight ? 1 : undefined, position: 'relative' }}>
       {renderHeader()}
 
       <div ref={messagesRef} onScroll={checkAtBottom} className="chat-messages" style={{
         flexGrow: 1, minHeight: 0, padding: '12px 16px',
-        display: 'flex', flexDirection: 'column', gap: '12px', overflowY: 'auto', position: 'relative',
+        display: 'flex', flexDirection: 'column', gap: '12px', overflowY: 'auto',
       }}>
         {messages.length === 0 && (
           <div style={{ color: 'var(--color-muted)', fontSize: '0.85rem', textAlign: 'center', marginTop: '2rem' }}>
@@ -656,15 +695,98 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
           </div>
         )}
         {messages.map((msg) => (
-          <div key={msg.id}>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-              <span style={{ color: msg.color, fontWeight: 600, fontSize: '0.85rem' }}>{msg.username}</span>
-              <span style={{ color: 'var(--color-muted)', fontSize: '0.75rem' }}>{msg.created_at}</span>
+          <div key={msg.id} style={{ display: 'flex', gap: '8px' }}>
+            <div style={{
+              width: '20px', height: '20px', borderRadius: '50%', overflow: 'hidden', flexShrink: 0, marginTop: '2px',
+              background: msg.avatar_filename ? 'none' : msg.color,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              {msg.avatar_filename ? (
+                <img src={getAvatarUrl(msg.avatar_filename)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              ) : (
+                <span style={{ fontSize: '0.55rem', fontWeight: 700, color: '#fff' }}>{msg.username.charAt(0).toUpperCase()}</span>
+              )}
             </div>
-            <div style={{ fontSize: '0.9rem', marginTop: '2px' }}>{msg.message}</div>
+            <div style={{ minWidth: 0, flex: 1 }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                <button
+                  onClick={() => msg.chat_user_id && handleUsernameClick(msg.chat_user_id)}
+                  style={{
+                    background: 'none', border: 'none', padding: 0, cursor: 'pointer',
+                    color: msg.color, fontWeight: 600, fontSize: '0.85rem',
+                  }}
+                >{msg.username}</button>
+                <span style={{ color: 'var(--color-muted)', fontSize: '0.75rem' }}>{msg.created_at}</span>
+              </div>
+              <div style={{ fontSize: '0.9rem', marginTop: '2px' }}>{msg.message}</div>
+            </div>
           </div>
         ))}
       </div>
+
+      {/* Profile popup */}
+      {profilePopup && (
+        <div style={{
+          position: 'absolute', bottom: '60px', left: '16px', right: '16px', zIndex: 10,
+          background: 'var(--color-surface)', border: '1px solid rgba(63, 63, 143, 0.3)',
+          borderRadius: '12px', padding: '16px', boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+        }}>
+          <button onClick={() => setProfilePopup(null)} style={{
+            position: 'absolute', top: '8px', right: '10px', background: 'none',
+            border: 'none', color: 'var(--color-muted)', cursor: 'pointer', fontSize: '1.1rem',
+          }}>&times;</button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
+            <div style={{
+              width: '48px', height: '48px', borderRadius: '50%', overflow: 'hidden', flexShrink: 0,
+              background: profilePopup.avatar_filename ? 'none' : profilePopup.color,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              {profilePopup.avatar_filename ? (
+                <img src={getAvatarUrl(profilePopup.avatar_filename)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              ) : (
+                <span style={{ fontSize: '1.2rem', fontWeight: 700, color: '#fff' }}>{profilePopup.username.charAt(0).toUpperCase()}</span>
+              )}
+            </div>
+            <div>
+              <div style={{ fontWeight: 700, color: profilePopup.color, fontSize: '0.95rem' }}>{profilePopup.username}</div>
+              {profilePopup.full_name && <div style={{ fontSize: '0.85rem', color: 'var(--color-muted)' }}>{profilePopup.full_name}</div>}
+            </div>
+          </div>
+          {profilePopup.about_me && (
+            <div style={{ fontSize: '0.85rem', color: 'var(--color-text)', marginBottom: '8px', lineHeight: 1.4 }}>
+              {profilePopup.about_me}
+            </div>
+          )}
+          {(profilePopup.location || profilePopup.hobby) && (
+            <div style={{ fontSize: '0.8rem', color: 'var(--color-muted)', marginBottom: '8px' }}>
+              {profilePopup.location && <span>📍 {profilePopup.location}</span>}
+              {profilePopup.location && profilePopup.hobby && <span> &middot; </span>}
+              {profilePopup.hobby && <span>🎯 {profilePopup.hobby}</span>}
+            </div>
+          )}
+          {[
+            profilePopup.facebook_url && { label: 'Facebook', url: profilePopup.facebook_url },
+            profilePopup.instagram_url && { label: 'Instagram', url: profilePopup.instagram_url },
+            profilePopup.twitter_url && { label: 'Twitter/X', url: profilePopup.twitter_url },
+            profilePopup.tiktok_url && { label: 'TikTok', url: profilePopup.tiktok_url },
+            profilePopup.youtube_url && { label: 'YouTube', url: profilePopup.youtube_url },
+          ].filter(Boolean).length > 0 && (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              {[
+                profilePopup.facebook_url && { label: 'Facebook', url: profilePopup.facebook_url },
+                profilePopup.instagram_url && { label: 'Instagram', url: profilePopup.instagram_url },
+                profilePopup.twitter_url && { label: 'Twitter/X', url: profilePopup.twitter_url },
+                profilePopup.tiktok_url && { label: 'TikTok', url: profilePopup.tiktok_url },
+                profilePopup.youtube_url && { label: 'YouTube', url: profilePopup.youtube_url },
+              ].filter(Boolean).map(link => (
+                <a key={link.label} href={link.url} target="_blank" rel="noopener noreferrer" style={{
+                  fontSize: '0.8rem', color: 'var(--accent-color, #6C63FF)', textDecoration: 'underline',
+                }}>{link.label}</a>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {hasNewMessages && (
         <div style={{ textAlign: 'center', padding: '4px' }}>

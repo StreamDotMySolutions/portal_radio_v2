@@ -6,6 +6,7 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\URL;
 
 class ChatUser extends Model implements CanResetPasswordContract
 {
@@ -15,6 +16,7 @@ class ChatUser extends Model implements CanResetPasswordContract
 
     protected $casts = [
         'is_banned' => 'boolean',
+        'email_verified_at' => 'datetime',
         'created_at' => 'datetime:d/m/Y H:i',
         'updated_at' => 'datetime:d/m/Y H:i',
     ];
@@ -24,6 +26,22 @@ class ChatUser extends Model implements CanResetPasswordContract
     public function messages()
     {
         return $this->hasMany(ChatMessage::class);
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->email_verified_at !== null;
+    }
+
+    public function sendEmailVerificationNotification(): void
+    {
+        $url = URL::temporarySignedRoute(
+            'chat.verify-email',
+            now()->addMinutes(60),
+            ['id' => $this->id, 'hash' => sha1($this->email)]
+        );
+
+        $this->notify(new \App\Notifications\ChatEmailVerificationNotification($url));
     }
 
     public function sendPasswordResetNotification($token)

@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 import ChatWidget, { ChatAuthForm } from './ChatWidget';
-import { getChatUser } from '../utils/chatApi';
+import { getChatUser, setChatUser as storeChatUser } from '../utils/chatApi';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/frontend';
 
@@ -22,14 +23,29 @@ export default function ChatPageComponent() {
   const [isOffline, setIsOffline] = useState(false);
   const [authView, setAuthView] = useState(null); // null | 'login' | 'register'
   const [chatUser, setChatUser] = useState(null);
+  const [verifiedBanner, setVerifiedBanner] = useState(false);
   const videoRef = useRef(null);
   const hlsRef = useRef(null);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     setChatOpen(window.innerWidth > 768);
     const saved = getChatUser();
     if (saved) setChatUser(saved);
-  }, []);
+
+    // Show verified banner if redirected from email verification
+    if (searchParams.get('verified') === '1') {
+      setVerifiedBanner(true);
+      // Update local storage with verified status
+      if (saved) {
+        const updated = { ...saved, email_verified_at: new Date().toISOString() };
+        storeChatUser(updated);
+        setChatUser(updated);
+      }
+      // Auto-hide after 5 seconds
+      setTimeout(() => setVerifiedBanner(false), 5000);
+    }
+  }, [searchParams]);
 
   // Fetch livestream URL
   useEffect(() => {
@@ -118,6 +134,20 @@ export default function ChatPageComponent() {
 
   return (
     <div className="container-fluid px-4 py-5">
+      {verifiedBanner && (
+        <div style={{
+          background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.3)',
+          borderRadius: '8px', padding: '12px 16px', marginBottom: '12px',
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        }}>
+          <span style={{ color: '#10B981', fontSize: '0.9rem', fontWeight: 600 }}>
+            Akaun anda berjaya diaktifkan! Anda kini boleh mengemaskini profil.
+          </span>
+          <button onClick={() => setVerifiedBanner(false)} style={{
+            background: 'none', border: 'none', color: '#10B981', cursor: 'pointer', fontSize: '1.1rem',
+          }}>&times;</button>
+        </div>
+      )}
       <div className="d-flex livestream-wrapper" style={{ height: 'calc(100vh - 200px)' }}>
         {/* Video player area — shows auth form when active */}
         <div className={`livestream-player ${chatOpen ? '' : 'chat-closed'}`} style={{
