@@ -35,6 +35,7 @@ Route::get('/home-banners', [BannerController::class, 'index']);
 Route::get('/home-programmes', [ProgrammeController::class, 'index']);
 Route::get('/home-videos', [VideoController::class, 'index']);
 Route::get('/stations', [StationController::class, 'index']);
+Route::get('/stations/{station:slug}', [StationController::class, 'show']);
 Route::post('/directories/search', [DirectoryController::class, 'search']);
 Route::get('/directories/{id}', [DirectoryController::class, 'index']);
 Route::get('/directories/{directory}/show', [DirectoryController::class, 'show']);

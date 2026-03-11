@@ -18,7 +18,9 @@ export default function StationDetail({ station }) {
         className="station-banner-hero position-relative d-flex align-items-end justify-content-center"
         style={{
           height: '300px',
-          backgroundImage: `url(${station.banner})`,
+          backgroundImage: station.heroBanner
+            ? `url(${station.heroBanner})`
+            : `linear-gradient(to bottom, ${station.accent}, var(--color-bg))`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}

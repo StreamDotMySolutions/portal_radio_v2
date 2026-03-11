@@ -2,12 +2,21 @@
 
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
-import { nasionalStations, negeriStations } from '@/data/stations';
+import { fetchStations } from '@/utils/stationsApi';
 
 export default function RadioStations() {
   const [playingSlug, setPlayingSlug] = useState(null);
   const audioRef = useRef(null);
   const hlsRef = useRef(null);
+  const [nasionalStations, setNasionalStations] = useState([]);
+  const [negeriStations, setNegeriStations] = useState([]);
+
+  useEffect(() => {
+    fetchStations().then(stations => {
+      setNasionalStations(stations.filter(s => s.category === 'nasional'));
+      setNegeriStations(stations.filter(s => s.category === 'negeri'));
+    });
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -85,15 +94,19 @@ export default function RadioStations() {
                   backgroundColor: '#000',
                   minHeight: '120px',
                 }}>
-                  <img
-                    src={station.banner}
-                    alt={station.name}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                    }}
-                  />
+                  {station.banner ? (
+                    <img
+                      src={station.banner}
+                      alt={station.name}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                      }}
+                    />
+                  ) : (
+                    <div style={{ width: '100%', minHeight: '120px', backgroundColor: station.accent, opacity: 0.3 }} />
+                  )}
                 </div>
 
                 {/* Hover overlay */}

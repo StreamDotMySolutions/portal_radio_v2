@@ -15,8 +15,14 @@ class StationController extends Controller
             $query->where('category', $request->input('category'));
         }
 
-        $stations = $query->orderBy('title')->get();
+        $stations = $query->defaultOrder()->get();
 
         return response()->json(['stations' => $stations]);
+    }
+
+    public function show(Station $station)
+    {
+        if (!$station->active) abort(404);
+        return response()->json(['station' => $station]);
     }
 }

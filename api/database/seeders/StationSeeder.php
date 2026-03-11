@@ -324,31 +324,64 @@ class StationSeeder extends Seeder
 
     public function run(): void
     {
-        Storage::disk('public')->makeDirectory('station-thumbnails');
-        Storage::disk('public')->makeDirectory('station-banners');
-
         // Clear existing stations
         Station::query()->delete();
 
         $adminId = \App\Models\User::first()->id;
 
+        // Get available banners from storage
+        $bannerFiles = [
+            '1700000000-selamat-datang-ke-rtm.jpg',
+            '1700000001-siaran-langsung-24-jam.jpg',
+            '1700000002-rtm-anugerah-seni-2025.jpg',
+            '1700000003-berita-terkini-rtm.jpg',
+            '1700000004-program-kanak-kanak.jpg',
+            '1700000005-sukan-malaysia.jpg',
+            '1700000006-dokumentari-alam-semula-jadi.jpg',
+            '1700000007-muzik-malaysia.jpg',
+            '1700000008-forum-perdana.jpg',
+            '1700000009-rancangan-hiburan-minggu-ini.jpg',
+        ];
+
+        $bannerIndex = 0;
+
         foreach ($this->nasionalStations as $data) {
+            $bannerFilename = $bannerFiles[$bannerIndex % count($bannerFiles)];
+            $bannerIndex++;
+
             Station::create(array_merge($data, [
                 'user_id' => $adminId,
                 'category' => 'nasional',
                 'active' => 1,
+                'thumbnail_filename' => $bannerFilename,
+                'banner_filename' => $bannerFilename,
             ]));
         }
 
         foreach ($this->negeriStations as $data) {
+            $bannerFilename = $bannerFiles[$bannerIndex % count($bannerFiles)];
+            $bannerIndex++;
+
             Station::create(array_merge($data, [
                 'user_id' => $adminId,
                 'category' => 'negeri',
                 'active' => 1,
+                'thumbnail_filename' => $bannerFilename,
+                'banner_filename' => $bannerFilename,
             ]));
         }
 
         // Rebuild nested set tree for all stations
         Station::fixTree();
+    }
+
+    private function hexToRgb(string $hex): array
+    {
+        $hex = ltrim($hex, '#');
+        $r = hexdec(substr($hex, 0, 2));
+        $g = hexdec(substr($hex, 2, 2));
+        $b = hexdec(substr($hex, 4, 2));
+
+        return ['r' => $r, 'g' => $g, 'b' => $b];
     }
 }
