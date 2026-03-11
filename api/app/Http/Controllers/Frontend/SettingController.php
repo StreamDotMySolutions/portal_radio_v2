@@ -4,14 +4,14 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
-use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
 
 class SettingController extends Controller
 {
     /**
      * Get livestream URL for public access
      */
-    public function livestreamUrl(): Response
+    public function livestreamUrl(): JsonResponse
     {
         return response()->json(['stream_url' => Setting::get('livestream_url', '')]);
     }
