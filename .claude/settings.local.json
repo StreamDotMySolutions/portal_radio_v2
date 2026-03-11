@@ -8,5 +8,9 @@
       "Bash(php:*)",
       "Bash(xargs:*)"
     ]
-  }
+  },
+  "enabledMcpjsonServers": [
+    "playwright"
+  ],
+  "enableAllProjectMcpServers": true
 }
