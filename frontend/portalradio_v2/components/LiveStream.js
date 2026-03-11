@@ -51,7 +51,7 @@ export default function LiveStream() {
     const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/frontend';
     fetch(`${API_URL}/livestream-url`)
         .then(r => r.json())
-        .then(d => setStreamUrl(d.stream_url || null))
+        .then(d => setStreamUrl(d.livestream_url || null))
         .catch(() => setStreamUrl(null));
   }, []);
 

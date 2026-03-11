@@ -19,11 +19,20 @@ const messages = [
   { user: 'Karim', color: '#14B8A6', text: 'Playlist hari ini sangat bagus', time: '8:12' },
 ];
 
+function getOrCreateSessionId() {
+  let id = sessionStorage.getItem('rtm_sid');
+  if (!id) {
+    id = crypto.randomUUID();
+    sessionStorage.setItem('rtm_sid', id);
+  }
+  return id;
+}
+
 export default function ChatPageComponent() {
   const [chatOpen, setChatOpen] = useState(true);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [livestreamUrl, setLivestreamUrl] = useState(null);
-  const audioRef = useRef(null);
+  const [isOffline, setIsOffline] = useState(false);
+  const videoRef = useRef(null);
   const hlsRef = useRef(null);
 
   useEffect(() => {
@@ -32,125 +41,128 @@ export default function ChatPageComponent() {
 
   // Fetch livestream URL
   useEffect(() => {
-    const fetchLivestreamUrl = async () => {
-      try {
-        const res = await fetch(`${API_URL}/frontend/livestream-url`);
-        if (res.ok) {
-          const data = await res.json();
-          setLivestreamUrl(data.livestream_url);
-        }
-      } catch (error) {
-        console.warn('Failed to fetch livestream URL:', error);
-      }
-    };
-
-    fetchLivestreamUrl();
+    fetch(`${API_URL}/frontend/livestream-url`)
+      .then(r => r.json())
+      .then(d => setLivestreamUrl(d.livestream_url || null))
+      .catch(() => setLivestreamUrl(null));
   }, []);
 
-  // Cleanup HLS on unmount
+  // HLS setup
   useEffect(() => {
+    if (!livestreamUrl || !videoRef.current) return;
+
+    const video = videoRef.current;
+    let playTracked = false;
+
+    (async () => {
+      try {
+        const HLS = (await import('hls.js')).default;
+        if (HLS.isSupported()) {
+          const hls = new HLS();
+          hlsRef.current = hls;
+
+          hls.on(HLS.Events.ERROR, (_, data) => {
+            if (data.fatal) {
+              setIsOffline(true);
+              hls.destroy();
+            }
+          });
+
+          hls.loadSource(livestreamUrl);
+          hls.attachMedia(video);
+        } else if (video?.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = livestreamUrl;
+        } else {
+          setIsOffline(true);
+        }
+      } catch {
+        if (video?.canPlayType('application/vnd.apple.mpegurl')) {
+          video.src = livestreamUrl;
+        } else {
+          setIsOffline(true);
+        }
+      }
+    })();
+
+    // Track play
+    const handlePlay = () => {
+      if (playTracked) return;
+      playTracked = true;
+
+      fetch(`${API_URL}/frontend/track`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          session_id: getOrCreateSessionId(),
+          event_type: 'livestream_play',
+          page_type: 'chat',
+          device_type: window.innerWidth < 768 ? 'mobile' : 'desktop',
+        }),
+      }).catch(() => {});
+    };
+
+    video.addEventListener('play', handlePlay, { once: true });
+
+    const handleVideoError = () => {
+      setIsOffline(true);
+    };
+    video.addEventListener('error', handleVideoError, { once: true });
+
     return () => {
+      video.removeEventListener('play', handlePlay);
+      video.removeEventListener('error', handleVideoError);
       if (hlsRef.current) {
         hlsRef.current.destroy();
         hlsRef.current = null;
       }
     };
-  }, []);
-
-  const togglePlayback = async (e) => {
-    e.stopPropagation();
-    if (!livestreamUrl) return;
-
-    const audio = audioRef.current;
-
-    if (isPlaying) {
-      // Stop playback
-      audio.pause();
-      setIsPlaying(false);
-      return;
-    }
-
-    // Start playback
-    setIsPlaying(true);
-    try {
-      const HLS = (await import('hls.js')).default;
-      if (HLS.isSupported()) {
-        if (hlsRef.current) {
-          hlsRef.current.destroy();
-        }
-        const hls = new HLS();
-        hlsRef.current = hls;
-        hls.loadSource(livestreamUrl);
-        hls.attachMedia(audio);
-        hls.on(HLS.Events.MANIFEST_PARSED, () => audio.play());
-      } else if (audio.canPlayType('application/vnd.apple.mpegurl')) {
-        audio.src = livestreamUrl;
-        audio.play();
-      }
-    } catch (error) {
-      if (audio.canPlayType('application/vnd.apple.mpegurl')) {
-        audio.src = livestreamUrl;
-        audio.play();
-      }
-    }
-  };
+  }, [livestreamUrl]);
 
   return (
     <div className="container-fluid px-4 py-5">
-      <audio ref={audioRef} />
       <div className="d-flex livestream-wrapper" style={{ height: 'calc(100vh - 200px)' }}>
         {/* Video area */}
         <div className={`livestream-player ${chatOpen ? '' : 'chat-closed'}`} style={{ flexGrow: 1, minWidth: 0 }}>
+          {/* 16:9 video player */}
           <div style={{
             position: 'relative',
-            height: '100%',
+            paddingBottom: '56.25%',
             backgroundColor: '#000',
-            borderRadius: '12px',
+            borderRadius: '12px 12px 0 0',
             overflow: 'hidden',
-            backgroundImage: 'url(/video-bg.png)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
           }}>
-            {/* Play icon */}
-            <div style={{
-              position: 'absolute',
-              inset: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
-              <button
-                onClick={togglePlayback}
+            {isOffline ? (
+              <div style={{
+                position: 'absolute',
+                inset: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: '#000',
+                color: '#999',
+                fontSize: '0.9rem',
+              }}>
+                <i className="bi bi-wifi-off" style={{ fontSize: '2rem', marginBottom: '0.5rem' }}></i>
+                <div>Siaran tidak tersedia</div>
+              </div>
+            ) : (
+              <video
+                ref={videoRef}
                 style={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: livestreamUrl ? 'pointer' : 'not-allowed',
-                  opacity: livestreamUrl ? 1 : 0.5,
-                  padding: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  backgroundColor: '#000',
                 }}
-                title={livestreamUrl ? (isPlaying ? 'Stop livestream' : 'Play livestream') : 'Loading livestream...'}
-              >
-                <svg width="80" height="80" viewBox="0 0 16 16" fill="#ff6600" style={{ cursor: 'inherit' }}>
-                  {isPlaying ? (
-                    <>
-                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-                      <path d="M5 6a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V7a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v2a1 1 0 1 1-2 0V7a1 1 0 0 1 1-1"/>
-                    </>
-                  ) : (
-                    <>
-                      <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
-                      <path d="M6.271 5.055a.5.5 0 0 1 .52.038l3.5 2.5a.5.5 0 0 1 0 .814l-3.5 2.5A.5.5 0 0 1 6 10.5v-5a.5.5 0 0 1 .271-.445"/>
-                    </>
-                  )}
-                </svg>
-              </button>
-            </div>
+                controls
+                autoPlay
+                muted
+              />
+            )}
+          </div>
 
             {/* Chat toggle button */}
             <button
