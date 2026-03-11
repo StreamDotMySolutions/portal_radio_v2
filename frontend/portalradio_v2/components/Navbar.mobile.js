@@ -2,15 +2,33 @@
 
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
+import { nasionalStations, negeriStations } from '../data/stations';
 
 export default function NavbarMobile() {
   const [scrolled, setScrolled] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener('scroll', onScroll);
     return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    const dropdown = document.querySelector('[data-bs-toggle="dropdown"]');
+    if (!dropdown) return;
+
+    const handleShow = () => setDropdownOpen(true);
+    const handleHide = () => setDropdownOpen(false);
+
+    dropdown.addEventListener('show.bs.dropdown', handleShow);
+    dropdown.addEventListener('hide.bs.dropdown', handleHide);
+
+    return () => {
+      dropdown.removeEventListener('show.bs.dropdown', handleShow);
+      dropdown.removeEventListener('hide.bs.dropdown', handleHide);
+    };
   }, []);
 
   const isActive = (href) => pathname === href;
@@ -35,19 +53,40 @@ export default function NavbarMobile() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav" style={{ fontSize: '1rem', textTransform: 'uppercase' }}>
             <li className="nav-item">
-              <a className="nav-link py-2" href="/" style={{ borderBottom: isActive('/') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease', display: 'inline-block' }}>Utama</a>
+              <a className={`nav-link py-2${isActive('/') ? ' nav-active' : ''}`} href="/">Utama</a>
+            </li>
+            <li className="nav-item dropdown">
+              <a className={`nav-link dropdown-toggle py-2${dropdownOpen || pathname.startsWith('/station/') ? ' nav-active' : ''}`} href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Senarai Radio</a>
+              <ul className="dropdown-menu dropdown-menu-dark p-0" style={{ minWidth: '320px' }}>
+                <li>
+                  <div className="px-2 py-2 row g-0">
+                    <div className="col-4">
+                      <h6 className="dropdown-header px-1" style={{ fontSize: '0.7rem' }}>Nasional</h6>
+                      {nasionalStations.map(station => (
+                        <a key={station.slug} className={`dropdown-item px-1 py-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`} style={{ fontSize: '0.75rem', whiteSpace: 'normal' }}>{station.name}</a>
+                      ))}
+                    </div>
+                    <div className="col-4">
+                      <h6 className="dropdown-header px-1" style={{ fontSize: '0.7rem' }}>Negeri</h6>
+                      {negeriStations.slice(0, Math.ceil(negeriStations.length / 2)).map(station => (
+                        <a key={station.slug} className={`dropdown-item px-1 py-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`} style={{ fontSize: '0.75rem', whiteSpace: 'normal' }}>{station.name}</a>
+                      ))}
+                    </div>
+                    <div className="col-4">
+                      <h6 className="dropdown-header px-1" style={{ fontSize: '0.7rem' }}>&nbsp;</h6>
+                      {negeriStations.slice(Math.ceil(negeriStations.length / 2)).map(station => (
+                        <a key={station.slug} className={`dropdown-item px-1 py-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`} style={{ fontSize: '0.75rem', whiteSpace: 'normal' }}>{station.name}</a>
+                      ))}
+                    </div>
+                  </div>
+                </li>
+              </ul>
             </li>
             <li className="nav-item">
-              <a className="nav-link py-2" href="/senarai-radio" style={{ borderBottom: isActive('/senarai-radio') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease', display: 'inline-block' }}>Senarai Radio</a>
+              <a className={`nav-link py-2${isActive('/chat') ? ' nav-active' : ''}`} href="/chat">Chat</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link py-2" href="/chat" style={{ borderBottom: isActive('/chat') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease', display: 'inline-block' }}>Chat</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link py-2" href="/mengenai-kami" style={{ borderBottom: isActive('/mengenai-kami') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease', display: 'inline-block' }}>Mengenai Kami</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link py-2" href="/hubungi" style={{ borderBottom: isActive('/hubungi') ? '3px solid var(--color-accent)' : 'none', paddingBottom: '0.5rem', transition: 'border-color 0.3s ease', display: 'inline-block' }}>Hubungi</a>
+              <a className={`nav-link py-2${isActive('/mengenai-kami') ? ' nav-active' : ''}`} href="/mengenai-kami">Mengenai Kami</a>
             </li>
           </ul>
           <div className="py-2">
