@@ -42,15 +42,17 @@ export default function StationDetailMobile({ station }) {
         {/* Audio Player / Embed Player */}
         <div className="mb-3">
           {station.embedPlayerUrl ? (
-            <iframe
-              src={station.embedPlayerUrl}
-              width="100%"
-              height="1200"
-              style={{ border: 'none', display: 'block', borderRadius: '8px', overflow: 'hidden', backgroundColor: 'var(--color-bg)' }}
-              allow="autoplay"
-              scrolling="no"
-              title={`${station.name} Live Player`}
-            />
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <iframe
+                src={station.embedPlayerUrl}
+                width="100%"
+                height="350"
+                style={{ border: 'none', display: 'block', borderRadius: '8px', overflow: 'hidden', backgroundColor: 'var(--color-bg)' }}
+                allow="autoplay"
+                scrolling="no"
+                title={`${station.name} Live Player`}
+              />
+            </div>
           ) : (
             <div className="d-flex gap-2 align-items-flex-end flex-wrap">
               <div style={{ flex: 1, minWidth: '200px' }}>
@@ -85,6 +87,20 @@ export default function StationDetailMobile({ station }) {
           )}
         </div>
 
+        {/* Frequency */}
+        <div className="card-dark p-3 mb-3" style={{ borderRadius: '8px', background: `linear-gradient(135deg, ${station.accent}22, ${station.accent}11)` }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ color: 'var(--color-muted)', fontSize: '0.75rem', marginBottom: '0.5rem' }}>Frekuensi Radio</div>
+            <div style={{ color: '#fff', fontWeight: '700', fontSize: '2rem' }}>{station.frequency}</div>
+          </div>
+        </div>
+
+        {/* About */}
+        <div className="card-dark p-3 mb-3" style={{ borderRadius: '8px' }}>
+          <h5 style={{ color: 'var(--color-text)', fontWeight: '600', marginBottom: '0.75rem', fontSize: '1rem' }}>Tentang Stesen</h5>
+          <p style={{ color: 'var(--color-muted)', lineHeight: '1.7', fontSize: '0.85rem', margin: 0 }}>{station.description}</p>
+        </div>
+
         {/* Social Media Links */}
         {station.social && (Object.values(station.social).some(link => link !== '#')) && (
           <div className="mb-3">
@@ -113,42 +129,6 @@ export default function StationDetailMobile({ station }) {
             </div>
           </div>
         )}
-
-        {/* About */}
-        <div className="card-dark p-3 mb-3" style={{ borderRadius: '8px' }}>
-          <h5 style={{ color: 'var(--color-text)', fontWeight: '600', marginBottom: '0.75rem', fontSize: '1rem' }}>Tentang Stesen</h5>
-          <p style={{ color: 'var(--color-muted)', lineHeight: '1.7', fontSize: '0.85rem', margin: 0 }}>{station.description}</p>
-        </div>
-
-        {/* Info */}
-        <div className="card-dark p-3 mb-3" style={{ borderRadius: '8px' }}>
-          <div className="d-flex justify-content-between mb-2">
-            <div>
-              <div style={{ color: 'var(--color-muted)', fontSize: '0.75rem' }}>Frekuensi</div>
-              <div style={{ color: 'var(--color-text)', fontWeight: '600', fontSize: '0.9rem' }}>{station.frequency}</div>
-            </div>
-            <div className="text-end">
-              <div style={{ color: 'var(--color-muted)', fontSize: '0.75rem' }}>Genre</div>
-              <div style={{ color: 'var(--color-text)', fontWeight: '600', fontSize: '0.9rem' }}>{station.genre}</div>
-            </div>
-          </div>
-          {station.social && (
-            <div className="d-flex gap-3 mt-2">
-              {station.social.facebook && (
-                <a href={station.social.facebook} style={{ color: station.accent, fontSize: '1.2rem' }}><i className="bi bi-facebook"></i></a>
-              )}
-              {station.social.instagram && (
-                <a href={station.social.instagram} style={{ color: station.accent, fontSize: '1.2rem' }}><i className="bi bi-instagram"></i></a>
-              )}
-              {station.social.twitter && (
-                <a href={station.social.twitter} style={{ color: station.accent, fontSize: '1.2rem' }}><i className="bi bi-twitter-x"></i></a>
-              )}
-              {station.social.youtube && (
-                <a href={station.social.youtube} style={{ color: station.accent, fontSize: '1.2rem' }}><i className="bi bi-youtube"></i></a>
-              )}
-            </div>
-          )}
-        </div>
       </div>
     </div>
   );
