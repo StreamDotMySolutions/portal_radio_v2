@@ -1,2 +1,8 @@
 *
 !.gitignore
+!banners/
+!stations/
+banners/*
+stations/*
+!banners/*.jpg
+!stations/*.jpg

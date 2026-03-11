@@ -41,6 +41,7 @@ import VodManagement from './pages/Administration/Vods'
 import Analytics from './pages/Administration/Analytics'
 import Activity from './pages/Administration/Activity'
 import ComplaintManagement from './pages/Administration/Complaints'
+import LivestreamManagement from './pages/Administration/Livestream'
 
 library.add(fas)
 
@@ -74,6 +75,7 @@ export default function App() {
                 <Route path="/administration/articles-data/:parentId" element={<ArticleDataManagement />} />
                 <Route path="/administration/banners" element={<BannerManagement />} />
                 <Route path="/administration/stations" element={<StationManagement />} />
+                <Route path="/administration/livestream" element={<LivestreamManagement />} />
                 <Route path="/administration/programmes" element={<ProgrammeManagement />} />
                 <Route path="/administration/videos" element={<VideoManagement />} />
                 <Route path="/administration/directories/:parentId" element={<DirectoryManagement />} />

@@ -2,6 +2,16 @@
 
 import { useState, useRef, useEffect } from 'react';
 
+// Helper to manage session ID for analytics
+function getOrCreateSessionId() {
+    let id = sessionStorage.getItem('rtm_sid');
+    if (!id) {
+        id = crypto.randomUUID();
+        sessionStorage.setItem('rtm_sid', id);
+    }
+    return id;
+}
+
 const messages = [
   { user: 'Ahmad', color: '#3F3F8F', text: 'Selamat pagi semua!', time: '8:01' },
   { user: 'Siti', color: '#DC2626', text: 'Lagu ni best! 🎵', time: '8:02' },
@@ -13,30 +23,93 @@ const messages = [
 
 export default function LiveStreamMobile() {
   const [chatOpen, setChatOpen] = useState(false);
+  const [streamUrl, setStreamUrl] = useState(null);
+  const [isOffline, setIsOffline] = useState(false);
   const videoRef = useRef(null);
+  const hlsRef = useRef(null);
 
+  // Fetch stream URL from API (runs once)
   useEffect(() => {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/frontend';
+    fetch(`${API_URL}/livestream-url`)
+        .then(r => r.json())
+        .then(d => setStreamUrl(d.stream_url || null))
+        .catch(() => setStreamUrl(null));
+  }, []);
+
+  // HLS setup with offline detection and play tracking
+  useEffect(() => {
+    if (!streamUrl || !videoRef.current) return;
+
     const video = videoRef.current;
-    const STREAM = 'https://nasionalfm.rtm.gov.my/hls/nasionalfm.m3u8';
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/frontend';
+    let playTracked = false;
 
     (async () => {
       try {
         const HLS = (await import('hls.js')).default;
         if (HLS.isSupported()) {
           const hls = new HLS();
-          hls.loadSource(STREAM);
+          hlsRef.current = hls;
+
+          hls.on(HLS.Events.ERROR, (_, data) => {
+            if (data.fatal) {
+              setIsOffline(true);
+              hls.destroy();
+            }
+          });
+
+          hls.loadSource(streamUrl);
           hls.attachMedia(video);
         } else if (video?.canPlayType('application/vnd.apple.mpegurl')) {
-          video.src = STREAM;
+          video.src = streamUrl;
+        } else {
+          setIsOffline(true);
         }
       } catch {
         // HLS not available, try native support
         if (video?.canPlayType('application/vnd.apple.mpegurl')) {
-          video.src = STREAM;
+          video.src = streamUrl;
+        } else {
+          setIsOffline(true);
         }
       }
     })();
-  }, []);
+
+    // Track play (fire once)
+    const handlePlay = () => {
+      if (playTracked) return;
+      playTracked = true;
+
+      fetch(`${API_URL}/track`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          session_id:  getOrCreateSessionId(),
+          event_type:  'livestream_play',
+          page_type:   'livestream',
+          device_type: window.innerWidth < 768 ? 'mobile' : 'desktop',
+        }),
+      }).catch(() => {});
+    };
+
+    video.addEventListener('play', handlePlay, { once: true });
+
+    // Native fallback error handling
+    const handleVideoError = () => {
+      setIsOffline(true);
+    };
+    video.addEventListener('error', handleVideoError, { once: true });
+
+    return () => {
+      video.removeEventListener('play', handlePlay);
+      video.removeEventListener('error', handleVideoError);
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+        hlsRef.current = null;
+      }
+    };
+  }, [streamUrl]);
 
   return (
     <section className="py-4">
@@ -51,11 +124,31 @@ export default function LiveStreamMobile() {
           borderRadius: '8px 8px 0 0',
           overflow: 'hidden',
         }}>
-          <video
-            ref={videoRef}
-            controls
-            style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
-          />
+          {isOffline ? (
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: '#111',
+              color: '#aaa',
+              gap: '10px',
+            }}>
+              <svg width="40" height="40" viewBox="0 0 16 16" fill="currentColor">
+                <path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+              </svg>
+              <span style={{ fontWeight: 600 }}>Siaran Tidak Tersedia</span>
+              <span style={{ fontSize: '0.85rem' }}>Sila cuba semula sebentar lagi</span>
+            </div>
+          ) : (
+            <video
+              ref={videoRef}
+              controls
+              style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+            />
+          )}
 
           {/* Chat toggle button */}
           <button

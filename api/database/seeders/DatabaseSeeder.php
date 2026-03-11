@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             DirectorySeeder::class,
             BannerSeeder::class,
             StationSeeder::class,
+            SettingSeeder::class,
         ]);
     }
 }

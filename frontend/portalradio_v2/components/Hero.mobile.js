@@ -9,9 +9,9 @@ export default function HeroMobile() {
   useEffect(() => {
     const fetchBanners = async () => {
       try {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/frontend';
         const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:8000';
-        const response = await fetch(`${apiUrl}/frontend/home-banners`);
+        const response = await fetch(`${apiUrl}/home-banners`);
         if (response.ok) {
           const data = await response.json();
           setBanners(data.banners || []);

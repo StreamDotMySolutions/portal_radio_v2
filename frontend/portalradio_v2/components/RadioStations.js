@@ -4,6 +4,15 @@ import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 import { fetchStations } from '@/utils/stationsApi';
 
+function getOrCreateSessionId() {
+  let id = sessionStorage.getItem('rtm_sid');
+  if (!id) {
+    id = crypto.randomUUID();
+    sessionStorage.setItem('rtm_sid', id);
+  }
+  return id;
+}
+
 export default function RadioStations() {
   const [playingSlug, setPlayingSlug] = useState(null);
   const audioRef = useRef(null);
@@ -35,6 +44,7 @@ export default function RadioStations() {
     if (disabled) return;
 
     const audio = audioRef.current;
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/frontend';
 
     // Same station — pause and stop
     if (playingSlug === station.slug) {
@@ -50,6 +60,18 @@ export default function RadioStations() {
     }
     audio.pause();
     setPlayingSlug(station.slug);
+
+    // Track play
+    fetch(`${API_URL}/track`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        session_id:  getOrCreateSessionId(),
+        event_type:  'livestream_play',
+        page_type:   'station_grid',
+        device_type: window.innerWidth < 768 ? 'mobile' : 'desktop',
+      }),
+    }).catch(() => {});
 
     // Load new stream
     try {

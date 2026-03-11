@@ -142,4 +142,46 @@ class AnalyticsService
 
         return $query->count();
     }
+
+    /**
+     * Get total livestream play clicks
+     */
+    public static function livestreamTotalPlays(): int
+    {
+        return AnalyticsEvent::where('event_type', 'livestream_play')->count();
+    }
+
+    /**
+     * Get livestream plays today
+     */
+    public static function livestreamPlaysToday(): int
+    {
+        return AnalyticsEvent::where('event_type', 'livestream_play')
+            ->whereDate('created_at', today())
+            ->count();
+    }
+
+    /**
+     * Get livestream plays this week
+     */
+    public static function livestreamPlaysThisWeek(): int
+    {
+        return AnalyticsEvent::where('event_type', 'livestream_play')
+            ->where('created_at', '>=', now()->startOfWeek())
+            ->count();
+    }
+
+    /**
+     * Get livestream plays by day (last 30 days)
+     * Returns [{date, views}] where "views" key matches DailyChart's expected shape
+     */
+    public static function livestreamDailyPlays()
+    {
+        return AnalyticsEvent::where('event_type', 'livestream_play')
+            ->where('created_at', '>=', now()->subDays(29)->startOfDay())
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as views'))
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy('date')
+            ->get();
+    }
 }

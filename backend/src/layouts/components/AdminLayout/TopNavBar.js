@@ -48,6 +48,9 @@ function TopNavbar() {
               <NavDropdown.Item as={NavLink} to="/administration/videos">
                 <FontAwesomeIcon icon={['fas', 'video']} />{' '}Videos
               </NavDropdown.Item>
+              <NavDropdown.Item as={NavLink} to="/administration/livestream">
+                <FontAwesomeIcon icon={['fas', 'tower-broadcast']} />{' '}Livestream
+              </NavDropdown.Item>
             </NavDropdown>
 
             <Nav.Link as={NavLink} to="/administration/analytics">

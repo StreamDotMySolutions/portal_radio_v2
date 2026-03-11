@@ -7,11 +7,11 @@ export function mapStation(s) {
     name: s.title,
     // thumbnail: used for card grid images
     banner: s.thumbnail_filename && s.thumbnail_filename !== 'placeholder'
-      ? `${SERVER_URL}/storage/banners/${s.thumbnail_filename}`
+      ? `${SERVER_URL}/storage/stations/${s.thumbnail_filename}`
       : null,
     // heroBanner: used for detail page full-width hero
     heroBanner: s.banner_filename && s.banner_filename !== 'placeholder'
-      ? `${SERVER_URL}/storage/banners/${s.banner_filename}`
+      ? `${SERVER_URL}/storage/stations/${s.banner_filename}`
       : null,
     accent: s.accent_color || '#444',
     streamUrl: null,

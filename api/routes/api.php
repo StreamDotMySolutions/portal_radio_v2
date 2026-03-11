@@ -27,6 +27,8 @@ use App\Http\Controllers\Backend\{
     ActivityController,
     ComplaintController,
     StationController,
+    LivestreamController,
+    SettingController,
 };
 
 Route::get('/', function () {
@@ -148,6 +150,13 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::delete('/stations/{station}', [StationController::class, 'delete']);
     Route::patch('/stations/{station}/toggle', [StationController::class, 'toggle']);
     Route::get('/stations/ordering/{station}', [StationController::class, 'ordering']);
+
+    // Settings
+    Route::get('/settings/{key}', [SettingController::class, 'show']);
+    Route::put('/settings/{key}', [SettingController::class, 'update']);
+
+    // Livestream
+    Route::get('/livestream', [LivestreamController::class, 'index']);
 
     // Programmes Settings
     Route::get('/programmes', [ProgrammeController::class, 'index']);
