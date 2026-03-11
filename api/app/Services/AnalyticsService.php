@@ -37,6 +37,18 @@ class AnalyticsService
             ->get();
     }
 
+    public static function topStations(int $limit = 10)
+    {
+        return AnalyticsEvent::where('event_type', 'pageview')
+            ->where('page_type', 'station')
+            ->whereNotNull('reference_id')
+            ->select('reference_id', 'reference_title', DB::raw('count(*) as views'))
+            ->groupBy('reference_id', 'reference_title')
+            ->orderByDesc('views')
+            ->limit($limit)
+            ->get();
+    }
+
     public static function topSearches(int $limit = 10)
     {
         return AnalyticsEvent::where('event_type', 'search')
@@ -88,5 +100,46 @@ class AnalyticsService
             ->groupBy('device_type')
             ->orderByDesc('count')
             ->get();
+    }
+
+    /**
+     * Get pageview count for a specific station
+     */
+    public static function stationViews(string $stationSlug)
+    {
+        return AnalyticsEvent::where('event_type', 'pageview')
+            ->where('page_type', 'station')
+            ->where('reference_id', $stationSlug)
+            ->count();
+    }
+
+    /**
+     * Get total pageviews for all stations
+     */
+    public static function totalStationViews()
+    {
+        return AnalyticsEvent::where('event_type', 'pageview')
+            ->where('page_type', 'station')
+            ->count();
+    }
+
+    /**
+     * Get station pageviews by date range
+     */
+    public static function stationViewsByDateRange(string $stationSlug, $startDate = null, $endDate = null)
+    {
+        $query = AnalyticsEvent::where('event_type', 'pageview')
+            ->where('page_type', 'station')
+            ->where('reference_id', $stationSlug);
+
+        if ($startDate) {
+            $query->where('created_at', '>=', $startDate);
+        }
+
+        if ($endDate) {
+            $query->where('created_at', '<=', $endDate);
+        }
+
+        return $query->count();
     }
 }

@@ -9,6 +9,7 @@ import CreateModal from '../modals/Create'
 import ShowModal from '../modals/Show'
 import EditModal from '../modals/Edit'
 import DeleteModal from '../modals/Delete'
+import Ordering from './Ordering'
 
 const DataTable = () => {
     const { url: apiBase } = useStore()
@@ -156,16 +157,27 @@ const DataTable = () => {
             <Table hover responsive style={{ '--bs-table-cell-padding-y': '0.85rem' }}>
                 <thead className='table-light'>
                     <tr>
+                        <th style={{ width: '100px' }}>Order</th>
                         <th>Title</th>
                         <th style={{ width: '120px' }}>Category</th>
                         <th style={{ width: '100px' }}>Frequency</th>
+                        <th style={{ width: '90px' }}>Pageviews</th>
                         <th style={{ width: '90px' }}>Active</th>
                         <th className='text-center' style={{ width: '160px' }}>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {items?.data?.map((item) => (
+                    {items?.data?.map((item, index) => (
                         <tr key={item.id}>
+                            <td className='text-nowrap'>
+                                <Ordering id={item.id} direction='up' disabled={index === 0} />
+                                {' '}
+                                <Ordering
+                                    id={item.id}
+                                    direction='down'
+                                    disabled={index === items.data.length - 1}
+                                />
+                            </td>
                             <td>{item.title}</td>
                             <td>
                                 <Badge bg={categoryBadgeVariant(item.category)}>
@@ -173,6 +185,7 @@ const DataTable = () => {
                                 </Badge>
                             </td>
                             <td>{item.frequency || '—'}</td>
+                            <td>{item.pageview_hits || 0}</td>
                             <td>
                                 <Form.Check
                                     type='switch'
@@ -190,7 +203,7 @@ const DataTable = () => {
                     ))}
                     {items?.data?.length === 0 && (
                         <tr>
-                            <td colSpan='5' className='text-center text-muted py-4'>
+                            <td colSpan='6' className='text-center text-muted py-4'>
                                 No stations found
                                 {search && <> matching <strong>"{search}"</strong></>}
                                 {categoryFilter && <> in <strong>{categoryFilter === 'nasional' ? 'Nasional' : 'Negeri'}</strong></>}

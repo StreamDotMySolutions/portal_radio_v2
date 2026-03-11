@@ -469,3 +469,510 @@ The dry-run prints a table showing every article's current type vs the computed 
 | `spatie/laravel-activitylog` | ^4.7 | Audit trail |
 | `spatie/laravel-backup` | ^8.5 | Automated backups |
 | `guzzlehttp/guzzle` | ^7.2 | HTTP client |
+
+---
+
+## Creating a New CRUD Feature (Step-by-Step)
+
+### Phase 1: Database & Models
+
+**1. Create Migration**
+```bash
+php artisan make:migration create_features_table
+```
+
+```php
+// database/migrations/YYYY_MM_DD_create_features_table.php
+Schema::create('features', function (Blueprint $table) {
+    $table->id();
+    $table->unsignedBigInteger('user_id');
+    $table->string('title');
+    $table->text('description')->nullable();
+    $table->boolean('active')->default(false);
+    $table->timestamps();
+
+    // For nested set (optional, add in separate migration if needed)
+    // $table->unsignedInteger('_lft')->default(0);
+    // $table->unsignedInteger('_rgt')->default(0);
+    // $table->unsignedBigInteger('parent_id')->nullable();
+
+    $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+});
+```
+
+**2. Create Model**
+```bash
+php artisan make:model Feature
+```
+
+```php
+// app/Models/Feature.php
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+use Kalnoy\Nestedset\NodeTrait; // Only if hierarchical
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
+
+class Feature extends Model
+{
+    use LogsActivity;
+    // use NodeTrait; // Only if using nested set ordering
+
+    protected $guarded = ['id'];
+
+    protected $casts = [
+        'created_at' => 'datetime:d/m/Y H:i',
+        'updated_at' => 'datetime:d/m/Y H:i',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->logUnguarded()->logOnlyDirty();
+    }
+}
+```
+
+**3. Run Migration**
+```bash
+php artisan migrate
+```
+
+---
+
+### Phase 2: API Controllers & Services
+
+**1. Create Controller**
+```bash
+php artisan make:controller Backend/FeatureController
+```
+
+```php
+// app/Http/Controllers/Backend/FeatureController.php
+namespace App\Http\Controllers\Backend;
+
+use Illuminate\Http\Request;
+use App\Models\Feature;
+use App\Services\FeatureService;
+
+class FeatureController extends Controller
+{
+    public function index(Request $request)
+    {
+        $query = Feature::defaultOrder(); // for nested set: defaultOrder()
+        // $query = Feature::query(); // for flat models
+
+        if ($request->filled('search')) {
+            $query->where('title', 'like', "%{$request->input('search')}%");
+        }
+
+        $features = $query->paginate(10)->withQueryString();
+        return response()->json(['features' => $features]);
+    }
+
+    public function show(Feature $feature)
+    {
+        return response()->json(['feature' => $feature]);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string',
+            'description' => 'sometimes|string',
+            'active' => 'required|boolean',
+        ]);
+
+        FeatureService::store($request);
+        return response()->json(['message' => 'Feature created successfully']);
+    }
+
+    public function update(Request $request, Feature $feature)
+    {
+        $request->validate([
+            'title' => 'sometimes|string',
+            'description' => 'sometimes|string',
+            'active' => 'sometimes|boolean',
+        ]);
+
+        FeatureService::update($request, $feature);
+        return response()->json(['message' => 'Feature updated successfully']);
+    }
+
+    public function delete(Feature $feature)
+    {
+        FeatureService::delete($feature);
+        return response()->json(['message' => 'Feature deleted successfully']);
+    }
+
+    public function toggle(Feature $feature)
+    {
+        $feature->update(['active' => $feature->active == 1 ? 0 : 1]);
+        return response()->json(['message' => 'Feature updated successfully']);
+    }
+
+    // Only if using nested set ordering
+    public function ordering(Feature $feature, Request $request)
+    {
+        switch ($request->input('direction')) {
+            case 'up':
+                $feature->up();
+                return response()->json(['message' => 'Feature moved up']);
+                break;
+            case 'down':
+                $feature->down();
+                return response()->json(['message' => 'Feature moved down']);
+                break;
+        }
+    }
+}
+```
+
+**2. Create Service**
+```bash
+mkdir -p app/Services
+```
+
+```php
+// app/Services/FeatureService.php
+namespace App\Services;
+
+use App\Models\Feature;
+use Illuminate\Http\Request;
+
+class FeatureService
+{
+    public static function index()
+    {
+        return Feature::defaultOrder()->get(); // or ->get() for flat
+    }
+
+    public static function store(Request $request)
+    {
+        Feature::create([
+            'user_id' => auth('sanctum')->user()->id,
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'active' => $request->input('active'),
+        ]);
+    }
+
+    public static function update(Request $request, Feature $feature)
+    {
+        $feature->update($request->only([
+            'title', 'description', 'active'
+        ]));
+    }
+
+    public static function delete(Feature $feature)
+    {
+        $feature->delete();
+    }
+}
+```
+
+**3. Create Form Request Validation (optional but recommended)**
+```bash
+mkdir -p app/Http/Requests/Features
+php artisan make:request Features/StoreRequest
+php artisan make:request Features/UpdateRequest
+```
+
+---
+
+### Phase 3: Routes
+
+**Add to `routes/api.php`** (inside the admin middleware group):
+
+```php
+// Features (flat model example)
+Route::get('/features', [FeatureController::class, 'index']);
+Route::get('/features/{feature}', [FeatureController::class, 'show']);
+Route::post('/features', [FeatureController::class, 'store']);
+Route::put('/features/{feature}', [FeatureController::class, 'update']);
+Route::delete('/features/{feature}', [FeatureController::class, 'delete']);
+Route::patch('/features/{feature}/toggle', [FeatureController::class, 'toggle']);
+
+// Only if using nested set ordering
+Route::get('/features/ordering/{feature}', [FeatureController::class, 'ordering']);
+
+// Nested set example (hierarchical model)
+// Route::get('/features/node/{parentId}', [FeatureController::class, 'index']);
+// Route::get('/features/ordering/{feature}', [FeatureController::class, 'ordering']);
+```
+
+---
+
+### Phase 4: React Admin Panel
+
+**1. Create Feature Folder Structure**
+```
+backend/src/pages/Administration/Features/
+├── index.js
+├── store.js
+├── components/
+│   ├── DataTable.js
+│   └── HtmlForm.js
+└── modals/
+    ├── Create.js
+    ├── Edit.js
+    ├── Show.js
+    └── Delete.js
+```
+
+**2. Create Store**
+```javascript
+// backend/src/pages/Administration/Features/store.js
+import { create } from 'zustand'
+
+const useFeaturesStore = create((set) => ({
+    refreshKey: 0,
+    setRefresh: () => set((state) => ({ refreshKey: state.refreshKey + 1 })),
+
+    paginatorUrl: null,
+    setPaginatorUrl: (url) => set({ paginatorUrl: url }),
+
+    search: '',
+    setSearch: (search) => set({ search, paginatorUrl: null }),
+}))
+
+export default useFeaturesStore
+```
+
+**3. Create Index Page**
+```javascript
+// backend/src/pages/Administration/Features/index.js
+import { Badge } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import BreadCrumb from '../../../libs/BreadCrumb'
+import DataTable from './components/DataTable'
+
+const Index = () => {
+    const items = [
+        { url: '/', label: <Badge><FontAwesomeIcon icon={['fas', 'home']} /></Badge> },
+        { url: '/administration/features', label: 'Feature Management' },
+    ]
+
+    return (
+        <>
+            <BreadCrumb items={items} />
+            <DataTable />
+        </>
+    )
+}
+export default Index
+```
+
+**4. Create DataTable Component**
+```javascript
+// backend/src/pages/Administration/Features/components/DataTable.js
+import React, { useState, useEffect } from 'react'
+import { Button, Form, InputGroup, Table } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import useStore from '../../../store'
+import useFeaturesStore from '../store'
+import axios from '../../../../libs/axios'
+import PaginatorLink from '../../../../libs/PaginatorLink'
+import CreateModal from '../modals/Create'
+import ShowModal from '../modals/Show'
+import EditModal from '../modals/Edit'
+import DeleteModal from '../modals/Delete'
+
+const DataTable = () => {
+    const { url: apiBase } = useStore()
+    const baseUrl = `${apiBase}/features`
+
+    const refreshKey = useFeaturesStore((s) => s.refreshKey)
+    const paginatorUrl = useFeaturesStore((s) => s.paginatorUrl)
+    const setPaginatorUrl = useFeaturesStore((s) => s.setPaginatorUrl)
+    const search = useFeaturesStore((s) => s.search)
+    const setSearch = useFeaturesStore((s) => s.setSearch)
+
+    const [query, setQuery] = useState(search)
+    const [items, setItems] = useState([])
+
+    useEffect(() => {
+        const timer = setTimeout(() => setSearch(query), 400)
+        return () => clearTimeout(timer)
+    }, [query])
+
+    const effectiveUrl = paginatorUrl
+        ?? (search ? `${baseUrl}?search=${encodeURIComponent(search)}` : baseUrl)
+
+    useEffect(() => {
+        axios({ method: 'get', url: effectiveUrl })
+            .then((response) => setItems(response.data.features))
+            .catch((error) => console.warn(error))
+    }, [refreshKey, paginatorUrl, search])
+
+    const handleClearSearch = () => setQuery('')
+
+    return (
+        <div>
+            {/* Toolbar */}
+            <div className='d-flex align-items-center justify-content-between mb-3 gap-2'>
+                <InputGroup style={{ maxWidth: '340px' }}>
+                    <InputGroup.Text>
+                        <FontAwesomeIcon icon={['fas', 'magnifying-glass']} />
+                    </InputGroup.Text>
+                    <Form.Control
+                        placeholder='Search by title...'
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                    />
+                    {query && (
+                        <Button variant='outline-secondary' onClick={handleClearSearch}>
+                            <FontAwesomeIcon icon={['fas', 'xmark']} />
+                        </Button>
+                    )}
+                </InputGroup>
+                <CreateModal />
+            </div>
+
+            {/* Result count */}
+            {items?.total !== undefined && (
+                <p className='text-muted small mb-2'>
+                    {items.total} feature{items.total !== 1 ? 's' : ''} found
+                    {search && <> for <strong>"{search}"</strong></>}
+                </p>
+            )}
+
+            <Table hover responsive style={{ '--bs-table-cell-padding-y': '0.85rem' }}>
+                <thead className='table-light'>
+                    <tr>
+                        <th>Title</th>
+                        <th style={{ width: '90px' }}>Active</th>
+                        <th className='text-center' style={{ width: '160px' }}>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {items?.data?.map((item) => (
+                        <tr key={item.id}>
+                            <td>{item.title}</td>
+                            <td>
+                                <Form.Check
+                                    type='switch'
+                                    checked={item.active == 1}
+                                    onChange={() => {/* toggle logic */}}
+                                />
+                            </td>
+                            <td className='text-end text-nowrap'>
+                                <ShowModal id={item.id} />{' '}
+                                <EditModal id={item.id} />{' '}
+                                <DeleteModal id={item.id} title={item.title} />
+                            </td>
+                        </tr>
+                    ))}
+                    {items?.data?.length === 0 && (
+                        <tr>
+                            <td colSpan='3' className='text-center text-muted py-4'>
+                                No features found{search && <> matching <strong>"{search}"</strong></>}.
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </Table>
+
+            <PaginatorLink store={{ setValue: (k, v) => k === 'url' && setPaginatorUrl(v) }} items={items} />
+        </div>
+    )
+}
+
+export default DataTable
+```
+
+**5. Create Modals** (Create, Edit, Delete, Show)
+
+Follow the modal patterns from existing CRUD sections (Programmes, Banners, Stations). Key points:
+- Create: `store.emptyData()` on show, POST on submit
+- Edit: GET to populate, PUT with `_method` on submit
+- Delete: Confirmation checkbox required
+- Show: Display-only view
+
+**6. Create HtmlForm Component**
+
+Use the Card-based layout pattern with sections:
+```javascript
+// backend/src/pages/Administration/Features/components/HtmlForm.js
+import { Card, Form, InputGroup } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
+const HtmlForm = ({ isLoading }) => (
+    <div className='d-flex flex-column gap-3'>
+        <Card>
+            <Card.Header className='fw-semibold'>
+                <FontAwesomeIcon icon={['fas', 'pencil']} className='me-2 text-secondary' />
+                Basic Info
+            </Card.Header>
+            <Card.Body className='d-flex flex-column gap-2'>
+                {/* FormInput components here */}
+            </Card.Body>
+        </Card>
+    </div>
+)
+
+export default HtmlForm
+```
+
+**7. Add Route in Backend Router**
+```javascript
+// backend/src/index.js
+import Features from './pages/Administration/Features'
+
+const router = createBrowserRouter([
+    // ... existing routes
+    {
+        path: '/administration/features',
+        element: <ProtectedRoute><Features /></ProtectedRoute>
+    }
+])
+```
+
+**8. Add to Navigation Menu** (if needed)
+
+---
+
+### Optional: Add Features
+
+#### A. Ordering (Nested Set)
+1. Add NodeTrait to Model
+2. Add ordering() method to Controller
+3. Create Ordering.js component
+4. Add Order column to DataTable
+5. Add route: `GET /features/ordering/{feature}`
+
+#### B. Image/File Upload
+1. Add migration columns: `thumbnail_filename`, `banner_filename`, etc.
+2. Use CommonService in Controller/Service for file handling
+3. Add file input to HtmlForm with replace pattern
+4. Display image in Show modal with Figure component
+
+#### C. Public API Endpoint
+1. Create Frontend Controller in `Frontend/FeatureController.php`
+2. Add to `routes/frontend.php`
+3. Return filtered (active only) data
+
+---
+
+### Checklist
+
+- [ ] Migration created and migrated
+- [ ] Model created with traits (LogsActivity, NodeTrait if needed)
+- [ ] Controller created with all CRUD methods
+- [ ] Service created with business logic
+- [ ] Routes added to api.php
+- [ ] React store created
+- [ ] Index page created
+- [ ] DataTable component created
+- [ ] Create, Edit, Delete, Show modals created
+- [ ] HtmlForm component created
+- [ ] Route added to backend router
+- [ ] Navigation menu updated (if needed)
+- [ ] Test all CRUD operations
+- [ ] Test validation errors
+- [ ] Test pagination and search

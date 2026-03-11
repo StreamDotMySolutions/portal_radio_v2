@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             DirectorySeeder::class,
             BannerSeeder::class,
+            StationSeeder::class,
         ]);
     }
 }

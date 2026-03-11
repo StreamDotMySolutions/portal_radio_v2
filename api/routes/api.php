@@ -26,6 +26,7 @@ use App\Http\Controllers\Backend\{
     AnalyticsController,
     ActivityController,
     ComplaintController,
+    StationController,
 };
 
 Route::get('/', function () {
@@ -138,6 +139,15 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::delete('/banners/{banner}', [BannerController::class, 'delete']);
     Route::get('/banners/ordering/{banner}', [BannerController::class, 'ordering']);
     Route::patch('/banners/{banner}/toggle', [BannerController::class, 'toggle']);
+
+    // Stations
+    Route::get('/stations', [StationController::class, 'index']);
+    Route::get('/stations/{station}', [StationController::class, 'show']);
+    Route::post('/stations', [StationController::class, 'store']);
+    Route::put('/stations/{station}', [StationController::class, 'update']);
+    Route::delete('/stations/{station}', [StationController::class, 'delete']);
+    Route::patch('/stations/{station}/toggle', [StationController::class, 'toggle']);
+    Route::get('/stations/ordering/{station}', [StationController::class, 'ordering']);
 
     // Programmes Settings
     Route::get('/programmes', [ProgrammeController::class, 'index']);

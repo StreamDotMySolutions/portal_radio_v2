@@ -683,3 +683,710 @@ REACT_APP_MODE=production                          — Controls maintenance mode
 | `video.js` ^8.21.0 | HLS video player |
 | `@fortawesome/react-fontawesome` ^0.2.0 | Icons |
 | `js-cookie` ^3.0.5 | Cookie management |
+
+---
+
+## Creating a New CRUD Feature (Step-by-Step)
+
+This guide assumes the Laravel API is already built. Focus on React admin panel only.
+
+### Step 1: Create Store
+
+**File**: `src/pages/Administration/Features/store.js`
+
+```javascript
+import { create } from 'zustand'
+
+const useFeaturesStore = create((set) => ({
+    refreshKey: 0,
+    setRefresh: () => set((state) => ({ refreshKey: state.refreshKey + 1 })),
+
+    paginatorUrl: null,
+    setPaginatorUrl: (url) => set({ paginatorUrl: url }),
+
+    search: '',
+    setSearch: (search) => set({ search, paginatorUrl: null }),
+
+    // Optional: for category/type filtering
+    // filter: '',
+    // setFilter: (filter) => set({ filter, paginatorUrl: null }),
+}))
+
+export default useFeaturesStore
+```
+
+**What it does:**
+- `refreshKey`: Incremented after CREATE/UPDATE/DELETE to refetch data
+- `paginatorUrl`: Set when user clicks pagination links
+- `search`: User's search input (debounced in DataTable)
+
+---
+
+### Step 2: Create Index Page
+
+**File**: `src/pages/Administration/Features/index.js`
+
+```javascript
+import { Badge } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import BreadCrumb from '../../../libs/BreadCrumb'
+import DataTable from './components/DataTable'
+
+const Index = () => {
+    const items = [
+        {
+            url: '/',
+            label: <Badge><FontAwesomeIcon icon={['fas', 'home']} /></Badge>
+        },
+        {
+            url: '/administration/features',
+            label: 'Feature Management'
+        },
+    ]
+
+    return (
+        <>
+            <BreadCrumb items={items} />
+            <DataTable />
+        </>
+    )
+}
+
+export default Index
+```
+
+**Key points:**
+- Always include home link in breadcrumb
+- Wrap navigation link in Badge if icon-only
+- Single component: render BreadCrumb + DataTable
+
+---
+
+### Step 3: Create DataTable Component
+
+**File**: `src/pages/Administration/Features/components/DataTable.js`
+
+```javascript
+import React, { useState, useEffect } from 'react'
+import { Button, Form, InputGroup, Table } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import useStore from '../../../store'
+import useFeaturesStore from '../store'
+import axios from '../../../../libs/axios'
+import PaginatorLink from '../../../../libs/PaginatorLink'
+import CreateModal from '../modals/Create'
+import ShowModal from '../modals/Show'
+import EditModal from '../modals/Edit'
+import DeleteModal from '../modals/Delete'
+
+const DataTable = () => {
+    const { url: apiBase } = useStore()
+    const baseUrl = `${apiBase}/features`
+
+    const refreshKey = useFeaturesStore((s) => s.refreshKey)
+    const paginatorUrl = useFeaturesStore((s) => s.paginatorUrl)
+    const setPaginatorUrl = useFeaturesStore((s) => s.setPaginatorUrl)
+    const search = useFeaturesStore((s) => s.search)
+    const setSearch = useFeaturesStore((s) => s.setSearch)
+
+    const [query, setQuery] = useState(search)
+    const [items, setItems] = useState([])
+
+    // Debounce search input (400ms idle)
+    useEffect(() => {
+        const timer = setTimeout(() => setSearch(query), 400)
+        return () => clearTimeout(timer)
+    }, [query, setSearch])
+
+    // Build effective URL with search/filter
+    const effectiveUrl = paginatorUrl
+        ?? (search ? `${baseUrl}?search=${encodeURIComponent(search)}` : baseUrl)
+
+    // Fetch data
+    useEffect(() => {
+        axios({ method: 'get', url: effectiveUrl })
+            .then((response) => setItems(response.data.features))
+            .catch((error) => console.warn(error))
+    }, [refreshKey, paginatorUrl, search, effectiveUrl])
+
+    // Handle toggle active
+    const handleToggleActive = (itemId) => {
+        setItems(prev => ({
+            ...prev,
+            data: prev.data.map(item =>
+                item.id === itemId ? { ...item, active: item.active == 1 ? 0 : 1 } : item
+            )
+        }))
+
+        axios({ method: 'patch', url: `${apiBase}/features/${itemId}/toggle` })
+            .catch(() => {
+                setItems(prev => ({
+                    ...prev,
+                    data: prev.data.map(item =>
+                        item.id === itemId ? { ...item, active: item.active == 1 ? 0 : 1 } : item
+                    )
+                }))
+            })
+    }
+
+    const handleClearSearch = () => setQuery('')
+
+    return (
+        <div>
+            {/* Toolbar */}
+            <div className='d-flex align-items-center justify-content-between mb-3 gap-2'>
+                <InputGroup style={{ maxWidth: '340px' }}>
+                    <InputGroup.Text>
+                        <FontAwesomeIcon icon={['fas', 'magnifying-glass']} />
+                    </InputGroup.Text>
+                    <Form.Control
+                        placeholder='Search by title...'
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                    />
+                    {query && (
+                        <Button variant='outline-secondary' onClick={handleClearSearch}>
+                            <FontAwesomeIcon icon={['fas', 'xmark']} />
+                        </Button>
+                    )}
+                </InputGroup>
+                <CreateModal />
+            </div>
+
+            {/* Result count */}
+            {items?.total !== undefined && (
+                <p className='text-muted small mb-2'>
+                    {items.total} feature{items.total !== 1 ? 's' : ''} found
+                    {search && <> for <strong>"{search}"</strong></>}
+                </p>
+            )}
+
+            {/* Table */}
+            <Table hover responsive style={{ '--bs-table-cell-padding-y': '0.85rem' }}>
+                <thead className='table-light'>
+                    <tr>
+                        <th>Title</th>
+                        <th style={{ width: '90px' }}>Active</th>
+                        <th className='text-center' style={{ width: '160px' }}>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {items?.data?.map((item) => (
+                        <tr key={item.id}>
+                            <td>{item.title}</td>
+                            <td>
+                                <Form.Check
+                                    type='switch'
+                                    checked={item.active == 1}
+                                    onChange={() => handleToggleActive(item.id)}
+                                />
+                            </td>
+                            <td className='text-end text-nowrap'>
+                                <ShowModal id={item.id} />
+                                <EditModal id={item.id} />
+                                <DeleteModal id={item.id} title={item.title} />
+                            </td>
+                        </tr>
+                    ))}
+                    {items?.data?.length === 0 && (
+                        <tr>
+                            <td colSpan='3' className='text-center text-muted py-4'>
+                                No features found{search && <> matching <strong>"{search}"</strong></>}.
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </Table>
+
+            {/* Pagination */}
+            <PaginatorLink
+                store={{ setValue: (k, v) => k === 'url' && setPaginatorUrl(v) }}
+                items={items}
+            />
+        </div>
+    )
+}
+
+export default DataTable
+```
+
+---
+
+### Step 4: Create Modals
+
+#### Create Modal
+
+**File**: `src/pages/Administration/Features/modals/Create.js`
+
+```javascript
+import React, { useState } from 'react'
+import { Button, Modal } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import axios from '../../../../libs/axios'
+import useStore from '../../../store'
+import useFeaturesStore from '../store'
+import HtmlForm from '../components/HtmlForm'
+import { appendFormData } from '../../../../libs/FormInput'
+
+const Create = () => {
+    const store = useStore()
+    const setRefresh = useFeaturesStore((s) => s.setRefresh)
+
+    const [show, setShow] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+
+    const handleShowClick = () => {
+        store.emptyData() // CRITICAL: always clear store before opening modal
+        setShow(true)
+    }
+
+    const handleClose = () => setShow(false)
+
+    const handleSubmitClick = () => {
+        setIsLoading(true)
+
+        const formData = new FormData()
+        appendFormData(formData, [
+            { key: 'title', value: store.getValue('title') },
+            { key: 'description', value: store.getValue('description') },
+            { key: 'active', value: store.getValue('active') || false },
+        ])
+
+        axios({ method: 'post', url: `${store.url}/features`, data: formData })
+            .then(() => {
+                setRefresh() // Trigger DataTable refetch
+                handleClose()
+            })
+            .catch((error) => {
+                setIsLoading(false)
+                if (error.response?.status == 422) {
+                    store.setValue('errors', error.response.data.errors)
+                }
+            })
+    }
+
+    return (
+        <>
+            <Button
+                onClick={handleShowClick}
+                className='ms-auto'
+            >
+                <FontAwesomeIcon icon={['fas', 'plus']} className='me-1' />
+                Create
+            </Button>
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Create Feature</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <HtmlForm isLoading={isLoading} />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant='secondary' onClick={handleClose} disabled={isLoading}>
+                        Close
+                    </Button>
+                    <Button variant='primary' onClick={handleSubmitClick} disabled={isLoading}>
+                        {isLoading ? 'Creating...' : 'Create'}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    )
+}
+
+export default Create
+```
+
+#### Edit Modal
+
+**File**: `src/pages/Administration/Features/modals/Edit.js`
+
+```javascript
+import React, { useState, useEffect } from 'react'
+import { Button, Modal } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import axios from '../../../../libs/axios'
+import useStore from '../../../store'
+import useFeaturesStore from '../store'
+import HtmlForm from '../components/HtmlForm'
+import { appendFormData } from '../../../../libs/FormInput'
+
+const Edit = ({ id }) => {
+    const store = useStore()
+    const setRefresh = useFeaturesStore((s) => s.setRefresh)
+
+    const [show, setShow] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+
+    const handleShowClick = () => {
+        setIsLoading(true)
+
+        // GET to populate form
+        axios({ method: 'get', url: `${store.url}/features/${id}` })
+            .then((response) => {
+                const { feature } = response.data
+                store.setValue('title', feature.title)
+                store.setValue('description', feature.description)
+                store.setValue('active', feature.active == 1)
+                setShow(true)
+            })
+            .finally(() => setIsLoading(false))
+    }
+
+    const handleClose = () => setShow(false)
+
+    const handleSubmitClick = () => {
+        setIsLoading(true)
+
+        const formData = new FormData()
+        appendFormData(formData, [
+            { key: '_method', value: 'put' },
+            { key: 'title', value: store.getValue('title') },
+            { key: 'description', value: store.getValue('description') },
+            { key: 'active', value: store.getValue('active') || false },
+        ])
+
+        axios({ method: 'post', url: `${store.url}/features/${id}`, data: formData })
+            .then(() => {
+                setRefresh()
+                handleClose()
+            })
+            .catch((error) => {
+                setIsLoading(false)
+                if (error.response?.status == 422) {
+                    store.setValue('errors', error.response.data.errors)
+                }
+            })
+    }
+
+    return (
+        <>
+            <Button
+                size='sm'
+                variant='outline-primary'
+                onClick={handleShowClick}
+            >
+                <FontAwesomeIcon icon={['fas', 'pencil']} />
+            </Button>
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Edit Feature</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <HtmlForm isLoading={isLoading} />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant='secondary' onClick={handleClose} disabled={isLoading}>
+                        Close
+                    </Button>
+                    <Button variant='primary' onClick={handleSubmitClick} disabled={isLoading}>
+                        {isLoading ? 'Updating...' : 'Update'}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    )
+}
+
+export default Edit
+```
+
+#### Delete Modal
+
+**File**: `src/pages/Administration/Features/modals/Delete.js`
+
+```javascript
+import React, { useState } from 'react'
+import { Button, Modal, Form, Alert } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import axios from '../../../../libs/axios'
+import useStore from '../../../store'
+import useFeaturesStore from '../store'
+
+const Delete = ({ id, title }) => {
+    const store = useStore()
+    const setRefresh = useFeaturesStore((s) => s.setRefresh)
+
+    const [show, setShow] = useState(false)
+    const [confirmed, setConfirmed] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+
+    const handleShowClick = () => {
+        setConfirmed(false)
+        setShow(true)
+    }
+
+    const handleClose = () => setShow(false)
+
+    const handleDeleteClick = () => {
+        setIsLoading(true)
+
+        axios({ method: 'delete', url: `${store.url}/features/${id}` })
+            .then(() => {
+                setRefresh()
+                handleClose()
+            })
+            .catch(() => setIsLoading(false))
+    }
+
+    return (
+        <>
+            <Button
+                size='sm'
+                variant='outline-danger'
+                onClick={handleShowClick}
+            >
+                <FontAwesomeIcon icon={['fas', 'trash']} />
+            </Button>
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Delete Feature</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Alert variant='danger' className='mb-3'>
+                        <FontAwesomeIcon icon={['fas', 'exclamation-triangle']} className='me-2' />
+                        This action cannot be undone.
+                    </Alert>
+                    <p>Are you sure you want to delete <strong>{title}</strong>?</p>
+                    <Form.Check
+                        type='checkbox'
+                        label='Yes, delete this feature'
+                        checked={confirmed}
+                        onChange={(e) => setConfirmed(e.target.checked)}
+                    />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant='secondary' onClick={handleClose} disabled={isLoading}>
+                        Cancel
+                    </Button>
+                    <Button
+                        variant='danger'
+                        onClick={handleDeleteClick}
+                        disabled={!confirmed || isLoading}
+                    >
+                        {isLoading ? 'Deleting...' : 'Delete'}
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    )
+}
+
+export default Delete
+```
+
+#### Show Modal
+
+**File**: `src/pages/Administration/Features/modals/Show.js`
+
+```javascript
+import React, { useState } from 'react'
+import { Button, Modal } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import axios from '../../../../libs/axios'
+import useStore from '../../../store'
+
+const Show = ({ id }) => {
+    const store = useStore()
+
+    const [show, setShow] = useState(false)
+    const [feature, setFeature] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
+
+    const handleShowClick = () => {
+        setIsLoading(true)
+
+        axios({ method: 'get', url: `${store.url}/features/${id}` })
+            .then((response) => {
+                setFeature(response.data.feature)
+                setShow(true)
+            })
+            .finally(() => setIsLoading(false))
+    }
+
+    const handleClose = () => setShow(false)
+
+    return (
+        <>
+            <Button
+                size='sm'
+                variant='outline-info'
+                onClick={handleShowClick}
+            >
+                <FontAwesomeIcon icon={['fas', 'eye']} />
+            </Button>
+
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>View Feature</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {feature && (
+                        <>
+                            <p><strong>Title:</strong> {feature.title}</p>
+                            <p><strong>Description:</strong> {feature.description || '—'}</p>
+                            <p><strong>Status:</strong> {feature.active == 1 ? 'Active' : 'Inactive'}</p>
+                        </>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant='secondary' onClick={handleClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    )
+}
+
+export default Show
+```
+
+---
+
+### Step 5: Create HtmlForm Component
+
+**File**: `src/pages/Administration/Features/components/HtmlForm.js`
+
+Use the Card-based layout pattern with FormInput components:
+
+```javascript
+import { Card, Form, InputGroup } from 'react-bootstrap'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import useStore from '../../../store'
+
+const HtmlForm = ({ isLoading }) => {
+    const store = useStore()
+
+    const handleInputChange = (fieldName) => (value) => {
+        store.setValue(fieldName, value)
+    }
+
+    return (
+        <div className='d-flex flex-column gap-3'>
+            <Card>
+                <Card.Header className='fw-semibold'>
+                    <FontAwesomeIcon icon={['fas', 'pencil']} className='me-2 text-secondary' />
+                    Basic Info
+                </Card.Header>
+                <Card.Body className='d-flex flex-column gap-2'>
+                    <InputGroup>
+                        <InputGroup.Text style={{ width: '80px' }}>Title</InputGroup.Text>
+                        <Form.Control
+                            placeholder='Feature title'
+                            value={store.getValue('title') || ''}
+                            readOnly={isLoading}
+                            isInvalid={!!store.getValue('errors')?.title}
+                            onChange={(e) => handleInputChange('title')(e.target.value)}
+                        />
+                        {store.getValue('errors')?.title && (
+                            <Form.Control.Feedback type='invalid'>
+                                {store.getValue('errors').title[0]}
+                            </Form.Control.Feedback>
+                        )}
+                    </InputGroup>
+
+                    <InputGroup>
+                        <InputGroup.Text style={{ width: '80px' }}>Description</InputGroup.Text>
+                        <Form.Control
+                            as='textarea'
+                            rows={3}
+                            placeholder='Feature description'
+                            value={store.getValue('description') || ''}
+                            readOnly={isLoading}
+                            onChange={(e) => handleInputChange('description')(e.target.value)}
+                        />
+                    </InputGroup>
+
+                    <Form.Check
+                        type='switch'
+                        label='Active'
+                        checked={store.getValue('active') || false}
+                        disabled={isLoading}
+                        onChange={(e) => handleInputChange('active')(e.target.checked)}
+                    />
+                </Card.Body>
+            </Card>
+        </div>
+    )
+}
+
+export default HtmlForm
+```
+
+---
+
+### Step 6: Add Route to Backend Router
+
+**File**: `src/index.js`
+
+```javascript
+import Features from './pages/Administration/Features'
+
+// Inside BrowserRouter routes:
+{
+    path: '/administration/features',
+    element: <ProtectedRoute><Features.default /></ProtectedRoute>
+}
+```
+
+---
+
+### Step 7: Add to Navigation (Optional)
+
+If you have a navigation menu/sidebar, add:
+
+```javascript
+<NavLink to='/administration/features'>
+    <FontAwesomeIcon icon={['fas', 'gears']} className='me-2' />
+    Features
+</NavLink>
+```
+
+---
+
+### Complete File Structure
+
+```
+backend/src/pages/Administration/Features/
+├── index.js                    (Index page with BreadCrumb + DataTable)
+├── store.js                    (Zustand store)
+├── components/
+│   ├── DataTable.js            (Main list table)
+│   └── HtmlForm.js             (Reusable form with Card sections)
+└── modals/
+    ├── Create.js               (Create modal)
+    ├── Edit.js                 (Edit modal)
+    ├── Delete.js               (Delete with confirmation)
+    └── Show.js                 (Read-only view)
+```
+
+---
+
+### Testing Checklist
+
+- [ ] Navigate to `/administration/features` — DataTable loads
+- [ ] Click "Create" — Modal opens with empty form
+- [ ] Fill form, submit — Feature created, DataTable refreshes
+- [ ] Click Edit on a row — Modal opens with populated data
+- [ ] Modify, submit — Feature updated
+- [ ] Click Delete on a row — Confirmation modal appears
+- [ ] Check confirmation, submit — Feature deleted
+- [ ] Click Show on a row — Read-only modal displays data
+- [ ] Search by title — Results filter correctly
+- [ ] Click pagination links — DataTable refetches correct page
+- [ ] Toggle active switch — Optimistic update + API call
+- [ ] Test validation errors from API (422)
+
+---
+
+### Advanced: Add Ordering (Optional)
+
+If API supports `GET /features/ordering/{id}?direction=up|down`:
+
+1. Create `src/pages/Administration/Features/components/Ordering.js` (see backend/agents.md ordering pattern)
+2. Add Order column to DataTable
+3. Import and use Ordering component with up/down disabled at boundaries

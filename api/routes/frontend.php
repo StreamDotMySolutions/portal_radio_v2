@@ -14,6 +14,7 @@ use App\Http\Controllers\Frontend\{
     AnalyticsController,
     DownloadController,
     ComplaintController,
+    StationController,
 };
 
 // prefix frontend/...
@@ -33,6 +34,7 @@ Route::get('/sitemap/search', [MenuController::class, 'sitemapSearch']);
 Route::get('/home-banners', [BannerController::class, 'index']);
 Route::get('/home-programmes', [ProgrammeController::class, 'index']);
 Route::get('/home-videos', [VideoController::class, 'index']);
+Route::get('/stations', [StationController::class, 'index']);
 Route::post('/directories/search', [DirectoryController::class, 'search']);
 Route::get('/directories/{id}', [DirectoryController::class, 'index']);
 Route::get('/directories/{directory}/show', [DirectoryController::class, 'show']);

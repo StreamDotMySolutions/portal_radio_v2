@@ -24,6 +24,9 @@ function TopNavbar() {
               <NavDropdown.Item as={NavLink} to="/administration/articles/0">
                 <FontAwesomeIcon icon={['fas', 'newspaper']} />{' '}Articles
               </NavDropdown.Item>
+              <NavDropdown.Item as={NavLink} to="/administration/stations">
+                <FontAwesomeIcon icon={['fas', 'radio']} />{' '}Stations
+              </NavDropdown.Item>
             </NavDropdown>
 
             <NavDropdown title={<span><FontAwesomeIcon icon={['fas', 'folder-open']} />{' '}Media</span>} id="nav-media">

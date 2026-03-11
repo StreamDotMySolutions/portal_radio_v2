@@ -6,27 +6,35 @@ use Illuminate\Http\Request;
 use App\Models\Station;
 use App\Services\CommonService;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class StationController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Station::query();
+        $query = Station::defaultOrder()
+            ->leftJoin('analytics_events', function ($join) {
+                $join->on('stations.slug', '=', 'analytics_events.reference_id')
+                     ->where('analytics_events.event_type', '=', 'pageview')
+                     ->where('analytics_events.page_type', '=', 'station');
+            })
+            ->select('stations.*', DB::raw('COUNT(analytics_events.id) as pageview_hits'))
+            ->groupBy('stations.id');
 
         if ($request->filled('search')) {
             $search = $request->input('search');
-            $query->where('title', 'like', "%{$search}%");
+            $query->where('stations.title', 'like', "%{$search}%");
         }
 
         if ($request->filled('category')) {
-            $query->where('category', $request->input('category'));
+            $query->where('stations.category', $request->input('category'));
         }
 
         if ($request->has('active') && $request->input('active') !== '') {
-            $query->where('active', $request->input('active'));
+            $query->where('stations.active', $request->input('active'));
         }
 
-        $stations = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
+        $stations = $query->paginate(10)->withQueryString();
 
         return response()->json(['stations' => $stations]);
     }
@@ -151,5 +159,19 @@ class StationController extends Controller
     {
         $station->update(['active' => $station->active == 1 ? 0 : 1]);
         return response()->json(['message' => 'Station updated successfully']);
+    }
+
+    public function ordering(Station $station, Request $request)
+    {
+        switch ($request->input('direction')) {
+            case 'up':
+                $station->up();
+                return response()->json(['message' => 'Station moved up']);
+                break;
+            case 'down':
+                $station->down();
+                return response()->json(['message' => 'Station moved down']);
+                break;
+        }
     }
 }
