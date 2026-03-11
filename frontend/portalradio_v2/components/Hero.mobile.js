@@ -1,16 +1,35 @@
 'use client';
 
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+
 export default function HeroMobile() {
-  const slides = [
-    { id: 0, image: '/hero-banner.png', alt: 'Hero Banner' },
-    { id: 1, image: '/carausel-banner.png', alt: 'Carousel Banner' },
-    { id: 2, image: '/ramadan.jpg', alt: 'Ramadan' },
-    { id: 3, image: '/carousel-1.jpg', alt: 'Carousel 1' },
-    { id: 4, image: '/carousel-2.jpg', alt: 'Carousel 2' },
-    { id: 5, image: '/carousel-3.jpg', alt: 'Carousel 3' },
-    { id: 6, image: '/carousel-4.jpg', alt: 'Carousel 4' },
-    { id: 7, image: '/carousel-5.jpg', alt: 'Carousel 5' },
-  ];
+  const [banners, setBanners] = useState([]);
+
+  useEffect(() => {
+    const fetchBanners = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+        const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:8000';
+        const response = await fetch(`${apiUrl}/frontend/home-banners`);
+        if (response.ok) {
+          const data = await response.json();
+          setBanners(data.banners || []);
+        }
+      } catch (error) {
+        console.warn('Failed to fetch banners:', error);
+        setBanners([]);
+      }
+    };
+
+    fetchBanners();
+  }, []);
+
+  const serverUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:8000';
+
+  if (!banners || banners.length === 0) {
+    return null;
+  }
 
   return (
     <section style={{ minHeight: '40vh', paddingTop: 0 }}>
@@ -22,7 +41,7 @@ export default function HeroMobile() {
       >
         {/* Indicators */}
         <div className="carousel-indicators">
-          {slides.map((slide, idx) => (
+          {banners.map((banner, idx) => (
             <button
               key={idx}
               type="button"
@@ -37,18 +56,25 @@ export default function HeroMobile() {
 
         {/* Carousel items */}
         <div className="carousel-inner">
-          {slides.map((slide, idx) => (
+          {banners.map((banner, idx) => (
             <div
               key={idx}
               className={`carousel-item ${idx === 0 ? 'active' : ''}`}
-              style={{
-                minHeight: '40vh',
-                backgroundImage: `url(${slide.image})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-              }}
             >
+              {banner?.filename && (
+                <Link href={banner.redirect_url || '#'}>
+                  <img
+                    src={`${serverUrl}/storage/banners/${banner.filename}`}
+                    alt={`Banner ${idx}`}
+                    style={{
+                      width: '100%',
+                      height: '40vh',
+                      objectFit: 'cover',
+                      display: 'block',
+                    }}
+                  />
+                </Link>
+              )}
             </div>
           ))}
         </div>
