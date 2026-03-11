@@ -65,10 +65,10 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'chat_users' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\ChatUser::class,
+        ],
     ],
 
     /*
@@ -94,6 +94,13 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => 'password_reset_tokens',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+
+        'chat_users' => [
+            'provider' => 'chat_users',
+            'table' => 'chat_password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,
         ],

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import ChatWidget from './ChatWidget';
 
 // Helper to manage session ID for analytics
 function getOrCreateSessionId() {
@@ -11,15 +12,6 @@ function getOrCreateSessionId() {
     }
     return id;
 }
-
-const messages = [
-  { user: 'Ahmad', color: '#3F3F8F', text: 'Selamat pagi semua!', time: '8:01' },
-  { user: 'Siti', color: '#DC2626', text: 'Lagu ni best! 🎵', time: '8:02' },
-  { user: 'Rizal', color: '#059669', text: 'NASIONALfm memang terbaik 👍', time: '8:03' },
-  { user: 'Aminah', color: '#D97706', text: 'Ada siapa dengar dari Sabah?', time: '8:04' },
-  { user: 'Kumar', color: '#7C3AED', text: 'Morning! Dari Penang sini', time: '8:05' },
-  { user: 'Fatimah', color: '#BE185D', text: 'Request lagu boleh?', time: '8:06' },
-];
 
 export default function LiveStreamMobile() {
   const [chatOpen, setChatOpen] = useState(false);
@@ -235,60 +227,7 @@ export default function LiveStreamMobile() {
               </button>
             </div>
 
-            {/* Messages */}
-            <div style={{
-              flexGrow: 1,
-              minHeight: 0,
-              padding: '12px 16px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '12px',
-              overflowY: 'auto',
-            }}>
-              {messages.map((msg, i) => (
-                <div key={i}>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                    <span style={{ color: msg.color, fontWeight: 600, fontSize: '0.85rem' }}>{msg.user}</span>
-                    <span style={{ color: 'var(--color-muted)', fontSize: '0.75rem' }}>{msg.time}</span>
-                  </div>
-                  <div style={{ fontSize: '0.9rem', marginTop: '2px' }}>{msg.text}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* Input area */}
-            <div style={{
-              padding: '12px 16px',
-              borderTop: '1px solid rgba(63, 63, 143, 0.3)',
-              display: 'flex',
-              gap: '8px',
-            }}>
-              <input
-                type="text"
-                placeholder="Taip mesej..."
-                readOnly
-                style={{
-                  flexGrow: 1,
-                  background: 'var(--color-bg)',
-                  border: '1px solid rgba(63, 63, 143, 0.3)',
-                  borderRadius: '8px',
-                  padding: '8px 12px',
-                  color: 'var(--color-text)',
-                  fontSize: '0.9rem',
-                  outline: 'none',
-                }}
-              />
-              <button className="btn-accent" style={{
-                border: 'none',
-                borderRadius: '8px',
-                padding: '8px 16px',
-                cursor: 'pointer',
-                fontWeight: 600,
-                fontSize: '0.9rem',
-              }}>
-                Hantar
-              </button>
-            </div>
+            <ChatWidget fullHeight />
           </div>
         )}
       </div>

@@ -16,6 +16,7 @@ use App\Http\Controllers\Frontend\{
     ComplaintController,
     StationController,
     SettingController,
+    ChatController,
 };
 
 // prefix frontend/...
@@ -51,4 +52,14 @@ Route::post('/track', [AnalyticsController::class, 'store']);
 
 // Complaints submission (public, protected by reCAPTCHA)
 Route::post('/complaints', [ComplaintController::class, 'store']);
+
+// Chat
+Route::prefix('chat')->group(function () {
+    Route::post('/register', [ChatController::class, 'register']);
+    Route::post('/login', [ChatController::class, 'login']);
+    Route::post('/forgot-password', [ChatController::class, 'forgotPassword']);
+    Route::post('/reset-password', [ChatController::class, 'resetPassword']);
+    Route::get('/messages', [ChatController::class, 'index']);
+    Route::post('/messages', [ChatController::class, 'store'])->middleware('throttle:chat-send');
+});
 
