@@ -46,7 +46,7 @@ export default function StationDetailMobile({ station }) {
               src={station.embedPlayerUrl}
               width="100%"
               height="1200"
-              style={{ border: 'none', display: 'block', borderRadius: '8px', overflow: 'hidden' }}
+              style={{ border: 'none', display: 'block', borderRadius: '8px', overflow: 'hidden', backgroundColor: 'var(--color-bg)' }}
               allow="autoplay"
               scrolling="no"
               title={`${station.name} Live Player`}
