@@ -89,6 +89,26 @@ body {
   }
 }
 
+.badge-offline {
+  background-color: #6B7280;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.badge-offline::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: currentColor;
+  border-radius: 50%;
+}
+
 /* Buttons */
 .btn-accent {
   background-color: var(--color-accent);

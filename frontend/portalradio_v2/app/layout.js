@@ -17,16 +17,16 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://radio.rtm.gov.my';
 export const metadata = {
   metadataBase: new URL(SITE_URL),
   title: 'PORTAL RADIO RTM',
-  description: 'Platform digital penyiaran RTM — televisyen, radio, dan berita dalam satu tempat.',
+  description: 'JABATAN PENYIARAN MALAYSIA',
   lang: 'ms',
   openGraph: {
     title: 'PORTAL RADIO RTM',
-    description: 'Platform digital penyiaran RTM — televisyen, radio, dan berita dalam satu tempat.',
+    description: 'JABATAN PENYIARAN MALAYSIA',
     url: SITE_URL,
     siteName: 'PortalRadio RTM',
     images: [
       {
-        url: '/logo-rtm-transparent.png',
+        url: '/og-image.png',
         width: 1200,
         height: 630,
         alt: 'PortalRadio RTM',
@@ -38,8 +38,8 @@ export const metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'PORTAL RADIO RTM',
-    description: 'Platform digital penyiaran RTM — televisyen, radio, dan berita dalam satu tempat.',
-    images: ['/logo-rtm-transparent.png'],
+    description: 'JABATAN PENYIARAN MALAYSIA',
+    images: ['/og-image.png'],
   },
 };
 

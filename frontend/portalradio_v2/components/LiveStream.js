@@ -209,7 +209,7 @@ export default function LiveStream() {
               borderRadius: '0 0 12px 12px',
               borderTop: 'none',
             }}>
-              <span className="badge-live">LIVE</span>
+              <span className={isOffline ? 'badge-offline' : 'badge-live'}>{isOffline ? 'OFFLINE' : 'LIVE'}</span>
               <span style={{
                 marginLeft: 'auto',
                 color: 'var(--color-muted)',
