@@ -37,6 +37,7 @@ class ChatController extends Controller
                 'token' => $user->token,
                 'email_verified_at' => $user->email_verified_at,
                 'avatar_filename' => $user->avatar_filename,
+                'is_banned' => $user->is_banned,
             ],
         ], 201);
     }
@@ -62,6 +63,7 @@ class ChatController extends Controller
                 'token' => $user->token,
                 'email_verified_at' => $user->email_verified_at,
                 'avatar_filename' => $user->avatar_filename,
+                'is_banned' => $user->is_banned,
             ],
         ]);
     }

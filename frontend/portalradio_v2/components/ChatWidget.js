@@ -396,7 +396,13 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
       scrollToBottom();
     } catch (err) {
       if (err?.status === 429) setError('Terlalu banyak mesej. Sila tunggu sebentar.');
-      else if (err?.status === 403) setError('Akaun anda telah disekat.');
+      else if (err?.status === 403) {
+        // Update user as banned in localStorage and state
+        const updated = { ...user, is_banned: true };
+        setChatUser(updated);
+        if (isControlled) onUserChange?.(updated);
+        else setInternalUser(updated);
+      }
       else setError('Gagal menghantar mesej.');
     } finally {
       setSending(false);
@@ -797,26 +803,40 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
         </div>
       )}
 
-      <form onSubmit={handleSend} style={{
-        padding: '12px 16px', borderTop: '1px solid rgba(63, 63, 143, 0.3)', display: 'flex', gap: '8px',
-      }}>
-        <input type="text" placeholder={user ? 'Taip mesej...' : 'Sila log masuk untuk sembang'}
-          readOnly={!user} value={input} onChange={e => setInput(e.target.value)} maxLength={500}
-          style={{
-            flexGrow: 1, background: 'var(--color-bg)', border: '1px solid rgba(63, 63, 143, 0.3)',
-            borderRadius: '8px', padding: '8px 12px', color: 'var(--color-text)',
-            fontSize: '0.9rem', outline: 'none', opacity: user ? 1 : 0.5,
-          }}
-        />
-        <button type="submit" className="btn-accent" disabled={!user || sending} style={{
-          border: 'none', borderRadius: '8px', padding: '8px 16px',
-          cursor: user ? 'pointer' : 'not-allowed', opacity: user ? 1 : 0.5,
-        }} title="Send message">
-          <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
-            <path d="M.5 1.163A1 1 0 0 1 1.97.28l12.868 6.837a1 1 0 0 1 0 1.766L1.969 15.72A1 1 0 0 1 .5 14.836V10.33a1 1 0 0 1 .816-.983L8.5 8 1.316 6.653A1 1 0 0 1 .5 5.67V1.163Z"/>
-          </svg>
-        </button>
-      </form>
+      {user?.is_banned ? (
+        <div style={{
+          padding: '10px 16px', borderTop: '1px solid rgba(239, 68, 68, 0.3)',
+          background: 'rgba(239, 68, 68, 0.08)', textAlign: 'center',
+        }}>
+          <div style={{ color: '#EF4444', fontSize: '0.85rem', fontWeight: 600 }}>
+            Akaun anda telah disekat.
+          </div>
+          <div style={{ color: 'var(--color-muted)', fontSize: '0.75rem', marginTop: '2px' }}>
+            Anda tidak boleh menghantar mesej.
+          </div>
+        </div>
+      ) : (
+        <form onSubmit={handleSend} style={{
+          padding: '12px 16px', borderTop: '1px solid rgba(63, 63, 143, 0.3)', display: 'flex', gap: '8px',
+        }}>
+          <input type="text" placeholder={user ? 'Taip mesej...' : 'Sila log masuk untuk sembang'}
+            readOnly={!user} value={input} onChange={e => setInput(e.target.value)} maxLength={500}
+            style={{
+              flexGrow: 1, background: 'var(--color-bg)', border: '1px solid rgba(63, 63, 143, 0.3)',
+              borderRadius: '8px', padding: '8px 12px', color: 'var(--color-text)',
+              fontSize: '0.9rem', outline: 'none', opacity: user ? 1 : 0.5,
+            }}
+          />
+          <button type="submit" className="btn-accent" disabled={!user || sending} style={{
+            border: 'none', borderRadius: '8px', padding: '8px 16px',
+            cursor: user ? 'pointer' : 'not-allowed', opacity: user ? 1 : 0.5,
+          }} title="Send message">
+            <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M.5 1.163A1 1 0 0 1 1.97.28l12.868 6.837a1 1 0 0 1 0 1.766L1.969 15.72A1 1 0 0 1 .5 14.836V10.33a1 1 0 0 1 .816-.983L8.5 8 1.316 6.653A1 1 0 0 1 .5 5.67V1.163Z"/>
+            </svg>
+          </button>
+        </form>
+      )}
 
       {error && view === 'chat' && (
         <div style={{ padding: '0 16px 8px', color: '#EF4444', fontSize: '0.8rem' }}>{error}</div>

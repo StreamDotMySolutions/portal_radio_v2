@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\{
     RoleController,
     UserController,
+    ChatUserController,
     AuthController,
     AccountController,
     DashboardController,
@@ -230,6 +231,15 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
 
 // Directory bulk import (external, e.g. Google Apps Script)
 Route::post('/directories/sync/{root}', [DirectoryController::class, 'store']);
+
+// Manage Chat Users
+Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
+    Route::get('/chat-users', [ChatUserController::class, 'index']);
+    Route::get('/chat-users/{chatUser}', [ChatUserController::class, 'show']);
+    Route::put('/chat-users/{chatUser}', [ChatUserController::class, 'update']);
+    Route::delete('/chat-users/{chatUser}', [ChatUserController::class, 'delete']);
+    Route::patch('/chat-users/{chatUser}/toggle-ban', [ChatUserController::class, 'toggleBan']);
+});
 
 // Manage Complaints
 Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
