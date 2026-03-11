@@ -10,6 +10,15 @@ use Illuminate\Http\Response;
 class SettingController extends Controller
 {
     /**
+     * Get all settings
+     */
+    public function index(): Response
+    {
+        $settings = Setting::orderBy('key')->get();
+        return response()->json(['settings' => $settings]);
+    }
+
+    /**
      * Get a setting by key
      */
     public function show(string $key): Response

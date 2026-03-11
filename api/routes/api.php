@@ -152,6 +152,7 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::get('/stations/ordering/{station}', [StationController::class, 'ordering']);
 
     // Settings
+    Route::get('/settings', [SettingController::class, 'index']);
     Route::get('/settings/{key}', [SettingController::class, 'show']);
     Route::put('/settings/{key}', [SettingController::class, 'update']);
 
