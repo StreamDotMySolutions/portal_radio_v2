@@ -85,9 +85,6 @@ export default function NavbarMobile() {
             <li className="nav-item">
               <a className={`nav-link py-2${isActive('/chat') ? ' nav-active' : ''}`} href="/chat">Chat</a>
             </li>
-            <li className="nav-item">
-              <a className={`nav-link py-2${isActive('/mengenai-kami') ? ' nav-active' : ''}`} href="/mengenai-kami">Mengenai Kami</a>
-            </li>
           </ul>
           <div className="py-2">
             <div className="input-group">

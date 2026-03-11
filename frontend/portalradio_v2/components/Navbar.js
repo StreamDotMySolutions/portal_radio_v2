@@ -92,11 +92,6 @@ export default function Navbar() {
                 Chat
               </a>
             </li>
-            <li className="nav-item">
-              <a className={`nav-link${isActive('/mengenai-kami') ? ' nav-active' : ''}`} href="/mengenai-kami">
-                Mengenai Kami
-              </a>
-            </li>
           </ul>
           <div className="d-flex">
             <div className="input-group" style={{ minWidth: '300px' }}>
