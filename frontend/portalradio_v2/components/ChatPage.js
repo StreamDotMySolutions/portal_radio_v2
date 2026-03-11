@@ -162,8 +162,6 @@ export default function ChatPageComponent() {
                 muted
               />
             )}
-          </div>
-
             {/* Chat toggle button */}
             <button
               onClick={() => setChatOpen(!chatOpen)}
