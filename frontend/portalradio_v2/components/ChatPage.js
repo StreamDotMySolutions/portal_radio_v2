@@ -30,6 +30,7 @@ function getOrCreateSessionId() {
 
 export default function ChatPageComponent() {
   const [chatOpen, setChatOpen] = useState(true);
+  const [chatFullScreen, setChatFullScreen] = useState(false);
   const [livestreamUrl, setLivestreamUrl] = useState(null);
   const [isOffline, setIsOffline] = useState(false);
   const videoRef = useRef(null);
@@ -128,16 +129,17 @@ export default function ChatPageComponent() {
   return (
     <div className="container-fluid px-4 py-5">
       <div className="d-flex livestream-wrapper" style={{ height: 'calc(100vh - 200px)' }}>
-        {/* Video area */}
-        <div className={`livestream-player ${chatOpen ? '' : 'chat-closed'}`} style={{ flexGrow: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
-          {/* Video player - match chat height */}
-          <div style={{
-            position: 'relative',
-            flex: 1,
-            backgroundColor: '#000',
-            borderRadius: '12px 12px 0 0',
-            overflow: 'hidden',
-          }}>
+        {/* Show video only if chat is not in full-screen mode */}
+        {!chatFullScreen && (
+          <div className={`livestream-player ${chatOpen ? '' : 'chat-closed'}`} style={{ flexGrow: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
+            {/* Video player - match chat height */}
+            <div style={{
+              position: 'relative',
+              flex: 1,
+              backgroundColor: '#000',
+              borderRadius: '12px 12px 0 0',
+              overflow: 'hidden',
+            }}>
             {isOffline ? (
               <div style={{
                 position: 'absolute',
@@ -194,14 +196,17 @@ export default function ChatPageComponent() {
             </button>
           </div>
         </div>
+        )}
 
-        {/* Chat sidebar */}
+        {/* Chat sidebar or full-screen */}
         {chatOpen && (
           <div className="chat-panel card-dark" style={{
             borderRadius: '12px',
             display: 'flex',
             flexDirection: 'column',
-            borderLeft: '1px solid rgba(63, 63, 143, 0.3)',
+            borderLeft: chatFullScreen ? 'none' : '1px solid rgba(63, 63, 143, 0.3)',
+            flex: chatFullScreen ? 1 : undefined,
+            minWidth: chatFullScreen ? 0 : undefined,
           }}>
             {/* Chat header */}
             <div style={{
@@ -212,21 +217,43 @@ export default function ChatPageComponent() {
               borderBottom: '1px solid rgba(63, 63, 143, 0.3)',
             }}>
               <span style={{ fontWeight: 700, fontSize: '1rem' }}>Sembang Langsung</span>
-              <button
-                onClick={() => setChatOpen(false)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  color: 'var(--color-muted)',
-                  cursor: 'pointer',
-                  fontSize: '1.2rem',
-                  padding: '4px',
-                }}
-              >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                  <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
-                </svg>
-              </button>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button
+                  onClick={() => setChatFullScreen(!chatFullScreen)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: 'var(--color-muted)',
+                    cursor: 'pointer',
+                    fontSize: '1rem',
+                    padding: '4px',
+                  }}
+                  title={chatFullScreen ? 'Show player' : 'Hide player'}
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    {chatFullScreen ? (
+                      <path d="M3 2.5a2.5 2.5 0 0 1 5 0 2.5 2.5 0 0 1-5 0zm5 0a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0z"/>
+                    ) : (
+                      <path d="M1.5 2a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1H2v3a.5.5 0 0 1-1 0V2zm6 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zM1 7.5a.5.5 0 0 1 1 0v3H5a.5.5 0 0 1 0 1H2a.5.5 0 0 1-.5-.5v-3zm12-3a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5v-3z"/>
+                    )}
+                  </svg>
+                </button>
+                <button
+                  onClick={() => setChatOpen(false)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: 'var(--color-muted)',
+                    cursor: 'pointer',
+                    fontSize: '1.2rem',
+                    padding: '4px',
+                  }}
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
+                  </svg>
+                </button>
+              </div>
             </div>
 
             {/* Messages */}
