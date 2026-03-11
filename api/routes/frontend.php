@@ -49,6 +49,8 @@ Route::get('/download/article-pdf/{filename}', [DownloadController::class, 'arti
 
 // Analytics tracking (fire-and-forget, no auth)
 Route::post('/track', [AnalyticsController::class, 'store']);
+Route::get('/station-hits', [AnalyticsController::class, 'stationHits']);
+Route::get('/livestream-hits', [AnalyticsController::class, 'livestreamHits']);
 
 // Complaints submission (public, protected by reCAPTCHA)
 Route::post('/complaints', [ComplaintController::class, 'store']);

@@ -3,10 +3,21 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Models\AnalyticsEvent;
+use App\Services\AnalyticsService;
 use Illuminate\Http\Request;
 
 class AnalyticsController extends Controller
 {
+    public function stationHits()
+    {
+        return response()->json(AnalyticsService::allStationViews());
+    }
+
+    public function livestreamHits()
+    {
+        return response()->json(['plays' => AnalyticsService::livestreamTotalPlays()]);
+    }
+
     public function store(Request $request)
     {
         $data = $request->validate([

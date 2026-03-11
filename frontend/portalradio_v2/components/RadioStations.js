@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
-import { fetchStations } from '@/utils/stationsApi';
+import { fetchStations, fetchStationHits } from '@/utils/stationsApi';
 
 function getOrCreateSessionId() {
   let id = sessionStorage.getItem('rtm_sid');
@@ -19,12 +19,14 @@ export default function RadioStations() {
   const hlsRef = useRef(null);
   const [nasionalStations, setNasionalStations] = useState([]);
   const [negeriStations, setNegeriStations] = useState([]);
+  const [stationHits, setStationHits] = useState({});
 
   useEffect(() => {
     fetchStations().then(stations => {
       setNasionalStations(stations.filter(s => s.category === 'nasional'));
       setNegeriStations(stations.filter(s => s.category === 'negeri'));
     });
+    fetchStationHits().then(setStationHits);
   }, []);
 
   useEffect(() => {
@@ -159,8 +161,7 @@ export default function RadioStations() {
               {(() => {
                 const isPlaying = playingSlug === station.slug;
                 const isDisabled = !station.streamUrl || station.streamUrl === '#';
-                // Mock listener count (consistent per station)
-                const listenerCount = Math.abs(station.slug.charCodeAt(0) * 47) % 5000 + 500;
+                const listenerCount = stationHits[station.slug] || 0;
                 return (
                   <div style={{
                     borderTop: `1px solid rgba(255,255,255,0.08)`,

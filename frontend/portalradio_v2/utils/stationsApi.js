@@ -45,6 +45,16 @@ export async function fetchStationBySlug(slug) {
   return data.station ? mapStation(data.station) : null;
 }
 
+export async function fetchStationHits() {
+  try {
+    const res = await fetch(`${API_URL}/station-hits`);
+    if (!res.ok) return {};
+    return await res.json();
+  } catch {
+    return {};
+  }
+}
+
 export async function searchStations(query) {
   const url = `${API_URL}/stations?q=${encodeURIComponent(query)}`;
   const res = await fetch(url);

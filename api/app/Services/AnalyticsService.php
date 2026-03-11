@@ -113,6 +113,20 @@ class AnalyticsService
     }
 
     /**
+     * Get pageview counts for all stations, keyed by slug
+     */
+    public static function allStationViews(): array
+    {
+        return AnalyticsEvent::where('event_type', 'pageview')
+            ->where('page_type', 'station')
+            ->whereNotNull('reference_id')
+            ->select('reference_id', DB::raw('count(*) as views'))
+            ->groupBy('reference_id')
+            ->pluck('views', 'reference_id')
+            ->toArray();
+    }
+
+    /**
      * Get total pageviews for all stations
      */
     public static function totalStationViews()
