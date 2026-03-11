@@ -12,15 +12,17 @@ import AccessibilityToggle from '@/components/AccessibilityToggle';
 import PageTracker from '@/components/PageTracker';
 import { AccessibilityProvider } from '@/context/AccessibilityContext';
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://radio.rtm.gov.my';
+
 export const metadata = {
-  metadataBase: new URL('https://portalradio.rtm.gov.my'),
-  title: 'PortalRadio v2 — RTM',
+  metadataBase: new URL(SITE_URL),
+  title: 'PORTAL RADIO RTM',
   description: 'Platform digital penyiaran RTM — televisyen, radio, dan berita dalam satu tempat.',
   lang: 'ms',
   openGraph: {
-    title: 'PortalRadio v2 — RTM',
+    title: 'PORTAL RADIO RTM',
     description: 'Platform digital penyiaran RTM — televisyen, radio, dan berita dalam satu tempat.',
-    url: 'https://portalradio.rtm.gov.my',
+    url: SITE_URL,
     siteName: 'PortalRadio RTM',
     images: [
       {
@@ -35,7 +37,7 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'PortalRadio v2 — RTM',
+    title: 'PORTAL RADIO RTM',
     description: 'Platform digital penyiaran RTM — televisyen, radio, dan berita dalam satu tempat.',
     images: ['/logo-rtm-transparent.png'],
   },
