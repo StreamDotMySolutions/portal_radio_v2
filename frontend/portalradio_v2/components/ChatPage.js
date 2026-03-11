@@ -70,14 +70,21 @@ export default function ChatPageComponent() {
 
           hls.loadSource(livestreamUrl);
           hls.attachMedia(video);
+          hls.on(HLS.Events.MANIFEST_PARSED, () => {
+            video.play().catch(() => {
+              // Autoplay might be blocked, user needs to click play
+            });
+          });
         } else if (video?.canPlayType('application/vnd.apple.mpegurl')) {
           video.src = livestreamUrl;
+          video.play().catch(() => {});
         } else {
           setIsOffline(true);
         }
       } catch {
         if (video?.canPlayType('application/vnd.apple.mpegurl')) {
           video.src = livestreamUrl;
+          video.play().catch(() => {});
         } else {
           setIsOffline(true);
         }
@@ -122,11 +129,11 @@ export default function ChatPageComponent() {
     <div className="container-fluid px-4 py-5">
       <div className="d-flex livestream-wrapper" style={{ height: 'calc(100vh - 200px)' }}>
         {/* Video area */}
-        <div className={`livestream-player ${chatOpen ? '' : 'chat-closed'}`} style={{ flexGrow: 1, minWidth: 0 }}>
-          {/* 16:9 video player */}
+        <div className={`livestream-player ${chatOpen ? '' : 'chat-closed'}`} style={{ flexGrow: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
+          {/* Video player - match chat height */}
           <div style={{
             position: 'relative',
-            paddingBottom: '56.25%',
+            flex: 1,
             backgroundColor: '#000',
             borderRadius: '12px 12px 0 0',
             overflow: 'hidden',
@@ -160,6 +167,7 @@ export default function ChatPageComponent() {
                 controls
                 autoPlay
                 muted
+                crossOrigin="anonymous"
               />
             )}
             {/* Chat toggle button */}
