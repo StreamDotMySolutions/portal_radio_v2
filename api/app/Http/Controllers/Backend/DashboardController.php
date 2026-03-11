@@ -10,6 +10,9 @@ use App\Models\Video;
 use App\Models\Asset;
 use App\Models\Vod;
 use App\Models\Directory;
+use App\Models\Station;
+use App\Models\ChatUser;
+use App\Models\ChatMessage;
 use App\Services\AnalyticsService;
 use Spatie\Activitylog\Models\Activity;
 
@@ -74,6 +77,11 @@ class DashboardController extends Controller
                 ],
                 'programmes'  => Programme::count(),
                 'videos'      => Video::count(),
+                'stations_nasional' => Station::where('category', 'nasional')->where('active', true)->count(),
+                'stations_negeri'   => Station::where('category', 'negeri')->where('active', true)->count(),
+                'livestream_plays'  => AnalyticsService::livestreamTotalPlays(),
+                'chat_users'        => ChatUser::count(),
+                'chat_messages'     => ChatMessage::count(),
                 'assets'      => Asset::count(),
                 'assets_filesize' => $assetsFilesize,
                 'vods'        => Vod::count(),

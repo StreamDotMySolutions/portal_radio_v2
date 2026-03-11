@@ -48,14 +48,6 @@ const StatCard = ({ title, value, icon, color }) => (
     </Card>
 )
 
-const formatFileSize = (bytes) => {
-    if (!bytes || bytes === 0) return '0 B'
-    const k = 1024
-    const sizes = ['B', 'KB', 'MB', 'GB']
-    const i = Math.floor(Math.log(bytes) / Math.log(k))
-    return (bytes / Math.pow(k, i)).toFixed(2) + ' ' + sizes[i]
-}
-
 const AdminDashboard = () => {
     const navigate = useNavigate()
     const { user } = useAuthStore()
@@ -92,93 +84,6 @@ const AdminDashboard = () => {
                     </Card.Body>
                 </Card>
 
-                {/* Content */}
-                <div>
-                    <p className='text-muted small fw-semibold text-uppercase mb-2'>Content</p>
-                    <Row className='g-3'>
-                        <Col md={3}>
-                            <Card className='h-100' onClick={() => navigate('/administration/articles/0')} style={{ cursor: 'pointer' }}>
-                                <Card.Body className='d-flex align-items-center gap-3'>
-                                    <div
-                                        className='text-primary bg-primary bg-opacity-10 rounded p-3 fs-4'
-                                        style={{ lineHeight: 1 }}
-                                    >
-                                        <FontAwesomeIcon icon={['fas', 'newspaper']} />
-                                    </div>
-                                    <div>
-                                        <div className='text-muted small'>Articles</div>
-                                        <div className='fw-bold'>
-                                            {isLoading ? '…' : (
-                                                <>
-                                                    {counts.articles_breakdown?.folders || 0} Folder{counts.articles_breakdown?.folders !== 1 ? 's' : ''} / {counts.articles_breakdown?.pages || 0} Page{counts.articles_breakdown?.pages !== 1 ? 's' : ''}
-                                                </>
-                                            )}
-                                        </div>
-                                    </div>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                        <Col md={3}>
-                            <Card className='h-100' onClick={() => navigate('/administration/directories/0')} style={{ cursor: 'pointer' }}>
-                                <Card.Body className='d-flex align-items-center gap-3'>
-                                    <div
-                                        className='text-info bg-info bg-opacity-10 rounded p-3 fs-4'
-                                        style={{ lineHeight: 1 }}
-                                    >
-                                        <FontAwesomeIcon icon={['fas', 'address-book']} />
-                                    </div>
-                                    <div>
-                                        <div className='text-muted small'>Directories</div>
-                                        <div className='fw-bold'>
-                                            {isLoading ? '…' : (
-                                                <>
-                                                    {counts.directories_breakdown?.departments || 0} Dept{counts.directories_breakdown?.departments !== 1 ? 's' : ''} / {counts.directories_breakdown?.staffs || 0} Staff{counts.directories_breakdown?.staffs !== 1 ? 's' : ''}
-                                                </>
-                                            )}
-                                        </div>
-                                    </div>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                        <Col md={3}>
-                            <Card className='h-100' onClick={() => navigate('/administration/assets/0')} style={{ cursor: 'pointer' }}>
-                                <Card.Body className='d-flex align-items-center gap-3'>
-                                    <div
-                                        className='text-warning bg-warning bg-opacity-10 rounded p-3 fs-4'
-                                        style={{ lineHeight: 1 }}
-                                    >
-                                        <FontAwesomeIcon icon={['fas', 'folder-open']} />
-                                    </div>
-                                    <div>
-                                        <div className='text-muted small'>Assets</div>
-                                        <div className='fw-bold'>
-                                            {isLoading ? '…' : formatFileSize(counts.assets_filesize)}
-                                        </div>
-                                    </div>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                        <Col md={3}>
-                            <Card className='h-100' onClick={() => navigate('/administration/vods')} style={{ cursor: 'pointer' }}>
-                                <Card.Body className='d-flex align-items-center gap-3'>
-                                    <div
-                                        className='text-danger bg-danger bg-opacity-10 rounded p-3 fs-4'
-                                        style={{ lineHeight: 1 }}
-                                    >
-                                        <FontAwesomeIcon icon={['fas', 'film']} />
-                                    </div>
-                                    <div>
-                                        <div className='text-muted small'>VODs</div>
-                                        <div className='fw-bold'>
-                                            {isLoading ? '…' : formatFileSize(counts.vods_filesize)}
-                                        </div>
-                                    </div>
-                                </Card.Body>
-                            </Card>
-                        </Col>
-                    </Row>
-                </div>
-
                 {/* Homepage */}
                 <div>
                     <p className='text-muted small fw-semibold text-uppercase mb-2'>Homepage</p>
@@ -206,10 +111,26 @@ const AdminDashboard = () => {
                             </Card>
                         </Col>
                         <Col md={4}>
-                            <ContentCard title='Programmes' value={v(counts.programmes)} icon='list'   color='secondary' to='/administration/programmes' />
+                            <ContentCard title='Stesen Nasional' value={v(counts.stations_nasional)} icon='radio' color='primary' to='/administration/stations' />
                         </Col>
                         <Col md={4}>
-                            <ContentCard title='Videos'     value={v(counts.videos)}     icon='video'  color='primary'   to='/administration/videos' />
+                            <ContentCard title='Stesen Negeri' value={v(counts.stations_negeri)} icon='radio' color='warning' to='/administration/stations' />
+                        </Col>
+                    </Row>
+                </div>
+
+                {/* Engagement */}
+                <div>
+                    <p className='text-muted small fw-semibold text-uppercase mb-2'>Engagement</p>
+                    <Row className='g-3'>
+                        <Col md={4}>
+                            <ContentCard title='Livestream Plays' value={v(counts.livestream_plays)} icon='play' color='danger' to='/administration/livestream' />
+                        </Col>
+                        <Col md={4}>
+                            <ContentCard title='Chat Users' value={v(counts.chat_users)} icon='users' color='info' to='/administration/chat-users' />
+                        </Col>
+                        <Col md={4}>
+                            <ContentCard title='Chat Messages' value={v(counts.chat_messages)} icon='comments' color='secondary' to='/administration/chat-messages' />
                         </Col>
                     </Row>
                 </div>

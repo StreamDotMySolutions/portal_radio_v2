@@ -20,52 +20,30 @@ function TopNavbar() {
               <FontAwesomeIcon icon={['fas', 'gauge']} />{' '}Dashboard
             </Nav.Link>
 
-            <NavDropdown title={<span><FontAwesomeIcon icon={['fas', 'newspaper']} />{' '}Content</span>} id="nav-content">
-              <NavDropdown.Item as={NavLink} to="/administration/articles/0">
-                <FontAwesomeIcon icon={['fas', 'newspaper']} />{' '}Articles
+<NavDropdown title={<span><FontAwesomeIcon icon={['fas', 'tv']} />{' '}Homepage</span>} id="nav-homepage">
+              <NavDropdown.Item as={NavLink} to="/administration/banners">
+                <FontAwesomeIcon icon={['fas', 'image']} />{' '}Banners
+              </NavDropdown.Item>
+              <NavDropdown.Item as={NavLink} to="/administration/livestream">
+                <FontAwesomeIcon icon={['fas', 'tower-broadcast']} />{' '}Livestream
+              </NavDropdown.Item>
+              <NavDropdown.Item as={NavLink} to="/administration/chat-messages">
+                <FontAwesomeIcon icon={['fas', 'message']} />{' '}Chat Messages
               </NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to="/administration/stations">
                 <FontAwesomeIcon icon={['fas', 'radio']} />{' '}Stations
               </NavDropdown.Item>
             </NavDropdown>
 
-            <NavDropdown title={<span><FontAwesomeIcon icon={['fas', 'folder-open']} />{' '}Media</span>} id="nav-media">
-              <NavDropdown.Item as={NavLink} to="/administration/assets/0">
-                <FontAwesomeIcon icon={['fas', 'folder-open']} />{' '}Assets
-              </NavDropdown.Item>
-              <NavDropdown.Item as={NavLink} to="/administration/vods/0">
-                <FontAwesomeIcon icon={['fas', 'film']} />{' '}VODs
-              </NavDropdown.Item>
-            </NavDropdown>
-
-            <NavDropdown title={<span><FontAwesomeIcon icon={['fas', 'tv']} />{' '}Homepage</span>} id="nav-homepage">
-              <NavDropdown.Item as={NavLink} to="/administration/banners">
-                <FontAwesomeIcon icon={['fas', 'image']} />{' '}Banners
-              </NavDropdown.Item>
-              <NavDropdown.Item as={NavLink} to="/administration/programmes">
-                <FontAwesomeIcon icon={['fas', 'list']} />{' '}Programmes
-              </NavDropdown.Item>
-              <NavDropdown.Item as={NavLink} to="/administration/videos">
-                <FontAwesomeIcon icon={['fas', 'video']} />{' '}Videos
-              </NavDropdown.Item>
-              <NavDropdown.Item as={NavLink} to="/administration/livestream">
-                <FontAwesomeIcon icon={['fas', 'tower-broadcast']} />{' '}Livestream
-              </NavDropdown.Item>
-            </NavDropdown>
-
-            <Nav.Link as={NavLink} to="/administration/analytics">
-              <FontAwesomeIcon icon={['fas', 'chart-bar']} />{' '}Analytics
-            </Nav.Link>
-
             <NavDropdown title={<span><FontAwesomeIcon icon={['fas', 'cog']} />{' '}System</span>} id="nav-system">
+              <NavDropdown.Item as={NavLink} to="/administration/analytics">
+                <FontAwesomeIcon icon={['fas', 'chart-bar']} />{' '}Analytics
+              </NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to="/administration/users">
                 <FontAwesomeIcon icon={['fas', 'users']} />{' '}Users
               </NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to="/administration/chat-users">
                 <FontAwesomeIcon icon={['fas', 'comments']} />{' '}Chat Users
-              </NavDropdown.Item>
-              <NavDropdown.Item as={NavLink} to="/administration/chat-messages">
-                <FontAwesomeIcon icon={['fas', 'message']} />{' '}Chat Messages
               </NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to="/administration/activity">
                 <FontAwesomeIcon icon={['fas', 'clock-rotate-left']} />{' '}Activity Log
