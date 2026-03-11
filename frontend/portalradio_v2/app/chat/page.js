@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import ChatPageComponent from '@/components/ChatPage';
 
 export const metadata = {
@@ -7,7 +8,9 @@ export const metadata = {
 export default function ChatPage() {
   return (
     <main style={{ backgroundColor: 'var(--color-bg)', minHeight: '100vh', paddingTop: '80px' }}>
-      <ChatPageComponent />
+      <Suspense>
+        <ChatPageComponent />
+      </Suspense>
     </main>
   );
 }

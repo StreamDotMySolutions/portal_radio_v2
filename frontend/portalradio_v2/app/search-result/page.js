@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { Suspense, useState, useEffect, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { searchStations } from '@/utils/stationsApi';
@@ -9,6 +9,14 @@ import { trackSearch } from '@/utils/analytics';
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/frontend';
 
 export default function SearchResultPage() {
+  return (
+    <Suspense>
+      <SearchResultContent />
+    </Suspense>
+  );
+}
+
+function SearchResultContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const q = searchParams.get('q') || '';
