@@ -148,6 +148,18 @@ body {
   color: var(--color-accent) !important;
 }
 
+.navbar-portal .nav-link.nav-active {
+  color: #ff6600 !important;
+  border-bottom: 3px solid #ff6600;
+  padding-bottom: 0.25rem;
+}
+
+.dropdown-item.active-station {
+  color: #ff6600 !important;
+  background-color: transparent !important;
+  font-weight: 600;
+}
+
 .navbar-portal.scrolled {
   position: fixed;
   top: 0;

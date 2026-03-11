@@ -67,35 +67,49 @@ export default function StationDetail({ station }) {
           </div>
         </div>
 
-        {/* Audio Player with RTM Klik Button */}
-        <div className="mb-4 d-flex gap-3 align-items-flex-end">
-          <div style={{ flex: 1 }}>
-            <AudioPlayer streamUrl={station.streamUrl} accent={station.accent} />
-          </div>
-          {station.rtmKlikUrl && (
-            <a
-              href={station.rtmKlikUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn"
-              style={{
-                backgroundColor: '#CCFF00',
-                color: '#000',
-                border: 'none',
-                borderRadius: '8px',
-                padding: '2px 24px 2px 8px',
-                fontWeight: '600',
-                fontSize: '0.95rem',
-                textDecoration: 'none',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              <i className="bi bi-play-circle-fill" style={{ fontSize: '28px' }}></i>
-              Dengarkan di RTM Klik
-            </a>
+        {/* Audio Player / Embed Player */}
+        <div className="mb-4">
+          {station.embedPlayerUrl ? (
+            <iframe
+              src={station.embedPlayerUrl}
+              width="100%"
+              height="1200"
+              style={{ border: 'none', display: 'block', borderRadius: '8px', overflow: 'hidden' }}
+              allow="autoplay"
+              scrolling="no"
+              title={`${station.name} Live Player`}
+            />
+          ) : (
+            <div className="d-flex gap-3 align-items-flex-end">
+              <div style={{ flex: 1 }}>
+                <AudioPlayer streamUrl={station.streamUrl} accent={station.accent} />
+              </div>
+              {station.rtmKlikUrl && (
+                <a
+                  href={station.rtmKlikUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn"
+                  style={{
+                    backgroundColor: '#CCFF00',
+                    color: '#000',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '2px 24px 2px 8px',
+                    fontWeight: '600',
+                    fontSize: '0.95rem',
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  <i className="bi bi-play-circle-fill" style={{ fontSize: '28px' }}></i>
+                  Dengarkan di RTM Klik
+                </a>
+              )}
+            </div>
           )}
         </div>
 
