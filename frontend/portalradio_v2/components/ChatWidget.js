@@ -734,6 +734,7 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
         <div style={{
           padding: '10px 16px', borderTop: '1px solid rgba(239, 68, 68, 0.3)',
           background: 'rgba(239, 68, 68, 0.08)', textAlign: 'center',
+          flexShrink: 0,
         }}>
           <div style={{ color: '#EF4444', fontSize: '0.85rem', fontWeight: 600 }}>
             Akaun anda telah disekat.
@@ -745,6 +746,7 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
       ) : (
         <form onSubmit={handleSend} style={{
           padding: '12px 16px', borderTop: '1px solid rgba(63, 63, 143, 0.3)', display: 'flex', gap: '8px',
+          flexShrink: 0, backgroundColor: 'var(--color-surface)',
         }}>
           <input type="text" placeholder={user ? 'Taip mesej...' : 'Sila log masuk untuk sembang'}
             readOnly={!user} value={input} onChange={e => setInput(e.target.value)} maxLength={500}
