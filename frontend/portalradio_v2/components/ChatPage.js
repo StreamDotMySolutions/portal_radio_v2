@@ -223,10 +223,10 @@ export default function ChatPageComponent() {
             borderRadius: chatFullScreen ? '0' : '12px',
             display: 'flex', flexDirection: 'column',
             borderLeft: chatFullScreen ? 'none' : '1px solid rgba(63, 63, 143, 0.3)',
-            flex: chatFullScreen ? 1 : '0 0 auto',
-            minWidth: chatFullScreen ? '100%' : 'auto',
-            width: chatFullScreen ? '100%' : 'auto',
-            maxWidth: chatFullScreen ? 'none' : '400px',
+            flex: chatFullScreen ? 1 : '1 1 auto',
+            width: chatFullScreen ? '100%' : '380px',
+            minHeight: 0,
+            maxHeight: '100%',
           }}>
             {/* Chat header */}
             <div style={{
