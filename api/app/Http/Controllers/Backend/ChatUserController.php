@@ -24,7 +24,7 @@ class ChatUserController extends Controller
         $request->validate([
             'username' => ['sometimes', 'string', 'min:2', 'max:30', 'regex:/^[a-zA-Z0-9_]+$/', 'unique:chat_users,username,' . $chatUser->id],
             'email' => ['sometimes', 'email', 'unique:chat_users,email,' . $chatUser->id],
-            'password' => ['nullable', 'string', 'min:6', 'confirmed'],
+            'password' => ['nullable', 'string', 'min:6'],
         ]);
 
         ChatUserService::update($request, $chatUser);
