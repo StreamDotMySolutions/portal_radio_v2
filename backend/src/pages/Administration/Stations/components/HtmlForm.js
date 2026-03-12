@@ -260,8 +260,9 @@ const HtmlForm = ({
                                         top: '50%',
                                         left: '50%',
                                         transform: 'translate(-50%, -50%)',
-                                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
                                         border: '1px solid #dee2e6',
+                                        zIndex: 10,
                                     }}
                                 >
                                     <FontAwesomeIcon icon={['fas', 'arrows-rotate']} className='me-1' />
@@ -323,8 +324,9 @@ const HtmlForm = ({
                                         top: '50%',
                                         left: '50%',
                                         transform: 'translate(-50%, -50%)',
-                                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
                                         border: '1px solid #dee2e6',
+                                        zIndex: 10,
                                     }}
                                 >
                                     <FontAwesomeIcon icon={['fas', 'arrows-rotate']} className='me-1' />
