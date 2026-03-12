@@ -109,14 +109,13 @@ export default function RadioStations() {
                 {/* Banner image */}
                 <div style={{
                   width: '100%',
-                  height: '100%',
+                  height: '160px',
                   borderRadius: '6px',
                   overflow: 'hidden',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                   backgroundColor: '#000',
-                  minHeight: '120px',
                 }}>
                   {station.banner ? (
                     <img
@@ -129,7 +128,7 @@ export default function RadioStations() {
                       }}
                     />
                   ) : (
-                    <div style={{ width: '100%', minHeight: '120px', backgroundColor: station.accent, opacity: 0.3 }} />
+                    <div style={{ width: '100%', height: '160px', backgroundColor: station.accent, opacity: 0.3 }} />
                   )}
                 </div>
 

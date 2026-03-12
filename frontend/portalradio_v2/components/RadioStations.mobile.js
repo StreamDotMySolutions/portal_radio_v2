@@ -106,11 +106,10 @@ export default function RadioStationsMobile() {
               <div className="p-2 d-flex flex-column flex-grow-1 align-items-center justify-content-center" style={{ position: 'relative' }}>
                 <div style={{
                   width: '100%',
-                  height: '100%',
+                  height: '100px',
                   borderRadius: '4px',
                   overflow: 'hidden',
                   backgroundColor: '#000',
-                  minHeight: '80px',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -122,7 +121,7 @@ export default function RadioStationsMobile() {
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />
                   ) : (
-                    <div style={{ width: '100%', minHeight: '80px', backgroundColor: station.accent, opacity: 0.3 }} />
+                    <div style={{ width: '100%', height: '100px', backgroundColor: station.accent, opacity: 0.3 }} />
                   )}
                 </div>
 

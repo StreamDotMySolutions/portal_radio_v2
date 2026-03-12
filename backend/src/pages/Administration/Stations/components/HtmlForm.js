@@ -247,7 +247,7 @@ const HtmlForm = ({
                                 <Figure className='mb-2'>
                                     <Figure.Image
                                         style={{ maxWidth: '200px', maxHeight: '200px' }}
-                                        src={`${serverUrl}/storage/station-thumbnails/${thumbnailFilename}`}
+                                        src={`${serverUrl}/storage/stations/${thumbnailFilename}`}
                                     />
                                 </Figure>
                                 <Button
@@ -302,7 +302,7 @@ const HtmlForm = ({
                                 <Figure className='mb-2'>
                                     <Figure.Image
                                         style={{ maxWidth: '100%', maxHeight: '200px' }}
-                                        src={`${serverUrl}/storage/station-banners/${bannerFilename}`}
+                                        src={`${serverUrl}/storage/stations/${bannerFilename}`}
                                     />
                                 </Figure>
                                 <Button
