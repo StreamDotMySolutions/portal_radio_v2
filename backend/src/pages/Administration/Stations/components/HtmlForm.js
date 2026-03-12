@@ -243,23 +243,31 @@ const HtmlForm = ({
                             Thumbnail <small className='text-muted'>(card grid, square/portrait)</small>
                         </Form.Label>
                         {thumbnailFilename && !replacingThumbnail ? (
-                            <>
-                                <Figure className='mb-2'>
+                            <div style={{ position: 'relative', display: 'inline-block', marginBottom: '1rem' }}>
+                                <Figure className='mb-0'>
                                     <Figure.Image
-                                        style={{ maxWidth: '200px', maxHeight: '200px' }}
+                                        style={{ maxWidth: '200px', maxHeight: '200px', display: 'block' }}
                                         src={`${serverUrl}/storage/stations/${thumbnailFilename}`}
                                     />
                                 </Figure>
                                 <Button
                                     size='sm'
-                                    variant='outline-secondary'
+                                    variant='light'
                                     disabled={isLoading}
                                     onClick={() => setReplacingThumbnail(true)}
+                                    style={{
+                                        position: 'absolute',
+                                        top: '50%',
+                                        left: '50%',
+                                        transform: 'translate(-50%, -50%)',
+                                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                                        border: '1px solid #dee2e6',
+                                    }}
                                 >
                                     <FontAwesomeIcon icon={['fas', 'arrows-rotate']} className='me-1' />
                                     Replace
                                 </Button>
-                            </>
+                            </div>
                         ) : (
                             <>
                                 <InputGroup>
@@ -298,23 +306,31 @@ const HtmlForm = ({
                             Banner <small className='text-muted'>(detail page hero, wide/landscape)</small>
                         </Form.Label>
                         {bannerFilename && !replacingBanner ? (
-                            <>
-                                <Figure className='mb-2'>
+                            <div style={{ position: 'relative', display: 'inline-block', marginBottom: '1rem', width: '100%' }}>
+                                <Figure className='mb-0'>
                                     <Figure.Image
-                                        style={{ maxWidth: '100%', maxHeight: '200px' }}
+                                        style={{ maxWidth: '100%', maxHeight: '200px', display: 'block' }}
                                         src={`${serverUrl}/storage/stations/${bannerFilename}`}
                                     />
                                 </Figure>
                                 <Button
                                     size='sm'
-                                    variant='outline-secondary'
+                                    variant='light'
                                     disabled={isLoading}
                                     onClick={() => setReplacingBanner(true)}
+                                    style={{
+                                        position: 'absolute',
+                                        top: '50%',
+                                        left: '50%',
+                                        transform: 'translate(-50%, -50%)',
+                                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                                        border: '1px solid #dee2e6',
+                                    }}
                                 >
                                     <FontAwesomeIcon icon={['fas', 'arrows-rotate']} className='me-1' />
                                     Replace
                                 </Button>
-                            </>
+                            </div>
                         ) : (
                             <>
                                 <InputGroup>
