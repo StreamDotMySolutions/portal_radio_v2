@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ChatWidget, { ChatAuthForm } from './ChatWidget';
+import ChatPublicProfile from './ChatPublicProfile';
 import { getChatUser, setChatUser as storeChatUser } from '../utils/chatApi';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/frontend';
@@ -24,6 +25,7 @@ export default function ChatPageComponent() {
   const [authView, setAuthView] = useState(null); // null | 'login' | 'register'
   const [chatUser, setChatUser] = useState(null);
   const [verifiedBanner, setVerifiedBanner] = useState(false);
+  const [profileUserId, setProfileUserId] = useState(null);
   const videoRef = useRef(null);
   const hlsRef = useRef(null);
   const searchParams = useSearchParams();
@@ -149,7 +151,7 @@ export default function ChatPageComponent() {
         </div>
       )}
       <div className="d-flex livestream-wrapper" style={{ height: 'calc(100vh - 200px)' }}>
-        {/* Video player area — shows auth form when active */}
+        {/* Video player area — shows profile, auth form, or livestream */}
         <div className={`livestream-player ${chatOpen ? '' : 'chat-closed'}`} style={{
           flexGrow: chatFullScreen ? 0 : 1,
           minWidth: 0,
@@ -163,7 +165,9 @@ export default function ChatPageComponent() {
             borderRadius: '12px 12px 0 0',
             overflow: 'hidden',
           }}>
-            {isOffline ? (
+            {profileUserId ? (
+              <ChatPublicProfile userId={profileUserId} onClose={() => setProfileUserId(null)} />
+            ) : isOffline ? (
               <div style={{
                 position: 'absolute', inset: 0,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
@@ -182,7 +186,7 @@ export default function ChatPageComponent() {
                 controls autoPlay muted crossOrigin="anonymous"
               />
             )}
-            {authView && (
+            {authView && !profileUserId && (
               <div style={{ position: 'absolute', inset: 0, zIndex: 3 }}>
                 <ChatAuthForm
                   view={authView}
@@ -193,7 +197,7 @@ export default function ChatPageComponent() {
               </div>
             )}
             {/* Chat toggle button */}
-            {!authView && (
+            {!authView && !profileUserId && (
               <button
                 onClick={() => setChatOpen(!chatOpen)}
                 className="btn-accent"
@@ -270,6 +274,7 @@ export default function ChatPageComponent() {
               onAuthAction={setAuthView}
               user={chatUser}
               onUserChange={setChatUser}
+              onProfileView={setProfileUserId}
             />
           </div>
         )}

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { getChatUser, setChatUser, chatRegister, chatLogin, chatForgotPassword, fetchMessages, sendMessage, getAvatarUrl, chatGetPublicProfile } from '../utils/chatApi';
+import { getChatUser, setChatUser, chatRegister, chatLogin, chatForgotPassword, fetchMessages, sendMessage, getAvatarUrl } from '../utils/chatApi';
 
 /**
  * ChatAuthForm — renders login or register form. Used by parents to show in the video area.
@@ -301,8 +301,9 @@ export function ChatAuthForm({ view, onSuccess, onBack, onSwitchView }) {
  *   onAuthAction: (action: 'login'|'register') => void — if provided, delegate auth UI to parent
  *   user: object|null — controlled user state (from parent)
  *   onUserChange: (user|null) => void — called on logout
+ *   onProfileView: (userId) => void — called when username clicked to view profile
  */
-export default function ChatWidget({ fullHeight = false, onAuthAction, user: controlledUser, onUserChange }) {
+export default function ChatWidget({ fullHeight = false, onAuthAction, user: controlledUser, onUserChange, onProfileView }) {
   const [internalUser, setInternalUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [lastId, setLastId] = useState(null);
@@ -321,8 +322,6 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
   const [forgotSent, setForgotSent] = useState(false);
   const [forgotLoading, setForgotLoading] = useState(false);
   const [hasNewMessages, setHasNewMessages] = useState(false);
-  const [profilePopup, setProfilePopup] = useState(null);
-  const [profileLoading, setProfileLoading] = useState(false);
 
   const isControlled = controlledUser !== undefined;
   const user = isControlled ? controlledUser : internalUser;
@@ -475,20 +474,9 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
     }
   };
 
-  const handleUsernameClick = async (chatUserId) => {
-    if (profilePopup?.id === chatUserId) {
-      setProfilePopup(null);
-      return;
-    }
-    setProfileLoading(true);
-    setProfilePopup(null);
-    try {
-      const profile = await chatGetPublicProfile(chatUserId);
-      setProfilePopup(profile);
-    } catch {
-      setProfilePopup(null);
-    } finally {
-      setProfileLoading(false);
+  const handleUsernameClick = (chatUserId) => {
+    if (onProfileView) {
+      onProfileView(chatUserId);
     }
   };
 
@@ -729,70 +717,6 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
           </div>
         ))}
       </div>
-
-      {/* Profile popup */}
-      {profilePopup && (
-        <div style={{
-          position: 'absolute', bottom: '60px', left: '16px', right: '16px', zIndex: 10,
-          background: 'var(--color-surface)', border: '1px solid rgba(63, 63, 143, 0.3)',
-          borderRadius: '12px', padding: '16px', boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
-        }}>
-          <button onClick={() => setProfilePopup(null)} style={{
-            position: 'absolute', top: '8px', right: '10px', background: 'none',
-            border: 'none', color: 'var(--color-muted)', cursor: 'pointer', fontSize: '1.1rem',
-          }}>&times;</button>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px' }}>
-            <div style={{
-              width: '48px', height: '48px', borderRadius: '50%', overflow: 'hidden', flexShrink: 0,
-              background: profilePopup.avatar_filename ? 'none' : profilePopup.color,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              {profilePopup.avatar_filename ? (
-                <img src={getAvatarUrl(profilePopup.avatar_filename)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              ) : (
-                <span style={{ fontSize: '1.2rem', fontWeight: 700, color: '#fff' }}>{profilePopup.username.charAt(0).toUpperCase()}</span>
-              )}
-            </div>
-            <div>
-              <div style={{ fontWeight: 700, color: profilePopup.color, fontSize: '0.95rem' }}>{profilePopup.username}</div>
-              {profilePopup.full_name && <div style={{ fontSize: '0.85rem', color: 'var(--color-muted)' }}>{profilePopup.full_name}</div>}
-            </div>
-          </div>
-          {profilePopup.about_me && (
-            <div style={{ fontSize: '0.85rem', color: 'var(--color-text)', marginBottom: '8px', lineHeight: 1.4 }}>
-              {profilePopup.about_me}
-            </div>
-          )}
-          {(profilePopup.location || profilePopup.hobby) && (
-            <div style={{ fontSize: '0.8rem', color: 'var(--color-muted)', marginBottom: '8px' }}>
-              {profilePopup.location && <span>📍 {profilePopup.location}</span>}
-              {profilePopup.location && profilePopup.hobby && <span> &middot; </span>}
-              {profilePopup.hobby && <span>🎯 {profilePopup.hobby}</span>}
-            </div>
-          )}
-          {[
-            profilePopup.facebook_url && { label: 'Facebook', url: profilePopup.facebook_url },
-            profilePopup.instagram_url && { label: 'Instagram', url: profilePopup.instagram_url },
-            profilePopup.twitter_url && { label: 'Twitter/X', url: profilePopup.twitter_url },
-            profilePopup.tiktok_url && { label: 'TikTok', url: profilePopup.tiktok_url },
-            profilePopup.youtube_url && { label: 'YouTube', url: profilePopup.youtube_url },
-          ].filter(Boolean).length > 0 && (
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-              {[
-                profilePopup.facebook_url && { label: 'Facebook', url: profilePopup.facebook_url },
-                profilePopup.instagram_url && { label: 'Instagram', url: profilePopup.instagram_url },
-                profilePopup.twitter_url && { label: 'Twitter/X', url: profilePopup.twitter_url },
-                profilePopup.tiktok_url && { label: 'TikTok', url: profilePopup.tiktok_url },
-                profilePopup.youtube_url && { label: 'YouTube', url: profilePopup.youtube_url },
-              ].filter(Boolean).map(link => (
-                <a key={link.label} href={link.url} target="_blank" rel="noopener noreferrer" style={{
-                  fontSize: '0.8rem', color: 'var(--accent-color, #6C63FF)', textDecoration: 'underline',
-                }}>{link.label}</a>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
 
       {hasNewMessages && (
         <div style={{ textAlign: 'center', padding: '4px' }}>

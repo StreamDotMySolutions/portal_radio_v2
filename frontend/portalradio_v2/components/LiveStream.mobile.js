@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import ChatWidget from './ChatWidget';
+import ChatPublicProfile from './ChatPublicProfile';
 
 // Helper to manage session ID for analytics
 function getOrCreateSessionId() {
@@ -18,6 +19,7 @@ export default function LiveStreamMobile() {
   const [streamUrl, setStreamUrl] = useState(null);
   const [isOffline, setIsOffline] = useState(false);
   const [livestreamPlays, setLivestreamPlays] = useState(0);
+  const [profileUserId, setProfileUserId] = useState(null);
   const videoRef = useRef(null);
   const hlsRef = useRef(null);
 
@@ -206,7 +208,7 @@ export default function LiveStreamMobile() {
             display: 'flex',
             flexDirection: 'column',
           }}>
-            {/* Chat header */}
+            {/* Chat or profile header */}
             <div style={{
               display: 'flex',
               alignItems: 'center',
@@ -214,9 +216,17 @@ export default function LiveStreamMobile() {
               padding: '12px 16px',
               borderBottom: '1px solid rgba(63, 63, 143, 0.3)',
             }}>
-              <span style={{ fontWeight: 700, fontSize: '1rem' }}>Sembang Langsung</span>
+              <span style={{ fontWeight: 700, fontSize: '1rem' }}>
+                {profileUserId ? 'Profil' : 'Sembang Langsung'}
+              </span>
               <button
-                onClick={() => setChatOpen(false)}
+                onClick={() => {
+                  if (profileUserId) {
+                    setProfileUserId(null);
+                  } else {
+                    setChatOpen(false);
+                  }
+                }}
                 style={{
                   background: 'none',
                   border: 'none',
@@ -232,7 +242,18 @@ export default function LiveStreamMobile() {
               </button>
             </div>
 
-            <ChatWidget fullHeight />
+            {profileUserId ? (
+              <ChatPublicProfile
+                userId={profileUserId}
+                onClose={() => setProfileUserId(null)}
+                fullHeight
+              />
+            ) : (
+              <ChatWidget
+                fullHeight
+                onProfileView={setProfileUserId}
+              />
+            )}
           </div>
         )}
       </div>
