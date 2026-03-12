@@ -25,4 +25,8 @@ echo "--- API: php artisan migrate ---"
 cd ../../api
 php artisan migrate
 
+# Restart PM2
+echo "--- Restart PM2: portalradio_v2 ---"
+pm2 restart portalradio_v2
+
 echo "=== Deploy finished at $(date) ==="
