@@ -79,6 +79,10 @@ const DataTable = () => {
         if (search) params.set('search', search)
         if (categoryFilter) params.set('category', categoryFilter)
         params.set('per_page', perPage)
+        if (sortBy) {
+            params.set('sort_by', sortBy)
+            params.set('sort_dir', sortDir)
+        }
         const qs = params.toString()
         return qs ? `${baseUrl}?${qs}` : baseUrl
     }
@@ -89,7 +93,7 @@ const DataTable = () => {
         axios({ method: 'get', url: effectiveUrl })
             .then((response) => setItems(response.data.stations))
             .catch((error) => console.warn(error))
-    }, [refreshKey, paginatorUrl, search, categoryFilter, perPage])
+    }, [refreshKey, paginatorUrl, search, categoryFilter, perPage, sortBy, sortDir])
 
     const paginatorAdapter = {
         setValue: (key, value) => {
@@ -107,8 +111,17 @@ const DataTable = () => {
         <div>
             {/* Toolbar */}
             <div className='d-flex align-items-center justify-content-between mb-3 gap-2'>
-                {/* Left: sort buttons (can add if needed) */}
-                <div></div>
+                {/* Left: sort buttons */}
+                <ButtonGroup>
+                    <Button
+                        variant={sortBy === 'created_at' ? 'primary' : 'outline-secondary'}
+                        size='sm'
+                        onClick={() => handleToggleSort('created_at')}
+                    >
+                        <FontAwesomeIcon icon={['fas', 'calendar']} className='me-1' />
+                        Date {sortBy === 'created_at' && <FontAwesomeIcon icon={['fas', sortDir === 'desc' ? 'arrow-down' : 'arrow-up']} className='ms-1' />}
+                    </Button>
+                </ButtonGroup>
 
                 {/* Middle: search and category filter */}
                 <div className='d-flex gap-2'>

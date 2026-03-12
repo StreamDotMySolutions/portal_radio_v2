@@ -12,7 +12,7 @@ class StationController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Station::defaultOrder()
+        $query = Station::query()
             ->leftJoin('analytics_events', function ($join) {
                 $join->on('stations.slug', '=', 'analytics_events.reference_id')
                      ->where('analytics_events.event_type', '=', 'pageview')
@@ -34,7 +34,18 @@ class StationController extends Controller
             $query->where('stations.active', $request->input('active'));
         }
 
-        $stations = $query->paginate(10)->withQueryString();
+        // Handle sorting
+        $sortBy = $request->input('sort_by', null);
+        $sortDir = $request->input('sort_dir', 'desc');
+
+        if ($sortBy === 'created_at') {
+            $query->orderBy('stations.created_at', $sortDir);
+        } else {
+            $query->defaultOrder();
+        }
+
+        $perPage = $request->input('per_page', 15);
+        $stations = $query->paginate($perPage)->withQueryString();
 
         return response()->json(['stations' => $stations]);
     }
