@@ -11,7 +11,7 @@ const emptyForm = {
     description: '',
     frequency: '',
     category: '',
-    rtmklkPlayerUrl: '',
+    rtmklikPlayerUrl: '',
     facebookUrl: '',
     xUrl: '',
     instagramUrl: '',
@@ -47,7 +47,7 @@ export default function EditModal({ id }) {
                     description: station.description || '',
                     frequency: station.frequency || '',
                     category: station.category || '',
-                    rtmklkPlayerUrl: station.rtmklik_player_url || '',
+                    rtmklikPlayerUrl: station.rtmklik_player_url || '',
                     facebookUrl: station.facebook_url || '',
                     xUrl: station.x_url || '',
                     instagramUrl: station.instagram_url || '',
@@ -78,7 +78,7 @@ export default function EditModal({ id }) {
         if (form.description) formData.append('description', form.description)
         if (form.frequency) formData.append('frequency', form.frequency)
         if (form.category) formData.append('category', form.category)
-        if (form.rtmklkPlayerUrl) formData.append('rtmklik_player_url', form.rtmklkPlayerUrl)
+        if (form.rtmklikPlayerUrl) formData.append('rtmklik_player_url', form.rtmklikPlayerUrl)
         if (form.facebookUrl) formData.append('facebook_url', form.facebookUrl)
         if (form.xUrl) formData.append('x_url', form.xUrl)
         if (form.instagramUrl) formData.append('instagram_url', form.instagramUrl)

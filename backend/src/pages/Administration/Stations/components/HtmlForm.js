@@ -140,10 +140,10 @@ const HtmlForm = ({
                         <InputGroup.Text style={{ width: '110px' }}>RTMKlik</InputGroup.Text>
                         <Form.Control
                             placeholder='RTMKlik player URL'
-                            value={form.rtmklkPlayerUrl}
+                            value={form.rtmklikPlayerUrl}
                             readOnly={isLoading}
                             isInvalid={!!errors?.rtmklik_player_url}
-                            onChange={(e) => onChange('rtmklkPlayerUrl')(e.target.value)}
+                            onChange={(e) => onChange('rtmklikPlayerUrl')(e.target.value)}
                         />
                         {errors?.rtmklik_player_url && (
                             <Form.Control.Feedback type='invalid'>{errors.rtmklik_player_url[0]}</Form.Control.Feedback>

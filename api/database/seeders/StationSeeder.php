@@ -57,6 +57,18 @@ class StationSeeder extends Seeder
             'youtube_url' => 'https://youtube.com/RTMMalaysia',
             'accent_color' => '#0891B2',
         ],
+        [
+            'slug' => 'klasik-fm',
+            'title' => 'Radio Klasik',
+            'description' => 'Radio Klasik menyiarkan muzik klasik dan tradisional Malaysia yang mempesona. Stesen ini memuliakan warisan muzik tempatan dengan lagu-lagu nostalgia dan persembahan orkestra.',
+            'frequency' => '89.3 FM',
+            'rtmklik_player_url' => 'https://rtmklik-radio-player.s3.ap-southeast-1.amazonaws.com/index.html?radio=RADIO_KLASIK',
+            'facebook_url' => 'https://facebook.com/RTMMalaysia',
+            'x_url' => 'https://twitter.com/RTMMalaysia',
+            'instagram_url' => 'https://instagram.com/RTMMalaysia',
+            'youtube_url' => 'https://youtube.com/RTMMalaysia',
+            'accent_color' => '#92400E',
+        ],
     ];
 
     private array $negeriStations = [
@@ -310,16 +322,6 @@ class StationSeeder extends Seeder
             'instagram_url' => 'https://instagram.com/RTMMalaysia',
             'accent_color' => '#059669',
         ],
-        [
-            'slug' => 'rtm-portal',
-            'title' => 'RTM Portal',
-            'description' => 'RTM Portal adalah platform digital rasmi Radio Televisyen Malaysia.',
-            'frequency' => 'FM',
-            'rtmklik_player_url' => null,
-            'facebook_url' => 'https://facebook.com/RTMMalaysia',
-            'instagram_url' => 'https://instagram.com/RTMMalaysia',
-            'accent_color' => '#FF5A1F',
-        ],
     ];
 
     public function run(): void
@@ -355,15 +357,5 @@ class StationSeeder extends Seeder
 
         // Rebuild nested set tree for all stations
         Station::fixTree();
-    }
-
-    private function hexToRgb(string $hex): array
-    {
-        $hex = ltrim($hex, '#');
-        $r = hexdec(substr($hex, 0, 2));
-        $g = hexdec(substr($hex, 2, 2));
-        $b = hexdec(substr($hex, 4, 2));
-
-        return ['r' => $r, 'g' => $g, 'b' => $b];
     }
 }
