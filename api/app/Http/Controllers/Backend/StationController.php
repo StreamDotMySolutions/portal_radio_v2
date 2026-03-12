@@ -14,7 +14,7 @@ class StationController extends Controller
     {
         $query = Station::query()
             ->leftJoin('analytics_events', function ($join) {
-                $join->on('stations.slug', '=', 'analytics_events.reference_id')
+                $join->on('stations.id', '=', 'analytics_events.reference_id')
                      ->where('analytics_events.event_type', '=', 'pageview')
                      ->where('analytics_events.page_type', '=', 'station');
             })

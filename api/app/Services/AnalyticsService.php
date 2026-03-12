@@ -103,12 +103,13 @@ class AnalyticsService
 
     /**
      * Get pageview count for a specific station
+     * @param int|string $stationId Station ID (reference_id in analytics)
      */
-    public static function stationViews(string $stationSlug)
+    public static function stationViews($stationId)
     {
         return AnalyticsEvent::where('event_type', 'pageview')
             ->where('page_type', 'station')
-            ->where('reference_id', $stationSlug)
+            ->where('reference_id', $stationId)
             ->count();
     }
 
@@ -138,12 +139,13 @@ class AnalyticsService
 
     /**
      * Get station pageviews by date range
+     * @param int|string $stationId Station ID (reference_id in analytics)
      */
-    public static function stationViewsByDateRange(string $stationSlug, $startDate = null, $endDate = null)
+    public static function stationViewsByDateRange($stationId, $startDate = null, $endDate = null)
     {
         $query = AnalyticsEvent::where('event_type', 'pageview')
             ->where('page_type', 'station')
-            ->where('reference_id', $stationSlug);
+            ->where('reference_id', $stationId);
 
         if ($startDate) {
             $query->where('created_at', '>=', $startDate);

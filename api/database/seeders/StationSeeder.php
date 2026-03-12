@@ -103,6 +103,16 @@ class StationSeeder extends Seeder
             'accent_color' => '#0891B2',
         ],
         [
+            'slug' => 'langkawi-fm',
+            'title' => 'Langkawi FM',
+            'description' => 'Langkawi FM menyiarkan rancangan untuk komuniti di Langkawi dan sekitarnya.',
+            'frequency' => 'Pelbagai Frekuensi',
+            'rtmklik_player_url' => 'https://rtmklik-radio-player.s3.ap-southeast-1.amazonaws.com/index.html?radio=LANGKAWI_FM',
+            'facebook_url' => 'https://facebook.com/RTMMalaysia',
+            'instagram_url' => 'https://instagram.com/RTMMalaysia',
+            'accent_color' => '#059669',
+        ],
+        [
             'slug' => 'selangor-fm',
             'title' => 'Selangor FM',
             'description' => 'Selangor FM menyiarkan rancangan untuk komuniti di Selangor.',
@@ -131,6 +141,16 @@ class StationSeeder extends Seeder
             'facebook_url' => 'https://facebook.com/RTMMalaysia',
             'instagram_url' => 'https://instagram.com/RTMMalaysia',
             'accent_color' => '#DC2626',
+        ],
+        [
+            'slug' => 'mutiara-fm',
+            'title' => 'Mutiara FM',
+            'description' => 'Mutiara FM adalah stesen radio RTM untuk masyarakat Pulau Pinang yang menyiarkan rancangan hiburan, berita, dan budaya tempatan.',
+            'frequency' => '99.8 FM',
+            'rtmklik_player_url' => 'https://rtmklik-radio-player.s3.ap-southeast-1.amazonaws.com/index.html?radio=MUTIARA_FM',
+            'facebook_url' => 'https://facebook.com/RTMMalaysia',
+            'instagram_url' => 'https://instagram.com/RTMMalaysia',
+            'accent_color' => '#0891B2',
         ],
         [
             'slug' => 'terengganu-fm',
