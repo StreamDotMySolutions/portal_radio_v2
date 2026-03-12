@@ -715,7 +715,7 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
                 >{msg.username}</button>
                 <span style={{ color: 'var(--color-muted)', fontSize: '0.75rem' }}>{msg.created_at}</span>
               </div>
-              <div style={{ fontSize: '0.9rem', marginTop: '2px' }}>{msg.message}</div>
+              <div style={{ fontSize: '0.9rem', marginTop: '2px', wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap' }}>{msg.message}</div>
             </div>
           </div>
         ))}
