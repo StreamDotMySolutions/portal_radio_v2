@@ -364,19 +364,26 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
         if (afterId) {
           setMessages(prev => [...prev, ...newMsgs]);
           if (!isAtBottomRef.current) setHasNewMessages(true);
+          // Auto-scroll only for new messages
+          if (isAtBottomRef.current) setTimeout(scrollToBottom, 0);
         } else {
           setMessages(newMsgs);
+          // Don't auto-scroll on initial load
         }
         setLastId(newMsgs[newMsgs.length - 1].id);
       }
     } catch {}
-  }, []);
+  }, [scrollToBottom]);
 
   useEffect(() => { loadMessages(null); }, [loadMessages]);
 
   useEffect(() => {
-    if (isAtBottomRef.current) scrollToBottom();
-  }, [messages, scrollToBottom]);
+    // Scroll to bottom only when user sends a message (messages.length changes and we're at bottom)
+    if (isAtBottomRef.current && messages.length > 0) {
+      // Only scroll if the last message was just added (by checking sending state)
+      if (!sending) scrollToBottom();
+    }
+  }, [messages, scrollToBottom, sending]);
 
   useEffect(() => {
     intervalRef.current = setInterval(() => loadMessages(lastId), 3000);
