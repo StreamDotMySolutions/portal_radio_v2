@@ -890,9 +890,17 @@ export default DataTable
 
 Follow the modal patterns from existing CRUD sections (Programmes, Banners, Stations). Key points:
 - Create: `store.emptyData()` on show, POST on submit
-- Edit: GET to populate, PUT with `_method` on submit
+- Edit: GET to populate, **POST with `_method=PUT` override on submit** (for FormData compatibility)
+  ```javascript
+  const formData = new FormData()
+  formData.append('_method', 'PUT')  // Add this first!
+  formData.append('field1', form.field1)
+  if (file) formData.append('file', file)
+  axios({ method: 'post', url: `${apiBase}/resource/${id}`, data: formData })
+  ```
 - Delete: Confirmation checkbox required
 - Show: Display-only view
+- **Route definition**: Keep as `Route::put()` — Laravel converts `_method=PUT` internally
 
 **6. Create HtmlForm Component**
 
