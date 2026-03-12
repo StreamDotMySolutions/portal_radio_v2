@@ -210,7 +210,7 @@ const DataTable = () => {
                                 />
                             </td>
                             <td className='text-end text-nowrap'>
-                                <ButtonGroup size='sm'>
+                                <ButtonGroup size='sm' style={{ gap: '0' }}>
                                     <ShowModal id={item.id} />
                                     <EditModal id={item.id} />
                                     <DeleteModal id={item.id} title={item.title} />
