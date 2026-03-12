@@ -26,6 +26,7 @@ const DataTable = () => {
     const [sortBy, setSortBy] = useState(null)
     const [sortDir, setSortDir] = useState('desc')
     const [query, setQuery] = useState(search)
+    const [perPage, setPerPage] = useState(15)
     const [items, setItems] = useState([])
 
     const handleToggleActive = (itemId) => {
@@ -77,6 +78,7 @@ const DataTable = () => {
         const params = new URLSearchParams()
         if (search) params.set('search', search)
         if (categoryFilter) params.set('category', categoryFilter)
+        params.set('per_page', perPage)
         const qs = params.toString()
         return qs ? `${baseUrl}?${qs}` : baseUrl
     }
@@ -87,7 +89,7 @@ const DataTable = () => {
         axios({ method: 'get', url: effectiveUrl })
             .then((response) => setItems(response.data.stations))
             .catch((error) => console.warn(error))
-    }, [refreshKey, paginatorUrl, search, categoryFilter])
+    }, [refreshKey, paginatorUrl, search, categoryFilter, perPage])
 
     const paginatorAdapter = {
         setValue: (key, value) => {
@@ -214,7 +216,7 @@ const DataTable = () => {
                 </tbody>
             </Table>
 
-            <PaginatorLink store={paginatorAdapter} items={items} />
+            <PaginatorLink store={paginatorAdapter} items={items} perPage={perPage} onPerPageChange={setPerPage} />
         </div>
     )
 }
