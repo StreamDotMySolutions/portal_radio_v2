@@ -243,10 +243,10 @@ const HtmlForm = ({
                             Thumbnail <small className='text-muted'>(card grid, square/portrait)</small>
                         </Form.Label>
                         {thumbnailFilename && !replacingThumbnail ? (
-                            <div style={{ position: 'relative', display: 'inline-block', marginBottom: '1rem' }}>
+                            <div style={{ position: 'relative', display: 'block', marginBottom: '1rem', width: '100%' }}>
                                 <Figure className='mb-0'>
                                     <Figure.Image
-                                        style={{ maxWidth: '200px', maxHeight: '200px', display: 'block' }}
+                                        style={{ maxWidth: '100%', maxHeight: '200px', display: 'block' }}
                                         src={`${serverUrl}/storage/stations/${thumbnailFilename}`}
                                     />
                                 </Figure>
