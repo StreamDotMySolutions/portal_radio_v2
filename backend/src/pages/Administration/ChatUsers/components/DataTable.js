@@ -54,6 +54,12 @@ const DataTable = () => {
             .catch((error) => console.warn(error))
     }
 
+    const handleVerify = (id) => {
+        axios({ method: 'patch', url: `${apiBase}/chat-users/${id}/verify` })
+            .then(() => setRefresh())
+            .catch((error) => console.warn(error))
+    }
+
     return (
         <div>
             {/* Toolbar */}
@@ -119,6 +125,16 @@ const DataTable = () => {
                             <td className='text-end text-nowrap'>
                                 <ShowModal id={item.id} />{' '}
                                 <EditModal id={item.id} />{' '}
+                                {!item.email_verified_at && (
+                                    <Button
+                                        size='sm'
+                                        variant='outline-info'
+                                        onClick={() => handleVerify(item.id)}
+                                        title='Verify Email'
+                                    >
+                                        <FontAwesomeIcon icon={['fas', 'check']} />
+                                    </Button>
+                                )}{' '}
                                 <Button
                                     size='sm'
                                     variant={item.is_banned ? 'outline-success' : 'outline-warning'}

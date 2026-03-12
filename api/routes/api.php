@@ -244,6 +244,7 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::put('/chat-users/{chatUser}', [ChatUserController::class, 'update']);
     Route::delete('/chat-users/{chatUser}', [ChatUserController::class, 'delete']);
     Route::patch('/chat-users/{chatUser}/toggle-ban', [ChatUserController::class, 'toggleBan']);
+    Route::patch('/chat-users/{chatUser}/verify', [ChatUserController::class, 'verify']);
 });
 
 // Manage Chat Messages

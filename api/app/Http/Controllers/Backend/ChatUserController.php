@@ -45,4 +45,16 @@ class ChatUserController extends Controller
         $status = $chatUser->is_banned ? 'banned' : 'unbanned';
         return response()->json(['message' => "Chat user successfully {$status}"]);
     }
+
+    public function verify(ChatUser $chatUser)
+    {
+        if ($chatUser->isVerified()) {
+            return response()->json(['message' => 'User akaun sudah diverifikasi.']);
+        }
+
+        $chatUser->email_verified_at = now();
+        $chatUser->save();
+
+        return response()->json(['message' => 'Chat user akaun berjaya diverifikasi.']);
+    }
 }
