@@ -750,6 +750,12 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
         }}>
           <input type="text" placeholder={user ? 'Taip mesej...' : 'Sila log masuk untuk sembang'}
             readOnly={!user} value={input} onChange={e => setInput(e.target.value)} maxLength={500}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey && user && !sending) {
+                e.preventDefault();
+                handleSend(e);
+              }
+            }}
             style={{
               flexGrow: 1, background: 'var(--color-bg)', border: '1px solid rgba(63, 63, 143, 0.3)',
               borderRadius: '8px', padding: '8px 12px', color: 'var(--color-text)',
