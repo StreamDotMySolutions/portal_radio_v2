@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { chatGetPublicProfile, getAvatarUrl } from '../utils/chatApi';
 
-export default function ChatPublicProfile({ userId, onClose, fullHeight = false }) {
+export default function ChatPublicProfile({ userId, onClose, fullHeight = false, isModal = false }) {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -27,27 +27,29 @@ export default function ChatPublicProfile({ userId, onClose, fullHeight = false 
   }, [userId]);
 
   if (loading) {
-    return (
+    const loadingContent = (
       <div style={{
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        height: '100%', backgroundColor: '#000', borderRadius: '12px',
+        height: '100%', backgroundColor: isModal ? 'transparent' : '#000', borderRadius: '12px',
       }}>
         <div style={{ color: 'var(--color-muted)', fontSize: '0.9rem' }}>Memuatkan profil...</div>
       </div>
     );
+    return isModal ? <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>{loadingContent}</div> : loadingContent;
   }
 
   if (error || !profile) {
-    return (
+    const errorContent = (
       <div style={{
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        height: '100%', backgroundColor: '#000', borderRadius: '12px', padding: '2rem',
+        height: '100%', backgroundColor: isModal ? 'transparent' : '#000', borderRadius: '12px', padding: '2rem',
       }}>
         <div style={{ color: 'var(--color-muted)', fontSize: '0.9rem', textAlign: 'center' }}>
           Profil tidak dijumpai
         </div>
       </div>
     );
+    return isModal ? <div style={{ position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>{errorContent}</div> : errorContent;
   }
 
   // Determine if user has any social media URLs
@@ -60,10 +62,8 @@ export default function ChatPublicProfile({ userId, onClose, fullHeight = false 
     profile.youtube_url && { label: 'YouTube', url: profile.youtube_url, icon: 'youtube' },
   ].filter(Boolean);
 
-  return (
-    <div style={{
-      display: 'flex', flexDirection: 'column', height: fullHeight ? '100%' : undefined, flex: fullHeight ? 1 : undefined, backgroundColor: '#000', borderRadius: '12px',
-    }}>
+  const profileContent = (
+    <>
       {/* Header with back button */}
       <div style={{
         display: 'flex', alignItems: 'center', gap: '12px', padding: '16px',
@@ -71,13 +71,13 @@ export default function ChatPublicProfile({ userId, onClose, fullHeight = false 
       }}>
         <button
           onClick={onClose}
-          title="Kembali"
+          title={isModal ? 'Tutup' : 'Kembali'}
           style={{
-            background: 'none', border: 'none', color: 'var(--color-text)', cursor: 'pointer',
-            fontSize: '1.2rem', padding: '0', display: 'flex', alignItems: 'center',
+            background: 'none', border: 'none', color: isModal ? 'var(--color-muted)' : 'var(--color-text)', cursor: 'pointer',
+            fontSize: isModal ? '1.5rem' : '1.2rem', padding: isModal ? '4px 8px' : '0', lineHeight: isModal ? 1 : 'inherit',
           }}
         >
-          ←
+          {isModal ? '×' : '←'}
         </button>
 
         {/* Avatar and username */}
@@ -134,6 +134,20 @@ export default function ChatPublicProfile({ userId, onClose, fullHeight = false 
             }}
           >
             Media Sosial
+          </button>
+        )}
+        {profile.avatar_filename && (
+          <button
+            onClick={() => setActiveTab('foto')}
+            style={{
+              flex: 1, background: 'none', border: 'none', padding: '12px 16px',
+              color: activeTab === 'foto' ? 'var(--accent-color, #6C63FF)' : 'var(--color-muted)',
+              fontSize: '0.9rem', fontWeight: activeTab === 'foto' ? 600 : 400,
+              borderBottom: activeTab === 'foto' ? '2px solid var(--accent-color, #6C63FF)' : '2px solid transparent',
+              cursor: 'pointer',
+            }}
+          >
+            Foto
           </button>
         )}
       </div>
@@ -236,7 +250,57 @@ export default function ChatPublicProfile({ userId, onClose, fullHeight = false 
             ))}
           </div>
         )}
+
+        {activeTab === 'foto' && profile.avatar_filename && (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '16px', padding: '1rem 0' }}>
+            <img
+              src={getAvatarUrl(profile.avatar_filename)}
+              alt={profile.username}
+              style={{
+                width: '180px', height: '180px', borderRadius: '50%', objectFit: 'cover',
+                border: '3px solid rgba(63, 63, 143, 0.3)', boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+              }}
+            />
+            <div style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-text)' }}>
+                {profile.username}
+              </div>
+              {profile.full_name && (
+                <div style={{ fontSize: '0.85rem', color: 'var(--color-muted)', marginTop: '4px' }}>
+                  {profile.full_name}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
+    </>
+  );
+
+  // Modal version
+  if (isModal) {
+    return (
+      <div style={{
+        position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 9999,
+        display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem',
+      }}>
+        <div style={{
+          background: 'var(--color-surface)', borderRadius: '12px', overflow: 'hidden',
+          width: '100%', maxWidth: '500px', maxHeight: '90vh', display: 'flex', flexDirection: 'column',
+          boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+        }}>
+          {profileContent}
+        </div>
+      </div>
+    );
+  }
+
+  // Non-modal version (displays in video player area)
+  return (
+    <div style={{
+      display: 'flex', flexDirection: 'column', height: fullHeight ? '100%' : undefined, flex: fullHeight ? 1 : undefined, backgroundColor: '#000', borderRadius: '12px',
+    }}>
+      {profileContent}
     </div>
   );
 }

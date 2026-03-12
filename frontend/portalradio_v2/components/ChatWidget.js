@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { getChatUser, setChatUser, chatRegister, chatLogin, chatForgotPassword, fetchMessages, sendMessage, getAvatarUrl } from '../utils/chatApi';
+import ChatProfileModal from './ChatProfileModal';
+import ChatPublicProfile from './ChatPublicProfile';
 
 /**
  * ChatAuthForm — renders login or register form. Used by parents to show in the video area.
@@ -322,6 +324,8 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
   const [forgotSent, setForgotSent] = useState(false);
   const [forgotLoading, setForgotLoading] = useState(false);
   const [hasNewMessages, setHasNewMessages] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [viewingPublicProfileId, setViewingPublicProfileId] = useState(null);
 
   const isControlled = controlledUser !== undefined;
   const user = isControlled ? controlledUser : internalUser;
@@ -475,9 +479,8 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
   };
 
   const handleUsernameClick = (chatUserId) => {
-    if (onProfileView) {
-      onProfileView(chatUserId);
-    }
+    // Show public profile as modal
+    setViewingPublicProfileId(chatUserId);
   };
 
   const inlineInputStyle = {
@@ -513,11 +516,11 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
             <span style={{ color: user.color, fontWeight: 700, fontSize: '0.85rem' }}>{user.username}</span>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <a href="/chat/profile" title="Profil" style={{ color: 'var(--color-muted)', display: 'flex', alignItems: 'center' }}>
+            <button onClick={() => setShowProfileModal(true)} title="Profil" style={{ background: 'none', border: 'none', color: 'var(--color-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
               <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
                 <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
               </svg>
-            </a>
+            </button>
             <button onClick={handleLogout} style={{
               background: 'none', border: 'none', color: 'var(--color-muted)',
               cursor: 'pointer', fontSize: '0.8rem', textDecoration: 'underline',
@@ -764,6 +767,14 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
 
       {error && view === 'chat' && (
         <div style={{ padding: '0 16px 8px', color: '#EF4444', fontSize: '0.8rem' }}>{error}</div>
+      )}
+
+      {showProfileModal && (
+        <ChatProfileModal user={user} onClose={() => setShowProfileModal(false)} onUserChange={isControlled ? onUserChange : setInternalUser} />
+      )}
+
+      {viewingPublicProfileId && (
+        <ChatPublicProfile userId={viewingPublicProfileId} onClose={() => setViewingPublicProfileId(null)} isModal={true} />
       )}
     </div>
   );

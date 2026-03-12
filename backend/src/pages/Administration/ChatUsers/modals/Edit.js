@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Modal } from 'react-bootstrap'
+import { Button, Modal, Toast, ToastContainer } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
@@ -16,6 +16,8 @@ export default function EditModal({ id }) {
     const [isLoading, setIsLoading] = useState(false)
     const [form, setForm] = useState(emptyForm)
     const [errors, setErrors] = useState(null)
+    const [showToast, setShowToast] = useState(false)
+    const [toastMessage, setToastMessage] = useState('')
 
     const onChange = (field) => (value) => setForm((prev) => ({ ...prev, [field]: value }))
 
@@ -53,6 +55,8 @@ export default function EditModal({ id }) {
 
         axios({ method: 'post', url: `${apiBase}/chat-users/${id}`, data: formData })
             .then(() => {
+                setToastMessage(`Chat user "${form.username}" berjaya dikemaskini.`)
+                setShowToast(true)
                 setRefresh()
                 handleClose()
             })
@@ -93,6 +97,14 @@ export default function EditModal({ id }) {
                     </Button>
                 </Modal.Footer>
             </Modal>
+
+            <ToastContainer position='top-end' className='p-3' style={{ position: 'fixed', zIndex: 9999 }}>
+                <Toast show={showToast} onClose={() => setShowToast(false)} delay={3000} autohide>
+                    <Toast.Body className='bg-success text-white'>
+                        {toastMessage}
+                    </Toast.Body>
+                </Toast>
+            </ToastContainer>
         </>
     )
 }
