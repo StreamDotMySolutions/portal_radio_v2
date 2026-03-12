@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\AnalyticsEvent;
+use App\Models\Station;
 use Illuminate\Support\Facades\DB;
 
 class AnalyticsService
@@ -118,13 +119,24 @@ class AnalyticsService
      */
     public static function allStationViews(): array
     {
-        return AnalyticsEvent::where('event_type', 'pageview')
+        $hitsByStationId = AnalyticsEvent::where('event_type', 'pageview')
             ->where('page_type', 'station')
             ->whereNotNull('reference_id')
             ->select('reference_id', DB::raw('count(*) as views'))
             ->groupBy('reference_id')
             ->pluck('views', 'reference_id')
             ->toArray();
+
+        // Map numeric station IDs to slugs for frontend consumption
+        $hitsBySlug = [];
+        foreach ($hitsByStationId as $stationId => $views) {
+            $station = Station::find($stationId);
+            if ($station) {
+                $hitsBySlug[$station->slug] = $views;
+            }
+        }
+
+        return $hitsBySlug;
     }
 
     /**
