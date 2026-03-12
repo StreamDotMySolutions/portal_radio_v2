@@ -42,6 +42,8 @@ export default function EditModal({ id }) {
         axios({ method: 'get', url: `${apiBase}/stations/${id}` })
             .then((response) => {
                 const station = response.data.station
+                console.log('Station data loaded:', station)
+                console.log('rtmklik_player_url:', station.rtmklik_player_url)
                 setForm({
                     title: station.title || '',
                     description: station.description || '',
@@ -74,6 +76,7 @@ export default function EditModal({ id }) {
     const handleSubmitClick = () => {
         setIsLoading(true)
         const formData = new FormData()
+        formData.append('_method', 'PUT')
         if (form.title) formData.append('title', form.title)
         if (form.description) formData.append('description', form.description)
         if (form.frequency) formData.append('frequency', form.frequency)
@@ -89,14 +92,20 @@ export default function EditModal({ id }) {
         if (thumbnailFile) formData.append('thumbnail', thumbnailFile)
         if (bannerFile) formData.append('banner', bannerFile)
 
-        axios({ method: 'put', url: `${apiBase}/stations/${id}`, data: formData })
+        console.log('Form submitted with rtmklikPlayerUrl:', form.rtmklikPlayerUrl)
+        console.log('Submitting to:', `${apiBase}/stations/${id}`)
+
+        axios({ method: 'post', url: `${apiBase}/stations/${id}`, data: formData })
             .then(() => {
+                console.log('Submit successful')
                 setRefresh()
                 setTimeout(() => handleClose(), 500)
             })
             .catch((error) => {
+                console.error('Submit error:', error.response?.status, error.response?.data)
                 if (error.response?.status === 422) {
                     setErrors(error.response.data.errors)
+                    console.error('Validation errors:', error.response.data.errors)
                 }
             })
             .finally(() => setIsLoading(false))
