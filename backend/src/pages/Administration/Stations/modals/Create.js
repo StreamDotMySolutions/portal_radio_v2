@@ -18,7 +18,7 @@ const emptyForm = {
     youtubeUrl: '',
     tiktokUrl: '',
     accentColor: '',
-    active: '',
+    active: 1,
 }
 
 export default function CreateModal() {
