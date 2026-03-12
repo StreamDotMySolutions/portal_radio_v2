@@ -46,8 +46,9 @@ export default function NavbarMobile() {
   return (
     <nav className={`navbar navbar-expand-lg navbar-dark navbar-portal${scrolled ? ' scrolled' : ''}`} style={{ background: '#141438' }}>
       <div className="container-fluid px-3 py-0">
-        <a className="navbar-brand" href="/">
+        <a className="navbar-brand d-flex align-items-center gap-2" href="/">
           <img src="/logo-rtm-transparent.png" alt="RTM" height={scrolled ? 30 : 40} style={{ objectFit: 'contain', transition: 'height 0.3s ease' }} />
+          <img src="/jabatan-penyiaran.svg" alt="Jabatan Penyiaran Malaysia" height={scrolled ? 18 : 24} style={{ transition: 'height 0.3s ease' }} />
         </a>
         <button
           className="navbar-toggler border-0 p-1"
