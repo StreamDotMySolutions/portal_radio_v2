@@ -25,6 +25,17 @@ class ChatUserController extends Controller
             'username' => ['sometimes', 'string', 'min:2', 'max:30', 'regex:/^[a-zA-Z0-9_]+$/', 'unique:chat_users,username,' . $chatUser->id],
             'email' => ['sometimes', 'email', 'unique:chat_users,email,' . $chatUser->id],
             'password' => ['nullable', 'string', 'min:6'],
+            'full_name' => ['sometimes', 'string', 'max:100'],
+            'gender' => ['sometimes', 'in:lelaki,perempuan'],
+            'location' => ['sometimes', 'string', 'max:100'],
+            'hobby' => ['sometimes', 'string', 'max:255'],
+            'about_me' => ['sometimes', 'string'],
+            'avatar' => ['sometimes', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+            'facebook_url' => ['sometimes', 'string', 'max:255'],
+            'instagram_url' => ['sometimes', 'string', 'max:255'],
+            'twitter_url' => ['sometimes', 'string', 'max:255'],
+            'tiktok_url' => ['sometimes', 'string', 'max:255'],
+            'youtube_url' => ['sometimes', 'string', 'max:255'],
         ]);
 
         ChatUserService::update($request, $chatUser);

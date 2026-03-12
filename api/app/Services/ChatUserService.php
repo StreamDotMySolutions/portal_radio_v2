@@ -50,6 +50,53 @@ class ChatUserService
             $chatUser->password = Hash::make($request->input('password'));
         }
 
+        if ($request->filled('full_name')) {
+            $chatUser->full_name = $request->input('full_name');
+        }
+
+        if ($request->filled('gender')) {
+            $chatUser->gender = $request->input('gender');
+        }
+
+        if ($request->filled('location')) {
+            $chatUser->location = $request->input('location');
+        }
+
+        if ($request->filled('hobby')) {
+            $chatUser->hobby = $request->input('hobby');
+        }
+
+        if ($request->filled('about_me')) {
+            $chatUser->about_me = $request->input('about_me');
+        }
+
+        if ($request->hasFile('avatar')) {
+            if ($chatUser->avatar_filename) {
+                CommonService::handleDeleteFile($chatUser->avatar_filename, 'chat-avatars');
+            }
+            $chatUser->avatar_filename = CommonService::handleStoreFile($request->file('avatar'), 'chat-avatars');
+        }
+
+        if ($request->filled('facebook_url')) {
+            $chatUser->facebook_url = $request->input('facebook_url');
+        }
+
+        if ($request->filled('instagram_url')) {
+            $chatUser->instagram_url = $request->input('instagram_url');
+        }
+
+        if ($request->filled('twitter_url')) {
+            $chatUser->twitter_url = $request->input('twitter_url');
+        }
+
+        if ($request->filled('tiktok_url')) {
+            $chatUser->tiktok_url = $request->input('tiktok_url');
+        }
+
+        if ($request->filled('youtube_url')) {
+            $chatUser->youtube_url = $request->input('youtube_url');
+        }
+
         $chatUser->save();
     }
 
