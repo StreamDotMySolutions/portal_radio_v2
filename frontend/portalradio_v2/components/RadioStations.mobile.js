@@ -204,7 +204,7 @@ export default function RadioStationsMobile() {
                       color: 'var(--color-muted)',
                     }}>
                       <i className="bi bi-headphones" style={{ fontSize: '0.75rem' }}></i>
-                      <span>{(listenerCount / 1000).toFixed(1)}K</span>
+                      <span>{listenerCount.toLocaleString()}</span>
                     </div>
                   </div>
                 );

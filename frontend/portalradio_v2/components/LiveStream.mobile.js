@@ -17,16 +17,21 @@ export default function LiveStreamMobile() {
   const [chatOpen, setChatOpen] = useState(false);
   const [streamUrl, setStreamUrl] = useState(null);
   const [isOffline, setIsOffline] = useState(false);
+  const [livestreamPlays, setLivestreamPlays] = useState(0);
   const videoRef = useRef(null);
   const hlsRef = useRef(null);
 
-  // Fetch stream URL from API (runs once)
+  // Fetch stream URL and play count from API (runs once)
   useEffect(() => {
     const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/frontend';
     fetch(`${API_URL}/livestream-url`)
         .then(r => r.json())
         .then(d => setStreamUrl(d.livestream_url || null))
         .catch(() => setStreamUrl(null));
+    fetch(`${API_URL}/livestream-hits`)
+        .then(r => r.json())
+        .then(d => setLivestreamPlays(d.plays || 0))
+        .catch(() => {});
   }, []);
 
   // HLS setup with offline detection and play tracking
@@ -175,7 +180,7 @@ export default function LiveStreamMobile() {
           borderRadius: '0 0 8px 8px',
           borderTop: 'none',
         }}>
-          <span className="badge-live" style={{ fontSize: '0.75rem', padding: '4px 8px' }}>LIVE</span>
+          <span className={isOffline ? 'badge-offline' : 'badge-live'} style={{ fontSize: '0.75rem', padding: '4px 8px' }}>{isOffline ? 'OFFLINE' : 'LIVE'}</span>
           <span style={{
             marginLeft: 'auto',
             color: 'var(--color-muted)',
@@ -187,7 +192,7 @@ export default function LiveStreamMobile() {
             <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
               <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-.828.34-1.752.96-2.55.425-.548.946-1.01 1.554-1.337A5 5 0 0 1 6.936 9.28M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"/>
             </svg>
-            1.2K
+            {livestreamPlays.toLocaleString()}
           </span>
         </div>
 

@@ -32,7 +32,7 @@ export default function HeroMobile() {
   }
 
   return (
-    <section style={{ minHeight: '40vh', paddingTop: 0 }}>
+    <section style={{ minHeight: '40vh', paddingTop: 0, marginTop: '100px' }}>
       <div
         id="heroCarousel"
         className="carousel slide"
