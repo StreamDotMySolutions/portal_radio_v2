@@ -630,6 +630,49 @@ npm start
 
 The RTM website will be available at `http://localhost:3002`
 
+## Environment Configuration
+
+### Development vs Production Setup
+
+The application uses a two-tier environment configuration system:
+
+#### `.env` File (Committed to Repository)
+Contains **production configuration** and serves as the source of truth for defaults:
+```env
+# Production URLs (actual domain)
+NEXT_PUBLIC_SITE_URL=https://radio.rtm.gov.my
+NEXT_PUBLIC_SERVER_URL=https://radio.rtm.gov.my
+NEXT_PUBLIC_API_URL=https://radio.rtm.gov.my/api/frontend
+```
+
+**Important:** This file is committed to git and should contain production values. All developers use this as the template.
+
+#### `.env.local` File (Ignored by Git)
+**Development override** file for local testing. Create this file in your local development environment:
+```env
+# Development URLs (local testing)
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+NEXT_PUBLIC_SERVER_URL=http://localhost:8000
+NEXT_PUBLIC_API_URL=http://localhost:8000/api/frontend
+```
+
+**Important:** This file is in `.gitignore` and must NOT be committed. Each developer maintains their own copy with their preferred settings.
+
+#### `.env.example` File (Committed to Repository)
+Template file for new developers. Copy this to `.env.local` to get started:
+```bash
+cp .env.example .env.local
+# Then edit .env.local with your local values
+```
+
+### Environment Configuration Best Practices
+
+1. **Never commit `.env.local`** - It should be in `.gitignore`
+2. **Keep `.env` with production values** - It's the default/fallback
+3. **Use `.env.local` for development** - Override production values for local testing
+4. **Production servers** - If `.env.local` exists on production, it will override `.env` (be aware of this when deploying)
+5. **All files use NEXT_PUBLIC_ prefix** - These variables are safe to expose to the browser
+
 ## Production Deployment
 
 ### Building for Production
@@ -649,13 +692,100 @@ php artisan view:cache
 cd backend
 npm run build
 
-# Frontend
-cd ../frontend
+# Frontend (Next.js)
+cd ../frontend/portalradio_v2
 npm run build
+```
 
-# RTM Website
-cd ../rtm.gov.my
-npm run build
+### Automated Deployment Script
+
+The project includes a comprehensive deployment script (`api/deploy.sh`) that handles the complete deployment pipeline:
+
+#### Deploy Script Features
+
+The `deploy.sh` script automates the following steps:
+
+1. **Git Pull** - Fetch latest changes from main branch
+2. **Backend Build** - Build React admin dashboard (`backend/npm run build`)
+3. **Frontend Build** - Build Next.js public site (`frontend/portalradio_v2/npm run build`)
+4. **Database Migration** - Run Laravel migrations (`php artisan migrate`)
+5. **Process Restart** - Restart PM2 process (`pm2 restart portalradio_v2`)
+6. **Comprehensive Logging** - All output saved to `deploy.log`
+
+#### Running the Deploy Script
+
+```bash
+# From project root
+cd api
+bash deploy.sh
+```
+
+#### Deploy Script Output
+
+The script provides:
+- **Timestamped logging** - Start and end times for each deployment
+- **Success checkmarks** - ✓ indicators for completed steps
+- **Error handling** - Exits immediately on any step failure with error message
+- **Detailed logging** - All output appended to `deploy.log` for history and debugging
+- **Clear formatting** - Section headers and status messages for easy reading
+
+#### Example Deploy Log Output
+```
+=== Deploy started at Wed Mar 12 14:30:45 UTC 2026 ===
+Project root: /var/www/portalradio_v2
+
+--- Git pull ---
+✓ Git pull completed
+
+--- Backend: npm run build ---
+✓ Backend build completed
+
+--- Frontend: npm run build ---
+✓ Frontend build completed
+
+--- API: php artisan migrate ---
+✓ Database migration completed
+
+--- Restart PM2: portalradio_v2 ---
+✓ PM2 restart completed
+
+=== Deploy finished at Wed Mar 12 14:35:20 UTC 2026 ===
+```
+
+#### Checking Deploy Status
+
+View recent deployment logs:
+```bash
+# View last deployment
+tail deploy.log
+
+# View last N lines
+tail -20 deploy.log
+
+# Follow live deployment (if running)
+tail -f deploy.log
+
+# View full deployment history
+cat deploy.log
+```
+
+#### PM2 Configuration
+
+Before using the deploy script, ensure PM2 is configured:
+
+```bash
+# Start the application with PM2
+cd frontend/portalradio_v2
+pm2 start npm --name portalradio_v2 -- start
+
+# Or if using a PM2 ecosystem file
+pm2 start ecosystem.config.js
+
+# Check PM2 status
+pm2 status
+
+# View logs
+pm2 logs portalradio_v2
 ```
 
 ## Nginx Configuration & Production Setup
@@ -967,6 +1097,60 @@ When running in development mode:
 - **Spatie packages** for permissions and activity logging
 - **Video.js** for media playback
 - **React Quill** for rich text editing
+- **Chat User Profiles** with modal views and tabbed interfaces
+- **Real-time Analytics** tracking with session persistence
+- **HLS Streaming** support with audio player controls
+
+## Chat Features
+
+### User Profile Modals
+
+The application includes two types of profile viewing experiences:
+
+#### 1. Own Profile Modal (`ChatProfileModal.js`)
+Registered users can click a profile icon to view and edit their own profile in a beautiful modal:
+- **Maklumat Tab**: Personal information (full name, gender, location, hobby, about me)
+- **Sosial Tab**: Social media links (Facebook, Instagram, Twitter/X, TikTok, YouTube)
+- **Foto Tab**: Avatar upload and image management
+- Form validation and success/error toast notifications
+- Session-based authentication via bearer token
+
+**Features:**
+- Edit and save profile changes
+- Upload/replace avatar image
+- Add or remove social media links
+- Toast notifications for success/failure feedback
+- Responsive design for mobile and desktop
+
+#### 2. Public Profile Modal (`ChatPublicProfile.js`)
+Click any username in the chat to view another user's public profile:
+- **Profil Tab**: View public profile information (always visible)
+  - About me, location, hobby, gender, member since date
+  - User avatar and color-coded username
+- **Media Sosial Tab**: Social media links (only shown if user has any)
+- **Foto Tab**: Display user avatar (only shown if avatar exists)
+- Read-only view (no editing)
+- Automatic tab hiding when data is unavailable
+
+**Features:**
+- Modal overlay with backdrop on chat widget
+- Non-modal display in video player area (fullscreen replacement for HLS player)
+- Color-coded user indicators
+- Conditional tab rendering based on available data
+- Proper loading and error states
+
+**Implementation Details:**
+- Props: `userId`, `onClose`, `fullHeight` (optional), `isModal` (optional)
+- Fetches data via `chatGetPublicProfile(userId)` from utils/chatApi.js
+- API endpoint: `GET /api/frontend/chat/profile/{userId}`
+- Returns public-only data (no email shown)
+
+### Chat Integration
+Both profile components integrate seamlessly with the existing chat widget:
+- Usernames become clickable buttons to open profile modals
+- Profile viewing doesn't interrupt chat flow
+- Modal closes with ← back button or × close button
+- Supports both desktop and mobile layouts
 
 ## API Documentation
 
