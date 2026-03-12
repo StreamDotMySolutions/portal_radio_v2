@@ -6,25 +6,21 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Full-stack CMS and public portal for RTM (Radio Televisyen Malaysia).
-Two React applications communicate via a central Laravel REST API.
+Full-stack radio portal for RTM (Radio Televisyen Malaysia).
+Three applications: a Next.js public frontend, a React admin panel, and a Laravel REST API.
 
 ```
 MySQL (portalrtm)
        ↓
-api/          Laravel 10 — REST API server (port 8000)
+api/                     Laravel 10 — REST API server (port 8000)
        ↓
-backend/      React 18   — Admin panel  (port 3000, served at /backend)
-frontend/
-  ├── rtm.gov.my/   React 18   — Public site  (port 3000, served at /)
-  └── nextjs/       Next.js    — Alternative public site
+backend/                 React 18   — Admin panel (port 3000, served at /backend)
+frontend/portalradio_v2/ Next.js 15 — Public radio portal (port 3000, served at /)
 ```
 
 ---
 
 ## Environment Configuration
-
-Each application needs its own `.env` file. Use `.env.example` as a template.
 
 ### api/.env
 ```env
@@ -47,10 +43,11 @@ REACT_APP_SERVER_URL=http://localhost:8000
 REACT_APP_MODE=production
 ```
 
-### frontend/rtm.gov.my/.env
+### frontend/portalradio_v2/.env
 ```env
-REACT_APP_API_URL=http://localhost:8000/api/frontend
-REACT_APP_SERVER_URL=http://localhost:8000
+NEXT_PUBLIC_API_URL=http://localhost:8000/api/frontend
+NEXT_PUBLIC_SERVER_URL=http://localhost:8000
+NEXT_PUBLIC_SITE_URL=https://radio.rtm.gov.my
 ```
 
 ---
@@ -63,7 +60,7 @@ REACT_APP_SERVER_URL=http://localhost:8000
 
 **Run:** `php artisan serve` (port 8000)
 
-**Database:** MySQL — database name `portalrtm`
+**Database:** MySQL — `portalrtm`
 
 **Auth:** Laravel Sanctum (bearer tokens) + Spatie Permission (`role:admin`)
 
@@ -77,21 +74,23 @@ REACT_APP_SERVER_URL=http://localhost:8000
 
 **Services:** `app/Services/` — Business logic lives here, controllers stay thin
 - `ArticleService`, `ArticleContentService`, `ArticleDataService`
-- `ArticleAssetService`, `ArticleGalleryService`, `ArticlePosterService`, `ArticleSettingService`
+- `ArticleAssetService`, `ArticleGalleryService`, `ArticlePosterService`, `ArticlePdfService`
 - `UserService`, `RoleService`, `AccountService`, `CommonService`
+- `AnalyticsService`, `ChatService`, `ChatUserService`, `ComplaintService`
 
 **Models:** `app/Models/`
 - `Article` — Hierarchical nested set (`kalnoy/nestedset`), core content model
-- `ArticleData` — Sub-articles with ordering
-- `ArticleContent` — Rich text body
-- `ArticlePoster` — Featured image
-- `ArticleAsset` — Media file attachments
-- `ArticleGallery` — Image galleries
+- `ArticleData`, `ArticleContent`, `ArticlePoster`, `ArticleAsset`, `ArticleGallery`, `ArticlePdf` — Article sub-models
 - `ArticleSetting` — Per-article flags: `active`, `show_children`, `listing_type`
 - `Banner`, `Programme`, `Video` — Homepage content
+- `Station` — Radio station; route model binding uses `slug` field
 - `Asset` — File/document management (nested)
 - `Vod` — Video-on-Demand (nested)
 - `Directory` — Staff directory (nested)
+- `Setting` — Global key-value settings (e.g. livestream URL)
+- `ChatUser`, `ChatMessage` — Public chat (separate from admin `User`)
+- `Complaint` — Public complaint submissions (protected by reCAPTCHA)
+- `AnalyticsEvent` — Tracks pageview, search, station, and livestream hits
 - `User`, `Role`, `UserProfile` — Auth and RBAC
 
 **Key packages:**
@@ -100,7 +99,6 @@ REACT_APP_SERVER_URL=http://localhost:8000
 - `spatie/laravel-activitylog` ^4.7 — Audit trail
 - `spatie/laravel-backup` ^8.5 — Automated backups
 - `laravel/sanctum` ^3.2 — API token auth
-
 
 ---
 
@@ -112,19 +110,43 @@ REACT_APP_SERVER_URL=http://localhost:8000
 
 **Key dependencies:** react-router-dom (ProtectedRoute), zustand, bootstrap, react-quill, video.js, FontAwesome icons
 
-**Protected routes:** `/backend/administration/*` for all CRUD operations (articles, users, roles, banners, programmes, videos, assets, directories, VODs)
+**Protected routes:** `/backend/administration/*` for all CRUD operations
+
+**Conventions:**
+- Axios instance is in `src/libs/axios.js` — always import from there
+- All admin UI routes must be wrapped in `<ProtectedRoute>`
+- Bootstrap classes for styling; Zustand for cross-component state
 
 ---
 
-### 3. `frontend/rtm.gov.my/` — React 18 Public Site
+### 3. `frontend/portalradio_v2/` — Next.js 15 Public Radio Portal
 
-**Purpose:** Public-facing portal. No authentication required.
+**Purpose:** Public-facing radio portal. No authentication required.
 
-**Key dependencies:** react-router-dom, bootstrap, hls.js, react-helmet-async, react-slick, react-youtube, zustand
+**Run:** `npm run dev` (port 3000)
 
-**Routes:** Home (`/`), Content pages (`/contents/:id`), Listings (`/listings/:id`), Directory search (`/directories/search/:query`), Sitemap (`/sitemap`)
+**Tech:** Next.js 15 App Router, React 19, Bootstrap 5, hls.js
 
+**App routes** (`app/` directory):
+- `/` — Home (hero, live stream, stations, news, programmes)
+- `/station/[slug]` — Individual station detail page
+- `/senarai-radio` — Full station listing
+- `/search-result` — Station search results
+- `/chat` — Public chat room
+- `/chat/profile` — Chat user profile
+- `/chat/reset-password` — Password reset
+- `/hubungi` — Contact / complaint form
+- `/mengenai-kami` — About page
+- `/api/proxy-player` — Internal Next.js API route that proxies RTMKlik embed player HTML (injects `<base>` tag for asset resolution)
 
+**Utility modules** (`utils/`):
+- `stationsApi.js` — `fetchStations()`, `fetchStationBySlug()`, `fetchStationHits()`, `searchStations()`, `mapStation()` — all station data fetching; `mapStation()` normalises API response to frontend shape
+- `chatApi.js` — All chat API calls; chat user token stored as JSON in `localStorage` under key `chat_user`; authenticated requests use `X-Chat-Token` header
+- `analytics.js` — `trackPageview()`, `trackSearch()`, `trackDownload()` — fire-and-forget POSTs to `/api/frontend/track`
+
+**Note:** Source files use `.js` extension (not `.jsx`). Desktop and mobile layouts are split into separate component files (e.g. `Navbar.js` / `Navbar.mobile.js`) and toggled via the `Responsive` component.
+
+---
 
 ## Directory Structure
 
@@ -132,52 +154,42 @@ REACT_APP_SERVER_URL=http://localhost:8000
 ```
 api/
 ├── app/
-│   ├── Http/
-│   │   ├── Controllers/
-│   │   │   ├── Backend/     — Admin-facing endpoints
-│   │   │   └── Frontend/    — Public-facing endpoints
-│   │   └── Requests/        — Form request validation
-│   ├── Models/              — Eloquent models (Article, User, Banner, etc.)
-│   ├── Services/            — Business logic (ArticleService, UserService, etc.)
-│   └── Traits/              — Shared functionality
+│   ├── Http/Controllers/
+│   │   ├── Backend/     — Admin-facing endpoints
+│   │   └── Frontend/    — Public-facing endpoints
+│   ├── Models/          — Eloquent models
+│   ├── Services/        — Business logic
+│   └── Traits/          — Shared functionality
 ├── database/
-│   ├── migrations/          — Schema changes
-│   └── seeders/             — Database seeders
+│   ├── migrations/
+│   └── seeders/
 ├── routes/
-│   ├── api.php              — Admin endpoints (/api, requires auth + role:admin)
-│   └── frontend.php         — Public endpoints (/api/frontend, no auth)
-├── tests/
-│   ├── Feature/             — Integration tests (HTTP requests)
-│   └── Unit/                — Unit tests
-└── storage/                 — Uploaded files and logs
+│   ├── api.php          — Admin endpoints (/api, auth required)
+│   └── frontend.php     — Public endpoints (/api/frontend, no auth)
+├── tests/Feature/       — Integration tests
+└── storage/             — Uploaded files and logs
 ```
 
 ### Backend Admin (backend/)
 ```
 backend/src/
-├── components/              — Reusable UI (buttons, forms, tables, modals)
-├── layouts/                 — Page layout wrappers (AdminLayout, ProtectedRoute)
-├── pages/                   — Page components organized by feature
-│   ├── Administration/
-│   ├── Account/
-│   └── ...
-├── libs/                    — Utilities (axios.js, constants)
-└── index.js                 — Router and app entry point
+├── components/          — Reusable UI
+├── layouts/             — AdminLayout, ProtectedRoute
+├── pages/Administration/ — CRUD page components
+├── libs/                — axios.js, constants
+└── index.js             — Router entry point
 ```
 
-### RTM Public Site (frontend/rtm.gov.my/)
+### Public Frontend (frontend/portalradio_v2/)
 ```
-frontend/rtm.gov.my/src/
-├── components/              — Reusable UI (Menu, Footer, HlsPlayer, carousels)
-├── layouts/                 — Page layout wrappers
-│   ├── HomeLayout/
-│   ├── ContentLayout/
-│   ├── ListingLayout/
-│   ├── DirectoryLayout/
-│   └── SitemapLayout/
-├── pages/                   — Page components (Home, Content, Listings, Directory)
-├── libs/                    — Utilities and API client
-└── index.js                 — Router and app entry point
+frontend/portalradio_v2/
+├── app/                 — Next.js App Router pages and API routes
+├── components/          — Page-level components (split desktop/mobile)
+├── context/             — AccessibilityContext
+├── data/                — Static data (stations.js seed data)
+├── hooks/               — useIsMobile.js
+├── utils/               — stationsApi.js, chatApi.js, analytics.js
+└── public/              — Static assets
 ```
 
 ---
@@ -185,11 +197,6 @@ frontend/rtm.gov.my/src/
 ## Testing
 
 ### API (Pest + PHPUnit)
-- Test files live in `tests/Feature/` and `tests/Unit/`
-- Uses **Pest** testing framework (newer, more expressive than PHPUnit)
-- Check `api/Pest.php` for global test helpers and setup
-
-Run tests:
 ```bash
 cd api
 ./vendor/bin/pest                    # All tests
@@ -197,67 +204,40 @@ cd api
 ./vendor/bin/pest --filter=LoginTest # Specific test
 ```
 
-### React Apps (Jest)
-- Tests run via `npm test` in each app
-- Jest is configured through `react-scripts` (no need to configure manually)
-- Can write unit tests for components, utils, hooks, etc.
+### React / Next.js
+```bash
+npm test                     # Run Jest tests
+npm test -- --watch          # Watch mode
+npm test -- --coverage       # Coverage report
+```
 
 ---
 
 ## Database & Models
 
 ### Hierarchical Content (Nested Sets)
-Several models use **nested sets** for hierarchical tree structures via `kalnoy/nestedset`:
-- **Article** — Main content hierarchy (pages, sections, categories)
+Several models use `kalnoy/nestedset` for tree structures:
+- **Article** — Main content hierarchy
 - **Asset** — File/document management
 - **Vod** — Video-on-Demand categories
 - **Directory** — Staff/organizational hierarchy
 
-Key methods on nested set models:
-- `->children()` — Get direct child nodes
-- `->descendants()` — Get all descendants
-- `->ancestor()` — Get parent
-- `->ancestors()` — Get all parents up to root
-- `->createChild([ 'name' => 'Child' ])` — Add child node
-- Ordering via `getOrderedBy()` and `setOrderBy()` methods
-
-### Core Models
-- **Article** + **ArticleData** — Main content with sub-items
-- **ArticleContent** — Rich text body for articles
-- **ArticleSetting** — Per-article flags (`active`, `show_children`, `listing_type`)
-- **ArticlePoster** — Featured image
-- **ArticleAsset** — Media attachments
-- **ArticleGallery** — Image galleries
-- **Banner**, **Programme**, **Video** — Homepage content
-- **User**, **Role** — Auth (uses Spatie Permission for RBAC)
+Key nested set methods: `->children()`, `->descendants()`, `->ancestors()`, `->createChild([...])`
 
 ### Date Formats
-All models cast dates to `datetime:d/m/Y H:i` format via `$casts`:
-```php
-protected $casts = [
-    'created_at' => 'datetime:d/m/Y H:i',
-    'updated_at' => 'datetime:d/m/Y H:i',
-];
-```
+All models cast dates to `datetime:d/m/Y H:i` via `$casts`.
 
 ---
 
 ## Development Conventions
 
 ### API (Laravel)
-- Business logic goes in `app/Services/`, not controllers
-- Controllers call services and return JSON responses
-- Use Spatie Permission middleware on all admin routes: `['auth:sanctum', 'role:admin']`
-- Frontend public routes require no middleware — add to `routes/frontend.php`
-- File uploads stored in `storage/` (Laravel's default disk)
+- Business logic goes in `app/Services/`, controllers call services and return JSON
+- Use `['auth:sanctum', 'role:admin']` middleware on all admin routes
+- Public routes go in `routes/frontend.php` with no middleware
+- File uploads stored via Laravel's default disk (`storage/`)
 
-### Backend & RTM.GOV.MY (React)
-- Axios instances are configured in `src/libs/axios.js` — always import from there, never create new instances
-- All admin UI routes must be wrapped in `<ProtectedRoute>`
-- Use Bootstrap classes for styling — avoid inline styles
-- Zustand for cross-component state; local `useState` for form/UI state
-
-### DataTable Toolbar Layout (all CRUD sections)
+### DataTable Toolbar Layout (backend admin CRUD sections)
 
 Every DataTable toolbar must follow this three-section layout on one row:
 
@@ -267,7 +247,6 @@ Every DataTable toolbar must follow this three-section layout on one row:
 
 ```jsx
 <div className='d-flex align-items-center justify-content-between mb-3 gap-2'>
-    {/* Left: sort buttons */}
     <ButtonGroup>
         <Button variant={sortBy === 'name' ? 'primary' : 'outline-secondary'} onClick={() => handleToggleSort('name')}>
             <FontAwesomeIcon icon={['fas', 'a']} className='me-1' />
@@ -279,63 +258,31 @@ Every DataTable toolbar must follow this three-section layout on one row:
         </Button>
     </ButtonGroup>
 
-    {/* Middle: search */}
     <InputGroup style={{ maxWidth: '340px' }}>
         <InputGroup.Text><FontAwesomeIcon icon={['fas', 'magnifying-glass']} /></InputGroup.Text>
         <Form.Control placeholder='Search by name...' value={query} onChange={e => setQuery(e.target.value)} />
         {query && <Button variant='outline-secondary' onClick={() => setQuery('')}><FontAwesomeIcon icon={['fas', 'xmark']} /></Button>}
     </InputGroup>
 
-    {/* Right: create */}
     <CreateModal />
 </div>
 ```
 
 **Sort toggle logic** (`handleToggleSort(field)`):
-- Same field active: desc → asc → off (null); different field: switch to that field at desc
-- Active button uses `variant='primary'`; inactive uses `variant='outline-secondary'`
-- Show direction arrow icon only when that field is active
+- Same field: desc → asc → off (null); different field: activate at desc
+- Active: `variant='primary'`; inactive: `variant='outline-secondary'`
+- Show direction arrow only when that field is active
 
-**API sort support** (Laravel controller):
+**API sort support:**
 ```php
 if ($sortBy === 'name') {
     $query->orderBy('name', $sortDir);
 } elseif ($sortBy === 'date') {
     $query->orderBy('created_at', $sortDir);
 } else {
-    $query->defaultOrder(); // or no ordering for non-nested models
+    $query->defaultOrder(); // nested set default, or omit for flat models
 }
 ```
-
----
-
-## Adding a New Feature (Typical Workflow)
-
-### Example: Add a new "Press Release" management section to admin
-
-**1. API Setup (Laravel)**
-- Create model: `php artisan make:model PressRelease -m` (or add to migration manually)
-- Create controller: `php artisan make:controller Backend/PressReleaseController --resource`
-- Register routes in `routes/api.php` with `['auth:sanctum', 'role:admin']` middleware
-- Add service logic to `app/Services/PressReleaseService.php` (business logic stays out of controller)
-- Test with `./vendor/bin/pest tests/Feature/PressReleaseTest.php`
-
-**2. Backend UI Setup (React)**
-- Create page component: `backend/src/pages/Administration/PressReleases/`
-- Create form component: `backend/src/pages/Administration/PressReleases/PressReleaseForm.jsx`
-- Add route in `backend/src/index.js` wrapped in `<ProtectedRoute>`
-- Use Axios from `src/libs/axios.js` to call API endpoints
-- Add to navigation menu (if needed)
-
-**3. Frontend (Public Site)**
-- If press releases should be public, add endpoint to `routes/frontend.php`
-- Create page/layout in `frontend/rtm.gov.my/src/pages/` to display content
-- Add route to `frontend/rtm.gov.my/src/index.js`
-- Fetch from `REACT_APP_API_URL/frontend/press-releases`
-
-**4. Testing**
-- API: Test the controller/service with `./vendor/bin/pest`
-- React: Test UI with `npm test` in backend/ or frontend/rtm.gov.my/
 
 ---
 
@@ -344,52 +291,30 @@ if ($sortBy === 'name') {
 ### API (Laravel)
 ```bash
 cd api
-
-# Development
 php artisan serve                    # Start dev server on :8000
-
-# Database
 php artisan migrate                  # Run pending migrations
-php artisan migrate:fresh --seed     # Reset DB and run seeders
-php artisan db:seed                  # Run seeders only
+php artisan migrate:fresh --seed     # Reset DB and seed
 php artisan tinker                   # Interactive REPL
-
-# Testing & Quality
-./vendor/bin/pest                    # Run all tests (Pest)
-./vendor/bin/pest --filter=TestName  # Run specific test
-php artisan test                     # Alternative: run tests with artisan
-php artisan pint                     # Fix code style with Pint (Laravel's code formatter)
-
-# Utilities
+./vendor/bin/pest                    # Run all tests
+php artisan pint                     # Fix code style
 php artisan route:list               # List all routes
-php artisan storage:link             # Create storage symlink for public files
+php artisan storage:link             # Create storage symlink
 ```
 
-### Backend Admin Panel (React 18)
+### Backend Admin (React 18)
 ```bash
 cd backend
-
-# Development
-npm install      # Install dependencies
-npm start        # Dev server on :3000 (served at /backend)
-
-# Building & Testing
-npm run build    # Production build (outputs to build/)
-npm test         # Run Jest tests
-npm test -- --watch  # Run tests in watch mode
-npm test -- --coverage  # Run tests with coverage report
+npm install
+npm start        # Dev server on :3000
+npm run build    # Production build
+npm test
 ```
 
-### RTM Public Website (React 18)
+### Public Frontend (Next.js)
 ```bash
-cd frontend/rtm.gov.my
-
-# Development
-npm install      # Install dependencies
-npm start        # Dev server on :3000 (served at /)
-
-# Building & Testing
-npm run build    # Production build without source maps (GENERATE_SOURCEMAP=false)
-npm test         # Run Jest tests
-npm test -- --watch  # Run tests in watch mode
+cd frontend/portalradio_v2
+npm install
+npm run dev      # Dev server on :3000
+npm run build    # Production build
+npm start        # Start production server
 ```
