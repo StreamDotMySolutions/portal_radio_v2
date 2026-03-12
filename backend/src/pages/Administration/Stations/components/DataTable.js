@@ -210,9 +210,11 @@ const DataTable = () => {
                                 />
                             </td>
                             <td className='text-end text-nowrap'>
-                                <ShowModal id={item.id} />{' '}
-                                <EditModal id={item.id} />{' '}
-                                <DeleteModal id={item.id} title={item.title} />
+                                <ButtonGroup size='sm'>
+                                    <ShowModal id={item.id} />
+                                    <EditModal id={item.id} />
+                                    <DeleteModal id={item.id} title={item.title} />
+                                </ButtonGroup>
                             </td>
                         </tr>
                     ))}
