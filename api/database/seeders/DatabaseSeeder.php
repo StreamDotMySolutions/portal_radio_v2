@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
             BannerSeeder::class,
             StationSeeder::class,
             SettingSeeder::class,
+            ChatUserSeeder::class,
+            ChatMessageSeeder::class,
         ]);
     }
 }
