@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Modal } from 'react-bootstrap'
+import { Button, Modal, Toast, ToastContainer } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
@@ -31,6 +31,9 @@ export default function CreateModal() {
     const [thumbnailFile, setThumbnailFile] = useState(null)
     const [bannerFile, setBannerFile] = useState(null)
     const [errors, setErrors] = useState(null)
+    const [showToast, setShowToast] = useState(false)
+    const [toastMessage, setToastMessage] = useState('')
+    const [toastVariant, setToastVariant] = useState('success')
 
     const onChange = (field) => (value) => setForm((prev) => ({ ...prev, [field]: value }))
 
@@ -64,19 +67,42 @@ export default function CreateModal() {
 
         axios({ method: 'post', url: `${apiBase}/stations`, data: formData })
             .then(() => {
+                setToastVariant('success')
+                setToastMessage('Station created successfully')
+                setShowToast(true)
                 setRefresh()
-                handleClose()
+                setTimeout(() => handleClose(), 1500)
             })
             .catch((error) => {
                 if (error.response?.status === 422) {
                     setErrors(error.response.data.errors)
+                    setToastVariant('danger')
+                    setToastMessage('Please check the form for errors')
+                } else {
+                    setToastVariant('danger')
+                    setToastMessage('Failed to create station')
                 }
+                setShowToast(true)
             })
             .finally(() => setIsLoading(false))
     }
 
     return (
         <>
+            <ToastContainer position='top-end' className='p-3'>
+                <Toast
+                    onClose={() => setShowToast(false)}
+                    show={showToast}
+                    delay={3000}
+                    autohide
+                    bg={toastVariant}
+                >
+                    <Toast.Body className={toastVariant === 'danger' ? 'text-white' : ''}>
+                        {toastMessage}
+                    </Toast.Body>
+                </Toast>
+            </ToastContainer>
+
             <Button variant='primary' onClick={handleShowClick}>
                 <FontAwesomeIcon icon={['fas', 'circle-plus']} className='me-1' />Create
             </Button>
