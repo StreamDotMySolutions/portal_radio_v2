@@ -149,7 +149,7 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::get('/stations', [StationController::class, 'index']);
     Route::get('/stations/{station}', [StationController::class, 'show']);
     Route::post('/stations', [StationController::class, 'store']);
-    Route::put('/stations/{station}', [StationController::class, 'update']);
+    Route::post('/stations/{station}', [StationController::class, 'update']);
     Route::delete('/stations/{station}', [StationController::class, 'delete']);
     Route::patch('/stations/{station}/toggle', [StationController::class, 'toggle']);
     Route::get('/stations/ordering/{station}', [StationController::class, 'ordering']);
@@ -241,7 +241,7 @@ Route::post('/github-webhook', [GithubWebhookController::class, 'handle']);
 Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::get('/chat-users', [ChatUserController::class, 'index']);
     Route::get('/chat-users/{chatUser}', [ChatUserController::class, 'show']);
-    Route::put('/chat-users/{chatUser}', [ChatUserController::class, 'update']);
+    Route::post('/chat-users/{chatUser}', [ChatUserController::class, 'update']);
     Route::delete('/chat-users/{chatUser}', [ChatUserController::class, 'delete']);
     Route::patch('/chat-users/{chatUser}/toggle-ban', [ChatUserController::class, 'toggleBan']);
     Route::patch('/chat-users/{chatUser}/verify', [ChatUserController::class, 'verify']);
