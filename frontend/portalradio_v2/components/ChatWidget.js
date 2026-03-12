@@ -753,7 +753,7 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
       ) : (
         <form onSubmit={handleSend} style={{
           padding: '12px 16px', borderTop: '1px solid rgba(63, 63, 143, 0.3)', display: 'flex', gap: '8px',
-          flexShrink: 0, backgroundColor: 'var(--color-surface)', marginBottom: '50px',
+          flexShrink: 0, backgroundColor: 'var(--color-surface)', marginBottom: '30px',
         }}>
           <input type="text" placeholder={user ? 'Taip mesej...' : 'Sila log masuk untuk sembang'}
             readOnly={!user} value={input} onChange={e => setInput(e.target.value)} maxLength={500}
