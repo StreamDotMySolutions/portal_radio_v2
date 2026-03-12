@@ -3,6 +3,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/fr
 
 export function mapStation(s) {
   return {
+    id: s.id,
     slug: s.slug,
     name: s.title,
     // thumbnail: used for card grid images

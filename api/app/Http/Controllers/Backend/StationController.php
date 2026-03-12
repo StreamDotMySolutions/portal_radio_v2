@@ -91,9 +91,9 @@ class StationController extends Controller
             'youtube_url' => $request->input('youtube_url'),
             'tiktok_url' => $request->input('tiktok_url'),
             'thumbnail_filename' => $request->hasFile('thumbnail')
-                ? CommonService::handleStoreFile($request->file('thumbnail'), 'station-thumbnails') : null,
+                ? CommonService::handleStoreFile($request->file('thumbnail'), 'stations') : null,
             'banner_filename' => $request->hasFile('banner')
-                ? CommonService::handleStoreFile($request->file('banner'), 'station-banners') : null,
+                ? CommonService::handleStoreFile($request->file('banner'), 'stations') : null,
             'accent_color' => $request->input('accent_color'),
             'active' => $request->input('active'),
         ]);
@@ -133,16 +133,16 @@ class StationController extends Controller
 
         if ($request->hasFile('thumbnail')) {
             if ($station->thumbnail_filename) {
-                CommonService::handleDeleteFile($station->thumbnail_filename, 'station-thumbnails');
+                CommonService::handleDeleteFile($station->thumbnail_filename, 'stations');
             }
-            $data['thumbnail_filename'] = CommonService::handleStoreFile($request->file('thumbnail'), 'station-thumbnails');
+            $data['thumbnail_filename'] = CommonService::handleStoreFile($request->file('thumbnail'), 'stations');
         }
 
         if ($request->hasFile('banner')) {
             if ($station->banner_filename) {
-                CommonService::handleDeleteFile($station->banner_filename, 'station-banners');
+                CommonService::handleDeleteFile($station->banner_filename, 'stations');
             }
-            $data['banner_filename'] = CommonService::handleStoreFile($request->file('banner'), 'station-banners');
+            $data['banner_filename'] = CommonService::handleStoreFile($request->file('banner'), 'stations');
         }
 
         $station->update($data);
@@ -153,10 +153,10 @@ class StationController extends Controller
     public function delete(Station $station)
     {
         if ($station->thumbnail_filename) {
-            CommonService::handleDeleteFile($station->thumbnail_filename, 'station-thumbnails');
+            CommonService::handleDeleteFile($station->thumbnail_filename, 'stations');
         }
         if ($station->banner_filename) {
-            CommonService::handleDeleteFile($station->banner_filename, 'station-banners');
+            CommonService::handleDeleteFile($station->banner_filename, 'stations');
         }
 
         if ($station->delete()) {

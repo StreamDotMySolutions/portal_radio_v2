@@ -8,8 +8,8 @@ import { trackPageview } from '@/utils/analytics';
 export default function StationDetailMobile({ station }) {
   // Track pageview on component mount
   useEffect(() => {
-    trackPageview('station', station.slug, station.name);
-  }, [station.slug, station.name]);
+    trackPageview('station', station.id, station.name);
+  }, [station.id, station.name]);
 
   return (
     <div style={{ backgroundColor: 'var(--color-bg)', paddingTop: '100px' }}>

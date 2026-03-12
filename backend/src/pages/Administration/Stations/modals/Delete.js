@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button, Modal, Form, Toast, ToastContainer } from 'react-bootstrap'
+import { Button, Modal, Form } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
@@ -12,9 +12,6 @@ export default function DeleteModal({ id, title }) {
     const [show, setShow] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [acknowledged, setAcknowledged] = useState(false)
-    const [showToast, setShowToast] = useState(false)
-    const [toastMessage, setToastMessage] = useState('')
-    const [toastVariant, setToastVariant] = useState('success')
 
     const handleShowClick = () => {
         setAcknowledged(false)
@@ -27,16 +24,10 @@ export default function DeleteModal({ id, title }) {
         setIsLoading(true)
         axios({ method: 'delete', url: `${apiBase}/stations/${id}` })
             .then(() => {
-                setToastVariant('success')
-                setToastMessage('Station deleted successfully')
-                setShowToast(true)
                 setRefresh()
-                setTimeout(() => handleClose(), 1500)
+                setTimeout(() => handleClose(), 500)
             })
             .catch((error) => {
-                setToastVariant('danger')
-                setToastMessage('Failed to delete station')
-                setShowToast(true)
                 console.warn(error)
             })
             .finally(() => setIsLoading(false))
@@ -44,20 +35,6 @@ export default function DeleteModal({ id, title }) {
 
     return (
         <>
-            <ToastContainer position='top-end' className='p-3'>
-                <Toast
-                    onClose={() => setShowToast(false)}
-                    show={showToast}
-                    delay={3000}
-                    autohide
-                    bg={toastVariant}
-                >
-                    <Toast.Body className={toastVariant === 'danger' ? 'text-white' : ''}>
-                        {toastMessage}
-                    </Toast.Body>
-                </Toast>
-            </ToastContainer>
-
             <Button size='sm' variant='outline-danger' onClick={handleShowClick} title='Delete'>
                 <FontAwesomeIcon icon={['fas', 'trash']} />
             </Button>

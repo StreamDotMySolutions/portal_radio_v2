@@ -174,7 +174,7 @@ export default function ShowModal({ id }) {
                                             <Figure className='mb-0'>
                                                 <Figure.Image
                                                     style={{ maxWidth: '150px', maxHeight: '150px' }}
-                                                    src={`${serverUrl}/storage/station-thumbnails/${station.thumbnail_filename}`}
+                                                    src={`${serverUrl}/storage/stations/${station.thumbnail_filename}`}
                                                 />
                                             </Figure>
                                         ) : (
@@ -189,7 +189,7 @@ export default function ShowModal({ id }) {
                                             <Figure className='mb-0'>
                                                 <Figure.Image
                                                     style={{ maxWidth: '300px', maxHeight: '150px' }}
-                                                    src={`${serverUrl}/storage/station-banners/${station.banner_filename}`}
+                                                    src={`${serverUrl}/storage/stations/${station.banner_filename}`}
                                                 />
                                             </Figure>
                                         ) : (
