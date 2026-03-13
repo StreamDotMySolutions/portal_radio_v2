@@ -55,6 +55,9 @@ class StationController extends Controller
 
     public function show(Station $station)
     {
+        $station->load('category:id,slug,display_name');
+        // Convert category relationship to slug string for consistency
+        $station->category = $station->category ? $station->category->slug : null;
         return response()->json(['station' => $station]);
     }
 
