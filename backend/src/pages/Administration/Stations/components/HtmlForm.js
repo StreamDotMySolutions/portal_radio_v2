@@ -22,15 +22,11 @@ const HtmlForm = ({
     const [categoriesLoading, setCategoriesLoading] = useState(true)
 
     useEffect(() => {
-        axios({ method: 'get', url: `${apiBase}/station-categories` })
+        axios({ method: 'get', url: `${apiBase}/station-categories/all` })
             .then((response) => {
                 const cats = response.data.categories || [];
-                if (Array.isArray(cats)) {
-                    setCategories(cats)
-                } else {
-                    console.error('Categories response is not an array:', cats)
-                    setCategories([])
-                }
+                console.log('Categories loaded:', cats);
+                setCategories(Array.isArray(cats) ? cats : []);
             })
             .catch((error) => {
                 console.error('Error fetching categories:', error)

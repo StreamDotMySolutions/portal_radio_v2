@@ -37,6 +37,12 @@ class StationCategoryController extends Controller
         return response()->json(['categories' => $categories]);
     }
 
+    public function all()
+    {
+        $categories = StationCategory::query()->defaultOrder()->get();
+        return response()->json(['categories' => $categories]);
+    }
+
     public function show(StationCategory $stationCategory)
     {
         return response()->json(['category' => $stationCategory]);

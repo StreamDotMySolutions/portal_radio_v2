@@ -156,6 +156,7 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::get('/stations/ordering/{station}', [StationController::class, 'ordering']);
 
     // Station Categories
+    Route::get('/station-categories/all', [StationCategoryController::class, 'all']);
     Route::get('/station-categories', [StationCategoryController::class, 'index']);
     Route::post('/station-categories', [StationCategoryController::class, 'store']);
     Route::get('/station-categories/ordering/{stationCategory}', [StationCategoryController::class, 'ordering']);
