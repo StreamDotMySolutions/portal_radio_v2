@@ -23,8 +23,19 @@ const HtmlForm = ({
 
     useEffect(() => {
         axios({ method: 'get', url: `${apiBase}/station-categories` })
-            .then((response) => setCategories(response.data.categories))
-            .catch((error) => console.warn(error))
+            .then((response) => {
+                const cats = response.data.categories || [];
+                if (Array.isArray(cats)) {
+                    setCategories(cats)
+                } else {
+                    console.error('Categories response is not an array:', cats)
+                    setCategories([])
+                }
+            })
+            .catch((error) => {
+                console.error('Error fetching categories:', error)
+                setCategories([])
+            })
             .finally(() => setCategoriesLoading(false))
     }, [apiBase])
 
@@ -109,11 +120,15 @@ const HtmlForm = ({
                                         required
                                     >
                                         <option value=''>Select category...</option>
-                                        {categories.map((cat) => (
-                                            <option key={cat.id} value={cat.slug}>
-                                                {cat.display_name}
-                                            </option>
-                                        ))}
+                                        {Array.isArray(categories) && categories.length > 0 ? (
+                                            categories.map((cat) => (
+                                                <option key={cat.id} value={cat.slug}>
+                                                    {cat.display_name}
+                                                </option>
+                                            ))
+                                        ) : (
+                                            <option value=''>No categories available</option>
+                                        )}
                                     </Form.Select>
                                 )}
                                 {errors?.category && (
