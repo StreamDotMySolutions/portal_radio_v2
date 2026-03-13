@@ -65,7 +65,7 @@ const DataTable = () => {
         if (search) params.set('search', search)
         if (sectionFilter) params.set('section', sectionFilter)
         if (activeFilter !== '') params.set('active', activeFilter)
-        params.set('per_page', 15)
+        params.set('per_page', 50)
         const qs = params.toString()
         return qs ? `${baseUrl}?${qs}` : baseUrl
     }

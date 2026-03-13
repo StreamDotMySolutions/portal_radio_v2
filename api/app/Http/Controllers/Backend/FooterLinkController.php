@@ -29,7 +29,7 @@ class FooterLinkController extends Controller
         }
 
         // Order by section and ordering
-        $links = $query->orderBy('section')->orderBy('ordering')->paginate(100)->withQueryString();
+        $links = $query->orderBy('section')->orderBy('ordering')->paginate(50)->withQueryString();
 
         return response()->json(['footer_links' => $links]);
     }
