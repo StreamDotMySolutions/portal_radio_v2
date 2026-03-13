@@ -67,6 +67,7 @@ const AdminDashboard = () => {
 
     const counts    = data?.counts   || {}
     const analytics = data?.analytics || {}
+    const stationCategories = data?.station_categories || []
 
     return (
         <>
@@ -110,13 +111,36 @@ const AdminDashboard = () => {
                                 </Card.Body>
                             </Card>
                         </Col>
-                        <Col md={4}>
-                            <ContentCard title='Stesen Nasional' value={v(counts.stations_nasional)} icon='radio' color='primary' to='/administration/stations' />
-                        </Col>
-                        <Col md={4}>
-                            <ContentCard title='Stesen Negeri' value={v(counts.stations_negeri)} icon='radio' color='warning' to='/administration/stations' />
-                        </Col>
                     </Row>
+                </div>
+
+                {/* Radio Stations */}
+                <div>
+                    <p className='text-muted small fw-semibold text-uppercase mb-2'>Radio Stations</p>
+                    <div className='d-flex gap-3'>
+                        <div style={{ flex: 1 }}>
+                            <ContentCard title='Stesen Radio' value={v(counts.stations)} icon='radio' color='primary' to='/administration/stations' />
+                        </div>
+                        {isLoading ? (
+                            <div className='text-muted'>Loading…</div>
+                        ) : stationCategories.map((cat) => (
+                            <div style={{ flex: 1 }} key={cat.slug}>
+                                <Card className='h-100' onClick={() => navigate('/administration/stations')} style={{ cursor: 'pointer' }}>
+                                    <Card.Body>
+                                        <div className='text-muted small mb-1'>{cat.display_name}</div>
+                                        <div className='fw-bold fs-4'>{cat.active_stations_count} <span className='text-muted fw-normal fs-6'>/ {cat.stations_count} stesen</span></div>
+                                        <div className='text-muted small mt-1'>
+                                            <FontAwesomeIcon icon={['fas', 'eye']} className='me-1' />
+                                            {cat.pageviews.toLocaleString()} pageviews
+                                        </div>
+                                    </Card.Body>
+                                </Card>
+                            </div>
+                        ))}
+                        <div style={{ flex: 1 }}>
+                            <StatCard title='Total Pageviews' value={v(counts.stations_pageviews)?.toLocaleString()} icon='eye' color='success' />
+                        </div>
+                    </div>
                 </div>
 
                 {/* Engagement */}
@@ -131,6 +155,22 @@ const AdminDashboard = () => {
                         </Col>
                         <Col md={4}>
                             <ContentCard title='Chat Messages' value={v(counts.chat_messages)} icon='comments' color='secondary' to='/administration/chat-messages' />
+                        </Col>
+                    </Row>
+                </div>
+
+                {/* Public portal live stats */}
+                <div>
+                    <p className='text-muted small fw-semibold text-uppercase mb-2'>Public Portal — Live Stats</p>
+                    <Row className='g-3'>
+                        <Col md={4}>
+                            <StatCard title='Pageviews Today'     value={v(analytics.today)}    icon='eye'           color='primary' />
+                        </Col>
+                        <Col md={4}>
+                            <StatCard title='Pageviews This Week' value={v(analytics.week)}     icon='calendar-week' color='success' />
+                        </Col>
+                        <Col md={4}>
+                            <StatCard title='Unique Visitors (30d)' value={v(analytics.visitors)} icon='users'  color='info' />
                         </Col>
                     </Row>
                 </div>
@@ -191,22 +231,6 @@ const AdminDashboard = () => {
                             )}
                         </Card.Body>
                     </Card>
-                </div>
-
-                {/* Public portal live stats */}
-                <div>
-                    <p className='text-muted small fw-semibold text-uppercase mb-2'>Public Portal — Live Stats</p>
-                    <Row className='g-3'>
-                        <Col md={4}>
-                            <StatCard title='Pageviews Today'     value={v(analytics.today)}    icon='eye'           color='primary' />
-                        </Col>
-                        <Col md={4}>
-                            <StatCard title='Pageviews This Week' value={v(analytics.week)}     icon='calendar-week' color='success' />
-                        </Col>
-                        <Col md={4}>
-                            <StatCard title='Unique Visitors (30d)' value={v(analytics.visitors)} icon='users'  color='info' />
-                        </Col>
-                    </Row>
                 </div>
 
             </div>

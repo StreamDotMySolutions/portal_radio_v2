@@ -11,6 +11,7 @@ use App\Models\Asset;
 use App\Models\Vod;
 use App\Models\Directory;
 use App\Models\Station;
+use App\Models\StationCategory;
 use App\Models\ChatUser;
 use App\Models\ChatMessage;
 use App\Services\AnalyticsService;
@@ -61,6 +62,25 @@ class DashboardController extends Controller
                 ];
             });
 
+        $stationCategories = StationCategory::query()
+            ->withCount(['stations', 'stations as active_stations_count' => function ($q) {
+                $q->where('active', true);
+            }])
+            ->get()
+            ->map(function ($cat) {
+                $pageviews = \App\Models\AnalyticsEvent::where('event_type', 'pageview')
+                    ->where('page_type', 'station')
+                    ->whereIn('reference_id', $cat->stations()->pluck('stations.id'))
+                    ->count();
+                return [
+                    'display_name' => $cat->display_name,
+                    'slug' => $cat->slug,
+                    'stations_count' => $cat->stations_count,
+                    'active_stations_count' => $cat->active_stations_count,
+                    'pageviews' => $pageviews,
+                ];
+            });
+
         return response()->json([
             'counts' => [
                 'articles'    => Article::count(),
@@ -77,8 +97,8 @@ class DashboardController extends Controller
                 ],
                 'programmes'  => Programme::count(),
                 'videos'      => Video::count(),
-                'stations_nasional' => Station::where('category', 'nasional')->where('active', true)->count(),
-                'stations_negeri'   => Station::where('category', 'negeri')->where('active', true)->count(),
+                'stations'          => Station::where('active', true)->count(),
+                'stations_pageviews' => \App\Models\AnalyticsEvent::where('event_type', 'pageview')->where('page_type', 'station')->count(),
                 'livestream_plays'  => AnalyticsService::livestreamTotalPlays(),
                 'chat_users'        => ChatUser::count(),
                 'chat_messages'     => ChatMessage::count(),
@@ -94,6 +114,7 @@ class DashboardController extends Controller
                 ],
             ],
             'analytics' => AnalyticsService::summary(),
+            'station_categories' => $stationCategories,
         ]);
     }
 }
