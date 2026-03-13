@@ -100,25 +100,6 @@ export default function StationDetail({ station }) {
             <div className="d-flex flex-column gap-4">
               {/* Frequency + Social Media Row */}
               <div className="d-flex gap-4">
-                {/* Frekuensi - 4 cols */}
-                <div
-                  className="card-dark d-flex flex-column align-items-center justify-content-center text-center p-4"
-                  style={{
-                    flex: '0 0 33.33%',
-                    borderRadius: '8px',
-                    background: `linear-gradient(135deg, ${station.accent}22, ${station.accent}11)`,
-                    borderColor: `${station.accent}44`,
-                  }}
-                >
-                  <i className="bi bi-broadcast" style={{ fontSize: '2rem', color: station.accent, marginBottom: '0.5rem' }}></i>
-                  <div style={{ fontSize: '3.5rem', fontWeight: '800', color: '#fff', lineHeight: 1, letterSpacing: '-1px' }}>
-                    {station.frequency}
-                  </div>
-                  <div style={{ color: 'var(--color-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-                    Frekuensi Radio
-                  </div>
-                </div>
-
                 {/* Social Media Links - 8 cols */}
                 {station.social && (Object.values(station.social).some(link => link !== '#')) && (
                   <div className="card-dark p-4" style={{ flex: '0 0 66.67%', borderRadius: '8px' }}>
@@ -147,6 +128,25 @@ export default function StationDetail({ station }) {
                     </div>
                   </div>
                 )}
+
+                {/* Frekuensi - 4 cols */}
+                <div
+                  className="card-dark d-flex flex-column align-items-center justify-content-center text-center p-4"
+                  style={{
+                    flex: '0 0 33.33%',
+                    borderRadius: '8px',
+                    background: `linear-gradient(135deg, ${station.accent}22, ${station.accent}11)`,
+                    borderColor: `${station.accent}44`,
+                  }}
+                >
+                  <i className="bi bi-broadcast" style={{ fontSize: '2rem', color: station.accent, marginBottom: '0.5rem' }}></i>
+                  <div style={{ fontSize: '3.5rem', fontWeight: '800', color: '#fff', lineHeight: 1, letterSpacing: '-1px' }}>
+                    {station.frequency}
+                  </div>
+                  <div style={{ color: 'var(--color-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
+                    Frekuensi Radio
+                  </div>
+                </div>
               </div>
 
               {/* Tentang Stesen */}

@@ -95,6 +95,14 @@ export default function StationDetailMobile({ station }) {
           )}
         </div>
 
+        {/* Frequency */}
+        <div className="card-dark p-3 mb-3" style={{ borderRadius: '8px', background: `linear-gradient(135deg, ${station.accent}22, ${station.accent}11)` }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ color: 'var(--color-muted)', fontSize: '0.75rem', marginBottom: '0.5rem' }}>Frekuensi Radio</div>
+            <div style={{ color: '#fff', fontWeight: '700', fontSize: '2.5rem' }}>{station.frequency}</div>
+          </div>
+        </div>
+
         {/* Social Media Links */}
         {station.social && (Object.values(station.social).some(link => link !== '#')) && (
           <div className="card-dark p-3 mb-3" style={{ borderRadius: '8px' }}>
@@ -123,14 +131,6 @@ export default function StationDetailMobile({ station }) {
             </div>
           </div>
         )}
-
-        {/* Frequency */}
-        <div className="card-dark p-3 mb-3" style={{ borderRadius: '8px', background: `linear-gradient(135deg, ${station.accent}22, ${station.accent}11)` }}>
-          <div style={{ textAlign: 'center' }}>
-            <div style={{ color: 'var(--color-muted)', fontSize: '0.75rem', marginBottom: '0.5rem' }}>Frekuensi Radio</div>
-            <div style={{ color: '#fff', fontWeight: '700', fontSize: '2.5rem' }}>{station.frequency}</div>
-          </div>
-        </div>
 
         {/* About */}
         <div className="card-dark p-3 mb-3" style={{ borderRadius: '8px' }}>
