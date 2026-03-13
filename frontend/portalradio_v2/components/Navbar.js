@@ -102,8 +102,8 @@ export default function Navbar() {
                       const stations = stationsByCategory[category.slug] || [];
                       if (stations.length === 0) return null;
 
-                      // Special handling for Negeri category to split in 2 columns
-                      if (category.slug === 'negeri') {
+                      // Special handling for Negeri & Tempatan categories to split in 2 columns
+                      if (category.slug === 'negeri' || category.slug === 'tempatan') {
                         const mid = Math.ceil(stations.length / 2);
                         return (
                           <React.Fragment key={category.slug}>
