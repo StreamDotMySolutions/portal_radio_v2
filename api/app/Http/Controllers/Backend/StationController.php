@@ -55,10 +55,14 @@ class StationController extends Controller
 
     public function show(Station $station)
     {
-        $station->load('category:id,slug,display_name');
-        // Convert category relationship to slug string for consistency
-        $station->category = $station->category ? $station->category->slug : null;
-        return response()->json(['station' => $station]);
+        // Get category slug via join instead of relationship
+        $stationWithCategory = Station::query()
+            ->leftJoin('station_categories', 'stations.station_category_id', '=', 'station_categories.id')
+            ->select('stations.*', 'station_categories.slug as category')
+            ->where('stations.id', $station->id)
+            ->first();
+
+        return response()->json(['station' => $stationWithCategory]);
     }
 
     public function store(Request $request)
