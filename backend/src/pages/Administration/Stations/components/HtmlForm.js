@@ -94,6 +94,7 @@ const HtmlForm = ({
                                     <option value='nasional'>Nasional</option>
                                     <option value='negeri'>Negeri</option>
                                     <option value='radio_tempatan'>Radio Tempatan</option>
+                                    <option value='radio_online'>Radio Online</option>
                                 </Form.Select>
                                 {errors?.category && (
                                     <Form.Control.Feedback type='invalid' className='d-block'>
