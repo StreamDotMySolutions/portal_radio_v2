@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\StationCategory;
+use Illuminate\Support\Facades\DB;
 
 class PopulateStationCategories extends Command
 {
@@ -27,10 +28,10 @@ class PopulateStationCategories extends Command
     public function handle()
     {
         $categories = [
-            ['display_name' => 'Radio Digital', 'slug' => 'radio_online', 'sort_order' => 1],
-            ['display_name' => 'Nasional', 'slug' => 'nasional', 'sort_order' => 2],
-            ['display_name' => 'Negeri', 'slug' => 'negeri', 'sort_order' => 3],
-            ['display_name' => 'Radio Tempatan', 'slug' => 'radio_tempatan', 'sort_order' => 4],
+            ['display_name' => 'Radio Digital', 'slug' => 'radio_online'],
+            ['display_name' => 'Nasional', 'slug' => 'nasional'],
+            ['display_name' => 'Negeri', 'slug' => 'negeri'],
+            ['display_name' => 'Radio Tempatan', 'slug' => 'radio_tempatan'],
         ];
 
         if (!$this->option('force')) {
@@ -63,9 +64,34 @@ class PopulateStationCategories extends Command
             }
         }
 
+        // Initialize nested set structure for proper ordering
+        $this->line("<fg=yellow>⟳</> Initializing nested set structure...");
+        $this->initializeNestedSet();
+
         $this->newLine();
         $this->info("✅ Complete! Created: $created, Updated: $updated");
+        $this->info("📍 Nested set structure initialized for ordering");
 
         return 0;
+    }
+
+    /**
+     * Initialize the nested set structure for all root-level categories.
+     */
+    private function initializeNestedSet()
+    {
+        $categories = StationCategory::query()
+            ->whereNull('parent_id')
+            ->orderBy('id')
+            ->get();
+
+        foreach ($categories as $index => $category) {
+            DB::table('station_categories')
+                ->where('id', $category->id)
+                ->update([
+                    '_lft' => ($index * 2) + 1,
+                    '_rgt' => ($index * 2) + 2,
+                ]);
+        }
     }
 }
