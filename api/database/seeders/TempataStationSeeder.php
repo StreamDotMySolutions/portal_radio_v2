@@ -37,13 +37,16 @@ class TempataStationSeeder extends Seeder
             ['title' => 'Lahad Datu FM', 'slug' => 'lahad-datu-fm'],
         ];
 
+        // Get tempatan category ID
+        $tempataCategory = \App\Models\StationCategory::where('slug', 'radio-tempatan')->first();
+
         foreach ($stations as $data) {
             Station::updateOrCreate(
                 ['slug' => $data['slug']],
                 [
                     'user_id' => $adminId,
                     'title' => $data['title'],
-                    'category' => 'radio-tempatan',
+                    'station_category_id' => $tempataCategory->id,
                     'active' => true,
                 ]
             );

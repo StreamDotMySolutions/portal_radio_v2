@@ -33,6 +33,6 @@ class Station extends Model
 
     public function category()
     {
-        return $this->belongsTo(StationCategory::class, 'category', 'slug');
+        return $this->belongsTo(StationCategory::class);
     }
 }

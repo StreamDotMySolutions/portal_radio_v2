@@ -351,12 +351,16 @@ class StationSeeder extends Seeder
 
         $adminId = \App\Models\User::first()->id;
 
+        // Get category IDs
+        $nasionalCat = \App\Models\StationCategory::where('slug', 'nasional')->first();
+        $negeriCat = \App\Models\StationCategory::where('slug', 'negeri')->first();
+
         foreach ($this->nasionalStations as $data) {
             $image = $data['slug'] . '.jpg';
 
             Station::create(array_merge($data, [
                 'user_id' => $adminId,
-                'category' => 'nasional',
+                'station_category_id' => $nasionalCat->id,
                 'active' => 1,
                 'thumbnail_filename' => $image,
                 'banner_filename' => $image,
@@ -368,7 +372,7 @@ class StationSeeder extends Seeder
 
             Station::create(array_merge($data, [
                 'user_id' => $adminId,
-                'category' => 'negeri',
+                'station_category_id' => $negeriCat->id,
                 'active' => 1,
                 'thumbnail_filename' => $image,
                 'banner_filename' => $image,
