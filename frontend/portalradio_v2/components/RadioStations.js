@@ -19,12 +19,14 @@ export default function RadioStations() {
   const hlsRef = useRef(null);
   const [nasionalStations, setNasionalStations] = useState([]);
   const [negeriStations, setNegeriStations] = useState([]);
+  const [radioTempatanStations, setRadioTempatanStations] = useState([]);
   const [stationHits, setStationHits] = useState({});
 
   useEffect(() => {
     fetchStations().then(stations => {
       setNasionalStations(stations.filter(s => s.category === 'nasional'));
       setNegeriStations(stations.filter(s => s.category === 'negeri'));
+      setRadioTempatanStations(stations.filter(s => s.category === 'radio_tempatan'));
     });
     fetchStationHits().then(setStationHits);
   }, []);
@@ -234,6 +236,10 @@ export default function RadioStations() {
           {/* Saluran Negeri */}
           <h2 className="section-heading" style={{ marginTop: '4rem' }}>Saluran Negeri</h2>
           {renderStationCards(negeriStations)}
+
+          {/* Radio Tempatan */}
+          <h2 className="section-heading" style={{ marginTop: '4rem' }}>Radio Tempatan</h2>
+          {renderStationCards(radioTempatanStations)}
         </div>
       </section>
     </>
