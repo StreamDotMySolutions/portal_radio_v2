@@ -14,10 +14,10 @@ class StationCategorySeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            ['display_name' => 'Radio Digital', 'slug' => 'radio_online'],
+            ['display_name' => 'Radio Digital', 'slug' => 'radio-online'],
             ['display_name' => 'Nasional', 'slug' => 'nasional'],
             ['display_name' => 'Negeri', 'slug' => 'negeri'],
-            ['display_name' => 'Radio Tempatan', 'slug' => 'radio_tempatan'],
+            ['display_name' => 'Radio Tempatan', 'slug' => 'radio-tempatan'],
         ];
 
         foreach ($categories as $index => $category) {

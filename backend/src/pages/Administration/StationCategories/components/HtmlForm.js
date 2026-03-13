@@ -12,12 +12,12 @@ const HtmlForm = ({
     // Auto-generate slug from display_name on change
     useEffect(() => {
         if (form.displayName && !form.slugManuallyEdited) {
-            // Using a simple slug function
+            // Using a simple slug function with hyphens
             const slug = form.displayName
                 .toLowerCase()
                 .trim()
                 .replace(/[^\w\s-]/g, '')
-                .replace(/[\s_-]+/g, '_')
+                .replace(/[\s_]+/g, '-')
                 .replace(/^-+|-+$/g, '')
             onChange('slug')(slug)
         }

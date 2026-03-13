@@ -28,10 +28,10 @@ class PopulateStationCategories extends Command
     public function handle()
     {
         $categories = [
-            ['display_name' => 'Radio Digital', 'slug' => 'radio_online'],
+            ['display_name' => 'Radio Digital', 'slug' => 'radio-online'],
             ['display_name' => 'Nasional', 'slug' => 'nasional'],
             ['display_name' => 'Negeri', 'slug' => 'negeri'],
-            ['display_name' => 'Radio Tempatan', 'slug' => 'radio_tempatan'],
+            ['display_name' => 'Radio Tempatan', 'slug' => 'radio-tempatan'],
         ];
 
         if (!$this->option('force')) {
