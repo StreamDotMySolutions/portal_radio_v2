@@ -95,55 +95,59 @@ export default function StationDetail({ station }) {
             )}
           </div>
 
-          {/* Right Column: Frequency + Social Media + About */}
+          {/* Right Column: Frequency/Social Media Row + About */}
           <div style={{ flex: '0 0 58%' }}>
             <div className="d-flex flex-column gap-4">
-              {/* Frekuensi */}
-              <div
-                className="card-dark d-flex flex-column align-items-center justify-content-center text-center p-4"
-                style={{
-                  borderRadius: '8px',
-                  background: `linear-gradient(135deg, ${station.accent}22, ${station.accent}11)`,
-                  borderColor: `${station.accent}44`,
-                }}
-              >
-                <i className="bi bi-broadcast" style={{ fontSize: '2rem', color: station.accent, marginBottom: '0.5rem' }}></i>
-                <div style={{ fontSize: '3.5rem', fontWeight: '800', color: '#fff', lineHeight: 1, letterSpacing: '-1px' }}>
-                  {station.frequency}
-                </div>
-                <div style={{ color: 'var(--color-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-                  Frekuensi Radio
-                </div>
-              </div>
-
-              {/* Social Media Links */}
-              {station.social && (Object.values(station.social).some(link => link !== '#')) && (
-                <div className="card-dark p-4" style={{ borderRadius: '8px' }}>
-                  <h5 style={{ color: 'var(--color-text)', fontWeight: '600', marginBottom: '1rem' }}>Ikuti Kami</h5>
-                  <div className="d-flex gap-3">
-                    {station.social.facebook && station.social.facebook !== '#' && (
-                      <a href={station.social.facebook} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontSize: '3.5rem' }}>
-                        <i className="bi bi-facebook"></i>
-                      </a>
-                    )}
-                    {station.social.instagram && station.social.instagram !== '#' && (
-                      <a href={station.social.instagram} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontSize: '3.5rem' }}>
-                        <i className="bi bi-instagram"></i>
-                      </a>
-                    )}
-                    {station.social.twitter && station.social.twitter !== '#' && (
-                      <a href={station.social.twitter} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontSize: '3.5rem' }}>
-                        <i className="bi bi-twitter-x"></i>
-                      </a>
-                    )}
-                    {station.social.youtube && station.social.youtube !== '#' && (
-                      <a href={station.social.youtube} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontSize: '3.5rem' }}>
-                        <i className="bi bi-youtube"></i>
-                      </a>
-                    )}
+              {/* Frequency + Social Media Row */}
+              <div className="d-flex gap-4">
+                {/* Frekuensi - 4 cols */}
+                <div
+                  className="card-dark d-flex flex-column align-items-center justify-content-center text-center p-4"
+                  style={{
+                    flex: '0 0 33.33%',
+                    borderRadius: '8px',
+                    background: `linear-gradient(135deg, ${station.accent}22, ${station.accent}11)`,
+                    borderColor: `${station.accent}44`,
+                  }}
+                >
+                  <i className="bi bi-broadcast" style={{ fontSize: '2rem', color: station.accent, marginBottom: '0.5rem' }}></i>
+                  <div style={{ fontSize: '3.5rem', fontWeight: '800', color: '#fff', lineHeight: 1, letterSpacing: '-1px' }}>
+                    {station.frequency}
+                  </div>
+                  <div style={{ color: 'var(--color-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>
+                    Frekuensi Radio
                   </div>
                 </div>
-              )}
+
+                {/* Social Media Links - 8 cols */}
+                {station.social && (Object.values(station.social).some(link => link !== '#')) && (
+                  <div className="card-dark p-4" style={{ flex: '0 0 66.67%', borderRadius: '8px' }}>
+                    <h5 style={{ color: 'var(--color-text)', fontWeight: '600', marginBottom: '1rem' }}>Ikuti Kami</h5>
+                    <div className="d-flex gap-3">
+                      {station.social.facebook && station.social.facebook !== '#' && (
+                        <a href={station.social.facebook} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontSize: '3.5rem' }}>
+                          <i className="bi bi-facebook"></i>
+                        </a>
+                      )}
+                      {station.social.instagram && station.social.instagram !== '#' && (
+                        <a href={station.social.instagram} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontSize: '3.5rem' }}>
+                          <i className="bi bi-instagram"></i>
+                        </a>
+                      )}
+                      {station.social.twitter && station.social.twitter !== '#' && (
+                        <a href={station.social.twitter} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontSize: '3.5rem' }}>
+                          <i className="bi bi-twitter-x"></i>
+                        </a>
+                      )}
+                      {station.social.youtube && station.social.youtube !== '#' && (
+                        <a href={station.social.youtube} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontSize: '3.5rem' }}>
+                          <i className="bi bi-youtube"></i>
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
 
               {/* Tentang Stesen */}
               <div className="card-dark p-4" style={{ borderRadius: '8px' }}>
