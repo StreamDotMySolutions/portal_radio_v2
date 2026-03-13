@@ -102,18 +102,22 @@ export default function NavbarMobile() {
                         <a key={station.slug} className={`dropdown-item px-1 py-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`} style={{ fontSize: '0.7rem', whiteSpace: 'normal' }}>{station.name}</a>
                       ))}
                     </div>
-                    <div className="col-3">
-                      <h6 className="dropdown-header px-1" style={{ fontSize: '0.7rem' }}>Radio Tempatan</h6>
-                      {radioTempatanStations.map(station => (
-                        <a key={station.slug} className={`dropdown-item px-1 py-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`} style={{ fontSize: '0.7rem', whiteSpace: 'normal' }}>{station.name}</a>
-                      ))}
-                    </div>
-                    <div className="col-2">
-                      <h6 className="dropdown-header px-1" style={{ fontSize: '0.7rem' }}>Radio Online</h6>
-                      {radioOnlineStations.map(station => (
-                        <a key={station.slug} className={`dropdown-item px-1 py-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`} style={{ fontSize: '0.7rem', whiteSpace: 'normal' }}>{station.name}</a>
-                      ))}
-                    </div>
+                    {radioTempatanStations.length > 0 && (
+                      <div className="col-3">
+                        <h6 className="dropdown-header px-1" style={{ fontSize: '0.7rem' }}>Radio Tempatan</h6>
+                        {radioTempatanStations.map(station => (
+                          <a key={station.slug} className={`dropdown-item px-1 py-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`} style={{ fontSize: '0.7rem', whiteSpace: 'normal' }}>{station.name}</a>
+                        ))}
+                      </div>
+                    )}
+                    {radioOnlineStations.length > 0 && (
+                      <div className="col-2">
+                        <h6 className="dropdown-header px-1" style={{ fontSize: '0.7rem' }}>Radio Online</h6>
+                        {radioOnlineStations.map(station => (
+                          <a key={station.slug} className={`dropdown-item px-1 py-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`} style={{ fontSize: '0.7rem', whiteSpace: 'normal' }}>{station.name}</a>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </li>
               </ul>

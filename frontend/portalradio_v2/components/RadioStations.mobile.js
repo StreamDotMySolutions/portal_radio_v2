@@ -257,7 +257,7 @@ export default function RadioStationsMobile() {
           )}
 
           {/* Radio Tempatan */}
-          {(categoryFilter === 'all' || categoryFilter === 'radio_tempatan') && (
+          {radioTempatanStations.length > 0 && (categoryFilter === 'all' || categoryFilter === 'radio_tempatan') && (
             <>
               <h2 className="section-heading" style={{ marginTop: categoryFilter === 'all' ? '2rem' : '0', fontSize: '1.5rem' }}>Radio Tempatan</h2>
               {renderStationCards(radioTempatanStations)}
@@ -265,7 +265,7 @@ export default function RadioStationsMobile() {
           )}
 
           {/* Radio Online */}
-          {(categoryFilter === 'all' || categoryFilter === 'radio_online') && (
+          {radioOnlineStations.length > 0 && (categoryFilter === 'all' || categoryFilter === 'radio_online') && (
             <>
               <h2 className="section-heading" style={{ marginTop: categoryFilter === 'all' ? '2rem' : '0', fontSize: '1.5rem' }}>Radio Online</h2>
               {renderStationCards(radioOnlineStations)}
