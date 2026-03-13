@@ -43,7 +43,7 @@ class TempataStationSeeder extends Seeder
                 [
                     'user_id' => $adminId,
                     'title' => $data['title'],
-                    'category' => 'tempatan',
+                    'category' => 'radio-tempatan',
                     'active' => true,
                 ]
             );
