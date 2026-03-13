@@ -65,8 +65,24 @@ export async function searchStations(query) {
 }
 
 export async function fetchStationCategories() {
-  const res = await fetch(`${API_URL}/station-categories`);
-  if (!res.ok) return [];
-  const data = await res.json();
-  return data.categories || [];
+  try {
+    const res = await fetch(`${API_URL}/station-categories`);
+    if (!res.ok) {
+      console.error('Failed to fetch categories:', res.status);
+      return [];
+    }
+    const data = await res.json();
+    const categories = data.categories || [];
+
+    // Ensure we return an array
+    if (!Array.isArray(categories)) {
+      console.error('Categories response is not an array:', categories);
+      return [];
+    }
+
+    return categories;
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    return [];
+  }
 }

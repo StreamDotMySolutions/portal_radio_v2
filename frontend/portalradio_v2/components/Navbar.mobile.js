@@ -14,14 +14,24 @@ export default function NavbarMobile() {
   const router = useRouter();
 
   useEffect(() => {
-    Promise.all([fetchStationCategories(), fetchStations()]).then(([cats, stations]) => {
-      setCategories(cats || []);
-      const grouped = {};
-      (cats || []).forEach(cat => {
-        grouped[cat.slug] = stations.filter(s => s.category === cat.slug);
+    Promise.all([fetchStationCategories(), fetchStations()])
+      .then(([cats, stations]) => {
+        const categoriesArray = Array.isArray(cats) ? cats : [];
+        const stationsArray = Array.isArray(stations) ? stations : [];
+
+        setCategories(categoriesArray);
+
+        const grouped = {};
+        categoriesArray.forEach(cat => {
+          grouped[cat.slug] = stationsArray.filter(s => s.category === cat.slug);
+        });
+        setStationsByCategory(grouped);
+      })
+      .catch(error => {
+        console.error('Error fetching categories/stations:', error);
+        setCategories([]);
+        setStationsByCategory({});
       });
-      setStationsByCategory(grouped);
-    });
   }, []);
 
   useEffect(() => {
