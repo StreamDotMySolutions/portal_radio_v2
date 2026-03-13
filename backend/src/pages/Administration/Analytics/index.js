@@ -104,7 +104,7 @@ const Analytics = () => {
     if (isLoading) return <div className='p-3 text-muted'>Loading...</div>
     if (!data)     return <div className='p-3 text-danger'>Failed to load analytics.</div>
 
-    const { summary, top_articles, top_searches, top_downloads, daily_views, device_split } = data
+    const { summary, top_articles, top_searches, top_downloads, daily_views, device_split, livestream_summary, livestream_daily } = data
 
     const totalDevices = device_split.reduce((s, d) => s + d.count, 0) || 1
 
@@ -130,6 +130,19 @@ const Analytics = () => {
                     </Col>
                 </Row>
 
+                {/* ── Livestream summary cards ── */}
+                <Row className='g-3'>
+                    <Col md={3}>
+                        <StatCard title='Livestream Total'    value={livestream_summary?.total}     icon='circle-play'  color='danger' />
+                    </Col>
+                    <Col md={3}>
+                        <StatCard title='Livestream Today'    value={livestream_summary?.today}     icon='play'         color='warning' />
+                    </Col>
+                    <Col md={3}>
+                        <StatCard title='Livestream This Week' value={livestream_summary?.this_week} icon='headphones'   color='info' />
+                    </Col>
+                </Row>
+
                 {/* ── 30-day chart ── */}
                 <Card>
                     <Card.Header className='fw-semibold'>
@@ -138,6 +151,17 @@ const Analytics = () => {
                     </Card.Header>
                     <Card.Body>
                         <DailyChart data={daily_views} />
+                    </Card.Body>
+                </Card>
+
+                {/* ── Livestream 30-day chart ── */}
+                <Card>
+                    <Card.Header className='fw-semibold'>
+                        <FontAwesomeIcon icon={['fas', 'chart-bar']} className='me-2 text-secondary' />
+                        Livestream Plays — Last 30 Days
+                    </Card.Header>
+                    <Card.Body>
+                        <DailyChart data={livestream_daily} />
                     </Card.Body>
                 </Card>
 

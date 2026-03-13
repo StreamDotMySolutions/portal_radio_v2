@@ -17,6 +17,12 @@ class AnalyticsController extends Controller
             'top_downloads'          => AnalyticsService::topDownloads(),
             'daily_views'            => AnalyticsService::dailyViews(),
             'device_split'           => AnalyticsService::deviceSplit(),
+            'livestream_summary'     => [
+                'total'     => AnalyticsService::livestreamTotalPlays(),
+                'today'     => AnalyticsService::livestreamPlaysToday(),
+                'this_week' => AnalyticsService::livestreamPlaysThisWeek(),
+            ],
+            'livestream_daily'       => AnalyticsService::livestreamDailyPlays(),
         ]);
     }
 }
