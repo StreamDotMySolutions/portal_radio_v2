@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             BannerSeeder::class,
             StationCategorySeeder::class,
             StationSeeder::class,
+            TempataStationSeeder::class,
             SettingSeeder::class,
             FooterSectionSeeder::class,
             FooterLinkSeeder::class,
