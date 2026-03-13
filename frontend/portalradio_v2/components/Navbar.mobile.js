@@ -112,7 +112,7 @@ export default function NavbarMobile() {
                     )}
                     {radioOnlineStations.length > 0 && (
                       <div className="col-2">
-                        <h6 className="dropdown-header px-1" style={{ fontSize: '0.7rem' }}>Radio Online</h6>
+                        <h6 className="dropdown-header px-1" style={{ fontSize: '0.7rem' }}>Radio Digital</h6>
                         {radioOnlineStations.map(station => (
                           <a key={station.slug} className={`dropdown-item px-1 py-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`} style={{ fontSize: '0.7rem', whiteSpace: 'normal' }}>{station.name}</a>
                         ))}

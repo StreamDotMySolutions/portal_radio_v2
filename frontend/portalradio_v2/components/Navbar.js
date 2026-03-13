@@ -116,7 +116,7 @@ export default function Navbar() {
                     )}
                     {radioOnlineStations.length > 0 && (
                       <div className="col-2">
-                        <h6 className="dropdown-header px-1">Radio Online</h6>
+                        <h6 className="dropdown-header px-1">Radio Digital</h6>
                         {radioOnlineStations.map(station => (
                           <a key={station.slug} className={`dropdown-item px-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`}>{station.name}</a>
                         ))}

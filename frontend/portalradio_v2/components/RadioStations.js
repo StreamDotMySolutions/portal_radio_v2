@@ -244,7 +244,7 @@ export default function RadioStations() {
               <option value="nasional">Nasional</option>
               <option value="negeri">Negeri</option>
               <option value="radio_tempatan">Radio Tempatan</option>
-              <option value="radio_online">Radio Online</option>
+              <option value="radio_online">Radio Digital</option>
             </select>
           </div>
 
@@ -275,7 +275,7 @@ export default function RadioStations() {
           {/* Radio Online */}
           {radioOnlineStations.length > 0 && (categoryFilter === 'all' || categoryFilter === 'radio_online') && (
             <>
-              <h2 className="section-heading" style={{ marginTop: categoryFilter === 'all' ? '4rem' : '0' }}>Radio Online</h2>
+              <h2 className="section-heading" style={{ marginTop: categoryFilter === 'all' ? '4rem' : '0' }}>Radio Digital</h2>
               {renderStationCards(radioOnlineStations)}
             </>
           )}
