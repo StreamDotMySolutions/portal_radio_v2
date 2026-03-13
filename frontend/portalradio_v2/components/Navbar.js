@@ -124,7 +124,7 @@ export default function Navbar() {
                       }
 
                       // Regular column for other categories
-                      const colClass = category.slug === 'radio_online' || category.slug === 'nasional' ? 'col-3' : 'col-2';
+                      const colClass = category.slug === 'radio-online' || category.slug === 'nasional' ? 'col-3' : 'col-2';
                       return (
                         <div key={category.slug} className={colClass}>
                           <h6 className="dropdown-header px-1">{category.display_name}</h6>
