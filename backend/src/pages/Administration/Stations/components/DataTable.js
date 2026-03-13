@@ -106,7 +106,8 @@ const DataTable = () => {
     const categoryBadgeVariant = (cat) => {
         if (cat === 'nasional') return 'primary'
         if (cat === 'negeri') return 'info'
-        if (cat === 'radio_tempatan') return 'warning'
+        if (cat === 'radio-tempatan') return 'warning'
+        if (cat === 'radio-online') return 'success'
         return 'secondary'
     }
 
@@ -150,10 +151,10 @@ const DataTable = () => {
                         onChange={(e) => setCategoryFilter(e.target.value)}
                     >
                         <option value=''>All Categories</option>
-                        <option value='radio_online'>Radio Digital</option>
+                        <option value='radio-online'>Radio Digital</option>
                         <option value='nasional'>Nasional</option>
                         <option value='negeri'>Negeri</option>
-                        <option value='radio_tempatan'>Radio Tempatan</option>
+                        <option value='radio-tempatan'>Radio Tempatan</option>
                     </Form.Select>
                 </div>
 
@@ -168,7 +169,7 @@ const DataTable = () => {
                     {search && <> for <strong>"{search}"</strong></>}
                     {categoryFilter && (
                         <> — <Badge bg={categoryBadgeVariant(categoryFilter)}>
-                            {categoryFilter === 'nasional' ? 'Nasional' : categoryFilter === 'negeri' ? 'Negeri' : categoryFilter === 'radio_tempatan' ? 'Radio Tempatan' : 'Radio Digital'}
+                            {categoryFilter === 'nasional' ? 'Nasional' : categoryFilter === 'negeri' ? 'Negeri' : categoryFilter === 'radio-tempatan' ? 'Radio Tempatan' : 'Radio Digital'}
                         </Badge></>
                     )}
                 </p>
