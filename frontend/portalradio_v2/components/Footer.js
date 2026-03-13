@@ -12,7 +12,7 @@ export default function Footer() {
         <div className="d-flex flex-wrap justify-content-center gap-5 mb-4">
           <div style={{ maxWidth: '240px' }}>
             <h6 className="mb-2">
-              <i className="bi bi-broadcast me-2"></i>Tentang RTM
+              <i className="bi bi-broadcast me-2"></i>Tentang Portal Radio RTM
             </h6>
             <p className="text-muted small mb-0">
               Radio Televisyen Malaysia (RTM) adalah penyiar nasional yang menghadirkan konten berkualitas, mendidik, dan menghibur masyarakat Malaysia sejak 1963.
@@ -29,9 +29,9 @@ export default function Footer() {
           <div>
             <h6 className="mb-2">Rangkaian RTM</h6>
             <ul className="list-unstyled small mb-0">
-              <li className="mb-1"><a href="#" className="text-accent">Portal Rasmi RTM</a></li>
-              <li className="mb-1"><a href="#" className="text-accent">Berita RTM</a></li>
-              <li><a href="#" className="text-accent">RTM Klik</a></li>
+              <li className="mb-1"><a href="https://www.rtm.gov.my" className="text-accent" target="_blank" rel="noopener noreferrer">Portal Rasmi RTM</a></li>
+              <li className="mb-1"><a href="https://berita.rtm.gov.my" className="text-accent" target="_blank" rel="noopener noreferrer">Berita RTM</a></li>
+              <li><a href="https://rtmklik.rtm.gov.my" className="text-accent" target="_blank" rel="noopener noreferrer">RTM Klik</a></li>
             </ul>
           </div>
           <div>
@@ -45,15 +45,9 @@ export default function Footer() {
         <hr className="my-3" style={{ borderColor: 'rgba(63, 63, 143, 0.3)' }} />
 
         <div className="text-center py-2">
-          <p className="text-muted small mb-2">
+          <p className="text-muted small mb-0">
             © 2025 RTM — Radio Televisyen Malaysia. Hak Cipta Terpelihara.
           </p>
-          <div>
-            <a href="#" className="social-icon me-3"><i className="bi bi-facebook"></i></a>
-            <a href="#" className="social-icon me-3"><i className="bi bi-instagram"></i></a>
-            <a href="#" className="social-icon me-3"><i className="bi bi-twitter-x"></i></a>
-            <a href="#" className="social-icon"><i className="bi bi-youtube"></i></a>
-          </div>
         </div>
       </div>
     </footer>
