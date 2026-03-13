@@ -15,6 +15,7 @@ class StationController extends Controller
     public function index(Request $request)
     {
         $query = Station::query()
+            ->with('category')
             ->leftJoin('analytics_events', function ($join) {
                 $join->on('stations.id', '=', 'analytics_events.reference_id')
                      ->where('analytics_events.event_type', '=', 'pageview')
@@ -29,7 +30,9 @@ class StationController extends Controller
         }
 
         if ($request->filled('category')) {
-            $query->where('stations.category', $request->input('category'));
+            $query->whereHas('category', function ($q) {
+                $q->where('slug', request()->input('category'));
+            });
         }
 
         if ($request->has('active') && $request->input('active') !== '') {
@@ -49,6 +52,12 @@ class StationController extends Controller
         $perPage = $request->input('per_page', 15);
         $stations = $query->paginate($perPage)->withQueryString();
 
+        // Map category slug for display
+        $stations->getCollection()->transform(function ($station) {
+            $station->category = $station->category->slug;
+            return $station;
+        });
+
         return response()->json(['stations' => $stations]);
     }
 
@@ -63,7 +72,7 @@ class StationController extends Controller
             'title' => 'required|string',
             'description' => 'sometimes|string',
             'frequency' => 'sometimes|string',
-            'category' => ['required', Rule::in(StationCategory::pluck('slug')->toArray())],
+            'station_category_id' => 'required|exists:station_categories,id',
             'slug' => 'sometimes|string|unique:stations',
             'rtmklik_player_url' => 'sometimes|string',
             'facebook_url' => 'sometimes|string',
@@ -85,7 +94,7 @@ class StationController extends Controller
             'slug' => $slug,
             'description' => $request->input('description'),
             'frequency' => $request->input('frequency'),
-            'category' => $request->input('category'),
+            'station_category_id' => $request->input('station_category_id'),
             'rtmklik_player_url' => $request->input('rtmklik_player_url'),
             'facebook_url' => $request->input('facebook_url'),
             'x_url' => $request->input('x_url'),
@@ -113,7 +122,7 @@ class StationController extends Controller
             'title' => 'sometimes|string',
             'description' => 'sometimes|string',
             'frequency' => 'sometimes|string',
-            'category' => ['sometimes', Rule::in(StationCategory::pluck('slug')->toArray())],
+            'station_category_id' => 'sometimes|exists:station_categories,id',
             'slug' => 'sometimes|string|unique:stations,slug,' . $station->id,
             'rtmklik_player_url' => 'sometimes|string',
             'facebook_url' => 'sometimes|string',
@@ -128,7 +137,7 @@ class StationController extends Controller
         ]);
 
         $data = $request->only([
-            'title', 'slug', 'description', 'frequency', 'category',
+            'title', 'slug', 'description', 'frequency', 'station_category_id',
             'rtmklik_player_url', 'facebook_url', 'x_url',
             'instagram_url', 'youtube_url', 'tiktok_url', 'accent_color', 'active'
         ]);
