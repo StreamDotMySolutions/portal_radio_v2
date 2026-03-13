@@ -150,10 +150,10 @@ const DataTable = () => {
                         onChange={(e) => setCategoryFilter(e.target.value)}
                     >
                         <option value=''>All Categories</option>
+                        <option value='radio_online'>Radio Digital</option>
                         <option value='nasional'>Nasional</option>
                         <option value='negeri'>Negeri</option>
                         <option value='radio_tempatan'>Radio Tempatan</option>
-                        <option value='radio_online'>Radio Digital</option>
                     </Form.Select>
                 </div>
 

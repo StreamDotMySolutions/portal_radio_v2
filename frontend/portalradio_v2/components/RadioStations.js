@@ -241,17 +241,25 @@ export default function RadioStations() {
               onChange={(e) => setCategoryFilter(e.target.value)}
             >
               <option value="all">Semua Kategori</option>
+              <option value="radio_online">Radio Digital</option>
               <option value="nasional">Nasional</option>
               <option value="negeri">Negeri</option>
               <option value="radio_tempatan">Radio Tempatan</option>
-              <option value="radio_online">Radio Digital</option>
             </select>
           </div>
+
+          {/* Radio Digital */}
+          {radioOnlineStations.length > 0 && (categoryFilter === 'all' || categoryFilter === 'radio_online') && (
+            <>
+              <h2 className="section-heading">Radio Digital</h2>
+              {renderStationCards(radioOnlineStations)}
+            </>
+          )}
 
           {/* Saluran Nasional */}
           {(categoryFilter === 'all' || categoryFilter === 'nasional') && (
             <>
-              <h2 className="section-heading">Saluran Nasional</h2>
+              <h2 className="section-heading" style={{ marginTop: categoryFilter === 'all' ? '4rem' : '0' }}>Saluran Nasional</h2>
               {renderStationCards(nasionalStations)}
             </>
           )}
@@ -269,14 +277,6 @@ export default function RadioStations() {
             <>
               <h2 className="section-heading" style={{ marginTop: categoryFilter === 'all' ? '4rem' : '0' }}>Radio Tempatan</h2>
               {renderStationCards(radioTempatanStations)}
-            </>
-          )}
-
-          {/* Radio Online */}
-          {radioOnlineStations.length > 0 && (categoryFilter === 'all' || categoryFilter === 'radio_online') && (
-            <>
-              <h2 className="section-heading" style={{ marginTop: categoryFilter === 'all' ? '4rem' : '0' }}>Radio Digital</h2>
-              {renderStationCards(radioOnlineStations)}
             </>
           )}
         </div>

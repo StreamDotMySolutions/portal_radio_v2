@@ -88,6 +88,14 @@ export default function Navbar() {
               <ul className="dropdown-menu dropdown-menu-dark p-0" style={{ minWidth: '900px' }}>
                 <li>
                   <div className="px-3 py-2 row g-0">
+                    {radioOnlineStations.length > 0 && (
+                      <div className="col-3">
+                        <h6 className="dropdown-header px-1">Radio Digital</h6>
+                        {radioOnlineStations.map(station => (
+                          <a key={station.slug} className={`dropdown-item px-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`}>{station.name}</a>
+                        ))}
+                      </div>
+                    )}
                     <div className="col-3">
                       <h6 className="dropdown-header px-1">Nasional</h6>
                       {nasionalStations.map(station => (
@@ -107,17 +115,9 @@ export default function Navbar() {
                       ))}
                     </div>
                     {radioTempatanStations.length > 0 && (
-                      <div className="col-3">
+                      <div className="col-2">
                         <h6 className="dropdown-header px-1">Radio Tempatan</h6>
                         {radioTempatanStations.map(station => (
-                          <a key={station.slug} className={`dropdown-item px-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`}>{station.name}</a>
-                        ))}
-                      </div>
-                    )}
-                    {radioOnlineStations.length > 0 && (
-                      <div className="col-2">
-                        <h6 className="dropdown-header px-1">Radio Digital</h6>
-                        {radioOnlineStations.map(station => (
                           <a key={station.slug} className={`dropdown-item px-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`}>{station.name}</a>
                         ))}
                       </div>

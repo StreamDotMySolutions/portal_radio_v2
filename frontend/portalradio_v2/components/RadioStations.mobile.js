@@ -233,17 +233,25 @@ export default function RadioStationsMobile() {
               onChange={(e) => setCategoryFilter(e.target.value)}
             >
               <option value="all">Semua Kategori</option>
+              <option value="radio_online">Radio Digital</option>
               <option value="nasional">Nasional</option>
               <option value="negeri">Negeri</option>
               <option value="radio_tempatan">Radio Tempatan</option>
-              <option value="radio_online">Radio Digital</option>
             </select>
           </div>
+
+          {/* Radio Digital */}
+          {radioOnlineStations.length > 0 && (categoryFilter === 'all' || categoryFilter === 'radio_online') && (
+            <>
+              <h2 className="section-heading" style={{ fontSize: '1.5rem' }}>Radio Digital</h2>
+              {renderStationCards(radioOnlineStations)}
+            </>
+          )}
 
           {/* Saluran Nasional */}
           {(categoryFilter === 'all' || categoryFilter === 'nasional') && (
             <>
-              <h2 className="section-heading" style={{ fontSize: '1.5rem' }}>Saluran Nasional</h2>
+              <h2 className="section-heading" style={{ marginTop: categoryFilter === 'all' ? '2rem' : '0', fontSize: '1.5rem' }}>Saluran Nasional</h2>
               {renderStationCards(nasionalStations)}
             </>
           )}
@@ -261,14 +269,6 @@ export default function RadioStationsMobile() {
             <>
               <h2 className="section-heading" style={{ marginTop: categoryFilter === 'all' ? '2rem' : '0', fontSize: '1.5rem' }}>Radio Tempatan</h2>
               {renderStationCards(radioTempatanStations)}
-            </>
-          )}
-
-          {/* Radio Online */}
-          {radioOnlineStations.length > 0 && (categoryFilter === 'all' || categoryFilter === 'radio_online') && (
-            <>
-              <h2 className="section-heading" style={{ marginTop: categoryFilter === 'all' ? '2rem' : '0', fontSize: '1.5rem' }}>Radio Digital</h2>
-              {renderStationCards(radioOnlineStations)}
             </>
           )}
         </div>
