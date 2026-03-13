@@ -104,7 +104,7 @@ const Analytics = () => {
     if (isLoading) return <div className='p-3 text-muted'>Loading...</div>
     if (!data)     return <div className='p-3 text-danger'>Failed to load analytics.</div>
 
-    const { summary, top_articles, top_searches, top_directory_searches, top_downloads, daily_views, device_split } = data
+    const { summary, top_articles, top_searches, top_downloads, daily_views, device_split } = data
 
     const totalDevices = device_split.reduce((s, d) => s + d.count, 0) || 1
 
@@ -247,36 +247,6 @@ const Analytics = () => {
                                             <tr><td colSpan={3} className='text-center text-muted py-3'>No searches yet</td></tr>
                                         )}
                                         {top_searches.map((item, i) => (
-                                            <tr key={i}>
-                                                <td className='text-muted'>{i + 1}</td>
-                                                <td>{item.query}</td>
-                                                <td className='text-end fw-semibold'>{item.count}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </Table>
-                            </Card.Body>
-                        </Card>
-
-                        <Card>
-                            <Card.Header className='fw-semibold'>
-                                <FontAwesomeIcon icon={['fas', 'address-book']} className='me-2 text-secondary' />
-                                Top Directory Searches
-                            </Card.Header>
-                            <Card.Body className='p-0'>
-                                <Table hover responsive className='mb-0'>
-                                    <thead className='table-light'>
-                                        <tr>
-                                            <th style={{ '--bs-table-cell-padding-y': '0.85rem' }}>#</th>
-                                            <th style={{ '--bs-table-cell-padding-y': '0.85rem' }}>Query</th>
-                                            <th style={{ '--bs-table-cell-padding-y': '0.85rem' }} className='text-end'>Count</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {top_directory_searches.length === 0 && (
-                                            <tr><td colSpan={3} className='text-center text-muted py-3'>No searches yet</td></tr>
-                                        )}
-                                        {top_directory_searches.map((item, i) => (
                                             <tr key={i}>
                                                 <td className='text-muted'>{i + 1}</td>
                                                 <td>{item.query}</td>
