@@ -15,13 +15,13 @@ class StationController extends Controller
     public function index(Request $request)
     {
         $query = Station::query()
-            ->with('category')
+            ->leftJoin('station_categories', 'stations.station_category_id', '=', 'station_categories.id')
             ->leftJoin('analytics_events', function ($join) {
                 $join->on('stations.id', '=', 'analytics_events.reference_id')
                      ->where('analytics_events.event_type', '=', 'pageview')
                      ->where('analytics_events.page_type', '=', 'station');
             })
-            ->select('stations.*', DB::raw('COUNT(analytics_events.id) as pageview_hits'))
+            ->select('stations.*', 'station_categories.slug as category', DB::raw('COUNT(analytics_events.id) as pageview_hits'))
             ->groupBy('stations.id');
 
         if ($request->filled('search')) {
@@ -30,9 +30,7 @@ class StationController extends Controller
         }
 
         if ($request->filled('category')) {
-            $query->whereHas('category', function ($q) {
-                $q->where('slug', request()->input('category'));
-            });
+            $query->where('station_categories.slug', $request->input('category'));
         }
 
         if ($request->has('active') && $request->input('active') !== '') {
@@ -51,12 +49,6 @@ class StationController extends Controller
 
         $perPage = $request->input('per_page', 15);
         $stations = $query->paginate($perPage)->withQueryString();
-
-        // Map category slug for display
-        $stations->getCollection()->transform(function ($station) {
-            $station->category = $station->category ? $station->category->slug : null;
-            return $station;
-        });
 
         return response()->json(['stations' => $stations]);
     }
