@@ -54,7 +54,7 @@ class StationController extends Controller
 
         // Map category slug for display
         $stations->getCollection()->transform(function ($station) {
-            $station->category = $station->category->slug;
+            $station->category = $station->category ? $station->category->slug : null;
             return $station;
         });
 
