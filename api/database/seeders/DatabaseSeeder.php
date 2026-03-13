@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             DirectorySeeder::class,
             BannerSeeder::class,
+            StationCategorySeeder::class,
             StationSeeder::class,
             SettingSeeder::class,
             ChatUserSeeder::class,

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Card, Form, InputGroup, Row, Col, Figure, Button } from 'react-bootstrap'
+import { Card, Form, InputGroup, Row, Col, Figure, Button, Spinner } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import axios from '../../../../libs/axios'
+import useStore from '../../../store'
 
 const HtmlForm = ({
     form,
@@ -13,8 +15,18 @@ const HtmlForm = ({
     onBannerChange,
     serverUrl
 }) => {
+    const { url: apiBase } = useStore()
     const [replacingThumbnail, setReplacingThumbnail] = useState(false)
     const [replacingBanner, setReplacingBanner] = useState(false)
+    const [categories, setCategories] = useState([])
+    const [categoriesLoading, setCategoriesLoading] = useState(true)
+
+    useEffect(() => {
+        axios({ method: 'get', url: `${apiBase}/station-categories` })
+            .then((response) => setCategories(response.data.categories))
+            .catch((error) => console.warn(error))
+            .finally(() => setCategoriesLoading(false))
+    }, [apiBase])
 
     const handleCancelThumbnailReplace = () => {
         setReplacingThumbnail(false)
@@ -84,19 +96,26 @@ const HtmlForm = ({
                         <Col sm={6}>
                             <Form.Group>
                                 <Form.Label className='fw-semibold small text-muted mb-1'>Category</Form.Label>
-                                <Form.Select
-                                    value={form.category}
-                                    disabled={isLoading}
-                                    isInvalid={!!errors?.category}
-                                    onChange={(e) => onChange('category')(e.target.value)}
-                                    required
-                                >
-                                    <option value=''>Select category...</option>
-                                    <option value='radio_online'>Radio Digital</option>
-                                    <option value='nasional'>Nasional</option>
-                                    <option value='negeri'>Negeri</option>
-                                    <option value='radio_tempatan'>Radio Tempatan</option>
-                                </Form.Select>
+                                {categoriesLoading ? (
+                                    <div style={{ padding: '0.375rem 0.75rem' }}>
+                                        <Spinner animation='border' size='sm' />
+                                    </div>
+                                ) : (
+                                    <Form.Select
+                                        value={form.category}
+                                        disabled={isLoading || categoriesLoading}
+                                        isInvalid={!!errors?.category}
+                                        onChange={(e) => onChange('category')(e.target.value)}
+                                        required
+                                    >
+                                        <option value=''>Select category...</option>
+                                        {categories.map((cat) => (
+                                            <option key={cat.id} value={cat.slug}>
+                                                {cat.display_name}
+                                            </option>
+                                        ))}
+                                    </Form.Select>
+                                )}
                                 {errors?.category && (
                                     <Form.Control.Feedback type='invalid' className='d-block'>
                                         {errors.category[0]}

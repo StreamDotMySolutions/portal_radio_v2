@@ -33,6 +33,7 @@ import ArticleManagement from './pages/Administration/Articles'
 import ArticleDataManagement from './pages/Administration/ArticlesData'
 import BannerManagement from './pages/Administration/Banners'
 import StationManagement from './pages/Administration/Stations'
+import StationCategoryManagement from './pages/Administration/StationCategories'
 import ProgrammeManagement from './pages/Administration/Programmes'
 import VideoManagement from './pages/Administration/Videos'
 import DirectoryManagement from './pages/Administration/Directories'
@@ -78,6 +79,7 @@ export default function App() {
                 <Route path="/administration/articles-data/:parentId" element={<ArticleDataManagement />} />
                 <Route path="/administration/banners" element={<BannerManagement />} />
                 <Route path="/administration/stations" element={<StationManagement />} />
+                <Route path="/administration/station-categories" element={<StationCategoryManagement />} />
                 <Route path="/administration/livestream" element={<LivestreamManagement />} />
                 <Route path="/administration/programmes" element={<ProgrammeManagement />} />
                 <Route path="/administration/videos" element={<VideoManagement />} />

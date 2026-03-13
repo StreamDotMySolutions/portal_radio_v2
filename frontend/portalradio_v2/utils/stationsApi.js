@@ -63,3 +63,10 @@ export async function searchStations(query) {
   const data = await res.json();
   return (data.stations || []).map(mapStation);
 }
+
+export async function fetchStationCategories() {
+  const res = await fetch(`${API_URL}/station-categories`);
+  if (!res.ok) return [];
+  const data = await res.json();
+  return data.categories || [];
+}

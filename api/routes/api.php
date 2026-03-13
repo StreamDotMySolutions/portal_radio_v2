@@ -30,6 +30,7 @@ use App\Http\Controllers\Backend\{
     ActivityController,
     ComplaintController,
     StationController,
+    StationCategoryController,
     LivestreamController,
     SettingController,
 };
@@ -153,6 +154,14 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::delete('/stations/{station}', [StationController::class, 'delete']);
     Route::patch('/stations/{station}/toggle', [StationController::class, 'toggle']);
     Route::get('/stations/ordering/{station}', [StationController::class, 'ordering']);
+
+    // Station Categories
+    Route::get('/station-categories', [StationCategoryController::class, 'index']);
+    Route::get('/station-categories/{stationCategory}', [StationCategoryController::class, 'show']);
+    Route::post('/station-categories', [StationCategoryController::class, 'store']);
+    Route::put('/station-categories/{stationCategory}', [StationCategoryController::class, 'update']);
+    Route::delete('/station-categories/{stationCategory}', [StationCategoryController::class, 'delete']);
+    Route::patch('/station-categories/{stationCategory}/toggle', [StationCategoryController::class, 'toggle']);
 
     // Settings
     Route::get('/settings', [SettingController::class, 'index']);

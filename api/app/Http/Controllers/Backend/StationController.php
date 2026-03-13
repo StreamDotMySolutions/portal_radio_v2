@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Backend;
 
 use Illuminate\Http\Request;
 use App\Models\Station;
+use App\Models\StationCategory;
 use App\Services\CommonService;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class StationController extends Controller
 {
@@ -61,7 +63,7 @@ class StationController extends Controller
             'title' => 'required|string',
             'description' => 'sometimes|string',
             'frequency' => 'sometimes|string',
-            'category' => 'required|in:nasional,negeri,radio_tempatan,radio_online',
+            'category' => ['required', Rule::in(StationCategory::pluck('slug')->toArray())],
             'slug' => 'sometimes|string|unique:stations',
             'rtmklik_player_url' => 'sometimes|string',
             'facebook_url' => 'sometimes|string',
@@ -111,7 +113,7 @@ class StationController extends Controller
             'title' => 'sometimes|string',
             'description' => 'sometimes|string',
             'frequency' => 'sometimes|string',
-            'category' => 'sometimes|in:nasional,negeri,radio_tempatan,radio_online',
+            'category' => ['sometimes', Rule::in(StationCategory::pluck('slug')->toArray())],
             'slug' => 'sometimes|string|unique:stations,slug,' . $station->id,
             'rtmklik_player_url' => 'sometimes|string',
             'facebook_url' => 'sometimes|string',

@@ -15,6 +15,7 @@ use App\Http\Controllers\Frontend\{
     DownloadController,
     ComplaintController,
     StationController,
+    StationCategoryController,
     SettingController,
     ChatController,
 };
@@ -38,6 +39,7 @@ Route::get('/home-programmes', [ProgrammeController::class, 'index']);
 Route::get('/home-videos', [VideoController::class, 'index']);
 Route::get('/stations', [StationController::class, 'index']);
 Route::get('/stations/{station:slug}', [StationController::class, 'show']);
+Route::get('/station-categories', [StationCategoryController::class, 'index']);
 Route::get('/livestream-url', [SettingController::class, 'livestreamUrl']);
 Route::post('/directories/search', [DirectoryController::class, 'search']);
 Route::get('/directories/{id}', [DirectoryController::class, 'index']);

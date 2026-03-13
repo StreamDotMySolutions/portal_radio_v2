@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
-import { fetchStations, fetchStationHits } from '@/utils/stationsApi';
+import { fetchStations, fetchStationHits, fetchStationCategories } from '@/utils/stationsApi';
 
 function getOrCreateSessionId() {
   let id = sessionStorage.getItem('rtm_sid');
@@ -17,19 +17,19 @@ export default function RadioStationsMobile() {
   const [playingSlug, setPlayingSlug] = useState(null);
   const audioRef = useRef(null);
   const hlsRef = useRef(null);
-  const [nasionalStations, setNasionalStations] = useState([]);
-  const [negeriStations, setNegeriStations] = useState([]);
-  const [radioTempatanStations, setRadioTempatanStations] = useState([]);
-  const [radioOnlineStations, setRadioOnlineStations] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [stationsByCategory, setStationsByCategory] = useState({});
   const [stationHits, setStationHits] = useState({});
   const [categoryFilter, setCategoryFilter] = useState('all');
 
   useEffect(() => {
-    fetchStations().then(stations => {
-      setNasionalStations(stations.filter(s => s.category === 'nasional'));
-      setNegeriStations(stations.filter(s => s.category === 'negeri'));
-      setRadioTempatanStations(stations.filter(s => s.category === 'radio_tempatan'));
-      setRadioOnlineStations(stations.filter(s => s.category === 'radio_online'));
+    Promise.all([fetchStationCategories(), fetchStations()]).then(([cats, stations]) => {
+      setCategories(cats || []);
+      const grouped = {};
+      (cats || []).forEach(cat => {
+        grouped[cat.slug] = stations.filter(s => s.category === cat.slug);
+      });
+      setStationsByCategory(grouped);
     });
     fetchStationHits().then(setStationHits);
   }, []);
@@ -233,44 +233,25 @@ export default function RadioStationsMobile() {
               onChange={(e) => setCategoryFilter(e.target.value)}
             >
               <option value="all">Semua Kategori</option>
-              <option value="radio_online">Radio Digital</option>
-              <option value="nasional">Nasional</option>
-              <option value="negeri">Negeri</option>
-              <option value="radio_tempatan">Radio Tempatan</option>
+              {categories.map(cat => (
+                <option key={cat.slug} value={cat.slug}>{cat.display_name}</option>
+              ))}
             </select>
           </div>
 
-          {/* Radio Digital */}
-          {radioOnlineStations.length > 0 && (categoryFilter === 'all' || categoryFilter === 'radio_online') && (
-            <>
-              <h2 className="section-heading" style={{ fontSize: '1.5rem' }}>Radio Digital</h2>
-              {renderStationCards(radioOnlineStations)}
-            </>
-          )}
+          {/* Dynamic categories */}
+          {categories.map((category) => {
+            const stations = stationsByCategory[category.slug] || [];
+            if (stations.length === 0) return null;
+            if (categoryFilter !== 'all' && categoryFilter !== category.slug) return null;
 
-          {/* Saluran Nasional */}
-          {(categoryFilter === 'all' || categoryFilter === 'nasional') && (
-            <>
-              <h2 className="section-heading" style={{ marginTop: categoryFilter === 'all' ? '2rem' : '0', fontSize: '1.5rem' }}>Saluran Nasional</h2>
-              {renderStationCards(nasionalStations)}
-            </>
-          )}
-
-          {/* Saluran Negeri */}
-          {(categoryFilter === 'all' || categoryFilter === 'negeri') && (
-            <>
-              <h2 className="section-heading" style={{ marginTop: categoryFilter === 'all' ? '2rem' : '0', fontSize: '1.5rem' }}>Saluran Negeri</h2>
-              {renderStationCards(negeriStations)}
-            </>
-          )}
-
-          {/* Radio Tempatan */}
-          {radioTempatanStations.length > 0 && (categoryFilter === 'all' || categoryFilter === 'radio_tempatan') && (
-            <>
-              <h2 className="section-heading" style={{ marginTop: categoryFilter === 'all' ? '2rem' : '0', fontSize: '1.5rem' }}>Radio Tempatan</h2>
-              {renderStationCards(radioTempatanStations)}
-            </>
-          )}
+            return (
+              <div key={category.slug}>
+                <h2 className="section-heading" style={{ marginTop: categoryFilter === 'all' ? '2rem' : '0', fontSize: '1.5rem' }}>{category.display_name}</h2>
+                {renderStationCards(stations)}
+              </div>
+            );
+          })}
         </div>
       </section>
     </>
