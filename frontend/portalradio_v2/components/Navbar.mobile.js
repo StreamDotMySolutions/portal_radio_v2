@@ -7,6 +7,7 @@ import { fetchStations, fetchStationCategories } from '@/utils/stationsApi';
 export default function NavbarMobile() {
   const [scrolled, setScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [openCategory, setOpenCategory] = useState(null);
   const [query, setQuery] = useState('');
   const [categories, setCategories] = useState([]);
   const [stationsByCategory, setStationsByCategory] = useState({});
@@ -89,44 +90,33 @@ export default function NavbarMobile() {
             <li className="nav-item">
               <a className={`nav-link py-2${isActive('/') ? ' nav-active' : ''}`} href="/">Utama</a>
             </li>
-            <li className="nav-item dropdown">
-              <a className={`nav-link dropdown-toggle py-2${dropdownOpen || pathname.startsWith('/station/') ? ' nav-active' : ''}`} href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Senarai Radio</a>
-              <ul className="dropdown-menu dropdown-menu-dark p-0" style={{ minWidth: '400px', left: '50%', transform: 'translateX(-50%)' }}>
+            <li className="nav-item dropdown" style={{ position: 'static' }}>
+              <a className={`nav-link dropdown-toggle py-2${dropdownOpen || pathname.startsWith('/station/') ? ' nav-active' : ''}`} href="#" role="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Senarai Radio</a>
+              <ul className="dropdown-menu dropdown-menu-dark p-0" style={{ width: '100vw', left: 0, right: 0, marginTop: 0, borderRadius: 0 }}>
                 <li>
-                  <div className="px-2 py-2 row g-0">
+                  <div className="py-1">
                     {categories.map(category => {
                       const stations = stationsByCategory[category.slug] || [];
                       if (stations.length === 0) return null;
+                      const isOpen = openCategory === category.slug;
 
-                      // Special handling for Negeri category to split in 2 columns
-                      if (category.slug === 'negeri') {
-                        const mid = Math.ceil(stations.length / 2);
-                        return (
-                          <React.Fragment key={category.slug}>
-                            <div className="col-2">
-                              <h6 className="dropdown-header px-1" style={{ fontSize: '0.7rem' }}>{category.display_name}</h6>
-                              {stations.slice(0, mid).map(station => (
-                                <a key={station.slug} className={`dropdown-item px-1 py-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`} style={{ fontSize: '0.7rem', whiteSpace: 'normal' }}>{station.name}</a>
-                              ))}
-                            </div>
-                            <div className="col-2">
-                              <h6 className="dropdown-header px-1" style={{ fontSize: '0.7rem' }}>&nbsp;</h6>
-                              {stations.slice(mid).map(station => (
-                                <a key={station.slug} className={`dropdown-item px-1 py-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`} style={{ fontSize: '0.7rem', whiteSpace: 'normal' }}>{station.name}</a>
-                              ))}
-                            </div>
-                          </React.Fragment>
-                        );
-                      }
-
-                      // Regular column for other categories
-                      const colClass = category.slug === 'radio-online' || category.slug === 'nasional' ? 'col-3' : 'col-2';
                       return (
-                        <div key={category.slug} className={colClass}>
-                          <h6 className="dropdown-header px-1" style={{ fontSize: '0.7rem' }}>{category.display_name}</h6>
-                          {stations.map(station => (
-                            <a key={station.slug} className={`dropdown-item px-1 py-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`} style={{ fontSize: '0.7rem', whiteSpace: 'normal' }}>{station.name}</a>
-                          ))}
+                        <div key={category.slug}>
+                          <button
+                            className="dropdown-item d-flex justify-content-between align-items-center px-3 py-2"
+                            style={{ fontSize: '0.85rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}
+                            onClick={(e) => { e.stopPropagation(); setOpenCategory(isOpen ? null : category.slug); }}
+                          >
+                            {category.display_name}
+                            <i className={`bi bi-chevron-${isOpen ? 'up' : 'down'}`} style={{ fontSize: '0.7rem' }} />
+                          </button>
+                          {isOpen && (
+                            <div className="px-2 pb-1">
+                              {stations.map(station => (
+                                <a key={station.slug} className={`dropdown-item px-3 py-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`} style={{ fontSize: '0.8rem', whiteSpace: 'normal' }}>{station.name}</a>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       );
                     })}

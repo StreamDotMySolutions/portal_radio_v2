@@ -102,8 +102,29 @@ export default function Navbar() {
                       const stations = stationsByCategory[category.slug] || [];
                       if (stations.length === 0) return null;
 
-                      // Special handling for Negeri & Tempatan categories to split in 2 columns
-                      if (category.slug === 'negeri' || category.slug === 'tempatan') {
+                      // Negeri: split into 2 sub-columns
+                      if (category.slug === 'negeri') {
+                        const mid = Math.ceil(stations.length / 2);
+                        return (
+                          <div key={category.slug} className="col-5 d-flex gap-0">
+                            <div className="flex-fill">
+                              <h6 className="dropdown-header px-1">{category.display_name}</h6>
+                              {stations.slice(0, mid).map(station => (
+                                <a key={station.slug} className={`dropdown-item px-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`}>{station.name}</a>
+                              ))}
+                            </div>
+                            <div className="flex-fill">
+                              <h6 className="dropdown-header px-1">&nbsp;</h6>
+                              {stations.slice(mid).map(station => (
+                                <a key={station.slug} className={`dropdown-item px-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`}>{station.name}</a>
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      }
+
+                      // Radio Tempatan: split into 2 sub-columns
+                      if (category.slug === 'radio-tempatan') {
                         const mid = Math.ceil(stations.length / 2);
                         return (
                           <React.Fragment key={category.slug}>
@@ -123,10 +144,9 @@ export default function Navbar() {
                         );
                       }
 
-                      // Regular column for other categories
-                      const colClass = category.slug === 'radio-online' || category.slug === 'nasional' ? 'col-3' : 'col-2';
+                      // Nasional and others: narrow column
                       return (
-                        <div key={category.slug} className={colClass}>
+                        <div key={category.slug} className="col-2">
                           <h6 className="dropdown-header px-1">{category.display_name}</h6>
                           {stations.map(station => (
                             <a key={station.slug} className={`dropdown-item px-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`}>{station.name}</a>
