@@ -224,9 +224,7 @@ function SearchResultContent() {
                         }}
                       >
                         <i className="bi bi-pin-map" style={{ fontSize: '0.8rem' }}></i>
-                        <span>
-                          {station.category === 'nasional' ? 'Nasional' : station.category === 'negeri' ? 'Negeri' : 'Radio Tempatan'}
-                        </span>
+                        <span>{station.categoryDisplay}</span>
                       </div>
                     </div>
                   </Link>

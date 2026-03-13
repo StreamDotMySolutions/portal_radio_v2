@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use Illuminate\Http\Request;
 use App\Models\Station;
+use App\Models\StationCategory;
 
 class StationController extends Controller
 {
@@ -26,6 +27,13 @@ class StationController extends Controller
         }
 
         $stations = $query->defaultOrder()->get();
+
+        // Map category slug to display_name
+        $categories = StationCategory::all()->keyBy('slug');
+        $stations = $stations->map(function ($station) use ($categories) {
+            $station->category_display = $categories[$station->category]->display_name ?? $station->category;
+            return $station;
+        });
 
         return response()->json(['stations' => $stations]);
     }

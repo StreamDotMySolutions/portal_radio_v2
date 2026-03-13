@@ -20,6 +20,7 @@ export function mapStation(s) {
     frequency: s.frequency || '',
     description: s.description || '',
     category: s.category,
+    categoryDisplay: s.category_display || s.category,
     social: {
       facebook: s.facebook_url || null,
       instagram: s.instagram_url || null,
