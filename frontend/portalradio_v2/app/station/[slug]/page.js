@@ -8,9 +8,25 @@ export async function generateMetadata({ params }) {
   const { slug } = await params;
   const station = await fetchStationBySlug(slug);
   if (!station) return {};
+  const title = `${station.name} — PortalRadio RTM`;
+  const description = station.description || `Dengar ${station.name} secara langsung di PortalRadio RTM`;
+  const image = station.heroBanner || station.banner || '/og-image.png';
   return {
-    title: `${station.name} — PortalRadio RTM`,
-    description: station.description,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      url: `/station/${slug}`,
+      images: [{ url: image, alt: station.name }],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [image],
+    },
   };
 }
 
