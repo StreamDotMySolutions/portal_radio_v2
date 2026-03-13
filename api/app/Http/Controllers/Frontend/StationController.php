@@ -10,10 +10,12 @@ class StationController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Station::query()->where('active', 1);
+        $query = Station::query()->where('active', 1)->with('category');
 
         if ($request->filled('category')) {
-            $query->where('category', $request->input('category'));
+            $query->whereHas('category', function ($q) {
+                $q->where('slug', request()->input('category'));
+            });
         }
 
         if ($request->filled('q')) {
@@ -21,17 +23,16 @@ class StationController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
                   ->orWhere('description', 'like', "%{$search}%")
-                  ->orWhere('frequency', 'like', "%{$search}%")
-                  ->orWhere('category', 'like', "%{$search}%");
+                  ->orWhere('frequency', 'like', "%{$search}%");
             });
         }
 
         $stations = $query->defaultOrder()->get();
 
-        // Map category slug to display_name
-        $categories = StationCategory::all()->keyBy('slug');
-        $stations = $stations->map(function ($station) use ($categories) {
-            $station->category_display = $categories[$station->category]->display_name ?? $station->category;
+        // Add category slug and display_name to response for frontend
+        $stations = $stations->map(function ($station) {
+            $station->category = $station->category->slug;
+            $station->category_display = $station->category ? $station->category->display_name : '';
             return $station;
         });
 
