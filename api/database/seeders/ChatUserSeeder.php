@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\ChatUser;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class ChatUserSeeder extends Seeder
 {
@@ -31,6 +32,7 @@ class ChatUserSeeder extends Seeder
                     'email' => $user['email'],
                     'password' => $user['password'],
                     'color' => $user['color'],
+                    'token' => Str::random(64),
                     'email_verified_at' => now(),
                     'full_name' => ucfirst(str_replace('_', ' ', $user['username'])),
                 ]
