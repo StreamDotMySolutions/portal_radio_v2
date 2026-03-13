@@ -32,7 +32,7 @@ export default function HeroMobile() {
   }
 
   return (
-    <section style={{ paddingTop: 0, marginTop: '106px' }}>
+    <section style={{ paddingTop: 0, marginTop: '200px' }}>
       <div
         id="heroCarousel"
         className="carousel slide"
@@ -67,8 +67,6 @@ export default function HeroMobile() {
                     alt={`Banner ${idx}`}
                     style={{
                       width: '100%',
-                      height: '30vh',
-                      objectFit: 'cover',
                       display: 'block',
                     }}
                   />

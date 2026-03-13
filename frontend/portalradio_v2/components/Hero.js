@@ -32,71 +32,71 @@ export default function Hero() {
   }
 
   return (
-    <section style={{ paddingTop: '130px', paddingBottom: 0 }}>
-      <div
-        id="heroCarousel"
-        className="carousel slide h-100"
-        data-bs-ride="carousel"
-      >
-        {/* Indicators */}
-        <div className="carousel-indicators">
-          {banners.map((banner, idx) => (
-            <button
-              key={idx}
-              type="button"
-              data-bs-target="#heroCarousel"
-              data-bs-slide-to={idx}
-              className={idx === 0 ? 'active' : ''}
-              aria-current={idx === 0 ? 'true' : 'false'}
-              aria-label={`Slide ${idx + 1}`}
-            />
-          ))}
-        </div>
-
-        {/* Carousel items */}
-        <div className="carousel-inner h-100">
-          {banners.map((banner, idx) => (
-            <div
-              key={idx}
-              className={`carousel-item ${idx === 0 ? 'active' : ''}`}
-            >
-              {banner?.filename && (
-                <Link href={banner.redirect_url || '#'}>
-                  <img
-                    src={`${serverUrl}/storage/banners/${banner.filename}`}
-                    alt={`Banner ${idx}`}
-                    style={{
-                      width: '100%',
-                      height: '55vh',
-                      objectFit: 'cover',
-                      display: 'block',
-                    }}
-                  />
-                </Link>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* Controls */}
-        <button
-          className="carousel-control-prev"
-          type="button"
-          data-bs-target="#heroCarousel"
-          data-bs-slide="prev"
+    <section style={{ paddingTop: '200px', paddingBottom: 0 }}>
+      <div className="container">
+        <div
+          id="heroCarousel"
+          className="carousel slide"
+          data-bs-ride="carousel"
         >
-          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span className="visually-hidden">Previous</span>
-        </button>
-        <button
-          className="carousel-control-next"
-          type="button"
-          data-bs-target="#heroCarousel"
-          data-bs-slide="next"
-        >
-          <span className="carousel-control-next-icon" aria-hidden="true"></span>
-          <span className="visually-hidden">Next</span>
-        </button>
+          {/* Indicators */}
+          <div className="carousel-indicators">
+            {banners.map((banner, idx) => (
+              <button
+                key={idx}
+                type="button"
+                data-bs-target="#heroCarousel"
+                data-bs-slide-to={idx}
+                className={idx === 0 ? 'active' : ''}
+                aria-current={idx === 0 ? 'true' : 'false'}
+                aria-label={`Slide ${idx + 1}`}
+              />
+            ))}
+          </div>
+
+          {/* Carousel items */}
+          <div className="carousel-inner">
+            {banners.map((banner, idx) => (
+              <div
+                key={idx}
+                className={`carousel-item ${idx === 0 ? 'active' : ''}`}
+              >
+                {banner?.filename && (
+                  <Link href={banner.redirect_url || '#'}>
+                    <img
+                      src={`${serverUrl}/storage/banners/${banner.filename}`}
+                      alt={`Banner ${idx}`}
+                      style={{
+                        width: '100%',
+                        display: 'block',
+                      }}
+                    />
+                  </Link>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Controls */}
+          <button
+            className="carousel-control-prev"
+            type="button"
+            data-bs-target="#heroCarousel"
+            data-bs-slide="prev"
+          >
+            <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span className="visually-hidden">Previous</span>
+          </button>
+          <button
+            className="carousel-control-next"
+            type="button"
+            data-bs-target="#heroCarousel"
+            data-bs-slide="next"
+          >
+            <span className="carousel-control-next-icon" aria-hidden="true"></span>
+            <span className="visually-hidden">Next</span>
+          </button>
+        </div>
       </div>
     </section>
   );
