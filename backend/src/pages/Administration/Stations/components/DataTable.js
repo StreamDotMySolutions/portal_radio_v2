@@ -104,7 +104,9 @@ const DataTable = () => {
     const handleClearSearch = () => setQuery('')
 
     const categoryBadgeVariant = (cat) => {
-        return cat === 'nasional' ? 'primary' : 'info'
+        if (cat === 'nasional') return 'primary'
+        if (cat === 'negeri') return 'info'
+        return 'warning'
     }
 
     return (
@@ -149,6 +151,7 @@ const DataTable = () => {
                         <option value=''>All Categories</option>
                         <option value='nasional'>Nasional</option>
                         <option value='negeri'>Negeri</option>
+                        <option value='radio_tempatan'>Radio Tempatan</option>
                     </Form.Select>
                 </div>
 
@@ -163,7 +166,7 @@ const DataTable = () => {
                     {search && <> for <strong>"{search}"</strong></>}
                     {categoryFilter && (
                         <> — <Badge bg={categoryBadgeVariant(categoryFilter)}>
-                            {categoryFilter === 'nasional' ? 'Nasional' : 'Negeri'}
+                            {categoryFilter === 'nasional' ? 'Nasional' : categoryFilter === 'negeri' ? 'Negeri' : 'Radio Tempatan'}
                         </Badge></>
                     )}
                 </p>
@@ -196,7 +199,7 @@ const DataTable = () => {
                             <td>{item.title}</td>
                             <td>
                                 <Badge bg={categoryBadgeVariant(item.category)}>
-                                    {item.category === 'nasional' ? 'Nasional' : 'Negeri'}
+                                    {item.category === 'nasional' ? 'Nasional' : item.category === 'negeri' ? 'Negeri' : 'Radio Tempatan'}
                                 </Badge>
                             </td>
                             <td>{item.frequency || '—'}</td>
@@ -223,7 +226,7 @@ const DataTable = () => {
                             <td colSpan='6' className='text-center text-muted py-4'>
                                 No stations found
                                 {search && <> matching <strong>"{search}"</strong></>}
-                                {categoryFilter && <> in <strong>{categoryFilter === 'nasional' ? 'Nasional' : 'Negeri'}</strong></>}
+                                {categoryFilter && <> in <strong>{categoryFilter === 'nasional' ? 'Nasional' : categoryFilter === 'negeri' ? 'Negeri' : 'Radio Tempatan'}</strong></>}
                                 .
                             </td>
                         </tr>
