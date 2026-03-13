@@ -17,6 +17,9 @@ return new class extends Migration
             $table->foreignId('station_category_id')->nullable()->after('user_id');
         });
 
+        // Normalise underscore slugs to hyphens (old enum values used underscores)
+        DB::statement("UPDATE stations SET category = REPLACE(category, '_', '-') WHERE category LIKE '%\_%'");
+
         // Migrate data from category slug to station_category_id
         DB::statement('
             UPDATE stations s
