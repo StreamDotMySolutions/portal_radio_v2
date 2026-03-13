@@ -31,8 +31,9 @@ class StationController extends Controller
 
         // Add category slug and display_name to response for frontend
         $stations = $stations->map(function ($station) {
-            $station->category = $station->category->slug;
-            $station->category_display = $station->category ? $station->category->display_name : '';
+            $cat = $station->category;
+            $station->category = $cat ? $cat->slug : null;
+            $station->category_display = $cat ? $cat->display_name : '';
             return $station;
         });
 
