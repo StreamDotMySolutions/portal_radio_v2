@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Station;
+use App\Models\StationCategory;
 use Illuminate\Database\Seeder;
 
 class TempataStationSeeder extends Seeder
@@ -38,7 +39,7 @@ class TempataStationSeeder extends Seeder
         ];
 
         // Get tempatan category ID
-        $tempataCategory = \App\Models\StationCategory::where('slug', 'radio-tempatan')->first();
+        $tempataCategory = StationCategory::where('slug', 'radio-tempatan')->first();
 
         foreach ($stations as $data) {
             Station::updateOrCreate(
