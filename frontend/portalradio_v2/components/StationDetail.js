@@ -50,7 +50,7 @@ export default function StationDetail({ station }) {
         {/* 2-Column Layout: Left (Player) + Right (About + Frequency) */}
         <div className="d-flex mb-4" style={{ gap: '1.5rem' }}>
           {/* Left Column: Player */}
-          <div style={{ flex: '0 0 42%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <div style={{ flex: '0 0 42%', display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
             {station.embedPlayerUrl ? (
               <div style={{ width: '100%', maxWidth: '100%' }}>
                 <iframe
