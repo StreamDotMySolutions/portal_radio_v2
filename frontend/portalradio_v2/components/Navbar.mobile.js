@@ -91,7 +91,7 @@ export default function NavbarMobile() {
             </li>
             <li className="nav-item dropdown">
               <a className={`nav-link dropdown-toggle py-2${dropdownOpen || pathname.startsWith('/station/') ? ' nav-active' : ''}`} href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Senarai Radio</a>
-              <ul className="dropdown-menu dropdown-menu-dark p-0" style={{ minWidth: '400px' }}>
+              <ul className="dropdown-menu dropdown-menu-dark p-0" style={{ minWidth: '400px', left: '50%', transform: 'translateX(-50%)' }}>
                 <li>
                   <div className="px-2 py-2 row g-0">
                     {categories.map(category => {
