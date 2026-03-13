@@ -33,12 +33,11 @@ export default function Hero() {
 
   return (
     <section style={{ paddingTop: '200px', paddingBottom: 0 }}>
-      <div className="container">
-        <div
-          id="heroCarousel"
-          className="carousel slide"
-          data-bs-ride="carousel"
-        >
+      <div
+        id="heroCarousel"
+        className="carousel slide"
+        data-bs-ride="carousel"
+      >
           {/* Indicators */}
           <div className="carousel-indicators">
             {banners.map((banner, idx) => (
@@ -77,26 +76,25 @@ export default function Hero() {
             ))}
           </div>
 
-          {/* Controls */}
-          <button
-            className="carousel-control-prev"
-            type="button"
-            data-bs-target="#heroCarousel"
-            data-bs-slide="prev"
-          >
-            <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span className="visually-hidden">Previous</span>
-          </button>
-          <button
-            className="carousel-control-next"
-            type="button"
-            data-bs-target="#heroCarousel"
-            data-bs-slide="next"
-          >
-            <span className="carousel-control-next-icon" aria-hidden="true"></span>
-            <span className="visually-hidden">Next</span>
-          </button>
-        </div>
+        {/* Controls */}
+        <button
+          className="carousel-control-prev"
+          type="button"
+          data-bs-target="#heroCarousel"
+          data-bs-slide="prev"
+        >
+          <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span className="visually-hidden">Previous</span>
+        </button>
+        <button
+          className="carousel-control-next"
+          type="button"
+          data-bs-target="#heroCarousel"
+          data-bs-slide="next"
+        >
+          <span className="carousel-control-next-icon" aria-hidden="true"></span>
+          <span className="visually-hidden">Next</span>
+        </button>
       </div>
     </section>
   );
