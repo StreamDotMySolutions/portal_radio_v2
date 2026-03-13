@@ -69,8 +69,8 @@ class StationController extends Controller
             'instagram_url' => 'sometimes|string',
             'youtube_url' => 'sometimes|string',
             'tiktok_url' => 'sometimes|string',
-            'thumbnail' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:10240',
-            'banner' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:10240',
+            'thumbnail' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:102400',
+            'banner' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:102400',
             'accent_color' => 'sometimes|string|max:20',
             'active' => 'required|boolean',
         ]);
@@ -119,8 +119,8 @@ class StationController extends Controller
             'instagram_url' => 'sometimes|string',
             'youtube_url' => 'sometimes|string',
             'tiktok_url' => 'sometimes|string',
-            'thumbnail' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:10240',
-            'banner' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:10240',
+            'thumbnail' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:102400',
+            'banner' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:102400',
             'accent_color' => 'sometimes|string|max:20',
             'active' => 'sometimes|boolean',
         ]);
