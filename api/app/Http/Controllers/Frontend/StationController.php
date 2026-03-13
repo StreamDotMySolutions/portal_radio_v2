@@ -32,6 +32,7 @@ class StationController extends Controller
         // Add category slug and display_name to response for frontend
         $stations = $stations->map(function ($station) {
             $cat = $station->getRelation('category');
+            $station->unsetRelation('category');
             $station->category = $cat ? $cat->slug : null;
             $station->category_display = $cat ? $cat->display_name : '';
             return $station;
@@ -43,6 +44,13 @@ class StationController extends Controller
     public function show(Station $station)
     {
         if (!$station->active) abort(404);
+
+        $station->load('category');
+        $cat = $station->getRelation('category');
+        $station->unsetRelation('category');
+        $station->category = $cat ? $cat->slug : null;
+        $station->category_display = $cat ? $cat->display_name : '';
+
         return response()->json(['station' => $station]);
     }
 }
