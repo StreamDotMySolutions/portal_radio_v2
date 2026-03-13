@@ -99,44 +99,44 @@ export default function StationDetailMobile({ station }) {
         <div className="card-dark p-3 mb-3" style={{ borderRadius: '8px', background: `linear-gradient(135deg, ${station.accent}22, ${station.accent}11)` }}>
           <div style={{ textAlign: 'center' }}>
             <div style={{ color: 'var(--color-muted)', fontSize: '0.75rem', marginBottom: '0.5rem' }}>Frekuensi Radio</div>
-            <div style={{ color: '#fff', fontWeight: '700', fontSize: '2rem' }}>{station.frequency}</div>
+            <div style={{ color: '#fff', fontWeight: '700', fontSize: '2.5rem' }}>{station.frequency}</div>
           </div>
-        </div>
-
-        {/* About */}
-        <div className="card-dark p-3 mb-3" style={{ borderRadius: '8px' }}>
-          <h5 style={{ color: 'var(--color-text)', fontWeight: '600', marginBottom: '0.75rem', fontSize: '1rem' }}>Tentang Stesen</h5>
-          <p style={{ color: 'var(--color-muted)', lineHeight: '1.7', fontSize: '0.85rem', margin: 0 }}>{station.description}</p>
         </div>
 
         {/* Social Media Links */}
         {station.social && (Object.values(station.social).some(link => link !== '#')) && (
-          <div className="mb-3">
+          <div className="card-dark p-3 mb-3" style={{ borderRadius: '8px' }}>
             <h5 style={{ color: 'var(--color-text)', fontWeight: '600', marginBottom: '0.75rem', fontSize: '1rem' }}>Ikuti Kami</h5>
-            <div className="d-flex gap-2">
+            <div className="d-flex gap-3">
               {station.social.facebook && station.social.facebook !== '#' && (
-                <a href={station.social.facebook} target="_blank" rel="noopener noreferrer" style={{ color: station.accent, fontSize: '1.3rem' }}>
+                <a href={station.social.facebook} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontSize: '2.5rem' }}>
                   <i className="bi bi-facebook"></i>
                 </a>
               )}
               {station.social.instagram && station.social.instagram !== '#' && (
-                <a href={station.social.instagram} target="_blank" rel="noopener noreferrer" style={{ color: station.accent, fontSize: '1.3rem' }}>
+                <a href={station.social.instagram} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontSize: '2.5rem' }}>
                   <i className="bi bi-instagram"></i>
                 </a>
               )}
               {station.social.twitter && station.social.twitter !== '#' && (
-                <a href={station.social.twitter} target="_blank" rel="noopener noreferrer" style={{ color: station.accent, fontSize: '1.3rem' }}>
+                <a href={station.social.twitter} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontSize: '2.5rem' }}>
                   <i className="bi bi-twitter-x"></i>
                 </a>
               )}
               {station.social.youtube && station.social.youtube !== '#' && (
-                <a href={station.social.youtube} target="_blank" rel="noopener noreferrer" style={{ color: station.accent, fontSize: '1.3rem' }}>
+                <a href={station.social.youtube} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontSize: '2.5rem' }}>
                   <i className="bi bi-youtube"></i>
                 </a>
               )}
             </div>
           </div>
         )}
+
+        {/* About */}
+        <div className="card-dark p-3 mb-3" style={{ borderRadius: '8px' }}>
+          <h5 style={{ color: 'var(--color-text)', fontWeight: '600', marginBottom: '0.75rem', fontSize: '1rem' }}>Tentang Stesen</h5>
+          <p style={{ color: 'var(--color-muted)', lineHeight: '1.7', fontSize: '0.85rem', margin: 0 }}>{station.description}</p>
+        </div>
       </div>
     </div>
   );

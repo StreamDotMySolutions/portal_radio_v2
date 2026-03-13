@@ -27,7 +27,7 @@ export default function StationDetail({ station }) {
       >
         <div className="position-absolute top-0 start-0 w-100 h-100" style={{ background: `linear-gradient(to bottom, transparent 0%, ${station.accent}55 50%, var(--color-bg) 100%)` }} />
         <div className="position-relative text-center pb-4" style={{ zIndex: 1 }}>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: '700', color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>
+          <h1 style={{ fontSize: '3.5rem', fontWeight: '700', color: '#fff', textShadow: '0 2px 8px rgba(0,0,0,0.5)' }}>
             {station.name}
           </h1>
           <div className="d-flex align-items-center justify-content-center gap-3">
@@ -95,7 +95,7 @@ export default function StationDetail({ station }) {
             )}
           </div>
 
-          {/* Right Column: Frequency + About */}
+          {/* Right Column: Frequency + Social Media + About */}
           <div style={{ flex: '0 0 58%' }}>
             <div className="d-flex flex-column gap-4">
               {/* Frekuensi */}
@@ -116,40 +116,40 @@ export default function StationDetail({ station }) {
                 </div>
               </div>
 
-              {/* Tentang Stesen */}
-              <div className="card-dark p-4" style={{ borderRadius: '8px' }}>
-                <h3 style={{ color: 'var(--color-text)', fontWeight: '600', marginBottom: '1rem' }}>Tentang Stesen</h3>
-                <p style={{ color: 'var(--color-muted)', lineHeight: '1.8', margin: 0 }}>{station.description}</p>
-              </div>
-
               {/* Social Media Links */}
               {station.social && (Object.values(station.social).some(link => link !== '#')) && (
-                <div>
+                <div className="card-dark p-4" style={{ borderRadius: '8px' }}>
                   <h5 style={{ color: 'var(--color-text)', fontWeight: '600', marginBottom: '1rem' }}>Ikuti Kami</h5>
                   <div className="d-flex gap-3">
                     {station.social.facebook && station.social.facebook !== '#' && (
-                      <a href={station.social.facebook} target="_blank" rel="noopener noreferrer" style={{ color: station.accent, fontSize: '1.5rem' }}>
+                      <a href={station.social.facebook} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontSize: '3.5rem' }}>
                         <i className="bi bi-facebook"></i>
                       </a>
                     )}
                     {station.social.instagram && station.social.instagram !== '#' && (
-                      <a href={station.social.instagram} target="_blank" rel="noopener noreferrer" style={{ color: station.accent, fontSize: '1.5rem' }}>
+                      <a href={station.social.instagram} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontSize: '3.5rem' }}>
                         <i className="bi bi-instagram"></i>
                       </a>
                     )}
                     {station.social.twitter && station.social.twitter !== '#' && (
-                      <a href={station.social.twitter} target="_blank" rel="noopener noreferrer" style={{ color: station.accent, fontSize: '1.5rem' }}>
+                      <a href={station.social.twitter} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontSize: '3.5rem' }}>
                         <i className="bi bi-twitter-x"></i>
                       </a>
                     )}
                     {station.social.youtube && station.social.youtube !== '#' && (
-                      <a href={station.social.youtube} target="_blank" rel="noopener noreferrer" style={{ color: station.accent, fontSize: '1.5rem' }}>
+                      <a href={station.social.youtube} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontSize: '3.5rem' }}>
                         <i className="bi bi-youtube"></i>
                       </a>
                     )}
                   </div>
                 </div>
               )}
+
+              {/* Tentang Stesen */}
+              <div className="card-dark p-4" style={{ borderRadius: '8px' }}>
+                <h3 style={{ color: 'var(--color-text)', fontWeight: '600', marginBottom: '1rem' }}>Tentang Stesen</h3>
+                <p style={{ color: 'var(--color-muted)', lineHeight: '1.8', margin: 0 }}>{station.description}</p>
+              </div>
             </div>
           </div>
         </div>
