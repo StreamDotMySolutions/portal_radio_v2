@@ -32,12 +32,11 @@ export default function HeroMobile() {
   }
 
   return (
-    <section style={{ minHeight: '40vh', paddingTop: 0, marginTop: '100px' }}>
+    <section style={{ paddingTop: 0, marginTop: '106px' }}>
       <div
         id="heroCarousel"
         className="carousel slide"
         data-bs-ride="carousel"
-        style={{ minHeight: '40vh' }}
       >
         {/* Indicators */}
         <div className="carousel-indicators">
@@ -68,7 +67,7 @@ export default function HeroMobile() {
                     alt={`Banner ${idx}`}
                     style={{
                       width: '100%',
-                      height: '40vh',
+                      height: '30vh',
                       objectFit: 'cover',
                       display: 'block',
                     }}

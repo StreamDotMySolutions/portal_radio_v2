@@ -32,12 +32,11 @@ export default function Hero() {
   }
 
   return (
-    <section style={{ minHeight: '100vh', paddingTop: 0 }}>
+    <section style={{ paddingTop: '130px', paddingBottom: 0 }}>
       <div
         id="heroCarousel"
         className="carousel slide h-100"
         data-bs-ride="carousel"
-        style={{ minHeight: '90vh' }}
       >
         {/* Indicators */}
         <div className="carousel-indicators">
@@ -68,7 +67,7 @@ export default function Hero() {
                     alt={`Banner ${idx}`}
                     style={{
                       width: '100%',
-                      height: '90vh',
+                      height: '55vh',
                       objectFit: 'cover',
                       display: 'block',
                     }}
