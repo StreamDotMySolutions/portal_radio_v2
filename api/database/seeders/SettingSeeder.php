@@ -59,37 +59,5 @@ class SettingSeeder extends Seeder
                 'description' => 'Footer copyright notice',
             ]
         );
-
-        Setting::updateOrCreate(
-            ['key' => 'footer_section_about'],
-            [
-                'value'       => 'Tentang Portal Radio RTM',
-                'description' => 'Footer section title: About',
-            ]
-        );
-
-        Setting::updateOrCreate(
-            ['key' => 'footer_section_quick'],
-            [
-                'value'       => 'Pautan Pantas',
-                'description' => 'Footer section title: Quick Links',
-            ]
-        );
-
-        Setting::updateOrCreate(
-            ['key' => 'footer_section_network'],
-            [
-                'value'       => 'Rangkaian RTM',
-                'description' => 'Footer section title: Network',
-            ]
-        );
-
-        Setting::updateOrCreate(
-            ['key' => 'footer_section_contact'],
-            [
-                'value'       => 'Hubungi Kami',
-                'description' => 'Footer section title: Contact Us',
-            ]
-        );
     }
 }
