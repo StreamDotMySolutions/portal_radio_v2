@@ -26,4 +26,9 @@ class StationCategory extends Model
         'created_at' => 'datetime:d/m/Y H:i',
         'updated_at' => 'datetime:d/m/Y H:i',
     ];
+
+    public function stations()
+    {
+        return $this->hasMany(Station::class, 'category', 'slug');
+    }
 }
