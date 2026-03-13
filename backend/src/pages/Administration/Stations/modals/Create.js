@@ -10,7 +10,7 @@ const emptyForm = {
     title: '',
     description: '',
     frequency: '',
-    category: '',
+    station_category_id: '',
     rtmklikPlayerUrl: '',
     facebookUrl: '',
     xUrl: '',
@@ -50,7 +50,7 @@ export default function CreateModal() {
         if (form.title) formData.append('title', form.title)
         if (form.description) formData.append('description', form.description)
         if (form.frequency) formData.append('frequency', form.frequency)
-        if (form.category) formData.append('category', form.category)
+        if (form.station_category_id) formData.append('station_category_id', form.station_category_id)
         if (form.rtmklikPlayerUrl) formData.append('rtmklik_player_url', form.rtmklikPlayerUrl)
         if (form.facebookUrl) formData.append('facebook_url', form.facebookUrl)
         if (form.xUrl) formData.append('x_url', form.xUrl)

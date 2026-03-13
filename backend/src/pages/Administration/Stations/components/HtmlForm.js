@@ -109,16 +109,16 @@ const HtmlForm = ({
                                     </div>
                                 ) : (
                                     <Form.Select
-                                        value={form.category}
+                                        value={form.station_category_id || ''}
                                         disabled={isLoading || categoriesLoading}
-                                        isInvalid={!!errors?.category}
-                                        onChange={(e) => onChange('category')(e.target.value)}
+                                        isInvalid={!!errors?.station_category_id}
+                                        onChange={(e) => onChange('station_category_id')(e.target.value ? parseInt(e.target.value) : '')}
                                         required
                                     >
                                         <option value=''>Select category...</option>
                                         {Array.isArray(categories) && categories.length > 0 ? (
                                             categories.map((cat) => (
-                                                <option key={cat.id} value={cat.slug}>
+                                                <option key={cat.id} value={cat.id}>
                                                     {cat.display_name}
                                                 </option>
                                             ))
@@ -127,9 +127,9 @@ const HtmlForm = ({
                                         )}
                                     </Form.Select>
                                 )}
-                                {errors?.category && (
+                                {errors?.station_category_id && (
                                     <Form.Control.Feedback type='invalid' className='d-block'>
-                                        {errors.category[0]}
+                                        {errors.station_category_id[0]}
                                     </Form.Control.Feedback>
                                 )}
                             </Form.Group>
