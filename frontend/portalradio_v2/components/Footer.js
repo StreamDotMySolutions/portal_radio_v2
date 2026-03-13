@@ -10,6 +10,10 @@ const defaultFooter = {
   email: 'info@rtm.gov.my',
   address: 'Jalan Semarak, 50564 KL',
   copyright: '© 2025 RTM — Radio Televisyen Malaysia. Hak Cipta Terpelihara.',
+  section_about: 'Tentang Portal Radio RTM',
+  section_quick: 'Pautan Pantas',
+  section_network: 'Rangkaian RTM',
+  section_contact: 'Hubungi Kami',
   quick_links: [
     { title: 'Utama', url: '/', is_external: false },
     { title: 'Senarai Radio', url: '/senarai-radio', is_external: false },
@@ -58,14 +62,14 @@ export default function Footer() {
         <div className="d-flex flex-wrap justify-content-center gap-5 mb-4">
           <div style={{ maxWidth: '240px' }}>
             <h6 className="mb-2">
-              <i className="bi bi-broadcast me-2"></i>Tentang Portal Radio RTM
+              <i className="bi bi-broadcast me-2"></i>{footer.section_about}
             </h6>
             <p className="text-muted small mb-0">
               {footer.description}
             </p>
           </div>
           <div>
-            <h6 className="mb-2">Pautan Pantas</h6>
+            <h6 className="mb-2">{footer.section_quick}</h6>
             <ul className="list-unstyled small mb-0">
               {footer.quick_links && footer.quick_links.map((link) => (
                 <li key={link.title} className="mb-1">
@@ -84,7 +88,7 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h6 className="mb-2">Rangkaian RTM</h6>
+            <h6 className="mb-2">{footer.section_network}</h6>
             <ul className="list-unstyled small mb-0">
               {footer.network_links && footer.network_links.map((link) => (
                 <li key={link.title} className="mb-1">
@@ -101,7 +105,7 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h6 className="mb-2">Hubungi Kami</h6>
+            <h6 className="mb-2">{footer.section_contact}</h6>
             <p className="text-muted small mb-1"><i className="bi bi-telephone me-2"></i>{footer.phone}</p>
             <p className="text-muted small mb-1"><i className="bi bi-envelope me-2"></i>{footer.email}</p>
             <p className="text-muted small mb-0"><i className="bi bi-geo-alt me-2"></i>{footer.address}</p>

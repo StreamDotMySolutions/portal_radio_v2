@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
 
 class SettingController extends Controller
 {
@@ -35,6 +36,12 @@ class SettingController extends Controller
         $setting = Setting::where('key', $key)->firstOrFail();
         $request->validate(['value' => 'required|string|max:500']);
         $setting->update(['value' => $request->input('value')]);
+
+        // Invalidate footer cache if updating footer_* settings
+        if (str_starts_with($key, 'footer_')) {
+            Cache::forget('frontend.footer');
+        }
+
         return response()->json(['message' => 'Setting updated successfully']);
     }
 
