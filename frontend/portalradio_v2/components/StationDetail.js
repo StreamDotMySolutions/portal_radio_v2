@@ -101,8 +101,9 @@ export default function StationDetail({ station }) {
               {/* Frequency + Social Media Row */}
               <div className="d-flex gap-4">
                 {/* Social Media Links - 8 cols */}
-                {station.social && (Object.values(station.social).some(link => link !== '#')) && (
-                  <div className="card-dark p-4" style={{ flex: '0 0 66.67%', borderRadius: '8px' }}>
+                <div className="card-dark p-4" style={{ flex: '0 0 66.67%', borderRadius: '8px' }}>
+                  {station.social && Object.values(station.social).some(link => link && link !== '#') ? (
+                    <>
                     <h5 style={{ color: 'var(--color-text)', fontWeight: '600', marginBottom: '1rem' }}>Ikuti Kami</h5>
                     <div className="d-flex gap-3">
                       {station.social.facebook && station.social.facebook !== '#' && (
@@ -126,8 +127,11 @@ export default function StationDetail({ station }) {
                         </a>
                       )}
                     </div>
-                  </div>
-                )}
+                    </>
+                  ) : (
+                    <p style={{ color: '#999', margin: 0 }}>Tiada saluran sosial media</p>
+                  )}
+                </div>
 
                 {/* Frekuensi - 4 cols */}
                 <div

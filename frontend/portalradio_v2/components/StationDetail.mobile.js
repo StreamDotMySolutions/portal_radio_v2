@@ -104,8 +104,9 @@ export default function StationDetailMobile({ station }) {
         </div>
 
         {/* Social Media Links */}
-        {station.social && (Object.values(station.social).some(link => link !== '#')) && (
-          <div className="card-dark p-3 mb-3" style={{ borderRadius: '8px' }}>
+        <div className="card-dark p-3 mb-3" style={{ borderRadius: '8px' }}>
+          {station.social && Object.values(station.social).some(link => link && link !== '#') ? (
+            <>
             <h5 style={{ color: 'var(--color-text)', fontWeight: '600', marginBottom: '0.75rem', fontSize: '1rem' }}>Ikuti Kami</h5>
             <div className="d-flex gap-3">
               {station.social.facebook && station.social.facebook !== '#' && (
@@ -129,8 +130,11 @@ export default function StationDetailMobile({ station }) {
                 </a>
               )}
             </div>
-          </div>
-        )}
+            </>
+          ) : (
+            <p style={{ color: '#999', margin: 0, fontSize: '0.9rem' }}>Tiada saluran sosial media</p>
+          )}
+        </div>
 
         {/* About */}
         <div className="card-dark p-3 mb-3" style={{ borderRadius: '8px' }}>
