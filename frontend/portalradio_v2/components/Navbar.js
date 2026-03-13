@@ -95,58 +95,16 @@ export default function Navbar() {
               <a className={`nav-link dropdown-toggle${dropdownOpen || pathname.startsWith('/station/') ? ' nav-active' : ''}`} href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Senarai Radio
               </a>
-              <ul className="dropdown-menu dropdown-menu-dark p-0" style={{ minWidth: '1100px', left: '50%', transform: 'translateX(-50%)' }}>
+              <ul className="dropdown-menu dropdown-menu-dark p-0" style={{ minWidth: '700px', left: '50%', transform: 'translateX(-50%)' }}>
                 <li>
-                  <div className="px-3 py-2 row g-0">
+                  <div className="px-3 py-2 d-flex">
                     {categories.map(category => {
                       const stations = stationsByCategory[category.slug] || [];
                       if (stations.length === 0) return null;
 
-                      // Negeri: split into 2 sub-columns
-                      if (category.slug === 'negeri') {
-                        const mid = Math.ceil(stations.length / 2);
-                        return (
-                          <div key={category.slug} className="col-5 d-flex gap-0">
-                            <div className="flex-fill">
-                              <h6 className="dropdown-header px-1">{category.display_name}</h6>
-                              {stations.slice(0, mid).map(station => (
-                                <a key={station.slug} className={`dropdown-item px-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`}>{station.name}</a>
-                              ))}
-                            </div>
-                            <div className="flex-fill">
-                              <h6 className="dropdown-header px-1">&nbsp;</h6>
-                              {stations.slice(mid).map(station => (
-                                <a key={station.slug} className={`dropdown-item px-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`}>{station.name}</a>
-                              ))}
-                            </div>
-                          </div>
-                        );
-                      }
-
-                      // Radio Tempatan: split into 2 sub-columns
-                      if (category.slug === 'radio-tempatan') {
-                        const mid = Math.ceil(stations.length / 2);
-                        return (
-                          <React.Fragment key={category.slug}>
-                            <div className="col-2">
-                              <h6 className="dropdown-header px-1">{category.display_name}</h6>
-                              {stations.slice(0, mid).map(station => (
-                                <a key={station.slug} className={`dropdown-item px-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`}>{station.name}</a>
-                              ))}
-                            </div>
-                            <div className="col-2">
-                              <h6 className="dropdown-header px-1">&nbsp;</h6>
-                              {stations.slice(mid).map(station => (
-                                <a key={station.slug} className={`dropdown-item px-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`}>{station.name}</a>
-                              ))}
-                            </div>
-                          </React.Fragment>
-                        );
-                      }
-
-                      // Nasional and others: narrow column
+                      // All categories: equal width
                       return (
-                        <div key={category.slug} className="col-2">
+                        <div key={category.slug} className="flex-fill">
                           <h6 className="dropdown-header px-1">{category.display_name}</h6>
                           {stations.map(station => (
                             <a key={station.slug} className={`dropdown-item px-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`}>{station.name}</a>
