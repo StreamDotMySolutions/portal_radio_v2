@@ -2,20 +2,19 @@ import { Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
+import useStationCategoriesStore from '../store'
 
 export default function Ordering({ id, direction, disabled }) {
     const { url: apiBase } = useStore()
-    const setRefresh = useStore((s) => s.setRefresh) // Using global store for refresh
+    const setRefresh = useStationCategoriesStore((s) => s.setRefresh)
 
     const handleClick = () => {
         axios({
-            method: 'patch',
-            url: `${apiBase}/station-categories/ordering/${id}`,
-            data: { direction }
+            method: 'get',
+            url: `${apiBase}/station-categories/ordering/${id}?direction=${direction}`
         })
             .then(() => {
-                // Trigger refresh through global store
-                setRefresh && setRefresh()
+                setRefresh()
             })
             .catch((error) => console.warn(error))
     }
