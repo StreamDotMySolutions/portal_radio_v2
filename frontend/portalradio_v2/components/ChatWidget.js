@@ -368,7 +368,7 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
           if (isAtBottomRef.current) setTimeout(scrollToBottom, 0);
         } else {
           setMessages(newMsgs);
-          // Don't auto-scroll on initial load
+          setTimeout(scrollToBottom, 0);
         }
         setLastId(newMsgs[newMsgs.length - 1].id);
       }
