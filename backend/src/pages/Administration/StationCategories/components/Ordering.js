@@ -13,10 +13,13 @@ export default function Ordering({ id, direction, disabled }) {
             method: 'get',
             url: `${apiBase}/station-categories/ordering/${id}?direction=${direction}`
         })
-            .then(() => {
+            .then((response) => {
+                console.log('Order changed:', response.data)
                 setRefresh()
             })
-            .catch((error) => console.warn(error))
+            .catch((error) => {
+                console.error('Ordering error:', error.response?.data || error.message)
+            })
     }
 
     const icon = direction === 'up' ? 'arrow-up' : 'arrow-down'
