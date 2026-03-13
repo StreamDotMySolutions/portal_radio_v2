@@ -30,8 +30,12 @@ function TopNavbar() {
               <NavDropdown.Item as={NavLink} to="/administration/chat-messages">
                 <FontAwesomeIcon icon={['fas', 'message']} />{' '}Chat Messages
               </NavDropdown.Item>
+              <NavDropdown.Divider />
               <NavDropdown.Item as={NavLink} to="/administration/stations">
                 <FontAwesomeIcon icon={['fas', 'radio']} />{' '}Stations
+              </NavDropdown.Item>
+              <NavDropdown.Item as={NavLink} to="/administration/station-categories">
+                <FontAwesomeIcon icon={['fas', 'tag']} />{' '}Station Categories
               </NavDropdown.Item>
             </NavDropdown>
 
@@ -47,10 +51,6 @@ function TopNavbar() {
               </NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to="/administration/activity">
                 <FontAwesomeIcon icon={['fas', 'clock-rotate-left']} />{' '}Activity Log
-              </NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item as={NavLink} to="/administration/station-categories">
-                <FontAwesomeIcon icon={['fas', 'tag']} />{' '}Station Categories
               </NavDropdown.Item>
               <NavDropdown.Item as={NavLink} to="/administration/settings">
                 <FontAwesomeIcon icon={['fas', 'sliders']} />{' '}Settings
