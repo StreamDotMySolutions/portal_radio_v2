@@ -10,6 +10,8 @@ export default function NavbarMobile() {
   const [query, setQuery] = useState('');
   const [nasionalStations, setNasionalStations] = useState([]);
   const [negeriStations, setNegeriStations] = useState([]);
+  const [radioTempatanStations, setRadioTempatanStations] = useState([]);
+  const [radioOnlineStations, setRadioOnlineStations] = useState([]);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -17,6 +19,8 @@ export default function NavbarMobile() {
     fetchStations().then(stations => {
       setNasionalStations(stations.filter(s => s.category === 'nasional'));
       setNegeriStations(stations.filter(s => s.category === 'negeri'));
+      setRadioTempatanStations(stations.filter(s => s.category === 'radio_tempatan'));
+      setRadioOnlineStations(stations.filter(s => s.category === 'radio_online'));
     });
   }, []);
 
@@ -77,25 +81,37 @@ export default function NavbarMobile() {
             </li>
             <li className="nav-item dropdown">
               <a className={`nav-link dropdown-toggle py-2${dropdownOpen || pathname.startsWith('/station/') ? ' nav-active' : ''}`} href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Senarai Radio</a>
-              <ul className="dropdown-menu dropdown-menu-dark p-0" style={{ minWidth: '320px' }}>
+              <ul className="dropdown-menu dropdown-menu-dark p-0" style={{ minWidth: '400px' }}>
                 <li>
                   <div className="px-2 py-2 row g-0">
-                    <div className="col-4">
+                    <div className="col-3">
                       <h6 className="dropdown-header px-1" style={{ fontSize: '0.7rem' }}>Nasional</h6>
                       {nasionalStations.map(station => (
-                        <a key={station.slug} className={`dropdown-item px-1 py-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`} style={{ fontSize: '0.75rem', whiteSpace: 'normal' }}>{station.name}</a>
+                        <a key={station.slug} className={`dropdown-item px-1 py-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`} style={{ fontSize: '0.7rem', whiteSpace: 'normal' }}>{station.name}</a>
                       ))}
                     </div>
-                    <div className="col-4">
+                    <div className="col-2">
                       <h6 className="dropdown-header px-1" style={{ fontSize: '0.7rem' }}>Negeri</h6>
                       {negeriStations.slice(0, Math.ceil(negeriStations.length / 2)).map(station => (
-                        <a key={station.slug} className={`dropdown-item px-1 py-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`} style={{ fontSize: '0.75rem', whiteSpace: 'normal' }}>{station.name}</a>
+                        <a key={station.slug} className={`dropdown-item px-1 py-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`} style={{ fontSize: '0.7rem', whiteSpace: 'normal' }}>{station.name}</a>
                       ))}
                     </div>
-                    <div className="col-4">
+                    <div className="col-2">
                       <h6 className="dropdown-header px-1" style={{ fontSize: '0.7rem' }}>&nbsp;</h6>
                       {negeriStations.slice(Math.ceil(negeriStations.length / 2)).map(station => (
-                        <a key={station.slug} className={`dropdown-item px-1 py-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`} style={{ fontSize: '0.75rem', whiteSpace: 'normal' }}>{station.name}</a>
+                        <a key={station.slug} className={`dropdown-item px-1 py-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`} style={{ fontSize: '0.7rem', whiteSpace: 'normal' }}>{station.name}</a>
+                      ))}
+                    </div>
+                    <div className="col-3">
+                      <h6 className="dropdown-header px-1" style={{ fontSize: '0.7rem' }}>Radio Tempatan</h6>
+                      {radioTempatanStations.map(station => (
+                        <a key={station.slug} className={`dropdown-item px-1 py-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`} style={{ fontSize: '0.7rem', whiteSpace: 'normal' }}>{station.name}</a>
+                      ))}
+                    </div>
+                    <div className="col-2">
+                      <h6 className="dropdown-header px-1" style={{ fontSize: '0.7rem' }}>Radio Online</h6>
+                      {radioOnlineStations.map(station => (
+                        <a key={station.slug} className={`dropdown-item px-1 py-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`} style={{ fontSize: '0.7rem', whiteSpace: 'normal' }}>{station.name}</a>
                       ))}
                     </div>
                   </div>

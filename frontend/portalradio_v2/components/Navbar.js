@@ -10,6 +10,8 @@ export default function Navbar() {
   const [query, setQuery] = useState('');
   const [nasionalStations, setNasionalStations] = useState([]);
   const [negeriStations, setNegeriStations] = useState([]);
+  const [radioTempatanStations, setRadioTempatanStations] = useState([]);
+  const [radioOnlineStations, setRadioOnlineStations] = useState([]);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -17,6 +19,8 @@ export default function Navbar() {
     fetchStations().then(stations => {
       setNasionalStations(stations.filter(s => s.category === 'nasional'));
       setNegeriStations(stations.filter(s => s.category === 'negeri'));
+      setRadioTempatanStations(stations.filter(s => s.category === 'radio_tempatan'));
+      setRadioOnlineStations(stations.filter(s => s.category === 'radio_online'));
     });
   }, []);
 
@@ -81,24 +85,36 @@ export default function Navbar() {
               <a className={`nav-link dropdown-toggle${dropdownOpen || pathname.startsWith('/station/') ? ' nav-active' : ''}`} href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Senarai Radio
               </a>
-              <ul className="dropdown-menu dropdown-menu-dark p-0" style={{ minWidth: '560px' }}>
+              <ul className="dropdown-menu dropdown-menu-dark p-0" style={{ minWidth: '700px' }}>
                 <li>
                   <div className="px-3 py-2 row g-0">
-                    <div className="col-4">
+                    <div className="col-3">
                       <h6 className="dropdown-header px-1">Nasional</h6>
                       {nasionalStations.map(station => (
                         <a key={station.slug} className={`dropdown-item px-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`}>{station.name}</a>
                       ))}
                     </div>
-                    <div className="col-4">
+                    <div className="col-2">
                       <h6 className="dropdown-header px-1">Negeri</h6>
                       {negeriStations.slice(0, Math.ceil(negeriStations.length / 2)).map(station => (
                         <a key={station.slug} className={`dropdown-item px-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`}>{station.name}</a>
                       ))}
                     </div>
-                    <div className="col-4">
+                    <div className="col-2">
                       <h6 className="dropdown-header px-1">&nbsp;</h6>
                       {negeriStations.slice(Math.ceil(negeriStations.length / 2)).map(station => (
+                        <a key={station.slug} className={`dropdown-item px-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`}>{station.name}</a>
+                      ))}
+                    </div>
+                    <div className="col-3">
+                      <h6 className="dropdown-header px-1">Radio Tempatan</h6>
+                      {radioTempatanStations.map(station => (
+                        <a key={station.slug} className={`dropdown-item px-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`}>{station.name}</a>
+                      ))}
+                    </div>
+                    <div className="col-2">
+                      <h6 className="dropdown-header px-1">Radio Online</h6>
+                      {radioOnlineStations.map(station => (
                         <a key={station.slug} className={`dropdown-item px-1${pathname === `/station/${station.slug}` ? ' active-station' : ''}`} href={`/station/${station.slug}`}>{station.name}</a>
                       ))}
                     </div>
