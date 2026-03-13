@@ -26,7 +26,7 @@ const DataTable = () => {
     const [sortBy, setSortBy] = useState(null)
     const [sortDir, setSortDir] = useState('desc')
     const [query, setQuery] = useState(search)
-    const [perPage, setPerPage] = useState(15)
+    const [perPage, setPerPage] = useState(50)
     const [items, setItems] = useState([])
     const [categories, setCategories] = useState([])
 
