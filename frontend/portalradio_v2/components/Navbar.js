@@ -2,14 +2,23 @@
 
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { nasionalStations, negeriStations } from '../data/stations';
+import { fetchStations } from '@/utils/stationsApi';
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [query, setQuery] = useState('');
+  const [nasionalStations, setNasionalStations] = useState([]);
+  const [negeriStations, setNegeriStations] = useState([]);
   const pathname = usePathname();
   const router = useRouter();
+
+  useEffect(() => {
+    fetchStations().then(stations => {
+      setNasionalStations(stations.filter(s => s.category === 'nasional'));
+      setNegeriStations(stations.filter(s => s.category === 'negeri'));
+    });
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 100);
