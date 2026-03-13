@@ -85,7 +85,7 @@ export default function Navbar() {
               <a className={`nav-link dropdown-toggle${dropdownOpen || pathname.startsWith('/station/') ? ' nav-active' : ''}`} href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Senarai Radio
               </a>
-              <ul className="dropdown-menu dropdown-menu-dark p-0" style={{ minWidth: '700px' }}>
+              <ul className="dropdown-menu dropdown-menu-dark p-0" style={{ minWidth: '900px' }}>
                 <li>
                   <div className="px-3 py-2 row g-0">
                     <div className="col-3">
