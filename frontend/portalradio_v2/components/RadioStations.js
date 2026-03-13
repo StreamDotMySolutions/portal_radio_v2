@@ -21,6 +21,7 @@ export default function RadioStations() {
   const [negeriStations, setNegeriStations] = useState([]);
   const [radioTempatanStations, setRadioTempatanStations] = useState([]);
   const [stationHits, setStationHits] = useState({});
+  const [categoryFilter, setCategoryFilter] = useState('all');
 
   useEffect(() => {
     fetchStations().then(stations => {
@@ -229,17 +230,44 @@ export default function RadioStations() {
       <audio ref={audioRef} />
       <section id="radio-stations" style={{ backgroundColor: 'var(--color-bg)' }} className="py-5">
         <div className="container">
+          {/* Category Filter */}
+          <div className="mb-4">
+            <select
+              className="form-select"
+              style={{ maxWidth: '250px' }}
+              value={categoryFilter}
+              onChange={(e) => setCategoryFilter(e.target.value)}
+            >
+              <option value="all">Semua Kategori</option>
+              <option value="nasional">Nasional</option>
+              <option value="negeri">Negeri</option>
+              <option value="radio_tempatan">Radio Tempatan</option>
+            </select>
+          </div>
+
           {/* Saluran Nasional */}
-          <h2 className="section-heading">Saluran Nasional</h2>
-          {renderStationCards(nasionalStations)}
+          {(categoryFilter === 'all' || categoryFilter === 'nasional') && (
+            <>
+              <h2 className="section-heading">Saluran Nasional</h2>
+              {renderStationCards(nasionalStations)}
+            </>
+          )}
 
           {/* Saluran Negeri */}
-          <h2 className="section-heading" style={{ marginTop: '4rem' }}>Saluran Negeri</h2>
-          {renderStationCards(negeriStations)}
+          {(categoryFilter === 'all' || categoryFilter === 'negeri') && (
+            <>
+              <h2 className="section-heading" style={{ marginTop: categoryFilter === 'all' ? '4rem' : '0' }}>Saluran Negeri</h2>
+              {renderStationCards(negeriStations)}
+            </>
+          )}
 
           {/* Radio Tempatan */}
-          <h2 className="section-heading" style={{ marginTop: '4rem' }}>Radio Tempatan</h2>
-          {renderStationCards(radioTempatanStations)}
+          {(categoryFilter === 'all' || categoryFilter === 'radio_tempatan') && (
+            <>
+              <h2 className="section-heading" style={{ marginTop: categoryFilter === 'all' ? '4rem' : '0' }}>Radio Tempatan</h2>
+              {renderStationCards(radioTempatanStations)}
+            </>
+          )}
         </div>
       </section>
     </>

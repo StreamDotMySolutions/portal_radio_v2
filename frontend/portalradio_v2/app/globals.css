@@ -180,6 +180,10 @@ body {
   padding-bottom: 0.25rem;
 }
 
+.dropdown-item {
+  text-transform: none !important;
+}
+
 .dropdown-item.active-station {
   color: #ff6600 !important;
   background-color: transparent !important;
