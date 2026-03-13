@@ -33,6 +33,9 @@ function TopNavbar() {
               <NavDropdown.Item as={NavLink} to="/administration/stations">
                 <FontAwesomeIcon icon={['fas', 'radio']} />{' '}Stations
               </NavDropdown.Item>
+              <NavDropdown.Item as={NavLink} to="/administration/station-categories">
+                <FontAwesomeIcon icon={['fas', 'tag']} />{' '}Station Categories
+              </NavDropdown.Item>
             </NavDropdown>
 
             <NavDropdown title={<span><FontAwesomeIcon icon={['fas', 'cog']} />{' '}System</span>} id="nav-system">
