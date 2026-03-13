@@ -28,6 +28,7 @@ const DataTable = () => {
     const [query, setQuery] = useState(search)
     const [perPage, setPerPage] = useState(15)
     const [items, setItems] = useState([])
+    const [categories, setCategories] = useState([])
 
     const handleToggleActive = (itemId) => {
         // Optimistic update
@@ -68,6 +69,19 @@ const DataTable = () => {
         }
     }
 
+    // Fetch categories on mount
+    useEffect(() => {
+        axios({ method: 'get', url: `${apiBase}/station-categories/all` })
+            .then((response) => {
+                const cats = response.data.categories || []
+                setCategories(Array.isArray(cats) ? cats : [])
+            })
+            .catch((error) => {
+                console.error('Error fetching categories:', error)
+                setCategories([])
+            })
+    }, [apiBase])
+
     // Debounce: commit typed query to store after 400ms idle
     useEffect(() => {
         const timer = setTimeout(() => setSearch(query), 400)
@@ -103,12 +117,19 @@ const DataTable = () => {
 
     const handleClearSearch = () => setQuery('')
 
-    const categoryBadgeVariant = (cat) => {
-        if (cat === 'nasional') return 'primary'
-        if (cat === 'negeri') return 'info'
-        if (cat === 'radio-tempatan') return 'warning'
-        if (cat === 'radio-online') return 'success'
-        return 'secondary'
+    const categoryBadgeVariant = (slug) => {
+        const variants = {
+            'nasional': 'primary',
+            'negeri': 'info',
+            'radio-tempatan': 'warning',
+            'radio-online': 'success'
+        }
+        return variants[slug] || 'secondary'
+    }
+
+    const getCategoryDisplayName = (slug) => {
+        const cat = categories.find(c => c.slug === slug)
+        return cat ? cat.display_name : slug
     }
 
     return (
@@ -151,10 +172,9 @@ const DataTable = () => {
                         onChange={(e) => setCategoryFilter(e.target.value)}
                     >
                         <option value=''>All Categories</option>
-                        <option value='radio-online'>Radio Digital</option>
-                        <option value='nasional'>Nasional</option>
-                        <option value='negeri'>Negeri</option>
-                        <option value='radio-tempatan'>Radio Tempatan</option>
+                        {categories.map((cat) => (
+                            <option key={cat.slug} value={cat.slug}>{cat.display_name}</option>
+                        ))}
                     </Form.Select>
                 </div>
 
@@ -169,7 +189,7 @@ const DataTable = () => {
                     {search && <> for <strong>"{search}"</strong></>}
                     {categoryFilter && (
                         <> — <Badge bg={categoryBadgeVariant(categoryFilter)}>
-                            {categoryFilter === 'nasional' ? 'Nasional' : categoryFilter === 'negeri' ? 'Negeri' : categoryFilter === 'radio-tempatan' ? 'Radio Tempatan' : 'Radio Digital'}
+                            {getCategoryDisplayName(categoryFilter)}
                         </Badge></>
                     )}
                 </p>
