@@ -222,7 +222,7 @@ const DataTable = () => {
                             <td>{item.title}</td>
                             <td>
                                 <Badge bg={categoryBadgeVariant(item.category)}>
-                                    {item.category === 'nasional' ? 'Nasional' : item.category === 'negeri' ? 'Negeri' : item.category === 'radio_tempatan' ? 'Radio Tempatan' : 'Radio Digital'}
+                                    {getCategoryDisplayName(item.category)}
                                 </Badge>
                             </td>
                             <td>{item.frequency || '—'}</td>
@@ -249,7 +249,7 @@ const DataTable = () => {
                             <td colSpan='6' className='text-center text-muted py-4'>
                                 No stations found
                                 {search && <> matching <strong>"{search}"</strong></>}
-                                {categoryFilter && <> in <strong>{categoryFilter === 'nasional' ? 'Nasional' : categoryFilter === 'negeri' ? 'Negeri' : categoryFilter === 'radio_tempatan' ? 'Radio Tempatan' : 'Radio Digital'}</strong></>}
+                                {categoryFilter && <> in <strong>{getCategoryDisplayName(categoryFilter)}</strong></>}
                                 .
                             </td>
                         </tr>

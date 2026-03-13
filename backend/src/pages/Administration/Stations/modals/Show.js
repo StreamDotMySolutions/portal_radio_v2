@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button, Modal, Table, Badge, Figure } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from '../../../../libs/axios'
@@ -10,6 +10,19 @@ export default function ShowModal({ id }) {
     const [show, setShow] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [station, setStation] = useState(null)
+    const [categories, setCategories] = useState([])
+
+    useEffect(() => {
+        axios({ method: 'get', url: `${apiBase}/station-categories/all` })
+            .then((response) => {
+                const cats = response.data.categories || []
+                setCategories(Array.isArray(cats) ? cats : [])
+            })
+            .catch((error) => {
+                console.error('Error fetching categories:', error)
+                setCategories([])
+            })
+    }, [apiBase])
 
     const handleShowClick = () => {
         setIsLoading(true)
@@ -27,8 +40,19 @@ export default function ShowModal({ id }) {
         setStation(null)
     }
 
-    const categoryVariant = (cat) => {
-        return cat === 'nasional' ? 'primary' : 'info'
+    const categoryVariant = (slug) => {
+        const variants = {
+            'nasional': 'primary',
+            'negeri': 'info',
+            'radio-tempatan': 'warning',
+            'radio-online': 'success'
+        }
+        return variants[slug] || 'secondary'
+    }
+
+    const getCategoryDisplayName = (slug) => {
+        const cat = categories.find(c => c.slug === slug)
+        return cat ? cat.display_name : slug
     }
 
     return (
@@ -62,7 +86,7 @@ export default function ShowModal({ id }) {
                                     <td className='fw-semibold'>Category</td>
                                     <td>
                                         <Badge bg={categoryVariant(station.category)}>
-                                            {station.category === 'nasional' ? 'Nasional' : 'Negeri'}
+                                            {getCategoryDisplayName(station.category)}
                                         </Badge>
                                     </td>
                                 </tr>
