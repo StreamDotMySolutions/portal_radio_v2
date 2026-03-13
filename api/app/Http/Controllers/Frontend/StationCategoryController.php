@@ -11,7 +11,7 @@ class StationCategoryController extends Controller
     public function index()
     {
         $categories = StationCategory::where('active', true)
-            ->orderBy('sort_order')
+            ->defaultOrder()
             ->get(['display_name', 'slug']);
 
         return response()->json(['categories' => $categories]);
