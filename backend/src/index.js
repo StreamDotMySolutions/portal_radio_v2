@@ -43,6 +43,7 @@ import Analytics from './pages/Administration/Analytics'
 import Activity from './pages/Administration/Activity'
 import ComplaintManagement from './pages/Administration/Complaints'
 import LivestreamManagement from './pages/Administration/Livestream'
+import FooterManagement from './pages/Administration/Footer'
 import SettingsManagement from './pages/Administration/Settings'
 import ChatUserManagement from './pages/Administration/ChatUsers'
 import ChatMessageManagement from './pages/Administration/ChatMessages'
@@ -81,6 +82,7 @@ export default function App() {
                 <Route path="/administration/stations" element={<StationManagement />} />
                 <Route path="/administration/station-categories" element={<StationCategoryManagement />} />
                 <Route path="/administration/livestream" element={<LivestreamManagement />} />
+                <Route path="/administration/footer" element={<FooterManagement />} />
                 <Route path="/administration/programmes" element={<ProgrammeManagement />} />
                 <Route path="/administration/videos" element={<VideoManagement />} />
                 <Route path="/administration/directories/:parentId" element={<DirectoryManagement />} />

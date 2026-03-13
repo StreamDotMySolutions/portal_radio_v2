@@ -1,10 +1,56 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+// Hardcoded defaults for fallback
+const defaultFooter = {
+  description: 'Radio Televisyen Malaysia (RTM) adalah penyiar nasional yang menghadirkan konten berkualitas, mendidik, dan menghibur masyarakat Malaysia sejak 1963.',
+  phone: '+603 2282 3456',
+  email: 'info@rtm.gov.my',
+  address: 'Jalan Semarak, 50564 KL',
+  copyright: '© 2025 RTM — Radio Televisyen Malaysia. Hak Cipta Terpelihara.',
+  quick_links: [
+    { title: 'Utama', url: '/', is_external: false },
+    { title: 'Senarai Radio', url: '/senarai-radio', is_external: false },
+    { title: 'Chat', url: '/chat', is_external: false },
+  ],
+  network_links: [
+    { title: 'Portal Rasmi RTM', url: 'https://www.rtm.gov.my', is_external: true },
+    { title: 'Berita RTM', url: 'https://berita.rtm.gov.my', is_external: true },
+    { title: 'RTM Klik', url: 'https://rtmklik.rtm.gov.my', is_external: true },
+  ],
+};
 
 export default function Footer() {
   const pathname = usePathname();
   const isActive = (href) => pathname === href;
+
+  const [footer, setFooter] = useState(defaultFooter);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchFooter = async () => {
+      try {
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api/frontend';
+        const response = await fetch(`${apiUrl}/home-footer`);
+        if (response.ok) {
+          const data = await response.json();
+          setFooter(data);
+        }
+      } catch (error) {
+        console.warn('Failed to load footer data, using defaults:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchFooter();
+  }, []);
+
+  if (isLoading) {
+    return null; // Don't render until loaded
+  }
 
   return (
     <footer className="py-4" style={{ backgroundColor: 'var(--color-surface)', borderTop: '1px solid rgba(63, 63, 143, 0.3)' }}>
@@ -15,30 +61,50 @@ export default function Footer() {
               <i className="bi bi-broadcast me-2"></i>Tentang Portal Radio RTM
             </h6>
             <p className="text-muted small mb-0">
-              Radio Televisyen Malaysia (RTM) adalah penyiar nasional yang menghadirkan konten berkualitas, mendidik, dan menghibur masyarakat Malaysia sejak 1963.
+              {footer.description}
             </p>
           </div>
           <div>
             <h6 className="mb-2">Pautan Pantas</h6>
             <ul className="list-unstyled small mb-0">
-              <li className="mb-1"><a href="/" style={{ color: isActive('/') ? '#17a2b8' : 'var(--color-accent)', transition: 'color 0.3s ease' }}>Utama</a></li>
-              <li className="mb-1"><a href="/senarai-radio" style={{ color: isActive('/senarai-radio') ? '#17a2b8' : 'var(--color-accent)', transition: 'color 0.3s ease' }}>Senarai Radio</a></li>
-              <li><a href="/chat" style={{ color: isActive('/chat') ? '#17a2b8' : 'var(--color-accent)', transition: 'color 0.3s ease' }}>Chat</a></li>
+              {footer.quick_links && footer.quick_links.map((link) => (
+                <li key={link.title} className="mb-1">
+                  <a
+                    href={link.url}
+                    style={{
+                      color: isActive(link.url) ? '#17a2b8' : 'var(--color-accent)',
+                      transition: 'color 0.3s ease'
+                    }}
+                    {...(link.is_external && { target: '_blank', rel: 'noopener noreferrer' })}
+                  >
+                    {link.title}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
           <div>
             <h6 className="mb-2">Rangkaian RTM</h6>
             <ul className="list-unstyled small mb-0">
-              <li className="mb-1"><a href="https://www.rtm.gov.my" className="text-accent" target="_blank" rel="noopener noreferrer">Portal Rasmi RTM</a></li>
-              <li className="mb-1"><a href="https://berita.rtm.gov.my" className="text-accent" target="_blank" rel="noopener noreferrer">Berita RTM</a></li>
-              <li><a href="https://rtmklik.rtm.gov.my" className="text-accent" target="_blank" rel="noopener noreferrer">RTM Klik</a></li>
+              {footer.network_links && footer.network_links.map((link) => (
+                <li key={link.title} className="mb-1">
+                  <a
+                    href={link.url}
+                    className="text-accent"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {link.title}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
           <div>
             <h6 className="mb-2">Hubungi Kami</h6>
-            <p className="text-muted small mb-1"><i className="bi bi-telephone me-2"></i>+603 2282 3456</p>
-            <p className="text-muted small mb-1"><i className="bi bi-envelope me-2"></i>info@rtm.gov.my</p>
-            <p className="text-muted small mb-0"><i className="bi bi-geo-alt me-2"></i>Jalan Semarak, 50564 KL</p>
+            <p className="text-muted small mb-1"><i className="bi bi-telephone me-2"></i>{footer.phone}</p>
+            <p className="text-muted small mb-1"><i className="bi bi-envelope me-2"></i>{footer.email}</p>
+            <p className="text-muted small mb-0"><i className="bi bi-geo-alt me-2"></i>{footer.address}</p>
           </div>
         </div>
 
@@ -46,7 +112,7 @@ export default function Footer() {
 
         <div className="text-center py-2">
           <p className="text-muted small mb-0">
-            © 2025 RTM — Radio Televisyen Malaysia. Hak Cipta Terpelihara.
+            {footer.copyright}
           </p>
         </div>
       </div>

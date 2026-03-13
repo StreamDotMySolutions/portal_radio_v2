@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             StationCategorySeeder::class,
             StationSeeder::class,
             SettingSeeder::class,
+            FooterLinkSeeder::class,
             ChatUserSeeder::class,
             ChatMessageSeeder::class,
         ]);

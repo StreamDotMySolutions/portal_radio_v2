@@ -59,5 +59,16 @@ Backend (React admin)   RTM.GOV.MY (React public)
 - ArticleData: sub-articles with ordering
 - Menus are driven by article hierarchy
 
+## Implementation Notes
+
+### Footer Admin Management System (2026-03-13)
+- **File**: `footer_admin_system.md`
+- Database-driven footer with admin panel at `/administration/footer`
+- Settings: stored in `settings` table (footer_description, phone, email, address, copyright)
+- Links: `footer_links` table with section, ordering, active toggle
+- Frontend fetches from `/api/frontend/home-footer` with hardcoded fallback
+- Admin CRUD for links + inline-edit for text settings
+- Cache invalidation on all writes
+
 ## Detailed Notes
 See `architecture.md` for more details.

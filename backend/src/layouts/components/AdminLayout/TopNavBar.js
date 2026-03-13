@@ -30,6 +30,9 @@ function TopNavbar() {
               <NavDropdown.Item as={NavLink} to="/administration/chat-messages">
                 <FontAwesomeIcon icon={['fas', 'message']} />{' '}Chat Messages
               </NavDropdown.Item>
+              <NavDropdown.Item as={NavLink} to="/administration/footer">
+                <FontAwesomeIcon icon={['fas', 'link']} />{' '}Footer
+              </NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item as={NavLink} to="/administration/stations">
                 <FontAwesomeIcon icon={['fas', 'radio']} />{' '}Stations

@@ -19,5 +19,45 @@ class SettingSeeder extends Seeder
                 'description' => 'HLS stream URL for the homepage Siaran Langsung section',
             ]
         );
+
+        Setting::updateOrCreate(
+            ['key' => 'footer_description'],
+            [
+                'value'       => 'Radio Televisyen Malaysia (RTM) adalah penyiar nasional yang menghadirkan konten berkualitas, mendidik, dan menghibur masyarakat Malaysia sejak 1963.',
+                'description' => 'Footer section: About Portal Radio RTM',
+            ]
+        );
+
+        Setting::updateOrCreate(
+            ['key' => 'footer_phone'],
+            [
+                'value'       => '+603 2282 3456',
+                'description' => 'Footer contact: Phone number',
+            ]
+        );
+
+        Setting::updateOrCreate(
+            ['key' => 'footer_email'],
+            [
+                'value'       => 'info@rtm.gov.my',
+                'description' => 'Footer contact: Email address',
+            ]
+        );
+
+        Setting::updateOrCreate(
+            ['key' => 'footer_address'],
+            [
+                'value'       => 'Jalan Semarak, 50564 KL',
+                'description' => 'Footer contact: Physical address',
+            ]
+        );
+
+        Setting::updateOrCreate(
+            ['key' => 'footer_copyright'],
+            [
+                'value'       => '© 2025 RTM — Radio Televisyen Malaysia. Hak Cipta Terpelihara.',
+                'description' => 'Footer copyright notice',
+            ]
+        );
     }
 }

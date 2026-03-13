@@ -33,6 +33,7 @@ use App\Http\Controllers\Backend\{
     StationCategoryController,
     LivestreamController,
     SettingController,
+    FooterLinkController,
 };
 
 Route::get('/', function () {
@@ -164,6 +165,15 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::put('/station-categories/{stationCategory}', [StationCategoryController::class, 'update']);
     Route::delete('/station-categories/{stationCategory}', [StationCategoryController::class, 'delete']);
     Route::patch('/station-categories/{stationCategory}/toggle', [StationCategoryController::class, 'toggle']);
+
+    // Footer Links
+    Route::get('/footer-links', [FooterLinkController::class, 'index']);
+    Route::get('/footer-links/{footerLink}', [FooterLinkController::class, 'show']);
+    Route::post('/footer-links', [FooterLinkController::class, 'store']);
+    Route::put('/footer-links/{footerLink}', [FooterLinkController::class, 'update']);
+    Route::delete('/footer-links/{footerLink}', [FooterLinkController::class, 'delete']);
+    Route::patch('/footer-links/{footerLink}/toggle', [FooterLinkController::class, 'toggle']);
+    Route::get('/footer-links/ordering/{footerLink}', [FooterLinkController::class, 'ordering']);
 
     // Settings
     Route::get('/settings', [SettingController::class, 'index']);
