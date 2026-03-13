@@ -14,16 +14,16 @@ class StationCategorySeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            ['display_name' => 'Radio Digital', 'slug' => 'radio_online', 'sort_order' => 1],
-            ['display_name' => 'Nasional', 'slug' => 'nasional', 'sort_order' => 2],
-            ['display_name' => 'Negeri', 'slug' => 'negeri', 'sort_order' => 3],
-            ['display_name' => 'Radio Tempatan', 'slug' => 'radio_tempatan', 'sort_order' => 4],
+            ['display_name' => 'Radio Digital', 'slug' => 'radio_online'],
+            ['display_name' => 'Nasional', 'slug' => 'nasional'],
+            ['display_name' => 'Negeri', 'slug' => 'negeri'],
+            ['display_name' => 'Radio Tempatan', 'slug' => 'radio_tempatan'],
         ];
 
-        foreach ($categories as $category) {
+        foreach ($categories as $index => $category) {
             StationCategory::updateOrCreate(
                 ['slug' => $category['slug']],
-                $category
+                array_merge($category, ['active' => true])
             );
         }
     }

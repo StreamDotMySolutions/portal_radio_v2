@@ -9,7 +9,6 @@ import HtmlForm from '../components/HtmlForm'
 const emptyForm = {
     displayName: '',
     slug: '',
-    sortOrder: 0,
     active: 1,
     slugManuallyEdited: false,
 }
@@ -38,7 +37,6 @@ export default function CreateModal() {
         const payload = {
             display_name: form.displayName,
             slug: form.slug,
-            sort_order: form.sortOrder,
             active: form.active,
         }
 

@@ -65,24 +65,7 @@ const HtmlForm = ({
                     </InputGroup>
 
                     <Row>
-                        <Col sm={6}>
-                            <Form.Group>
-                                <Form.Label className='fw-semibold small text-muted mb-1'>Sort Order</Form.Label>
-                                <Form.Control
-                                    type='number'
-                                    value={form.sortOrder}
-                                    disabled={isLoading}
-                                    isInvalid={!!errors?.sort_order}
-                                    onChange={(e) => onChange('sortOrder')(parseInt(e.target.value) || 0)}
-                                />
-                                {errors?.sort_order && (
-                                    <Form.Control.Feedback type='invalid' className='d-block'>
-                                        {errors.sort_order[0]}
-                                    </Form.Control.Feedback>
-                                )}
-                            </Form.Group>
-                        </Col>
-                        <Col sm={6}>
+                        <Col sm={12}>
                             <Form.Group>
                                 <Form.Label className='fw-semibold small text-muted mb-1'>Active</Form.Label>
                                 <div className='d-flex gap-3'>

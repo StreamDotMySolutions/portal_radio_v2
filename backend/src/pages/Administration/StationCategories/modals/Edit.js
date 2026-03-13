@@ -27,7 +27,6 @@ export default function EditModal({ id }) {
                 setForm({
                     displayName: cat.display_name,
                     slug: cat.slug,
-                    sortOrder: cat.sort_order,
                     active: cat.active ? 1 : 0,
                     slugManuallyEdited: true,
                 })
@@ -43,7 +42,6 @@ export default function EditModal({ id }) {
         const payload = {
             display_name: form.displayName,
             slug: form.slug,
-            sort_order: form.sortOrder,
             active: form.active,
         }
 

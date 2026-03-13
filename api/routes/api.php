@@ -162,6 +162,7 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::put('/station-categories/{stationCategory}', [StationCategoryController::class, 'update']);
     Route::delete('/station-categories/{stationCategory}', [StationCategoryController::class, 'delete']);
     Route::patch('/station-categories/{stationCategory}/toggle', [StationCategoryController::class, 'toggle']);
+    Route::patch('/station-categories/ordering/{stationCategory}', [StationCategoryController::class, 'ordering']);
 
     // Settings
     Route::get('/settings', [SettingController::class, 'index']);

@@ -27,10 +27,8 @@ class StationCategoryController extends Controller
 
         if ($sortBy === 'display_name') {
             $query->orderBy('display_name', $sortDir);
-        } elseif ($sortBy === 'sort_order') {
-            $query->orderBy('sort_order', $sortDir);
         } else {
-            $query->orderBy('sort_order', 'asc');
+            $query->defaultOrder();
         }
 
         $perPage = $request->input('per_page', 15);
@@ -49,14 +47,12 @@ class StationCategoryController extends Controller
         $request->validate([
             'display_name' => 'required|string',
             'slug' => 'required|string|unique:station_categories',
-            'sort_order' => 'sometimes|integer',
             'active' => 'required|boolean',
         ]);
 
         $category = StationCategory::create([
             'display_name' => $request->input('display_name'),
             'slug' => $request->input('slug'),
-            'sort_order' => $request->input('sort_order', 0),
             'active' => $request->input('active'),
         ]);
 
@@ -72,11 +68,10 @@ class StationCategoryController extends Controller
         $request->validate([
             'display_name' => 'sometimes|string',
             'slug' => 'sometimes|string|unique:station_categories,slug,' . $stationCategory->id,
-            'sort_order' => 'sometimes|integer',
             'active' => 'sometimes|boolean',
         ]);
 
-        $data = $request->only(['display_name', 'slug', 'sort_order', 'active']);
+        $data = $request->only(['display_name', 'slug', 'active']);
         $stationCategory->update($data);
 
         return response()->json(['message' => 'Category successfully updated']);
@@ -95,5 +90,19 @@ class StationCategoryController extends Controller
     {
         $stationCategory->update(['active' => $stationCategory->active == 1 ? 0 : 1]);
         return response()->json(['message' => 'Category updated successfully']);
+    }
+
+    public function ordering(StationCategory $stationCategory, Request $request)
+    {
+        switch ($request->input('direction')) {
+            case 'up':
+                $stationCategory->up();
+                return response()->json(['message' => 'Category moved up']);
+                break;
+            case 'down':
+                $stationCategory->down();
+                return response()->json(['message' => 'Category moved down']);
+                break;
+        }
     }
 }

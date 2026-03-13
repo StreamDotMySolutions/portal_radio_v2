@@ -9,6 +9,7 @@ import CreateModal from '../modals/Create'
 import ShowModal from '../modals/Show'
 import EditModal from '../modals/Edit'
 import DeleteModal from '../modals/Delete'
+import Ordering from './Ordering'
 
 const DataTable = () => {
     const { url: apiBase } = useStore()
@@ -110,14 +111,6 @@ const DataTable = () => {
                         <FontAwesomeIcon icon={['fas', 'a']} className='me-1' />
                         Name {sortBy === 'display_name' && <FontAwesomeIcon icon={['fas', sortDir === 'desc' ? 'arrow-down' : 'arrow-up']} className='ms-1' />}
                     </Button>
-                    <Button
-                        variant={sortBy === 'sort_order' ? 'primary' : 'outline-secondary'}
-                        size='sm'
-                        onClick={() => handleToggleSort('sort_order')}
-                    >
-                        <FontAwesomeIcon icon={['fas', 'list']} className='me-1' />
-                        Order {sortBy === 'sort_order' && <FontAwesomeIcon icon={['fas', sortDir === 'desc' ? 'arrow-down' : 'arrow-up']} className='ms-1' />}
-                    </Button>
                 </ButtonGroup>
 
                 {/* Middle: search */}
@@ -152,19 +145,27 @@ const DataTable = () => {
             <Table hover responsive style={{ '--bs-table-cell-padding-y': '0.85rem' }}>
                 <thead className='table-light'>
                     <tr>
+                        <th style={{ width: '100px' }}>Order</th>
                         <th>Display Name</th>
                         <th style={{ width: '120px' }}>Slug</th>
-                        <th style={{ width: '90px' }}>Sort Order</th>
                         <th style={{ width: '90px' }}>Active</th>
                         <th className='text-center' style={{ width: '160px' }}>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {items?.data?.map((item) => (
+                    {items?.data?.map((item, index) => (
                         <tr key={item.id}>
+                            <td className='text-nowrap'>
+                                <Ordering id={item.id} direction='up' disabled={index === 0} />
+                                {' '}
+                                <Ordering
+                                    id={item.id}
+                                    direction='down'
+                                    disabled={index === items.data.length - 1}
+                                />
+                            </td>
                             <td>{item.display_name}</td>
                             <td><code>{item.slug}</code></td>
-                            <td>{item.sort_order}</td>
                             <td>
                                 <Form.Check
                                     type='switch'
