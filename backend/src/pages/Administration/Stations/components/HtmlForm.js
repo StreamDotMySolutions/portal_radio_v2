@@ -89,6 +89,7 @@ const HtmlForm = ({
                                     disabled={isLoading}
                                     isInvalid={!!errors?.category}
                                     onChange={(e) => onChange('category')(e.target.value)}
+                                    required
                                 >
                                     <option value=''>Select category...</option>
                                     <option value='nasional'>Nasional</option>
