@@ -83,7 +83,8 @@ NEXT_PUBLIC_SITE_URL=https://radio.rtm.gov.my
 - `ArticleData`, `ArticleContent`, `ArticlePoster`, `ArticleAsset`, `ArticleGallery`, `ArticlePdf` — Article sub-models
 - `ArticleSetting` — Per-article flags: `active`, `show_children`, `listing_type`
 - `Banner`, `Programme`, `Video` — Homepage content
-- `Station` — Radio station; route model binding uses `slug` field
+- `Station` — Radio station; route model binding uses `slug` field; belongs to `StationCategory` via `station_category_id` FK
+- `StationCategory` — Station grouping (nasional, negeri, radio-tempatan, radio-online); nested set for ordering
 - `Asset` — File/document management (nested)
 - `Vod` — Video-on-Demand (nested)
 - `Directory` — Staff directory (nested)
