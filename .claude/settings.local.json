@@ -21,7 +21,9 @@
       "WebFetch(domain:radio.rtm.gov.my)",
       "mcp__playwright__browser_take_screenshot",
       "mcp__playwright__browser_resize",
-      "mcp__playwright__browser_click"
+      "mcp__playwright__browser_click",
+      "Bash(git add:*)",
+      "Bash(git rebase:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
