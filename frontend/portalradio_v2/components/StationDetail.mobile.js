@@ -50,12 +50,10 @@ export default function StationDetailMobile({ station }) {
         {/* Audio Player / Embed Player */}
         <div className="mb-3">
           {station.embedPlayerUrl ? (
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', aspectRatio: '1 / 1.03', position: 'relative' }}>
               <iframe
                 src={station.embedPlayerUrl}
-                width="100%"
-                height="350"
-                style={{ border: 'none', display: 'block', borderRadius: '8px', overflow: 'hidden', backgroundColor: 'var(--color-bg)' }}
+                style={{ border: 'none', display: 'block', borderRadius: '8px', overflow: 'hidden', backgroundColor: 'var(--color-bg)', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
                 allow="autoplay"
                 scrolling="no"
                 title={`${station.name} Live Player`}

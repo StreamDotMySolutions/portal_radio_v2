@@ -52,12 +52,10 @@ export default function StationDetail({ station }) {
           {/* Left Column: Player */}
           <div style={{ flex: '0 0 42%', display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
             {station.embedPlayerUrl ? (
-              <div style={{ width: '100%', maxWidth: '100%' }}>
+              <div style={{ width: '100%', maxWidth: '100%', aspectRatio: '1 / 1.03', position: 'relative' }}>
                 <iframe
                   src={station.embedPlayerUrl}
-                  width="100%"
-                  height="380"
-                  style={{ border: 'none', display: 'block', borderRadius: '8px', overflow: 'hidden', backgroundColor: 'var(--color-bg)', margin: '0 auto' }}
+                  style={{ border: 'none', display: 'block', borderRadius: '8px', overflow: 'hidden', backgroundColor: 'var(--color-bg)', margin: '0 auto', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
                   allow="autoplay"
                   scrolling="no"
                   title={`${station.name} Live Player`}
