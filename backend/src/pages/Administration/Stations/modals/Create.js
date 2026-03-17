@@ -8,6 +8,7 @@ import HtmlForm from '../components/HtmlForm'
 
 const emptyForm = {
     title: '',
+    slug: '',
     description: '',
     frequency: '',
     station_category_id: '',
@@ -21,6 +22,8 @@ const emptyForm = {
     active: 1,
 }
 
+const toSlug = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+
 export default function CreateModal() {
     const { url: apiBase, server: serverUrl } = useStore()
     const setRefresh = useStationsStore((s) => s.setRefresh)
@@ -32,10 +35,22 @@ export default function CreateModal() {
     const [bannerFile, setBannerFile] = useState(null)
     const [errors, setErrors] = useState(null)
 
-    const onChange = (field) => (value) => setForm((prev) => ({ ...prev, [field]: value }))
+    const [slugTouched, setSlugTouched] = useState(false)
+
+    const onChange = (field) => (value) => {
+        setForm((prev) => {
+            const next = { ...prev, [field]: value }
+            if (field === 'title' && !slugTouched) {
+                next.slug = toSlug(value)
+            }
+            return next
+        })
+        if (field === 'slug') setSlugTouched(true)
+    }
 
     const handleShowClick = () => {
         setForm(emptyForm)
+        setSlugTouched(false)
         setThumbnailFile(null)
         setBannerFile(null)
         setErrors(null)
@@ -48,6 +63,7 @@ export default function CreateModal() {
         setIsLoading(true)
         const formData = new FormData()
         if (form.title) formData.append('title', form.title)
+        if (form.slug) formData.append('slug', form.slug)
         if (form.description) formData.append('description', form.description)
         if (form.frequency) formData.append('frequency', form.frequency)
         if (form.station_category_id) formData.append('station_category_id', form.station_category_id)

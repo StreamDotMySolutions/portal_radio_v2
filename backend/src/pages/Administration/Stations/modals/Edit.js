@@ -8,6 +8,7 @@ import HtmlForm from '../components/HtmlForm'
 
 const emptyForm = {
     title: '',
+    slug: '',
     description: '',
     frequency: '',
     station_category_id: '',
@@ -46,6 +47,7 @@ export default function EditModal({ id }) {
                 console.log('rtmklik_player_url:', station.rtmklik_player_url)
                 setForm({
                     title: station.title || '',
+                    slug: station.slug || '',
                     description: station.description || '',
                     frequency: station.frequency || '',
                     station_category_id: station.station_category_id || '',
@@ -78,6 +80,7 @@ export default function EditModal({ id }) {
         const formData = new FormData()
         formData.append('_method', 'PUT')
         if (form.title) formData.append('title', form.title)
+        if (form.slug) formData.append('slug', form.slug)
         if (form.description) formData.append('description', form.description)
         if (form.frequency) formData.append('frequency', form.frequency)
         if (form.station_category_id) formData.append('station_category_id', form.station_category_id)

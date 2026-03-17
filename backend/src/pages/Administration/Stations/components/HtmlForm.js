@@ -68,6 +68,20 @@ const HtmlForm = ({
                     </InputGroup>
 
                     <InputGroup>
+                        <InputGroup.Text style={{ width: '110px' }}>Slug</InputGroup.Text>
+                        <Form.Control
+                            placeholder='station-url-slug'
+                            value={form.slug || ''}
+                            readOnly={isLoading}
+                            isInvalid={!!errors?.slug}
+                            onChange={(e) => onChange('slug')(e.target.value)}
+                        />
+                        {errors?.slug && (
+                            <Form.Control.Feedback type='invalid'>{errors.slug[0]}</Form.Control.Feedback>
+                        )}
+                    </InputGroup>
+
+                    <InputGroup>
                         <InputGroup.Text style={{ width: '110px' }}>Description</InputGroup.Text>
                         <Form.Control
                             as='textarea'
