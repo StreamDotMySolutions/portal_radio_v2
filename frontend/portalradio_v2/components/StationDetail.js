@@ -17,7 +17,7 @@ export default function StationDetail({ station }) {
       <div
         className="station-banner-hero position-relative d-flex align-items-end justify-content-center"
         style={{
-          height: '300px',
+          height: '200px',
           backgroundImage: station.heroBanner
             ? `url(${station.heroBanner})`
             : `linear-gradient(to bottom, ${station.accent}, var(--color-bg))`,
@@ -41,9 +41,9 @@ export default function StationDetail({ station }) {
         </div>
       </div>
 
-      <div className="container py-4">
+      <div className="container py-3">
         {/* Back link */}
-        <Link href="/#radio-stations" className="d-inline-flex align-items-center gap-2 mb-4" style={{ color: 'var(--color-muted)', fontSize: '0.9rem' }}>
+        <Link href="/#radio-stations" className="d-inline-flex align-items-center gap-2 mb-3" style={{ color: 'var(--color-muted)', fontSize: '0.9rem' }}>
           <i className="bi bi-arrow-left"></i> Kembali ke Senarai Stesen
         </Link>
 
@@ -56,7 +56,7 @@ export default function StationDetail({ station }) {
                 <iframe
                   src={station.embedPlayerUrl}
                   width="100%"
-                  height="500"
+                  height="380"
                   style={{ border: 'none', display: 'block', borderRadius: '8px', overflow: 'hidden', backgroundColor: 'var(--color-bg)', margin: '0 auto' }}
                   allow="autoplay"
                   scrolling="no"
