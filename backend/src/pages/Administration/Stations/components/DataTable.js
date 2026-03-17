@@ -146,6 +146,22 @@ const DataTable = () => {
                         <FontAwesomeIcon icon={['fas', 'calendar']} className='me-1' />
                         Date {sortBy === 'created_at' && <FontAwesomeIcon icon={['fas', sortDir === 'desc' ? 'arrow-down' : 'arrow-up']} className='ms-1' />}
                     </Button>
+                    <Button
+                        variant={sortBy === 'pageviews' ? 'primary' : 'outline-secondary'}
+                        size='sm'
+                        onClick={() => handleToggleSort('pageviews')}
+                    >
+                        <FontAwesomeIcon icon={['fas', 'eye']} className='me-1' />
+                        Pageviews {sortBy === 'pageviews' && <FontAwesomeIcon icon={['fas', sortDir === 'desc' ? 'arrow-down' : 'arrow-up']} className='ms-1' />}
+                    </Button>
+                    <Button
+                        variant={sortBy === 'unique_visitors' ? 'primary' : 'outline-secondary'}
+                        size='sm'
+                        onClick={() => handleToggleSort('unique_visitors')}
+                    >
+                        <FontAwesomeIcon icon={['fas', 'users']} className='me-1' />
+                        Visitors {sortBy === 'unique_visitors' && <FontAwesomeIcon icon={['fas', sortDir === 'desc' ? 'arrow-down' : 'arrow-up']} className='ms-1' />}
+                    </Button>
                 </ButtonGroup>
 
                 {/* Middle: search and category filter */}
@@ -203,6 +219,7 @@ const DataTable = () => {
                         <th style={{ width: '120px' }}>Category</th>
                         <th style={{ width: '100px' }}>Frequency</th>
                         <th style={{ width: '90px' }}>Pageviews</th>
+                        <th style={{ width: '110px' }}>Unique Visitors</th>
                         <th style={{ width: '90px' }}>Active</th>
                         <th className='text-center' style={{ width: '160px' }}>Action</th>
                     </tr>
@@ -227,6 +244,7 @@ const DataTable = () => {
                             </td>
                             <td>{item.frequency || '—'}</td>
                             <td>{item.pageview_hits || 0}</td>
+                            <td>{item.unique_visitors || 0}</td>
                             <td>
                                 <Form.Check
                                     type='switch'
@@ -246,7 +264,7 @@ const DataTable = () => {
                     ))}
                     {items?.data?.length === 0 && (
                         <tr>
-                            <td colSpan='6' className='text-center text-muted py-4'>
+                            <td colSpan='8' className='text-center text-muted py-4'>
                                 No stations found
                                 {search && <> matching <strong>"{search}"</strong></>}
                                 {categoryFilter && <> in <strong>{getCategoryDisplayName(categoryFilter)}</strong></>}

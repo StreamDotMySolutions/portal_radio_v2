@@ -21,7 +21,7 @@ class StationController extends Controller
                      ->where('analytics_events.event_type', '=', 'pageview')
                      ->where('analytics_events.page_type', '=', 'station');
             })
-            ->select('stations.*', 'station_categories.slug as category', DB::raw('COUNT(analytics_events.id) as pageview_hits'))
+            ->select('stations.*', 'station_categories.slug as category', DB::raw('COUNT(analytics_events.id) as pageview_hits'), DB::raw('COUNT(DISTINCT analytics_events.session_id) as unique_visitors'))
             ->groupBy('stations.id');
 
         if ($request->filled('search')) {
@@ -43,6 +43,10 @@ class StationController extends Controller
 
         if ($sortBy === 'created_at') {
             $query->orderBy('stations.created_at', $sortDir);
+        } elseif ($sortBy === 'pageviews') {
+            $query->orderBy('pageview_hits', $sortDir);
+        } elseif ($sortBy === 'unique_visitors') {
+            $query->orderBy('unique_visitors', $sortDir);
         } else {
             $query->defaultOrder();
         }
