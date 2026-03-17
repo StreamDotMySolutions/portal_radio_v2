@@ -142,7 +142,7 @@ export default function StationDetail({ station }) {
                   }}
                 >
                   <i className="bi bi-broadcast" style={{ fontSize: '2rem', color: station.accent, marginBottom: '0.5rem' }}></i>
-                  <div style={{ fontSize: '3.5rem', fontWeight: '800', color: '#fff', lineHeight: 1, letterSpacing: '-1px' }}>
+                  <div style={{ fontSize: 'clamp(1.5rem, 5vw, 3.5rem)', fontWeight: '800', color: '#fff', lineHeight: 1, letterSpacing: '-1px', wordBreak: 'break-word' }}>
                     {station.frequency}
                   </div>
                   <div style={{ color: 'var(--color-muted)', fontSize: '0.85rem', marginTop: '0.5rem' }}>

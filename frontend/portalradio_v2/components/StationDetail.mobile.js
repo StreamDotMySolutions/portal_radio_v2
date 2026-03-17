@@ -130,7 +130,7 @@ export default function StationDetailMobile({ station }) {
         <div className="card-dark p-3 mb-3" style={{ borderRadius: '8px', background: `linear-gradient(135deg, ${station.accent}22, ${station.accent}11)` }}>
           <div style={{ textAlign: 'center' }}>
             <div style={{ color: 'var(--color-muted)', fontSize: '0.75rem', marginBottom: '0.5rem' }}>Frekuensi Radio</div>
-            <div style={{ color: '#fff', fontWeight: '700', fontSize: '2rem' }}>{station.frequency}</div>
+            <div style={{ color: '#fff', fontWeight: '700', fontSize: 'clamp(1.2rem, 6vw, 2rem)', wordBreak: 'break-word' }}>{station.frequency}</div>
           </div>
         </div>
 
