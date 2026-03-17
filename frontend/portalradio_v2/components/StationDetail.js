@@ -101,7 +101,7 @@ export default function StationDetail({ station }) {
               {/* Frequency + Social Media Row */}
               <div className="d-flex gap-4">
                 {/* Social Media Links - 8 cols */}
-                <div className="card-dark p-4" style={{ flex: '0 0 66.67%', borderRadius: '8px' }}>
+                <div className="card-dark p-4" style={{ flex: '1 1 auto', borderRadius: '8px' }}>
                   {station.social && Object.values(station.social).some(link => link && link !== '#') ? (
                     <>
                     <h5 style={{ color: 'var(--color-text)', fontWeight: '600', marginBottom: '1rem' }}>Ikuti Kami</h5>
@@ -137,7 +137,7 @@ export default function StationDetail({ station }) {
                 <div
                   className="card-dark d-flex flex-column align-items-center justify-content-center text-center p-4"
                   style={{
-                    flex: '0 0 33.33%',
+                    flex: '1 1 auto',
                     borderRadius: '8px',
                     background: `linear-gradient(135deg, ${station.accent}22, ${station.accent}11)`,
                     borderColor: `${station.accent}44`,
