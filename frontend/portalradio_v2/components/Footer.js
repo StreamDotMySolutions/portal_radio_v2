@@ -106,9 +106,18 @@ export default function Footer() {
           </div>
           <div>
             <h6 className="mb-2">{footer.section_contact}</h6>
-            <p className="text-muted small mb-1"><i className="bi bi-telephone me-2"></i>{footer.phone}</p>
-            <p className="text-muted small mb-1"><i className="bi bi-envelope me-2"></i>{footer.email}</p>
-            <p className="text-muted small mb-0"><i className="bi bi-geo-alt me-2"></i>{footer.address}</p>
+            <div className="d-flex align-items-start mb-1">
+              <i className="bi bi-telephone text-muted small me-2 mt-1"></i>
+              <span className="text-muted small">{footer.phone}</span>
+            </div>
+            <div className="d-flex align-items-start mb-1">
+              <i className="bi bi-envelope text-muted small me-2 mt-1"></i>
+              <span className="text-muted small">{footer.email}</span>
+            </div>
+            <div className="d-flex align-items-start">
+              <i className="bi bi-geo-alt text-muted small me-2 mt-1"></i>
+              <span className="text-muted small" style={{ whiteSpace: 'pre-line' }}>{footer.address}</span>
+            </div>
           </div>
         </div>
 

@@ -158,8 +158,7 @@ export default function FooterManagement() {
                                             <td>
                                                 <Form.Control
                                                     as={
-                                                        setting.key ===
-                                                        'footer_description'
+                                                        ['footer_description', 'footer_address'].includes(setting.key)
                                                             ? 'textarea'
                                                             : 'input'
                                                     }
@@ -173,15 +172,14 @@ export default function FooterManagement() {
                                                     }
                                                     autoFocus
                                                     rows={
-                                                        setting.key ===
-                                                        'footer_description'
+                                                        ['footer_description', 'footer_address'].includes(setting.key)
                                                             ? 3
                                                             : 1
                                                     }
                                                 />
                                             </td>
                                         ) : (
-                                            <td style={{ fontSize: '0.9rem' }}>
+                                            <td style={{ fontSize: '0.9rem', whiteSpace: 'pre-line' }}>
                                                 {setting.value || '(empty)'}
                                             </td>
                                         )}
