@@ -172,36 +172,6 @@ export default function FullPlayerCardMobile({ station, pageviews = 0 }) {
           </div>
         )}
 
-        {/* Play Button Overlay */}
-        <button
-          onClick={toggle}
-          disabled={disabled || error}
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            width: '56px',
-            height: '56px',
-            borderRadius: '50%',
-            backgroundColor: disabled || error ? '#555' : station.accent,
-            border: 'none',
-            color: '#fff',
-            fontSize: '1.6rem',
-            cursor: disabled || error ? 'not-allowed' : 'pointer',
-            opacity: disabled || error ? 0.5 : 1,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'transform 0.2s',
-            zIndex: 10,
-          }}
-          onTouchStart={(e) => !disabled && !error && (e.target.style.transform = 'translate(-50%, -50%) scale(0.95)')}
-          onTouchEnd={(e) => (e.target.style.transform = 'translate(-50%, -50%)')}
-        >
-          <i className={`bi ${playing ? 'bi-pause-fill' : 'bi-play-fill'}`}></i>
-        </button>
-
         {/* Share Button Overlay */}
         <button
           style={{
@@ -241,7 +211,7 @@ export default function FullPlayerCardMobile({ station, pageviews = 0 }) {
           Kongsi
         </button>
 
-        {/* Volume Control Overlay */}
+        {/* Volume Control Overlay with Play Button */}
         <div style={{
           position: 'absolute',
           bottom: '0',
@@ -254,6 +224,30 @@ export default function FullPlayerCardMobile({ station, pageviews = 0 }) {
           backgroundColor: 'rgba(0, 0, 0, 0.4)',
           zIndex: 5,
         }}>
+          <button
+            onClick={toggle}
+            disabled={disabled || error}
+            style={{
+              width: '36px',
+              height: '36px',
+              borderRadius: '50%',
+              backgroundColor: disabled || error ? '#555' : station.accent,
+              border: 'none',
+              color: '#fff',
+              fontSize: '0.9rem',
+              cursor: disabled || error ? 'not-allowed' : 'pointer',
+              opacity: disabled || error ? 0.5 : 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'transform 0.2s',
+              flexShrink: 0,
+            }}
+            onTouchStart={(e) => !disabled && !error && (e.target.style.transform = 'scale(0.95)')}
+            onTouchEnd={(e) => (e.target.style.transform = 'scale(1)')}
+          >
+            <i className={`bi ${playing ? 'bi-pause-fill' : 'bi-play-fill'}`}></i>
+          </button>
           <i className="bi bi-volume-down" style={{ fontSize: '0.8rem', color: '#fff', flexShrink: 0 }}></i>
           <input
             type="range"
