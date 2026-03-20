@@ -120,7 +120,7 @@ export default function FullPlayerCardMobile({ station, pageviews = 0 }) {
       {/* Artwork/Banner Section */}
       <div
         style={{
-          height: '100%',
+          flex: 1,
           backgroundImage: station.banner ? `url(${station.banner})` : `linear-gradient(135deg, ${station.accent}44, ${station.accent}22)`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
