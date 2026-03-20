@@ -102,16 +102,28 @@ export default function FullPlayerCard({ station, pageviews = 0 }) {
 
   return (
     <div
-      className="card-dark d-flex flex-column"
       style={{
-        borderRadius: '12px',
-        overflow: 'hidden',
         width: '100%',
+        maxWidth: '100%',
         aspectRatio: '1 / 1.03',
-        backgroundColor: 'var(--color-bg)',
-        border: `1px solid ${station.accent}22`,
+        position: 'relative',
       }}
     >
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          borderRadius: '12px',
+          overflow: 'hidden',
+          backgroundColor: 'var(--color-bg)',
+          border: `1px solid ${station.accent}22`,
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
       {!disabled && <audio ref={audioRef} />}
 
       {/* Artwork/Banner Section */}
@@ -285,6 +297,7 @@ export default function FullPlayerCard({ station, pageviews = 0 }) {
           <i className="bi bi-eye" style={{ fontSize: '0.8rem' }}></i>
           {pageviews.toLocaleString()}
         </div>
+      </div>
       </div>
     </div>
   );
