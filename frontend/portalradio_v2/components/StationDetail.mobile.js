@@ -17,11 +17,12 @@ export default function StationDetailMobile({ station }) {
   }, [station.id, station.name]);
 
   return (
-    <div style={{ backgroundColor: 'var(--color-bg)', paddingTop: '100px' }}>
+    <div style={{ backgroundColor: 'var(--color-bg)', paddingTop: '60px' }}>
       {/* Banner */}
       <div
         className="position-relative d-flex align-items-end justify-content-center"
         style={{
+          display: 'none',
           height: '180px',
           backgroundImage: station.heroBanner
             ? `url(${station.heroBanner})`
