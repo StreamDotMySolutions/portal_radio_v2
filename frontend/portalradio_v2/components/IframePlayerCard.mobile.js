@@ -6,9 +6,15 @@ export default function IframePlayerCardMobile({ station, pageviews = 0 }) {
   return (
     <div
       style={{
-        display: 'flex',
-        justifyContent: 'center',
+        width: '100%',
+        maxWidth: '100%',
         aspectRatio: '1 / 1.03',
+        borderRadius: '12px',
+        overflow: 'hidden',
+        backgroundColor: 'var(--color-bg)',
+        border: `1px solid ${station.accent}22`,
+        display: 'flex',
+        flexDirection: 'column',
         position: 'relative',
       }}
     >
@@ -18,11 +24,8 @@ export default function IframePlayerCardMobile({ station, pageviews = 0 }) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            width: '100%',
-            height: '100%',
+            flex: 1,
             backgroundColor: `${station.accent}11`,
-            borderRadius: '8px',
-            border: `1px solid ${station.accent}22`,
           }}
         >
           <div style={{ textAlign: 'center', color: 'var(--color-muted)' }}>
@@ -36,14 +39,9 @@ export default function IframePlayerCardMobile({ station, pageviews = 0 }) {
           style={{
             border: 'none',
             display: 'block',
-            borderRadius: '8px',
-            overflow: 'hidden',
             backgroundColor: 'var(--color-bg)',
             width: '100%',
-            height: '100%',
-            position: 'absolute',
-            top: 0,
-            left: 0,
+            flex: 1,
             margin: 0,
             padding: 0,
           }}
