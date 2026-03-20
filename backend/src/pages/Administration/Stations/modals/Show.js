@@ -1,16 +1,18 @@
-import { useState, useEffect } from 'react'
-import { Button, Modal, Table, Badge, Figure } from 'react-bootstrap'
+import { useState, useEffect, useRef } from 'react'
+import { Button, Modal, Table, Badge, Figure, Card } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
 
 export default function ShowModal({ id }) {
     const { url: apiBase, server: serverUrl } = useStore()
+    const audioRef = useRef(null)
 
     const [show, setShow] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [station, setStation] = useState(null)
     const [categories, setCategories] = useState([])
+    const [playing, setPlaying] = useState(false)
 
     useEffect(() => {
         axios({ method: 'get', url: `${apiBase}/station-categories/all` })
@@ -68,6 +70,88 @@ export default function ShowModal({ id }) {
 
                 <Modal.Body>
                     {station && (
+                        <>
+                            {/* Player Preview */}
+                            {station.player_type === 'm3u8' && station.stream_url ? (
+                                <Card className='mb-3' style={{ backgroundColor: '#f8f9fa' }}>
+                                    <Card.Body>
+                                        <div className='d-flex align-items-center gap-2 mb-2'>
+                                            <FontAwesomeIcon icon={['fas', 'play']} className='text-primary' />
+                                            <h6 className='mb-0'>M3U8 Player Preview</h6>
+                                        </div>
+                                        <div style={{ backgroundColor: '#000', borderRadius: '8px', padding: '12px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                            <button
+                                                onClick={() => {
+                                                    if (playing) {
+                                                        audioRef.current?.pause()
+                                                    } else {
+                                                        audioRef.current?.play()
+                                                    }
+                                                    setPlaying(!playing)
+                                                }}
+                                                style={{
+                                                    width: '40px',
+                                                    height: '40px',
+                                                    borderRadius: '50%',
+                                                    backgroundColor: '#007bff',
+                                                    border: 'none',
+                                                    color: '#fff',
+                                                    cursor: 'pointer',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    flexShrink: 0
+                                                }}
+                                            >
+                                                <FontAwesomeIcon icon={['fas', playing ? 'pause' : 'play']} />
+                                            </button>
+                                            <audio
+                                                ref={audioRef}
+                                                onPause={() => setPlaying(false)}
+                                                onEnded={() => setPlaying(false)}
+                                                style={{ flex: 1 }}
+                                            >
+                                                <source src={station.stream_url} type='application/x-mpegURL' />
+                                            </audio>
+                                            <small style={{ color: '#999' }}>{station.title}</small>
+                                        </div>
+                                    </Card.Body>
+                                </Card>
+                            ) : station.player_type === 'iframe' && station.rtmklik_player_url ? (
+                                <Card className='mb-3' style={{ backgroundColor: '#f8f9fa' }}>
+                                    <Card.Body>
+                                        <div className='d-flex align-items-center gap-2 mb-2'>
+                                            <FontAwesomeIcon icon={['fas', 'window-restore']} className='text-warning' />
+                                            <h6 className='mb-0'>RTMKlik Player Preview</h6>
+                                        </div>
+                                        <div style={{ aspectRatio: '1/1.03', position: 'relative', backgroundColor: '#000', borderRadius: '8px', overflow: 'hidden' }}>
+                                            <iframe
+                                                src={station.rtmklik_player_url}
+                                                style={{
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    border: 'none',
+                                                    position: 'absolute',
+                                                    top: 0,
+                                                    left: 0
+                                                }}
+                                                allow='autoplay'
+                                                scrolling='no'
+                                                title={`${station.title} player`}
+                                            />
+                                        </div>
+                                    </Card.Body>
+                                </Card>
+                            ) : (
+                                <Card className='mb-3' style={{ backgroundColor: '#f8f9fa' }}>
+                                    <Card.Body className='text-center text-muted'>
+                                        <FontAwesomeIcon icon={['fas', 'info-circle']} className='me-2' />
+                                        No player configured
+                                    </Card.Body>
+                                </Card>
+                            )}
+
+                            {/* Station Details Table */}
                         <Table bordered>
                             <tbody>
                                 <tr>
@@ -99,17 +183,41 @@ export default function ShowModal({ id }) {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td className='fw-semibold'>RTMKlik URL</td>
+                                    <td className='fw-semibold'>Player Type</td>
                                     <td>
-                                        {station.rtmklik_player_url ? (
-                                            <a href={station.rtmklik_player_url} target='_blank' rel='noreferrer'>
-                                                {station.rtmklik_player_url}
-                                            </a>
-                                        ) : (
-                                            '—'
-                                        )}
+                                        <Badge bg={station.player_type === 'm3u8' ? 'primary' : 'warning'}>
+                                            {station.player_type === 'm3u8' ? 'M3U8 (HLS)' : 'RTMKlik (iframe)'}
+                                        </Badge>
                                     </td>
                                 </tr>
+                                {station.player_type === 'm3u8' && (
+                                    <tr>
+                                        <td className='fw-semibold'>Stream URL</td>
+                                        <td>
+                                            {station.stream_url ? (
+                                                <code style={{ fontSize: '0.85rem', wordBreak: 'break-all' }}>
+                                                    {station.stream_url}
+                                                </code>
+                                            ) : (
+                                                '—'
+                                            )}
+                                        </td>
+                                    </tr>
+                                )}
+                                {station.player_type === 'iframe' && (
+                                    <tr>
+                                        <td className='fw-semibold'>RTMKlik URL</td>
+                                        <td>
+                                            {station.rtmklik_player_url ? (
+                                                <a href={station.rtmklik_player_url} target='_blank' rel='noreferrer'>
+                                                    {station.rtmklik_player_url}
+                                                </a>
+                                            ) : (
+                                                '—'
+                                            )}
+                                        </td>
+                                    </tr>
+                                )}
                                 <tr>
                                     <td className='fw-semibold'>Facebook</td>
                                     <td>
@@ -231,6 +339,7 @@ export default function ShowModal({ id }) {
                                 </tr>
                             </tbody>
                         </Table>
+                        </>
                     )}
                 </Modal.Body>
 
