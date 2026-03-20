@@ -363,6 +363,8 @@ class StationSeeder extends Seeder
                 'user_id' => $adminId,
                 'station_category_id' => $nasionalCat->id,
                 'active' => 1,
+                'player_type' => 'iframe',
+                'stream_url' => null,
                 'thumbnail_filename' => $image,
                 'banner_filename' => $image,
             ]));
@@ -375,6 +377,8 @@ class StationSeeder extends Seeder
                 'user_id' => $adminId,
                 'station_category_id' => $negeriCat->id,
                 'active' => 1,
+                'player_type' => 'iframe',
+                'stream_url' => null,
                 'thumbnail_filename' => $image,
                 'banner_filename' => $image,
             ]));

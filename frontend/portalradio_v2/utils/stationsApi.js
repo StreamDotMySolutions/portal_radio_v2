@@ -15,7 +15,8 @@ export function mapStation(s) {
       ? `${SERVER_URL}/storage/stations/${s.banner_filename}`
       : null,
     accent: s.accent_color || '#444',
-    streamUrl: null,
+    streamUrl: s.stream_url || null,
+    playerType: s.player_type || 'm3u8',
     embedPlayerUrl: s.rtmklik_player_url || null,
     frequency: s.frequency || '',
     description: s.description || '',

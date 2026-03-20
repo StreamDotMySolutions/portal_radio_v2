@@ -1,14 +1,19 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import AudioPlayer from './AudioPlayer';
+import FullPlayerCardMobile from './FullPlayerCard.mobile';
+import IframePlayerCardMobile from './IframePlayerCard.mobile';
 import { trackPageview } from '@/utils/analytics';
+import { fetchStationHits } from '@/utils/stationsApi';
 
 export default function StationDetailMobile({ station }) {
-  // Track pageview on component mount
+  const [stationHits, setStationHits] = useState({});
+
+  // Track pageview and fetch hits on component mount
   useEffect(() => {
     trackPageview('station', station.id, station.name);
+    fetchStationHits().then(setStationHits);
   }, [station.id, station.name]);
 
   return (
@@ -47,49 +52,12 @@ export default function StationDetailMobile({ station }) {
           <i className="bi bi-arrow-left"></i> Kembali
         </Link>
 
-        {/* Audio Player / Embed Player */}
-        <div className="mb-3">
-          {station.embedPlayerUrl ? (
-            <div style={{ display: 'flex', justifyContent: 'center', aspectRatio: '1 / 1.03', position: 'relative' }}>
-              <iframe
-                src={station.embedPlayerUrl}
-                style={{ border: 'none', display: 'block', borderRadius: '8px', overflow: 'hidden', backgroundColor: 'var(--color-bg)', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
-                allow="autoplay"
-                scrolling="no"
-                title={`${station.name} Live Player`}
-              />
-            </div>
+        {/* Full Player Card Mobile */}
+        <div className="mb-2">
+          {station.playerType === 'iframe' ? (
+            <IframePlayerCardMobile station={station} pageviews={stationHits[station.slug] || 0} />
           ) : (
-            <div className="d-flex gap-2 align-items-flex-end flex-wrap">
-              <div style={{ flex: 1, minWidth: '200px' }}>
-                <AudioPlayer streamUrl={station.streamUrl} accent={station.accent} />
-              </div>
-              {station.rtmKlikUrl && (
-                <a
-                  href={station.rtmKlikUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn"
-                  style={{
-                    backgroundColor: '#CCFF00',
-                    color: '#000',
-                    border: 'none',
-                    borderRadius: '8px',
-                    padding: '2px 16px 2px 6px',
-                    fontWeight: '600',
-                    fontSize: '0.85rem',
-                    textDecoration: 'none',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  <i className="bi bi-play-circle-fill" style={{ fontSize: '20px' }}></i>
-                  Dengarkan
-                </a>
-              )}
-            </div>
+            <FullPlayerCardMobile station={station} pageviews={stationHits[station.slug] || 0} />
           )}
         </div>
 

@@ -1,14 +1,19 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import AudioPlayer from './AudioPlayer';
+import FullPlayerCard from './FullPlayerCard';
+import IframePlayerCard from './IframePlayerCard';
 import { trackPageview } from '@/utils/analytics';
+import { fetchStationHits } from '@/utils/stationsApi';
 
 export default function StationDetail({ station }) {
-  // Track pageview on component mount
+  const [stationHits, setStationHits] = useState({});
+
+  // Track pageview and fetch hits on component mount
   useEffect(() => {
     trackPageview('station', station.id, station.name);
+    fetchStationHits().then(setStationHits);
   }, [station.id, station.name]);
 
   return (
@@ -51,45 +56,10 @@ export default function StationDetail({ station }) {
         <div className="d-flex mb-4" style={{ gap: '1.5rem' }}>
           {/* Left Column: Player */}
           <div style={{ flex: '0 0 42%', display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
-            {station.embedPlayerUrl ? (
-              <div style={{ width: '100%', maxWidth: '100%', aspectRatio: '1 / 1.03', position: 'relative' }}>
-                <iframe
-                  src={station.embedPlayerUrl}
-                  style={{ border: 'none', display: 'block', borderRadius: '8px', overflow: 'hidden', backgroundColor: 'var(--color-bg)', margin: '0 auto', width: '100%', height: '100%', position: 'absolute', top: 0, left: 0 }}
-                  allow="autoplay"
-                  scrolling="no"
-                  title={`${station.name} Live Player`}
-                />
-              </div>
+            {station.playerType === 'iframe' ? (
+              <IframePlayerCard station={station} pageviews={stationHits[station.slug] || 0} />
             ) : (
-              <div className="d-flex flex-column gap-3">
-                <AudioPlayer streamUrl={station.streamUrl} accent={station.accent} />
-                {station.rtmKlikUrl && (
-                  <a
-                    href={station.rtmKlikUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn"
-                    style={{
-                      backgroundColor: '#CCFF00',
-                      color: '#000',
-                      border: 'none',
-                      borderRadius: '8px',
-                      padding: '2px 24px 2px 8px',
-                      fontWeight: '600',
-                      fontSize: '0.95rem',
-                      textDecoration: 'none',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '4px',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    <i className="bi bi-play-circle-fill" style={{ fontSize: '28px' }}></i>
-                    Dengarkan di RTM Klik
-                  </a>
-                )}
-              </div>
+              <FullPlayerCard station={station} pageviews={stationHits[station.slug] || 0} />
             )}
           </div>
 

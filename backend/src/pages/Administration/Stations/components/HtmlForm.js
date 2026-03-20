@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Card, Form, InputGroup, Row, Col, Figure, Button, Spinner } from 'react-bootstrap'
+import { Card, Form, InputGroup, Row, Col, Figure, Button, Spinner, ButtonGroup } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from '../../../../libs/axios'
 import useStore from '../../../store'
@@ -183,19 +183,57 @@ const HtmlForm = ({
                     Social & Stream URLs
                 </Card.Header>
                 <Card.Body className='d-flex flex-column gap-2'>
-                    <InputGroup>
-                        <InputGroup.Text style={{ width: '110px' }}>RTMKlik</InputGroup.Text>
-                        <Form.Control
-                            placeholder='RTMKlik player URL'
-                            value={form.rtmklikPlayerUrl}
-                            readOnly={isLoading}
-                            isInvalid={!!errors?.rtmklik_player_url}
-                            onChange={(e) => onChange('rtmklikPlayerUrl')(e.target.value)}
-                        />
-                        {errors?.rtmklik_player_url && (
-                            <Form.Control.Feedback type='invalid'>{errors.rtmklik_player_url[0]}</Form.Control.Feedback>
-                        )}
-                    </InputGroup>
+                    <div>
+                        <Form.Label className='fw-semibold small text-muted mb-2'>Player Type</Form.Label>
+                        <ButtonGroup className='w-100'>
+                            <Button
+                                variant={form.playerType === 'm3u8' ? 'primary' : 'outline-secondary'}
+                                onClick={() => onChange('playerType')('m3u8')}
+                                disabled={isLoading}
+                            >
+                                <FontAwesomeIcon icon={['fas', 'play']} className='me-1' />
+                                M3U8
+                            </Button>
+                            <Button
+                                variant={form.playerType === 'iframe' ? 'primary' : 'outline-secondary'}
+                                onClick={() => onChange('playerType')('iframe')}
+                                disabled={isLoading}
+                            >
+                                <FontAwesomeIcon icon={['fas', 'window-restore']} className='me-1' />
+                                Player
+                            </Button>
+                        </ButtonGroup>
+                    </div>
+
+                    {form.playerType === 'iframe' ? (
+                        <InputGroup>
+                            <InputGroup.Text style={{ width: '110px' }}>RTMKlik URL</InputGroup.Text>
+                            <Form.Control
+                                placeholder='RTMKlik player URL'
+                                value={form.rtmklikPlayerUrl}
+                                readOnly={isLoading}
+                                isInvalid={!!errors?.rtmklik_player_url}
+                                onChange={(e) => onChange('rtmklikPlayerUrl')(e.target.value)}
+                            />
+                            {errors?.rtmklik_player_url && (
+                                <Form.Control.Feedback type='invalid'>{errors.rtmklik_player_url[0]}</Form.Control.Feedback>
+                            )}
+                        </InputGroup>
+                    ) : (
+                        <InputGroup>
+                            <InputGroup.Text style={{ width: '110px' }}>Stream URL</InputGroup.Text>
+                            <Form.Control
+                                placeholder='https://...stream.m3u8'
+                                value={form.streamUrl || ''}
+                                readOnly={isLoading}
+                                isInvalid={!!errors?.stream_url}
+                                onChange={(e) => onChange('streamUrl')(e.target.value)}
+                            />
+                            {errors?.stream_url && (
+                                <Form.Control.Feedback type='invalid'>{errors.stream_url[0]}</Form.Control.Feedback>
+                            )}
+                        </InputGroup>
+                    )}
 
                     <InputGroup>
                         <InputGroup.Text style={{ width: '110px' }}>Facebook</InputGroup.Text>

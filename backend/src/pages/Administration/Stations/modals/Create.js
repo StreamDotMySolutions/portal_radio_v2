@@ -12,6 +12,8 @@ const emptyForm = {
     description: '',
     frequency: '',
     station_category_id: '',
+    playerType: 'm3u8',
+    streamUrl: '',
     rtmklikPlayerUrl: '',
     facebookUrl: '',
     xUrl: '',
@@ -67,7 +69,13 @@ export default function CreateModal() {
         if (form.description) formData.append('description', form.description)
         if (form.frequency) formData.append('frequency', form.frequency)
         if (form.station_category_id) formData.append('station_category_id', form.station_category_id)
-        if (form.rtmklikPlayerUrl) formData.append('rtmklik_player_url', form.rtmklikPlayerUrl)
+        formData.append('player_type', form.playerType)
+        if (form.playerType === 'm3u8' && form.streamUrl) {
+            formData.append('stream_url', form.streamUrl)
+        }
+        if (form.playerType === 'iframe' && form.rtmklikPlayerUrl) {
+            formData.append('rtmklik_player_url', form.rtmklikPlayerUrl)
+        }
         if (form.facebookUrl) formData.append('facebook_url', form.facebookUrl)
         if (form.xUrl) formData.append('x_url', form.xUrl)
         if (form.instagramUrl) formData.append('instagram_url', form.instagramUrl)

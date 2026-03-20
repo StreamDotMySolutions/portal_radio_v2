@@ -78,6 +78,8 @@ class StationController extends Controller
             'station_category_id' => 'required|exists:station_categories,id',
             'slug' => 'sometimes|string|unique:stations',
             'rtmklik_player_url' => 'sometimes|string',
+            'player_type' => 'sometimes|string|in:m3u8,iframe',
+            'stream_url' => 'sometimes|nullable|string',
             'facebook_url' => 'sometimes|string',
             'x_url' => 'sometimes|string',
             'instagram_url' => 'sometimes|string',
@@ -99,6 +101,8 @@ class StationController extends Controller
             'frequency' => $request->input('frequency'),
             'station_category_id' => $request->input('station_category_id'),
             'rtmklik_player_url' => $request->input('rtmklik_player_url'),
+            'player_type' => $request->input('player_type', 'm3u8'),
+            'stream_url' => $request->input('stream_url'),
             'facebook_url' => $request->input('facebook_url'),
             'x_url' => $request->input('x_url'),
             'instagram_url' => $request->input('instagram_url'),
@@ -128,6 +132,8 @@ class StationController extends Controller
             'station_category_id' => 'sometimes|exists:station_categories,id',
             'slug' => 'sometimes|string|unique:stations,slug,' . $station->id,
             'rtmklik_player_url' => 'sometimes|string',
+            'player_type' => 'sometimes|string|in:m3u8,iframe',
+            'stream_url' => 'sometimes|nullable|string',
             'facebook_url' => 'sometimes|string',
             'x_url' => 'sometimes|string',
             'instagram_url' => 'sometimes|string',
@@ -141,7 +147,7 @@ class StationController extends Controller
 
         $data = $request->only([
             'title', 'slug', 'description', 'frequency', 'station_category_id',
-            'rtmklik_player_url', 'facebook_url', 'x_url',
+            'rtmklik_player_url', 'player_type', 'stream_url', 'facebook_url', 'x_url',
             'instagram_url', 'youtube_url', 'tiktok_url', 'accent_color', 'active'
         ]);
 
