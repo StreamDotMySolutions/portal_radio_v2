@@ -23,7 +23,10 @@
       "mcp__playwright__browser_resize",
       "mcp__playwright__browser_click",
       "Bash(git add:*)",
-      "Bash(git rebase:*)"
+      "Bash(git rebase:*)",
+      "Bash(git stash:*)",
+      "Bash(git push:*)",
+      "Bash(git commit:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
