@@ -1,0 +1,293 @@
+'use client';
+
+import { useState, useRef, useEffect } from 'react';
+import { trackPlayerPlay } from '@/utils/analytics';
+
+export default function FullPlayerCardMobile({ station, pageviews = 0 }) {
+  const [playing, setPlaying] = useState(false);
+  const [error, setError] = useState(false);
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [volume, setVolume] = useState(100);
+  const audioRef = useRef(null);
+  const hlsRef = useRef(null);
+  const playTrackedRef = useRef(false);
+  const disabled = !station.streamUrl || station.streamUrl === '#';
+
+  // Load HLS stream
+  useEffect(() => {
+    if (disabled) return;
+    const audio = audioRef.current;
+    if (hlsRef.current) { hlsRef.current.destroy(); hlsRef.current = null; }
+    setPlaying(false);
+    setError(false);
+
+    if (station.streamUrl.includes('.m3u8')) {
+      (async () => {
+        try {
+          const HLS = (await import('hls.js')).default;
+          if (HLS.isSupported()) {
+            const hls = new HLS();
+            hlsRef.current = hls;
+            hls.loadSource(station.streamUrl);
+            hls.attachMedia(audio);
+            hls.on(HLS.Events.ERROR, (_, data) => { if (data.fatal) setError(true); });
+          } else if (audio?.canPlayType('application/vnd.apple.mpegurl')) {
+            audio.src = station.streamUrl;
+          } else {
+            setError(true);
+          }
+        } catch {
+          if (audio?.canPlayType('application/vnd.apple.mpegurl')) {
+            audio.src = station.streamUrl;
+          } else {
+            setError(true);
+          }
+        }
+      })();
+    } else {
+      audio.src = station.streamUrl;
+    }
+
+    return () => { if (hlsRef.current) { hlsRef.current.destroy(); hlsRef.current = null; } };
+  }, [station.streamUrl, disabled]);
+
+  // Update time display
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const updateTime = () => setCurrentTime(audio.currentTime);
+    const updateDuration = () => setDuration(audio.duration);
+
+    audio.addEventListener('timeupdate', updateTime);
+    audio.addEventListener('loadedmetadata', updateDuration);
+    audio.addEventListener('ended', () => setPlaying(false));
+
+    return () => {
+      audio.removeEventListener('timeupdate', updateTime);
+      audio.removeEventListener('loadedmetadata', updateDuration);
+      audio.removeEventListener('ended', () => setPlaying(false));
+    };
+  }, []);
+
+  const toggle = () => {
+    if (disabled || error) return;
+    if (playing) {
+      audioRef.current?.pause();
+    } else {
+      audioRef.current?.play();
+      // Track first play
+      if (!playTrackedRef.current) {
+        playTrackedRef.current = true;
+        trackPlayerPlay(station.id, station.name);
+      }
+    }
+    setPlaying(!playing);
+  };
+
+  const handleVolumeChange = (e) => {
+    const vol = parseInt(e.target.value);
+    setVolume(vol);
+    if (audioRef.current) audioRef.current.volume = vol / 100;
+  };
+
+  const formatTime = (seconds) => {
+    if (!seconds || isNaN(seconds)) return '0:00';
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = Math.floor(seconds % 60);
+    return h > 0 ? `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}` : `${m}:${s.toString().padStart(2, '0')}`;
+  };
+
+  return (
+    <div
+      className="card-dark d-flex flex-column"
+      style={{
+        borderRadius: '12px',
+        overflow: 'hidden',
+        width: '100%',
+        aspectRatio: '1 / 1.1',
+        backgroundColor: 'var(--color-bg)',
+        border: `1px solid ${station.accent}22`,
+      }}
+    >
+      {!disabled && <audio ref={audioRef} />}
+
+      {/* Artwork/Banner Section */}
+      <div
+        style={{
+          height: '100%',
+          backgroundImage: station.banner ? `url(${station.banner})` : `linear-gradient(135deg, ${station.accent}44, ${station.accent}22)`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          overflow: 'hidden',
+        }}
+      >
+        {/* Overlay */}
+        <div style={{ position: 'absolute', inset: 0, background: `linear-gradient(to bottom, transparent, ${station.accent}44)` }} />
+
+        {/* Animated Equalizer Bars when playing */}
+        {playing && (
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'flex-end',
+            justifyContent: 'space-around',
+            padding: '12px',
+            paddingBottom: '62px',
+            zIndex: 2,
+            gap: '3px',
+          }}>
+            {Array.from({ length: 16 }).map((_, i) => (
+              <div
+                key={i}
+                style={{
+                  flex: 1,
+                  height: `${30 + (i % 4) * 15}%`,
+                  backgroundColor: station.accent,
+                  borderRadius: '2px',
+                  opacity: 0.8,
+                  animation: `audioBar 0.${4 + (i % 5)}s ease-in-out infinite alternate`,
+                }}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Play Button Overlay */}
+        <button
+          onClick={toggle}
+          disabled={disabled || error}
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '56px',
+            height: '56px',
+            borderRadius: '50%',
+            backgroundColor: disabled || error ? '#555' : station.accent,
+            border: 'none',
+            color: '#fff',
+            fontSize: '1.6rem',
+            cursor: disabled || error ? 'not-allowed' : 'pointer',
+            opacity: disabled || error ? 0.5 : 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'transform 0.2s',
+            zIndex: 10,
+          }}
+          onTouchStart={(e) => !disabled && !error && (e.target.style.transform = 'translate(-50%, -50%) scale(0.95)')}
+          onTouchEnd={(e) => (e.target.style.transform = 'translate(-50%, -50%)')}
+        >
+          <i className={`bi ${playing ? 'bi-pause-fill' : 'bi-play-fill'}`}></i>
+        </button>
+
+        {/* Share Button Overlay */}
+        <button
+          style={{
+            position: 'absolute',
+            top: '8px',
+            left: '8px',
+            padding: '6px 10px',
+            backgroundColor: 'transparent',
+            border: `1px solid ${station.accent}66`,
+            borderRadius: '6px',
+            color: station.accent,
+            fontSize: '0.75rem',
+            fontWeight: '600',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '3px',
+            transition: 'all 0.2s',
+            zIndex: 10,
+          }}
+          onTouchStart={(e) => {
+            e.target.style.backgroundColor = `${station.accent}11`;
+            e.target.style.borderColor = station.accent;
+          }}
+          onTouchEnd={(e) => {
+            e.target.style.backgroundColor = 'transparent';
+            e.target.style.borderColor = `${station.accent}66`;
+          }}
+          onClick={() => {
+            const text = `Dengarkan ${station.name} - ${station.frequency}`;
+            navigator.share?.({ title: 'RTM Radio', text, url: window.location.href })
+              .catch(() => navigator.clipboard.writeText(window.location.href));
+          }}
+        >
+          <i className="bi bi-share" style={{ fontSize: '0.8rem' }}></i>
+          Kongsi
+        </button>
+
+        {/* Volume Control Overlay */}
+        <div style={{
+          position: 'absolute',
+          bottom: '0',
+          left: '0',
+          right: '0',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '6px',
+          padding: '10px 12px',
+          backgroundColor: 'rgba(0, 0, 0, 0.4)',
+          zIndex: 5,
+        }}>
+          <i className="bi bi-volume-down" style={{ fontSize: '0.8rem', color: '#fff', flexShrink: 0 }}></i>
+          <input
+            type="range"
+            min="0"
+            max="100"
+            value={volume}
+            onChange={handleVolumeChange}
+            disabled={disabled}
+            style={{
+              flex: 1,
+              height: '3px',
+              borderRadius: '2px',
+              backgroundColor: '#555',
+              accentColor: station.accent,
+              cursor: disabled ? 'not-allowed' : 'pointer',
+              appearance: 'slider-horizontal',
+              opacity: disabled ? 0.5 : 1,
+            }}
+          />
+          <i className="bi bi-volume-up" style={{ fontSize: '0.8rem', color: '#fff', flexShrink: 0 }}></i>
+        </div>
+
+        {/* Pageview Count Badge */}
+        <div
+          style={{
+            position: 'absolute',
+            top: '8px',
+            right: '8px',
+            backgroundColor: `${station.accent}CC`,
+            color: '#fff',
+            padding: '4px 10px',
+            borderRadius: '20px',
+            fontSize: '0.7rem',
+            fontWeight: '600',
+            zIndex: 3,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+          }}
+        >
+          <i className="bi bi-eye" style={{ fontSize: '0.75rem' }}></i>
+          {pageviews.toLocaleString()}
+        </div>
+      </div>
+
+
+    </div>
+  );
+}

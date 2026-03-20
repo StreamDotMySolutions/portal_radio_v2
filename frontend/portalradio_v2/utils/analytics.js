@@ -121,3 +121,33 @@ export async function trackDownload(pageType, filename) {
     console.warn('Analytics tracking error:', error);
   }
 }
+
+/**
+ * Track a player play event (M3U8 or other stream players)
+ * @param {number} stationId - Station ID being played
+ * @param {string} stationName - Station name being played
+ */
+export async function trackPlayerPlay(stationId, stationName) {
+  try {
+    const payload = {
+      session_id: getSessionId(),
+      event_type: 'player_play',
+      page_type: 'station',
+      reference_id: stationId,
+      reference_title: stationName,
+      device_type: getDeviceType(),
+      referrer: document.referrer || null,
+    };
+
+    fetch(`${API_BASE}/track`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    }).catch(() => {});
+  } catch (error) {
+    console.warn('Analytics tracking error:', error);
+  }
+}
