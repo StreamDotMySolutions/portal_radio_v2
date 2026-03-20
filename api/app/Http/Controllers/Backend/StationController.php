@@ -21,7 +21,12 @@ class StationController extends Controller
                      ->where('analytics_events.event_type', '=', 'pageview')
                      ->where('analytics_events.page_type', '=', 'station');
             })
-            ->select('stations.*', 'station_categories.slug as category', DB::raw('COUNT(analytics_events.id) as pageview_hits'), DB::raw('COUNT(DISTINCT analytics_events.session_id) as unique_visitors'))
+            ->leftJoin('analytics_events as playback_events', function ($join) {
+                $join->on('stations.id', '=', 'playback_events.reference_id')
+                     ->where('playback_events.event_type', '=', 'player_play')
+                     ->where('playback_events.page_type', '=', 'station');
+            })
+            ->select('stations.*', 'station_categories.slug as category', DB::raw('COUNT(analytics_events.id) as pageview_hits'), DB::raw('COUNT(DISTINCT analytics_events.session_id) as unique_visitors'), DB::raw('COUNT(playback_events.id) as playback_plays'))
             ->groupBy('stations.id');
 
         if ($request->filled('search')) {
@@ -47,6 +52,8 @@ class StationController extends Controller
             $query->orderBy('pageview_hits', $sortDir);
         } elseif ($sortBy === 'unique_visitors') {
             $query->orderBy('unique_visitors', $sortDir);
+        } elseif ($sortBy === 'playback') {
+            $query->orderBy('playback_plays', $sortDir);
         } else {
             $query->defaultOrder();
         }
