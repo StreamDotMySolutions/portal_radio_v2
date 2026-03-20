@@ -286,11 +286,6 @@ export default function FullPlayerCard({ station, pageviews = 0 }) {
           {pageviews.toLocaleString()}
         </div>
       </div>
-
-
-      {/* Controls Section - Empty */}
-      <div style={{ padding: '8px 16px 8px', flex: '0 0 auto', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '16px' }}>
-      </div>
     </div>
   );
 }
