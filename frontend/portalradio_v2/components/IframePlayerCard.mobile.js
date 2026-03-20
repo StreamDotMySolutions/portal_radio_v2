@@ -44,6 +44,8 @@ export default function IframePlayerCardMobile({ station, pageviews = 0 }) {
             position: 'absolute',
             top: 0,
             left: 0,
+            margin: 0,
+            padding: 0,
           }}
           allow="autoplay"
           scrolling="no"

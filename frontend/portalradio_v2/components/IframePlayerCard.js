@@ -39,12 +39,13 @@ export default function IframePlayerCard({ station, pageviews = 0 }) {
             borderRadius: '8px',
             overflow: 'hidden',
             backgroundColor: 'var(--color-bg)',
-            margin: '0 auto',
             width: '100%',
             height: '100%',
             position: 'absolute',
             top: 0,
             left: 0,
+            margin: 0,
+            padding: 0,
           }}
           allow="autoplay"
           scrolling="no"
