@@ -100,6 +100,7 @@ class DashboardController extends Controller
                 'stations'          => Station::where('active', true)->count(),
                 'stations_pageviews' => \App\Models\AnalyticsEvent::where('event_type', 'pageview')->where('page_type', 'station')->count(),
                 'livestream_plays'  => AnalyticsService::livestreamTotalPlays(),
+                'playback_plays'    => \App\Models\AnalyticsEvent::where('event_type', 'player_play')->where('page_type', 'station')->count(),
                 'chat_users'        => ChatUser::count(),
                 'chat_messages'     => ChatMessage::count(),
                 'assets'      => Asset::count(),

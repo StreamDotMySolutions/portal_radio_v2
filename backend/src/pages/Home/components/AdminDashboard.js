@@ -147,13 +147,16 @@ const AdminDashboard = () => {
                 <div>
                     <p className='text-muted small fw-semibold text-uppercase mb-2'>Engagement</p>
                     <Row className='g-3'>
-                        <Col md={4}>
+                        <Col md={3}>
                             <ContentCard title='Livestream Plays' value={v(counts.livestream_plays)} icon='play' color='danger' to='/administration/livestream' />
                         </Col>
-                        <Col md={4}>
+                        <Col md={3}>
+                            <ContentCard title='Playback Total' value={v(counts.playback_plays)} icon='headphones' color='warning' to='/administration/stations' />
+                        </Col>
+                        <Col md={3}>
                             <ContentCard title='Chat Users' value={v(counts.chat_users)} icon='users' color='info' to='/administration/chat-users' />
                         </Col>
-                        <Col md={4}>
+                        <Col md={3}>
                             <ContentCard title='Chat Messages' value={v(counts.chat_messages)} icon='comments' color='secondary' to='/administration/chat-messages' />
                         </Col>
                     </Row>
