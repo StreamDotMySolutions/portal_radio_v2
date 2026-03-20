@@ -99,7 +99,8 @@ class PopulateM3u8FromRtmklik extends Command
 
         // Confirm before applying
         if (!$this->option('force')) {
-            if (!$this->confirm("Apply these {$count = count($updates)} update(s)?", true)) {
+            $count = count($updates);
+            if (!$this->confirm("Apply these {$count} update(s)?", true)) {
                 $this->info('❌ Cancelled.');
                 return 0;
             }
