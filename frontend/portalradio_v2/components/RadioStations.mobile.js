@@ -87,6 +87,8 @@ export default function RadioStationsMobile() {
         session_id:  getOrCreateSessionId(),
         event_type:  'livestream_play',
         page_type:   'station_grid',
+        reference_id: station.id,
+        reference_title: station.name,
         device_type: window.innerWidth < 768 ? 'mobile' : 'desktop',
       }),
     }).catch(() => {});
