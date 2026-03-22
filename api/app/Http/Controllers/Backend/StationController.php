@@ -23,7 +23,7 @@ class StationController extends Controller
             })
             ->leftJoin('analytics_events as playback_events', function ($join) {
                 $join->on('stations.id', '=', 'playback_events.reference_id')
-                     ->where('playback_events.event_type', '=', 'player_play')
+                     ->whereIn('playback_events.event_type', ['player_play', 'livestream_play'])
                      ->where('playback_events.page_type', '=', 'station');
             })
             ->select('stations.*', 'station_categories.slug as category', DB::raw('COUNT(analytics_events.id) as pageview_hits'), DB::raw('COUNT(DISTINCT analytics_events.session_id) as unique_visitors'), DB::raw('COUNT(playback_events.id) as playback_plays'))
