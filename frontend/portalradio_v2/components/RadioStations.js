@@ -86,7 +86,7 @@ export default function RadioStations() {
       body: JSON.stringify({
         session_id:  getOrCreateSessionId(),
         event_type:  'livestream_play',
-        page_type:   'station_grid',
+        page_type:   'station',
         reference_id: station.id,
         reference_title: station.name,
         device_type: window.innerWidth < 768 ? 'mobile' : 'desktop',
