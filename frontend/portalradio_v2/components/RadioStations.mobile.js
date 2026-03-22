@@ -54,6 +54,22 @@ export default function RadioStationsMobile() {
     };
   }, []);
 
+  // Stop station audio when livestream starts
+  useEffect(() => {
+    const handleOtherPlayer = (e) => {
+      if (e.detail?.source !== 'station') {
+        audioRef.current?.pause();
+        if (hlsRef.current) {
+          hlsRef.current.destroy();
+          hlsRef.current = null;
+        }
+        setPlayingSlug(null);
+      }
+    };
+    window.addEventListener('rtm-player-start', handleOtherPlayer);
+    return () => window.removeEventListener('rtm-player-start', handleOtherPlayer);
+  }, []);
+
   const toggleStation = async (station, e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -78,6 +94,9 @@ export default function RadioStationsMobile() {
     }
     audio.pause();
     setPlayingSlug(station.slug);
+
+    // Notify other players to stop
+    window.dispatchEvent(new CustomEvent('rtm-player-start', { detail: { source: 'station' } }));
 
     // Track play and increment hit count
     fetch(`${API_URL}/track`, {

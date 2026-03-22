@@ -94,6 +94,20 @@ export default function LiveStreamMobile() {
 
     video.addEventListener('play', handlePlay, { once: true });
 
+    // Notify other players to stop when livestream plays
+    const handleLivestreamPlay = () => {
+      window.dispatchEvent(new CustomEvent('rtm-player-start', { detail: { source: 'livestream' } }));
+    };
+    video.addEventListener('play', handleLivestreamPlay);
+
+    // Stop livestream when station player starts
+    const handleOtherPlayer = (e) => {
+      if (e.detail?.source !== 'livestream') {
+        video.pause();
+      }
+    };
+    window.addEventListener('rtm-player-start', handleOtherPlayer);
+
     // Native fallback error handling
     const handleVideoError = () => {
       setIsOffline(true);
@@ -102,6 +116,8 @@ export default function LiveStreamMobile() {
 
     return () => {
       video.removeEventListener('play', handlePlay);
+      video.removeEventListener('play', handleLivestreamPlay);
+      window.removeEventListener('rtm-player-start', handleOtherPlayer);
       video.removeEventListener('error', handleVideoError);
       if (hlsRef.current) {
         hlsRef.current.destroy();
