@@ -103,23 +103,25 @@ class AnalyticsService
     }
 
     /**
-     * Get pageview count for a specific station
+     * Get player play count for a specific station
+     * Counts both livestream_play and player_play events
      * @param int|string $stationId Station ID (reference_id in analytics)
      */
     public static function stationViews($stationId)
     {
-        return AnalyticsEvent::where('event_type', 'pageview')
+        return AnalyticsEvent::whereIn('event_type', ['livestream_play', 'player_play'])
             ->where('page_type', 'station')
             ->where('reference_id', $stationId)
             ->count();
     }
 
     /**
-     * Get pageview counts for all stations, keyed by slug
+     * Get player play counts for all stations, keyed by slug
+     * Counts both livestream_play and player_play events
      */
     public static function allStationViews(): array
     {
-        $hitsByStationId = AnalyticsEvent::where('event_type', 'pageview')
+        $hitsByStationId = AnalyticsEvent::whereIn('event_type', ['livestream_play', 'player_play'])
             ->where('page_type', 'station')
             ->whereNotNull('reference_id')
             ->select('reference_id', DB::raw('count(*) as views'))
@@ -140,22 +142,24 @@ class AnalyticsService
     }
 
     /**
-     * Get total pageviews for all stations
+     * Get total player plays for all stations
+     * Counts both livestream_play and player_play events
      */
     public static function totalStationViews()
     {
-        return AnalyticsEvent::where('event_type', 'pageview')
+        return AnalyticsEvent::whereIn('event_type', ['livestream_play', 'player_play'])
             ->where('page_type', 'station')
             ->count();
     }
 
     /**
-     * Get station pageviews by date range
+     * Get station player plays by date range
+     * Counts both livestream_play and player_play events
      * @param int|string $stationId Station ID (reference_id in analytics)
      */
     public static function stationViewsByDateRange($stationId, $startDate = null, $endDate = null)
     {
-        $query = AnalyticsEvent::where('event_type', 'pageview')
+        $query = AnalyticsEvent::whereIn('event_type', ['livestream_play', 'player_play'])
             ->where('page_type', 'station')
             ->where('reference_id', $stationId);
 
