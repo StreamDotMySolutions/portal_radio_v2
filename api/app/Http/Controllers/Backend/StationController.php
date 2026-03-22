@@ -16,18 +16,13 @@ class StationController extends Controller
     {
         $query = Station::query()
             ->leftJoin('station_categories', 'stations.station_category_id', '=', 'station_categories.id')
-            ->leftJoin('analytics_events', function ($join) {
-                $join->on('stations.id', '=', 'analytics_events.reference_id')
-                     ->where('analytics_events.event_type', '=', 'pageview')
-                     ->where('analytics_events.page_type', '=', 'station');
-            })
-            ->leftJoin('analytics_events as playback_events', function ($join) {
-                $join->on('stations.id', '=', 'playback_events.reference_id')
-                     ->whereIn('playback_events.event_type', ['player_play', 'livestream_play'])
-                     ->where('playback_events.page_type', '=', 'station');
-            })
-            ->select('stations.*', 'station_categories.slug as category', DB::raw('COUNT(analytics_events.id) as pageview_hits'), DB::raw('COUNT(DISTINCT analytics_events.session_id) as unique_visitors'), DB::raw('COUNT(playback_events.id) as playback_plays'))
-            ->groupBy('stations.id');
+            ->select(
+                'stations.*',
+                'station_categories.slug as category',
+                DB::raw('(SELECT COUNT(*) FROM analytics_events WHERE analytics_events.reference_id = stations.id AND analytics_events.event_type = "pageview" AND analytics_events.page_type = "station") as pageview_hits'),
+                DB::raw('(SELECT COUNT(DISTINCT session_id) FROM analytics_events WHERE analytics_events.reference_id = stations.id AND analytics_events.event_type = "pageview" AND analytics_events.page_type = "station") as unique_visitors'),
+                DB::raw('(SELECT COUNT(*) FROM analytics_events WHERE analytics_events.reference_id = stations.id AND analytics_events.event_type IN ("player_play", "livestream_play") AND analytics_events.page_type = "station") as playback_plays')
+            );
 
         if ($request->filled('search')) {
             $search = $request->input('search');
