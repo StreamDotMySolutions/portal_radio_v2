@@ -59,7 +59,16 @@ export default function StationDetail({ station }) {
             {station.playerType === 'iframe' ? (
               <IframePlayerCard station={station} pageviews={stationHits[station.slug] || 0} />
             ) : (
-              <FullPlayerCard station={station} pageviews={stationHits[station.slug] || 0} />
+              <FullPlayerCard
+                station={station}
+                pageviews={stationHits[station.slug] || 0}
+                onFirstPlay={() =>
+                  setStationHits(prev => ({
+                    ...prev,
+                    [station.slug]: (prev[station.slug] || 0) + 1,
+                  }))
+                }
+              />
             )}
           </div>
 

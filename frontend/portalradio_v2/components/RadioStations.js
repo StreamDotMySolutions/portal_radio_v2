@@ -79,7 +79,7 @@ export default function RadioStations() {
     audio.pause();
     setPlayingSlug(station.slug);
 
-    // Track play
+    // Track play and increment hit count
     fetch(`${API_URL}/track`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -90,6 +90,12 @@ export default function RadioStations() {
         device_type: window.innerWidth < 768 ? 'mobile' : 'desktop',
       }),
     }).catch(() => {});
+
+    // Optimistic update: increment hit count immediately
+    setStationHits(prev => ({
+      ...prev,
+      [station.slug]: (prev[station.slug] || 0) + 1,
+    }));
 
     // Load new stream
     try {

@@ -58,7 +58,16 @@ export default function StationDetailMobile({ station }) {
           {station.playerType === 'iframe' ? (
             <IframePlayerCardMobile station={station} pageviews={stationHits[station.slug] || 0} />
           ) : (
-            <FullPlayerCardMobile station={station} pageviews={stationHits[station.slug] || 0} />
+            <FullPlayerCardMobile
+              station={station}
+              pageviews={stationHits[station.slug] || 0}
+              onFirstPlay={() =>
+                setStationHits(prev => ({
+                  ...prev,
+                  [station.slug]: (prev[station.slug] || 0) + 1,
+                }))
+              }
+            />
           )}
         </div>
 

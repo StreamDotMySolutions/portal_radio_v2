@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { trackPlayerPlay } from '@/utils/analytics';
 
-export default function FullPlayerCardMobile({ station, pageviews = 0 }) {
+export default function FullPlayerCardMobile({ station, pageviews = 0, onFirstPlay }) {
   const [playing, setPlaying] = useState(false);
   const [error, setError] = useState(false);
   const [duration, setDuration] = useState(0);
@@ -81,6 +81,7 @@ export default function FullPlayerCardMobile({ station, pageviews = 0 }) {
       if (!playTrackedRef.current) {
         playTrackedRef.current = true;
         trackPlayerPlay(station.id, station.name);
+        onFirstPlay?.();
       }
     }
     setPlaying(!playing);
