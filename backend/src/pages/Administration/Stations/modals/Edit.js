@@ -24,6 +24,8 @@ const emptyForm = {
     active: '',
 }
 
+const toSlug = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+
 export default function EditModal({ id }) {
     const { url: apiBase, server: serverUrl } = useStore()
     const setRefresh = useStationsStore((s) => s.setRefresh)
@@ -37,7 +39,7 @@ export default function EditModal({ id }) {
     const [bannerFilename, setBannerFilename] = useState(null)
     const [errors, setErrors] = useState(null)
 
-    const onChange = (field) => (value) => setForm((prev) => ({ ...prev, [field]: value }))
+    const onChange = (field) => (value) => setForm((prev) => ({ ...prev, [field]: field === 'slug' ? toSlug(value) : value }))
 
     const handleShowClick = () => {
         setIsLoading(true)

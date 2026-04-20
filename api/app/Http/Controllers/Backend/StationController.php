@@ -93,7 +93,7 @@ class StationController extends Controller
             'active' => 'required|boolean',
         ]);
 
-        $slug = $request->input('slug') ?: Str::slug($request->input('title'));
+        $slug = Str::slug($request->input('slug') ?: $request->input('title'));
 
         $station = Station::create([
             'user_id' => auth('sanctum')->user()->id,
@@ -152,6 +152,10 @@ class StationController extends Controller
             'rtmklik_player_url', 'player_type', 'stream_url', 'facebook_url', 'x_url',
             'instagram_url', 'youtube_url', 'tiktok_url', 'accent_color', 'active'
         ]);
+
+        if (isset($data['slug'])) {
+            $data['slug'] = Str::slug($data['slug']);
+        }
 
         if ($request->hasFile('thumbnail')) {
             if ($station->thumbnail_filename) {
