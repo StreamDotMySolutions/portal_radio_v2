@@ -41,7 +41,7 @@ export default function CreateModal() {
 
     const onChange = (field) => (value) => {
         setForm((prev) => {
-            const next = { ...prev, [field]: value }
+            const next = { ...prev, [field]: field === 'slug' ? toSlug(value) : value }
             if (field === 'title' && !slugTouched) {
                 next.slug = toSlug(value)
             }
