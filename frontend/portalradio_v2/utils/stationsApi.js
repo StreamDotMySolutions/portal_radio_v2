@@ -27,6 +27,7 @@ export function mapStation(s) {
       instagram: s.instagram_url || null,
       twitter: s.x_url || null,
       youtube: s.youtube_url || null,
+      tiktok: s.tiktok_url || null,
     },
   };
 }
