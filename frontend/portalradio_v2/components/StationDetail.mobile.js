@@ -97,6 +97,11 @@ export default function StationDetailMobile({ station }) {
                   <i className="bi bi-youtube"></i>
                 </a>
               )}
+              {station.social.tiktok && station.social.tiktok !== '#' && (
+                <a href={station.social.tiktok} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontSize: '2.5rem' }}>
+                  <i className="bi bi-tiktok"></i>
+                </a>
+              )}
             </div>
             </>
           ) : (
