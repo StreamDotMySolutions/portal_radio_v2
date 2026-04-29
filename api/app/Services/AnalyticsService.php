@@ -215,4 +215,114 @@ class AnalyticsService
             ->orderBy('date')
             ->get();
     }
+
+    public static function livestreamPlaysThisMonth(): int
+    {
+        return AnalyticsEvent::where('event_type', 'livestream_play')
+            ->where('created_at', '>=', now()->startOfMonth())
+            ->count();
+    }
+
+    public static function playerPlaysTotal(): int
+    {
+        return AnalyticsEvent::where('event_type', 'player_play')->count();
+    }
+
+    public static function playerPlaysToday(): int
+    {
+        return AnalyticsEvent::where('event_type', 'player_play')
+            ->whereDate('created_at', today())
+            ->count();
+    }
+
+    public static function playerPlaysThisWeek(): int
+    {
+        return AnalyticsEvent::where('event_type', 'player_play')
+            ->where('created_at', '>=', now()->startOfWeek())
+            ->count();
+    }
+
+    public static function playerPlaysThisMonth(): int
+    {
+        return AnalyticsEvent::where('event_type', 'player_play')
+            ->where('created_at', '>=', now()->startOfMonth())
+            ->count();
+    }
+
+    public static function topStationsByPlayback(int $limit = 10)
+    {
+        return AnalyticsEvent::whereIn('event_type', ['player_play', 'livestream_play'])
+            ->where('page_type', 'station')
+            ->whereNotNull('reference_id')
+            ->select('reference_id', 'reference_title', DB::raw('count(*) as plays'))
+            ->groupBy('reference_id', 'reference_title')
+            ->orderByDesc('plays')
+            ->limit($limit)
+            ->get();
+    }
+
+    public static function playbackDaily()
+    {
+        return AnalyticsEvent::whereIn('event_type', ['player_play', 'livestream_play'])
+            ->where('created_at', '>=', now()->subDays(29)->startOfDay())
+            ->select(
+                DB::raw('DATE(created_at) as date'),
+                DB::raw("SUM(CASE WHEN event_type = 'player_play' THEN 1 ELSE 0 END) as player_plays"),
+                DB::raw("SUM(CASE WHEN event_type = 'livestream_play' THEN 1 ELSE 0 END) as livestream_plays")
+            )
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy('date')
+            ->get();
+    }
+
+    public static function uniqueVisitorsBreakdown(): array
+    {
+        return [
+            'today'  => AnalyticsEvent::where('event_type', 'pageview')
+                            ->whereDate('created_at', today())
+                            ->distinct('session_id')->count('session_id'),
+            'week'   => AnalyticsEvent::where('event_type', 'pageview')
+                            ->where('created_at', '>=', now()->startOfWeek())
+                            ->distinct('session_id')->count('session_id'),
+            'month'  => AnalyticsEvent::where('event_type', 'pageview')
+                            ->where('created_at', '>=', now()->startOfMonth())
+                            ->distinct('session_id')->count('session_id'),
+            'last30' => AnalyticsEvent::where('event_type', 'pageview')
+                            ->where('created_at', '>=', now()->subDays(30))
+                            ->distinct('session_id')->count('session_id'),
+        ];
+    }
+
+    public static function dailyUniqueVisitors()
+    {
+        return AnalyticsEvent::where('event_type', 'pageview')
+            ->where('created_at', '>=', now()->subDays(29)->startOfDay())
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(DISTINCT session_id) as views'))
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->orderBy('date')
+            ->get();
+    }
+
+    public static function uniqueVisitorsByDevice()
+    {
+        return AnalyticsEvent::where('event_type', 'pageview')
+            ->select('device_type', DB::raw('COUNT(DISTINCT session_id) as count'))
+            ->groupBy('device_type')
+            ->orderByDesc('count')
+            ->get();
+    }
+
+    public static function pagesPerVisitor(int $days = 30): float
+    {
+        $since = now()->subDays($days);
+        $views = AnalyticsEvent::where('event_type', 'pageview')
+            ->where('created_at', '>=', $since)
+            ->count();
+        $visitors = AnalyticsEvent::where('event_type', 'pageview')
+            ->where('created_at', '>=', $since)
+            ->distinct('session_id')->count('session_id');
+
+        if ($visitors === 0) return 0;
+        return round($views / $visitors, 2);
+    }
 }

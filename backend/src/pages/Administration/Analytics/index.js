@@ -104,9 +104,17 @@ const Analytics = () => {
     if (isLoading) return <div className='p-3 text-muted'>Loading...</div>
     if (!data)     return <div className='p-3 text-danger'>Failed to load analytics.</div>
 
-    const { summary, top_articles, top_searches, top_downloads, daily_views, device_split, livestream_summary, livestream_daily } = data
+    const {
+        summary, top_articles, top_searches, top_downloads, daily_views, device_split,
+        livestream_summary, livestream_daily,
+        playback_summary, top_stations_by_plays = [], playback_daily = [],
+        visitors_breakdown, visitors_daily = [], visitors_by_device = [], pages_per_visitor,
+    } = data
 
     const totalDevices = device_split.reduce((s, d) => s + d.count, 0) || 1
+    const totalUniqueDevices = visitors_by_device.reduce((s, d) => s + Number(d.count), 0) || 1
+    const playerDaily = playback_daily.map((r) => ({ date: r.date, views: Number(r.player_plays) }))
+    const livestreamDailyFromPlayback = playback_daily.map((r) => ({ date: r.date, views: Number(r.livestream_plays) }))
 
     return (
         <>
@@ -114,32 +122,65 @@ const Analytics = () => {
 
             <div className='d-flex flex-column gap-3'>
 
-                {/* ── Summary cards ── */}
+                {/* ── Pageview summary cards ── */}
                 <Row className='g-3'>
                     <Col md={3}>
-                        <StatCard title='Today'          value={summary.today}    icon='eye'          color='primary' />
+                        <StatCard title='Pageviews Today'      value={summary.today} icon='eye'           color='primary' />
                     </Col>
                     <Col md={3}>
-                        <StatCard title='This Week'      value={summary.week}     icon='calendar-week' color='success' />
+                        <StatCard title='Pageviews This Week'  value={summary.week}  icon='calendar-week' color='success' />
                     </Col>
                     <Col md={3}>
-                        <StatCard title='This Month'     value={summary.month}    icon='calendar'     color='info' />
+                        <StatCard title='Pageviews This Month' value={summary.month} icon='calendar'      color='info' />
                     </Col>
                     <Col md={3}>
-                        <StatCard title='Unique Visitors (30d)' value={summary.visitors} icon='users' color='warning' />
+                        <StatCard title='Pages / Visitor (30d)' value={pages_per_visitor ?? '—'} icon='layer-group' color='secondary' />
                     </Col>
                 </Row>
 
-                {/* ── Livestream summary cards ── */}
+                {/* ── Unique visitors cards ── */}
                 <Row className='g-3'>
                     <Col md={3}>
-                        <StatCard title='Livestream Total'    value={livestream_summary?.total}     icon='circle-play'  color='danger' />
+                        <StatCard title='Visitors Today'      value={visitors_breakdown?.today}  icon='user'  color='primary' />
                     </Col>
                     <Col md={3}>
-                        <StatCard title='Livestream Today'    value={livestream_summary?.today}     icon='play'         color='warning' />
+                        <StatCard title='Visitors This Week'  value={visitors_breakdown?.week}   icon='users' color='success' />
                     </Col>
                     <Col md={3}>
-                        <StatCard title='Livestream This Week' value={livestream_summary?.this_week} icon='headphones'   color='info' />
+                        <StatCard title='Visitors This Month' value={visitors_breakdown?.month}  icon='users' color='info' />
+                    </Col>
+                    <Col md={3}>
+                        <StatCard title='Visitors (30d)'      value={visitors_breakdown?.last30} icon='users' color='warning' />
+                    </Col>
+                </Row>
+
+                {/* ── Playback summary cards ── */}
+                <Row className='g-3'>
+                    <Col md={3}>
+                        <StatCard title='Player Today'        value={playback_summary?.player_today}     icon='play'         color='primary' />
+                    </Col>
+                    <Col md={3}>
+                        <StatCard title='Player This Week'    value={playback_summary?.player_week}      icon='play'         color='primary' />
+                    </Col>
+                    <Col md={3}>
+                        <StatCard title='Player This Month'   value={playback_summary?.player_month}     icon='play'         color='primary' />
+                    </Col>
+                    <Col md={3}>
+                        <StatCard title='Player Total'        value={playback_summary?.player_total}     icon='circle-play'  color='primary' />
+                    </Col>
+                </Row>
+                <Row className='g-3'>
+                    <Col md={3}>
+                        <StatCard title='Livestream Today'    value={playback_summary?.livestream_today} icon='play'         color='danger' />
+                    </Col>
+                    <Col md={3}>
+                        <StatCard title='Livestream This Week' value={playback_summary?.livestream_week} icon='headphones'   color='danger' />
+                    </Col>
+                    <Col md={3}>
+                        <StatCard title='Livestream This Month' value={playback_summary?.livestream_month} icon='calendar'   color='danger' />
+                    </Col>
+                    <Col md={3}>
+                        <StatCard title='Livestream Total'    value={playback_summary?.livestream_total} icon='circle-play'  color='danger' />
                     </Col>
                 </Row>
 
@@ -164,6 +205,116 @@ const Analytics = () => {
                         <DailyChart data={livestream_daily} />
                     </Card.Body>
                 </Card>
+
+                {/* ── Playback (player_play vs livestream_play) 30-day charts ── */}
+                <Card>
+                    <Card.Header className='fw-semibold'>
+                        <FontAwesomeIcon icon={['fas', 'chart-bar']} className='me-2 text-secondary' />
+                        Playback — Last 30 Days
+                    </Card.Header>
+                    <Card.Body>
+                        <Row className='g-3'>
+                            <Col md={6}>
+                                <div className='small text-muted mb-1'>Player Plays</div>
+                                <DailyChart data={playerDaily} />
+                            </Col>
+                            <Col md={6}>
+                                <div className='small text-muted mb-1'>Livestream Plays</div>
+                                <DailyChart data={livestreamDailyFromPlayback} />
+                            </Col>
+                        </Row>
+                    </Card.Body>
+                </Card>
+
+                {/* ── Unique visitors 30-day chart ── */}
+                <Card>
+                    <Card.Header className='fw-semibold'>
+                        <FontAwesomeIcon icon={['fas', 'chart-bar']} className='me-2 text-secondary' />
+                        Unique Visitors — Last 30 Days
+                    </Card.Header>
+                    <Card.Body>
+                        <DailyChart data={visitors_daily} />
+                    </Card.Body>
+                </Card>
+
+                {/* ── Top Stations by Plays + Visitors by Device ── */}
+                <Row className='g-3'>
+                    <Col md={6}>
+                        <Card className='h-100'>
+                            <Card.Header className='fw-semibold'>
+                                <FontAwesomeIcon icon={['fas', 'radio']} className='me-2 text-secondary' />
+                                Top Stations by Plays
+                            </Card.Header>
+                            <Card.Body className='p-0'>
+                                <Table hover responsive className='mb-0'>
+                                    <thead className='table-light'>
+                                        <tr>
+                                            <th style={{ '--bs-table-cell-padding-y': '0.85rem' }}>#</th>
+                                            <th style={{ '--bs-table-cell-padding-y': '0.85rem' }}>Station</th>
+                                            <th style={{ '--bs-table-cell-padding-y': '0.85rem' }} className='text-end'>Plays</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {top_stations_by_plays.length === 0 && (
+                                            <tr><td colSpan={3} className='text-center text-muted py-3'>No data yet</td></tr>
+                                        )}
+                                        {top_stations_by_plays.map((item, i) => {
+                                            const url = pageUrl('station', item.reference_id)
+                                            return (
+                                                <tr key={i}>
+                                                    <td className='text-muted'>{i + 1}</td>
+                                                    <td>
+                                                        <FontAwesomeIcon icon={['fas', 'radio']} className='me-2 text-muted' />
+                                                        {url ? (
+                                                            <a href={url} target='_blank' rel='noreferrer'>
+                                                                {item.reference_title || `ID ${item.reference_id}`}
+                                                            </a>
+                                                        ) : (
+                                                            item.reference_title || <span className='text-muted'>ID {item.reference_id}</span>
+                                                        )}
+                                                    </td>
+                                                    <td className='text-end fw-semibold'>{item.plays}</td>
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </Table>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+
+                    <Col md={6}>
+                        <Card className='h-100'>
+                            <Card.Header className='fw-semibold'>
+                                <FontAwesomeIcon icon={['fas', 'user-group']} className='me-2 text-secondary' />
+                                Unique Visitors by Device
+                            </Card.Header>
+                            <Card.Body className='d-flex flex-column gap-2'>
+                                {visitors_by_device.length === 0 && (
+                                    <span className='text-muted'>No data yet</span>
+                                )}
+                                {visitors_by_device.map((item, i) => {
+                                    const count = Number(item.count)
+                                    const pct = Math.round((count / totalUniqueDevices) * 100)
+                                    return (
+                                        <div key={i}>
+                                            <div className='d-flex justify-content-between mb-1'>
+                                                <span className='text-capitalize'>{item.device_type || 'unknown'}</span>
+                                                <span className='text-muted small'>{count} ({pct}%)</span>
+                                            </div>
+                                            <div className='progress' style={{ height: '6px' }}>
+                                                <div
+                                                    className='progress-bar bg-warning'
+                                                    style={{ width: `${pct}%` }}
+                                                />
+                                            </div>
+                                        </div>
+                                    )
+                                })}
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
 
                 {/* ── Bottom row ── */}
                 <Row className='g-3'>
