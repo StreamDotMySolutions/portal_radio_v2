@@ -35,6 +35,7 @@ export default function CreateModal() {
     const [form, setForm] = useState(emptyForm)
     const [thumbnailFile, setThumbnailFile] = useState(null)
     const [bannerFile, setBannerFile] = useState(null)
+    const [playerFile, setPlayerFile] = useState(null)
     const [errors, setErrors] = useState(null)
 
     const [slugTouched, setSlugTouched] = useState(false)
@@ -55,6 +56,7 @@ export default function CreateModal() {
         setSlugTouched(false)
         setThumbnailFile(null)
         setBannerFile(null)
+        setPlayerFile(null)
         setErrors(null)
         setShow(true)
     }
@@ -85,6 +87,7 @@ export default function CreateModal() {
         if (form.active !== '') formData.append('active', form.active)
         if (thumbnailFile) formData.append('thumbnail', thumbnailFile)
         if (bannerFile) formData.append('banner', bannerFile)
+        if (playerFile) formData.append('player', playerFile)
 
         axios({ method: 'post', url: `${apiBase}/stations`, data: formData })
             .then(() => {
@@ -120,6 +123,8 @@ export default function CreateModal() {
                         onThumbnailChange={setThumbnailFile}
                         bannerFilename={null}
                         onBannerChange={setBannerFile}
+                        playerFilename={null}
+                        onPlayerChange={setPlayerFile}
                         serverUrl={serverUrl}
                     />
                 </Modal.Body>

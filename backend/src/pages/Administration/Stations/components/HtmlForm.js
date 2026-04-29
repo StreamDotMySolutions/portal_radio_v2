@@ -13,11 +13,14 @@ const HtmlForm = ({
     onThumbnailChange,
     bannerFilename,
     onBannerChange,
+    playerFilename,
+    onPlayerChange,
     serverUrl
 }) => {
     const { url: apiBase } = useStore()
     const [replacingThumbnail, setReplacingThumbnail] = useState(false)
     const [replacingBanner, setReplacingBanner] = useState(false)
+    const [replacingPlayer, setReplacingPlayer] = useState(false)
     const [categories, setCategories] = useState([])
     const [categoriesLoading, setCategoriesLoading] = useState(true)
 
@@ -43,6 +46,11 @@ const HtmlForm = ({
     const handleCancelBannerReplace = () => {
         setReplacingBanner(false)
         onBannerChange(null)
+    }
+
+    const handleCancelPlayerReplace = () => {
+        setReplacingPlayer(false)
+        onPlayerChange(null)
     }
 
     return (
@@ -443,6 +451,70 @@ const HtmlForm = ({
                                         variant='link'
                                         className='ps-0 mt-1 text-secondary'
                                         onClick={handleCancelBannerReplace}
+                                    >
+                                        Cancel replace
+                                    </Button>
+                                )}
+                            </>
+                        )}
+                    </div>
+
+                    <div>
+                        <Form.Label className='fw-semibold small text-muted mb-2'>
+                            Player Image <small className='text-muted'>(player background, ~1:1 square)</small>
+                        </Form.Label>
+                        {playerFilename && !replacingPlayer ? (
+                            <div style={{ position: 'relative', display: 'inline-block', marginBottom: '1rem', width: '100%' }}>
+                                <Figure className='mb-0'>
+                                    <Figure.Image
+                                        style={{ maxWidth: '100%', maxHeight: '200px', display: 'block' }}
+                                        src={`${serverUrl}/storage/stations/${playerFilename}`}
+                                    />
+                                </Figure>
+                                <Button
+                                    size='sm'
+                                    variant='light'
+                                    disabled={isLoading}
+                                    onClick={() => setReplacingPlayer(true)}
+                                    style={{
+                                        position: 'absolute',
+                                        top: '50%',
+                                        left: '50%',
+                                        transform: 'translate(-50%, -50%)',
+                                        backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                                        border: '1px solid #dee2e6',
+                                        zIndex: 10,
+                                    }}
+                                >
+                                    <FontAwesomeIcon icon={['fas', 'arrows-rotate']} className='me-1' />
+                                    Replace
+                                </Button>
+                            </div>
+                        ) : (
+                            <>
+                                <InputGroup>
+                                    <InputGroup.Text>
+                                        <FontAwesomeIcon icon={['fas', 'upload']} />
+                                    </InputGroup.Text>
+                                    <Form.Control
+                                        type='file'
+                                        accept='image/*'
+                                        disabled={isLoading}
+                                        isInvalid={!!errors?.player}
+                                        onChange={(e) => onPlayerChange(e.target.files[0])}
+                                    />
+                                    {errors?.player && (
+                                        <Form.Control.Feedback type='invalid'>
+                                            {errors.player[0]}
+                                        </Form.Control.Feedback>
+                                    )}
+                                </InputGroup>
+                                {playerFilename && (
+                                    <Button
+                                        size='sm'
+                                        variant='link'
+                                        className='ps-0 mt-1 text-secondary'
+                                        onClick={handleCancelPlayerReplace}
                                     >
                                         Cancel replace
                                     </Button>

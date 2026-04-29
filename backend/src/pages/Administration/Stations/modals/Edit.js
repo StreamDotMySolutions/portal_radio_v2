@@ -37,6 +37,8 @@ export default function EditModal({ id }) {
     const [thumbnailFilename, setThumbnailFilename] = useState(null)
     const [bannerFile, setBannerFile] = useState(null)
     const [bannerFilename, setBannerFilename] = useState(null)
+    const [playerFile, setPlayerFile] = useState(null)
+    const [playerFilename, setPlayerFilename] = useState(null)
     const [errors, setErrors] = useState(null)
 
     const onChange = (field) => (value) => setForm((prev) => ({ ...prev, [field]: field === 'slug' ? toSlug(value) : value }))
@@ -68,8 +70,10 @@ export default function EditModal({ id }) {
                 })
                 setThumbnailFilename(station.thumbnail_filename || null)
                 setBannerFilename(station.banner_filename || null)
+                setPlayerFilename(station.player_filename || null)
                 setThumbnailFile(null)
                 setBannerFile(null)
+                setPlayerFile(null)
                 setShow(true)
             })
             .catch((error) => console.warn(error))
@@ -106,6 +110,7 @@ export default function EditModal({ id }) {
         if (form.active !== '') formData.append('active', form.active)
         if (thumbnailFile) formData.append('thumbnail', thumbnailFile)
         if (bannerFile) formData.append('banner', bannerFile)
+        if (playerFile) formData.append('player', playerFile)
 
         console.log('Form submitted with rtmklikPlayerUrl:', form.rtmklikPlayerUrl)
         console.log('Submitting to:', `${apiBase}/stations/${id}`)
@@ -147,6 +152,8 @@ export default function EditModal({ id }) {
                         onThumbnailChange={setThumbnailFile}
                         bannerFilename={bannerFilename}
                         onBannerChange={setBannerFile}
+                        playerFilename={playerFilename}
+                        onPlayerChange={setPlayerFile}
                         serverUrl={serverUrl}
                     />
                 </Modal.Body>

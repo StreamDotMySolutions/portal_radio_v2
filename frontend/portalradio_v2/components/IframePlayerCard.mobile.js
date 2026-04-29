@@ -25,10 +25,13 @@ export default function IframePlayerCardMobile({ station, pageviews = 0 }) {
             alignItems: 'center',
             justifyContent: 'center',
             flex: 1,
+            backgroundImage: (station.player || station.banner) ? `url(${station.player || station.banner})` : undefined,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
             backgroundColor: `${station.accent}11`,
           }}
         >
-          <div style={{ textAlign: 'center', color: 'var(--color-muted)' }}>
+          <div style={{ textAlign: 'center', color: 'var(--color-muted)', backgroundColor: 'rgba(255,255,255,0.85)', padding: '0.75rem 1rem', borderRadius: '8px' }}>
             <i className="bi bi-exclamation-circle" style={{ fontSize: '1.8rem', display: 'block', marginBottom: '0.5rem' }}></i>
             <p style={{ margin: 0, fontSize: '0.85rem' }}>Player URL not configured</p>
           </div>

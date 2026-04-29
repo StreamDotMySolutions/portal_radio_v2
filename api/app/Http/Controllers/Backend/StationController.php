@@ -89,6 +89,7 @@ class StationController extends Controller
             'tiktok_url' => 'sometimes|string',
             'thumbnail' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:102400',
             'banner' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:102400',
+            'player' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:102400',
             'accent_color' => 'sometimes|string|max:20',
             'active' => 'required|boolean',
         ]);
@@ -114,6 +115,8 @@ class StationController extends Controller
                 ? CommonService::handleStoreFile($request->file('thumbnail'), 'stations') : null,
             'banner_filename' => $request->hasFile('banner')
                 ? CommonService::handleStoreFile($request->file('banner'), 'stations') : null,
+            'player_filename' => $request->hasFile('player')
+                ? CommonService::handleStoreFile($request->file('player'), 'stations') : null,
             'accent_color' => $request->input('accent_color'),
             'active' => $request->input('active'),
         ]);
@@ -143,6 +146,7 @@ class StationController extends Controller
             'tiktok_url' => 'sometimes|string',
             'thumbnail' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:102400',
             'banner' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:102400',
+            'player' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:102400',
             'accent_color' => 'sometimes|string|max:20',
             'active' => 'sometimes|boolean',
         ]);
@@ -171,6 +175,13 @@ class StationController extends Controller
             $data['banner_filename'] = CommonService::handleStoreFile($request->file('banner'), 'stations');
         }
 
+        if ($request->hasFile('player')) {
+            if ($station->player_filename) {
+                CommonService::handleDeleteFile($station->player_filename, 'stations');
+            }
+            $data['player_filename'] = CommonService::handleStoreFile($request->file('player'), 'stations');
+        }
+
         $station->update($data);
 
         return response()->json(['message' => 'Station successfully updated']);
@@ -183,6 +194,9 @@ class StationController extends Controller
         }
         if ($station->banner_filename) {
             CommonService::handleDeleteFile($station->banner_filename, 'stations');
+        }
+        if ($station->player_filename) {
+            CommonService::handleDeleteFile($station->player_filename, 'stations');
         }
 
         if ($station->delete()) {

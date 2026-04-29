@@ -14,6 +14,10 @@ export function mapStation(s) {
     heroBanner: s.banner_filename && s.banner_filename !== 'placeholder'
       ? `${SERVER_URL}/storage/stations/${s.banner_filename}`
       : null,
+    // player: used for the player card background (~1:1 ratio)
+    player: s.player_filename && s.player_filename !== 'placeholder'
+      ? `${SERVER_URL}/storage/stations/${s.player_filename}`
+      : null,
     accent: s.accent_color || '#444',
     streamUrl: s.stream_url || null,
     playerType: s.player_type || 'm3u8',
