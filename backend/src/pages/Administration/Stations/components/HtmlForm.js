@@ -312,6 +312,20 @@ const HtmlForm = ({
                             <Form.Control.Feedback type='invalid'>{errors.tiktok_url[0]}</Form.Control.Feedback>
                         )}
                     </InputGroup>
+
+                    <InputGroup>
+                        <InputGroup.Text style={{ width: '110px' }}>Threads</InputGroup.Text>
+                        <Form.Control
+                            placeholder='https://threads.net/@...'
+                            value={form.threadsUrl}
+                            readOnly={isLoading}
+                            isInvalid={!!errors?.threads_url}
+                            onChange={(e) => onChange('threadsUrl')(e.target.value)}
+                        />
+                        {errors?.threads_url && (
+                            <Form.Control.Feedback type='invalid'>{errors.threads_url[0]}</Form.Control.Feedback>
+                        )}
+                    </InputGroup>
                 </Card.Body>
             </Card>
 

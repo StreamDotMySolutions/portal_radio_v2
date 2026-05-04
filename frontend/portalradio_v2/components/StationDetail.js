@@ -108,6 +108,11 @@ export default function StationDetail({ station }) {
                           <i className="bi bi-tiktok"></i>
                         </a>
                       )}
+                      {station.social.threads && station.social.threads !== '#' && (
+                        <a href={station.social.threads} target="_blank" rel="noopener noreferrer" style={{ color: '#fff', fontSize: '3.5rem' }}>
+                          <i className="bi bi-threads"></i>
+                        </a>
+                      )}
                     </div>
                     </>
                   ) : (

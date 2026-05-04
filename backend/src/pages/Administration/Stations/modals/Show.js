@@ -279,6 +279,18 @@ export default function ShowModal({ id }) {
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td className='fw-semibold'>Threads</td>
+                                    <td>
+                                        {station.threads_url ? (
+                                            <a href={station.threads_url} target='_blank' rel='noreferrer'>
+                                                {station.threads_url}
+                                            </a>
+                                        ) : (
+                                            '—'
+                                        )}
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td className='fw-semibold'>Accent Color</td>
                                     <td>
                                         {station.accent_color ? (

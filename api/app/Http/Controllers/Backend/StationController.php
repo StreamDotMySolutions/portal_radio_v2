@@ -87,6 +87,7 @@ class StationController extends Controller
             'instagram_url' => 'sometimes|string',
             'youtube_url' => 'sometimes|string',
             'tiktok_url' => 'sometimes|string',
+            'threads_url' => 'sometimes|string',
             'thumbnail' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:102400',
             'banner' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:102400',
             'player' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:102400',
@@ -111,6 +112,7 @@ class StationController extends Controller
             'instagram_url' => $request->input('instagram_url'),
             'youtube_url' => $request->input('youtube_url'),
             'tiktok_url' => $request->input('tiktok_url'),
+            'threads_url' => $request->input('threads_url'),
             'thumbnail_filename' => $request->hasFile('thumbnail')
                 ? CommonService::handleStoreFile($request->file('thumbnail'), 'stations') : null,
             'banner_filename' => $request->hasFile('banner')
@@ -144,6 +146,7 @@ class StationController extends Controller
             'instagram_url' => 'sometimes|string',
             'youtube_url' => 'sometimes|string',
             'tiktok_url' => 'sometimes|string',
+            'threads_url' => 'sometimes|string',
             'thumbnail' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:102400',
             'banner' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:102400',
             'player' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:102400',
@@ -154,7 +157,7 @@ class StationController extends Controller
         $data = $request->only([
             'title', 'slug', 'description', 'frequency', 'station_category_id',
             'rtmklik_player_url', 'player_type', 'stream_url', 'facebook_url', 'x_url',
-            'instagram_url', 'youtube_url', 'tiktok_url', 'accent_color', 'active'
+            'instagram_url', 'youtube_url', 'tiktok_url', 'threads_url', 'accent_color', 'active'
         ]);
 
         if (isset($data['slug'])) {

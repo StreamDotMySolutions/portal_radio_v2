@@ -32,6 +32,7 @@ export function mapStation(s) {
       twitter: s.x_url || null,
       youtube: s.youtube_url || null,
       tiktok: s.tiktok_url || null,
+      threads: s.threads_url || null,
     },
   };
 }

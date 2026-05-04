@@ -20,6 +20,7 @@ const emptyForm = {
     instagramUrl: '',
     youtubeUrl: '',
     tiktokUrl: '',
+    threadsUrl: '',
     accentColor: '',
     active: 1,
 }
@@ -83,6 +84,7 @@ export default function CreateModal() {
         if (form.instagramUrl) formData.append('instagram_url', form.instagramUrl)
         if (form.youtubeUrl) formData.append('youtube_url', form.youtubeUrl)
         if (form.tiktokUrl) formData.append('tiktok_url', form.tiktokUrl)
+        if (form.threadsUrl) formData.append('threads_url', form.threadsUrl)
         if (form.accentColor) formData.append('accent_color', form.accentColor)
         if (form.active !== '') formData.append('active', form.active)
         if (thumbnailFile) formData.append('thumbnail', thumbnailFile)
