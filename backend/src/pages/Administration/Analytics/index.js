@@ -1,8 +1,43 @@
 import { useEffect, useState } from 'react'
-import { Badge, Card, Col, Row, Table } from 'react-bootstrap'
+import { Badge, Button, Card, Col, Form, InputGroup, Row, Table } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import axios from '../../../libs/axios'
 import BreadCrumb from '../../../libs/BreadCrumb'
+
+const isoDate = (d) => d.toISOString().split('T')[0]
+const todayIso = () => isoDate(new Date())
+const daysAgoIso = (n) => isoDate(new Date(Date.now() - n * 86400000))
+
+const presetToRange = (key) => {
+    if (key === '7d')   return [daysAgoIso(6),  todayIso()]
+    if (key === '30d')  return [daysAgoIso(29), todayIso()]
+    if (key === '90d')  return [daysAgoIso(89), todayIso()]
+    if (key === 'this_month') {
+        const now = new Date()
+        return [isoDate(new Date(now.getFullYear(), now.getMonth(), 1)), todayIso()]
+    }
+    if (key === 'last_month') {
+        const now = new Date()
+        const first = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+        const last  = new Date(now.getFullYear(), now.getMonth(), 0)
+        return [isoDate(first), isoDate(last)]
+    }
+    return null
+}
+
+const inferPreset = (from, to) => {
+    if (to !== todayIso()) {
+        const lm = presetToRange('last_month')
+        if (lm && from === lm[0] && to === lm[1]) return 'last_month'
+        return 'custom'
+    }
+    if (from === daysAgoIso(6))  return '7d'
+    if (from === daysAgoIso(29)) return '30d'
+    if (from === daysAgoIso(89)) return '90d'
+    const tm = presetToRange('this_month')
+    if (tm && from === tm[0]) return 'this_month'
+    return 'custom'
+}
 
 const PUBLIC_URL = process.env.REACT_APP_PUBLIC_URL || ''
 
@@ -48,16 +83,18 @@ const StatCard = ({ title, value, icon, color }) => (
     </Card>
 )
 
-// ── 30-day bar chart ─────────────────────────────────────────────────────────
-const DailyChart = ({ data }) => {
-    // Build a full 30-day array, filling gaps with 0
+// ── Variable-range bar chart ─────────────────────────────────────────────────
+const DailyChart = ({ data, from, to }) => {
+    // Build a full day-by-day array between from..to, filling gaps with 0
+    const fromDate = new Date(from + 'T00:00:00')
+    const toDate   = new Date(to + 'T00:00:00')
+    const dayCount = Math.max(1, Math.round((toDate - fromDate) / 86400000) + 1)
     const days = []
-    for (let i = 29; i >= 0; i--) {
-        const d = new Date()
-        d.setDate(d.getDate() - i)
-        const dateStr = d.toISOString().split('T')[0]
+    for (let i = 0; i < dayCount; i++) {
+        const d = new Date(fromDate.getTime() + i * 86400000)
+        const dateStr = isoDate(d)
         const found = data.find((r) => r.date === dateStr)
-        days.push({ date: dateStr, views: found ? found.views : 0 })
+        days.push({ date: dateStr, views: found ? Number(found.views) : 0 })
     }
 
     const max = Math.max(...days.map((d) => d.views), 1)
@@ -81,9 +118,86 @@ const DailyChart = ({ data }) => {
             </div>
             <div className='d-flex justify-content-between mt-1'>
                 <small className='text-muted'>{days[0]?.date}</small>
-                <small className='text-muted'>{days[29]?.date}</small>
+                <small className='text-muted'>{days[days.length - 1]?.date}</small>
             </div>
         </div>
+    )
+}
+
+// ── Date range filter bar ────────────────────────────────────────────────────
+const FilterBar = ({ preset, from, to, onChange }) => {
+    const [draftFrom, setDraftFrom] = useState(from)
+    const [draftTo, setDraftTo]     = useState(to)
+
+    useEffect(() => { setDraftFrom(from); setDraftTo(to) }, [from, to])
+
+    const handlePreset = (e) => {
+        const key = e.target.value
+        if (key === 'custom') {
+            onChange({ preset: 'custom', from, to })
+            return
+        }
+        const range = presetToRange(key)
+        if (range) onChange({ preset: key, from: range[0], to: range[1] })
+    }
+
+    const handleApplyCustom = () => {
+        if (!draftFrom || !draftTo) return
+        const [f, t] = draftFrom <= draftTo ? [draftFrom, draftTo] : [draftTo, draftFrom]
+        onChange({ preset: 'custom', from: f, to: t })
+    }
+
+    const isCustom = preset === 'custom'
+
+    return (
+        <Card className='mb-3'>
+            <Card.Body className='py-2'>
+                <Row className='g-2 align-items-center'>
+                    <Col xs='auto'>
+                        <Form.Select size='sm' value={preset} onChange={handlePreset} style={{ minWidth: '160px' }}>
+                            <option value='7d'>Last 7 days</option>
+                            <option value='30d'>Last 30 days</option>
+                            <option value='90d'>Last 90 days</option>
+                            <option value='this_month'>This month</option>
+                            <option value='last_month'>Last month</option>
+                            <option value='custom'>Custom range</option>
+                        </Form.Select>
+                    </Col>
+                    <Col xs='auto'>
+                        <InputGroup size='sm'>
+                            <InputGroup.Text>From</InputGroup.Text>
+                            <Form.Control
+                                type='date'
+                                value={isCustom ? draftFrom : from}
+                                disabled={!isCustom}
+                                onChange={(e) => setDraftFrom(e.target.value)}
+                            />
+                        </InputGroup>
+                    </Col>
+                    <Col xs='auto'>
+                        <InputGroup size='sm'>
+                            <InputGroup.Text>To</InputGroup.Text>
+                            <Form.Control
+                                type='date'
+                                value={isCustom ? draftTo : to}
+                                disabled={!isCustom}
+                                onChange={(e) => setDraftTo(e.target.value)}
+                            />
+                        </InputGroup>
+                    </Col>
+                    {isCustom && (
+                        <Col xs='auto'>
+                            <Button size='sm' variant='primary' onClick={handleApplyCustom}>
+                                <FontAwesomeIcon icon={['fas', 'check']} className='me-1' /> Apply
+                            </Button>
+                        </Col>
+                    )}
+                    <Col className='text-muted small text-end'>
+                        Showing {from} → {to}
+                    </Col>
+                </Row>
+            </Card.Body>
+        </Card>
     )
 }
 
@@ -91,18 +205,43 @@ const DailyChart = ({ data }) => {
 const Analytics = () => {
     const url = process.env.REACT_APP_BACKEND_URL + '/analytics'
 
-    const [data, setData]         = useState(null)
+    const initialParams = new URLSearchParams(window.location.search)
+    const initialFrom = initialParams.get('from') || daysAgoIso(29)
+    const initialTo   = initialParams.get('to')   || todayIso()
+
+    const [from, setFrom]     = useState(initialFrom)
+    const [to, setTo]         = useState(initialTo)
+    const [preset, setPreset] = useState(inferPreset(initialFrom, initialTo))
+    const [data, setData]     = useState(null)
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        axios({ method: 'get', url })
+        setIsLoading(true)
+        const qs = new URLSearchParams({ from, to }).toString()
+        const newUrl = `${window.location.pathname}?${qs}`
+        if (window.location.search !== `?${qs}`) {
+            window.history.replaceState(null, '', newUrl)
+        }
+        axios({ method: 'get', url: `${url}?${qs}` })
             .then((res) => setData(res.data))
             .catch((err) => console.warn(err))
             .finally(() => setIsLoading(false))
-    }, [])
+    }, [from, to])
 
-    if (isLoading) return <div className='p-3 text-muted'>Loading...</div>
-    if (!data)     return <div className='p-3 text-danger'>Failed to load analytics.</div>
+    const handleFilterChange = ({ preset: nextPreset, from: nextFrom, to: nextTo }) => {
+        setPreset(nextPreset)
+        setFrom(nextFrom)
+        setTo(nextTo)
+    }
+
+    if (isLoading && !data) return (
+        <>
+            <BreadCrumb items={breadcrumbItems} />
+            <FilterBar preset={preset} from={from} to={to} onChange={handleFilterChange} />
+            <div className='p-3 text-muted'>Loading...</div>
+        </>
+    )
+    if (!data) return <div className='p-3 text-danger'>Failed to load analytics.</div>
 
     const {
         summary, top_articles, top_searches, top_downloads, daily_views, device_split,
@@ -119,6 +258,7 @@ const Analytics = () => {
     return (
         <>
             <BreadCrumb items={breadcrumbItems} />
+            <FilterBar preset={preset} from={from} to={to} onChange={handleFilterChange} />
 
             <div className='d-flex flex-column gap-3'>
 
@@ -184,56 +324,56 @@ const Analytics = () => {
                     </Col>
                 </Row>
 
-                {/* ── 30-day chart ── */}
+                {/* ── Pageviews chart (range-aware) ── */}
                 <Card>
                     <Card.Header className='fw-semibold'>
                         <FontAwesomeIcon icon={['fas', 'chart-bar']} className='me-2 text-secondary' />
-                        Pageviews — Last 30 Days
+                        Pageviews — {data.range?.from} → {data.range?.to}
                     </Card.Header>
                     <Card.Body>
-                        <DailyChart data={daily_views} />
+                        <DailyChart data={daily_views} from={data.range.from} to={data.range.to} />
                     </Card.Body>
                 </Card>
 
-                {/* ── Livestream 30-day chart ── */}
+                {/* ── Livestream chart (range-aware) ── */}
                 <Card>
                     <Card.Header className='fw-semibold'>
                         <FontAwesomeIcon icon={['fas', 'chart-bar']} className='me-2 text-secondary' />
-                        Livestream Plays — Last 30 Days
+                        Livestream Plays — {data.range?.from} → {data.range?.to}
                     </Card.Header>
                     <Card.Body>
-                        <DailyChart data={livestream_daily} />
+                        <DailyChart data={livestream_daily} from={data.range.from} to={data.range.to} />
                     </Card.Body>
                 </Card>
 
-                {/* ── Playback (player_play vs livestream_play) 30-day charts ── */}
+                {/* ── Playback (player_play vs livestream_play) charts ── */}
                 <Card>
                     <Card.Header className='fw-semibold'>
                         <FontAwesomeIcon icon={['fas', 'chart-bar']} className='me-2 text-secondary' />
-                        Playback — Last 30 Days
+                        Playback — {data.range?.from} → {data.range?.to}
                     </Card.Header>
                     <Card.Body>
                         <Row className='g-3'>
                             <Col md={6}>
                                 <div className='small text-muted mb-1'>Player Plays</div>
-                                <DailyChart data={playerDaily} />
+                                <DailyChart data={playerDaily} from={data.range.from} to={data.range.to} />
                             </Col>
                             <Col md={6}>
                                 <div className='small text-muted mb-1'>Livestream Plays</div>
-                                <DailyChart data={livestreamDailyFromPlayback} />
+                                <DailyChart data={livestreamDailyFromPlayback} from={data.range.from} to={data.range.to} />
                             </Col>
                         </Row>
                     </Card.Body>
                 </Card>
 
-                {/* ── Unique visitors 30-day chart ── */}
+                {/* ── Unique visitors chart (range-aware) ── */}
                 <Card>
                     <Card.Header className='fw-semibold'>
                         <FontAwesomeIcon icon={['fas', 'chart-bar']} className='me-2 text-secondary' />
-                        Unique Visitors — Last 30 Days
+                        Unique Visitors — {data.range?.from} → {data.range?.to}
                     </Card.Header>
                     <Card.Body>
-                        <DailyChart data={visitors_daily} />
+                        <DailyChart data={visitors_daily} from={data.range.from} to={data.range.to} />
                     </Card.Body>
                 </Card>
 

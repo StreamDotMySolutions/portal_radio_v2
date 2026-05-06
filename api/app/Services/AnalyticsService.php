@@ -8,6 +8,13 @@ use Illuminate\Support\Facades\DB;
 
 class AnalyticsService
 {
+    private static function applyDateRange($query, $from = null, $to = null)
+    {
+        if ($from) $query->where('created_at', '>=', $from);
+        if ($to)   $query->where('created_at', '<=', $to);
+        return $query;
+    }
+
     public static function summary(): array
     {
         return [
@@ -26,77 +33,83 @@ class AnalyticsService
         ];
     }
 
-    public static function topArticles(int $limit = 10)
+    public static function topArticles(int $limit = 10, $from = null, $to = null)
     {
-        return AnalyticsEvent::where('event_type', 'pageview')
-            ->whereNotNull('reference_title')
-            ->select('reference_id', 'reference_title', 'page_type', DB::raw('count(*) as views'))
+        $query = AnalyticsEvent::where('event_type', 'pageview')
+            ->whereNotNull('reference_title');
+        self::applyDateRange($query, $from, $to);
+        return $query->select('reference_id', 'reference_title', 'page_type', DB::raw('count(*) as views'))
             ->groupBy('reference_id', 'reference_title', 'page_type')
             ->orderByDesc('views')
             ->limit($limit)
             ->get();
     }
 
-    public static function topStations(int $limit = 10)
+    public static function topStations(int $limit = 10, $from = null, $to = null)
     {
-        return AnalyticsEvent::where('event_type', 'pageview')
+        $query = AnalyticsEvent::where('event_type', 'pageview')
             ->where('page_type', 'station')
-            ->whereNotNull('reference_id')
-            ->select('reference_id', 'reference_title', DB::raw('count(*) as views'))
+            ->whereNotNull('reference_id');
+        self::applyDateRange($query, $from, $to);
+        return $query->select('reference_id', 'reference_title', DB::raw('count(*) as views'))
             ->groupBy('reference_id', 'reference_title')
             ->orderByDesc('views')
             ->limit($limit)
             ->get();
     }
 
-    public static function topSearches(int $limit = 10)
+    public static function topSearches(int $limit = 10, $from = null, $to = null)
     {
-        return AnalyticsEvent::where('event_type', 'search')
-            ->whereNotNull('reference_title')
-            ->select('reference_title as query', DB::raw('count(*) as count'))
+        $query = AnalyticsEvent::where('event_type', 'search')
+            ->whereNotNull('reference_title');
+        self::applyDateRange($query, $from, $to);
+        return $query->select('reference_title as query', DB::raw('count(*) as count'))
             ->groupBy('reference_title')
             ->orderByDesc('count')
             ->limit($limit)
             ->get();
     }
 
-    public static function topDirectorySearches(int $limit = 10)
+    public static function topDirectorySearches(int $limit = 10, $from = null, $to = null)
     {
-        return AnalyticsEvent::where('event_type', 'search')
+        $query = AnalyticsEvent::where('event_type', 'search')
             ->where('page_type', 'directory')
-            ->whereNotNull('reference_title')
-            ->select('reference_title as query', DB::raw('count(*) as count'))
+            ->whereNotNull('reference_title');
+        self::applyDateRange($query, $from, $to);
+        return $query->select('reference_title as query', DB::raw('count(*) as count'))
             ->groupBy('reference_title')
             ->orderByDesc('count')
             ->limit($limit)
             ->get();
     }
 
-    public static function dailyViews()
+    public static function dailyViews($from = null, $to = null)
     {
-        return AnalyticsEvent::where('event_type', 'pageview')
-            ->where('created_at', '>=', now()->subDays(29)->startOfDay())
-            ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as views'))
+        $query = AnalyticsEvent::where('event_type', 'pageview');
+        self::applyDateRange($query, $from ?: now()->subDays(29)->startOfDay(), $to);
+        return $query->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as views'))
             ->groupBy(DB::raw('DATE(created_at)'))
             ->orderBy('date')
             ->get();
     }
 
-    public static function topDownloads(int $limit = 10)
+    public static function topDownloads(int $limit = 10, $from = null, $to = null)
     {
-        return AnalyticsEvent::where('event_type', 'download')
-            ->whereNotNull('reference_title')
-            ->select('reference_title as filename', 'page_type', DB::raw('count(*) as count'))
+        $query = AnalyticsEvent::where('event_type', 'download')
+            ->whereNotNull('reference_title');
+        self::applyDateRange($query, $from, $to);
+        return $query->select('reference_title as filename', 'page_type', DB::raw('count(*) as count'))
             ->groupBy('reference_title', 'page_type')
             ->orderByDesc('count')
             ->limit($limit)
             ->get();
     }
 
-    public static function deviceSplit()
+    public static function deviceSplit($from = null, $to = null)
     {
-        return AnalyticsEvent::where('event_type', 'pageview')
-            ->select('device_type', DB::raw('count(*) as count'))
+        $query = AnalyticsEvent::where('event_type', 'pageview');
+        self::applyDateRange($query, $from, $to);
+        return $query->select('device_type', DB::raw('count(*) as count'))
             ->groupBy('device_type')
             ->orderByDesc('count')
             ->get();
@@ -206,11 +219,11 @@ class AnalyticsService
      * Get livestream plays by day (last 30 days)
      * Returns [{date, views}] where "views" key matches DailyChart's expected shape
      */
-    public static function livestreamDailyPlays()
+    public static function livestreamDailyPlays($from = null, $to = null)
     {
-        return AnalyticsEvent::where('event_type', 'livestream_play')
-            ->where('created_at', '>=', now()->subDays(29)->startOfDay())
-            ->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as views'))
+        $query = AnalyticsEvent::where('event_type', 'livestream_play');
+        self::applyDateRange($query, $from ?: now()->subDays(29)->startOfDay(), $to);
+        return $query->select(DB::raw('DATE(created_at) as date'), DB::raw('count(*) as views'))
             ->groupBy(DB::raw('DATE(created_at)'))
             ->orderBy('date')
             ->get();
@@ -249,23 +262,24 @@ class AnalyticsService
             ->count();
     }
 
-    public static function topStationsByPlayback(int $limit = 10)
+    public static function topStationsByPlayback(int $limit = 10, $from = null, $to = null)
     {
-        return AnalyticsEvent::whereIn('event_type', ['player_play', 'livestream_play'])
+        $query = AnalyticsEvent::whereIn('event_type', ['player_play', 'livestream_play'])
             ->where('page_type', 'station')
-            ->whereNotNull('reference_id')
-            ->select('reference_id', 'reference_title', DB::raw('count(*) as plays'))
+            ->whereNotNull('reference_id');
+        self::applyDateRange($query, $from, $to);
+        return $query->select('reference_id', 'reference_title', DB::raw('count(*) as plays'))
             ->groupBy('reference_id', 'reference_title')
             ->orderByDesc('plays')
             ->limit($limit)
             ->get();
     }
 
-    public static function playbackDaily()
+    public static function playbackDaily($from = null, $to = null)
     {
-        return AnalyticsEvent::whereIn('event_type', ['player_play', 'livestream_play'])
-            ->where('created_at', '>=', now()->subDays(29)->startOfDay())
-            ->select(
+        $query = AnalyticsEvent::whereIn('event_type', ['player_play', 'livestream_play']);
+        self::applyDateRange($query, $from ?: now()->subDays(29)->startOfDay(), $to);
+        return $query->select(
                 DB::raw('DATE(created_at) as date'),
                 DB::raw("SUM(CASE WHEN event_type = 'player_play' THEN 1 ELSE 0 END) as player_plays"),
                 DB::raw("SUM(CASE WHEN event_type = 'livestream_play' THEN 1 ELSE 0 END) as livestream_plays")
@@ -293,20 +307,21 @@ class AnalyticsService
         ];
     }
 
-    public static function dailyUniqueVisitors()
+    public static function dailyUniqueVisitors($from = null, $to = null)
     {
-        return AnalyticsEvent::where('event_type', 'pageview')
-            ->where('created_at', '>=', now()->subDays(29)->startOfDay())
-            ->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(DISTINCT session_id) as views'))
+        $query = AnalyticsEvent::where('event_type', 'pageview');
+        self::applyDateRange($query, $from ?: now()->subDays(29)->startOfDay(), $to);
+        return $query->select(DB::raw('DATE(created_at) as date'), DB::raw('COUNT(DISTINCT session_id) as views'))
             ->groupBy(DB::raw('DATE(created_at)'))
             ->orderBy('date')
             ->get();
     }
 
-    public static function uniqueVisitorsByDevice()
+    public static function uniqueVisitorsByDevice($from = null, $to = null)
     {
-        return AnalyticsEvent::where('event_type', 'pageview')
-            ->select('device_type', DB::raw('COUNT(DISTINCT session_id) as count'))
+        $query = AnalyticsEvent::where('event_type', 'pageview');
+        self::applyDateRange($query, $from, $to);
+        return $query->select('device_type', DB::raw('COUNT(DISTINCT session_id) as count'))
             ->groupBy('device_type')
             ->orderByDesc('count')
             ->get();
