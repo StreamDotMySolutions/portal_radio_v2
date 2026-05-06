@@ -18,16 +18,22 @@ echo "✓ Git pull completed"
 echo ""
 
 # Backend React admin
-echo "--- Backend: npm run build ---"
+echo "--- Backend: npm install ---"
 cd backend
+npm install --no-audit --no-fund || { echo "ERROR: Backend npm install failed"; exit 1; }
+echo "✓ Backend npm install completed"
+echo "--- Backend: npm run build ---"
 npm run build || { echo "ERROR: Backend build failed"; exit 1; }
 echo "✓ Backend build completed"
 cd ..
 echo ""
 
 # Frontend Next.js
-echo "--- Frontend: npm run build ---"
+echo "--- Frontend: npm install ---"
 cd frontend/portalradio_v2
+npm install --no-audit --no-fund || { echo "ERROR: Frontend npm install failed"; exit 1; }
+echo "✓ Frontend npm install completed"
+echo "--- Frontend: npm run build ---"
 npm run build || { echo "ERROR: Frontend build failed"; exit 1; }
 echo "✓ Frontend build completed"
 cd ../..
