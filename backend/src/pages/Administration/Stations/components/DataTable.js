@@ -22,6 +22,10 @@ const DataTable = () => {
     const setSearch = useStationsStore((s) => s.setSearch)
     const categoryFilter = useStationsStore((s) => s.categoryFilter)
     const setCategoryFilter = useStationsStore((s) => s.setCategoryFilter)
+    const dateFrom = useStationsStore((s) => s.dateFrom)
+    const setDateFrom = useStationsStore((s) => s.setDateFrom)
+    const dateTo = useStationsStore((s) => s.dateTo)
+    const setDateTo = useStationsStore((s) => s.setDateTo)
 
     const [sortBy, setSortBy] = useState(null)
     const [sortDir, setSortDir] = useState('desc')
@@ -29,6 +33,8 @@ const DataTable = () => {
     const [perPage, setPerPage] = useState(50)
     const [items, setItems] = useState([])
     const [categories, setCategories] = useState([])
+    const [draftFrom, setDraftFrom] = useState(dateFrom)
+    const [draftTo, setDraftTo] = useState(dateTo)
 
     const handleToggleActive = (itemId) => {
         // Optimistic update
@@ -92,6 +98,8 @@ const DataTable = () => {
         const params = new URLSearchParams()
         if (search) params.set('search', search)
         if (categoryFilter) params.set('category', categoryFilter)
+        if (dateFrom) params.set('start_date', dateFrom)
+        if (dateTo) params.set('end_date', dateTo)
         params.set('per_page', perPage)
         if (sortBy) {
             params.set('sort_by', sortBy)
@@ -107,7 +115,18 @@ const DataTable = () => {
         axios({ method: 'get', url: effectiveUrl })
             .then((response) => setItems(response.data.stations))
             .catch((error) => console.warn(error))
-    }, [refreshKey, paginatorUrl, search, categoryFilter, perPage, sortBy, sortDir])
+    }, [refreshKey, paginatorUrl, search, categoryFilter, dateFrom, dateTo, perPage, sortBy, sortDir])
+
+    const handleApplyDates = () => {
+        const [f, t] = (draftFrom && draftTo && draftFrom > draftTo)
+            ? [draftTo, draftFrom] : [draftFrom, draftTo]
+        setDateFrom(f); setDateTo(t)
+    }
+
+    const handleClearDates = () => {
+        setDraftFrom(''); setDraftTo('')
+        setDateFrom(''); setDateTo('')
+    }
 
     const paginatorAdapter = {
         setValue: (key, value) => {
@@ -204,6 +223,48 @@ const DataTable = () => {
 
                 {/* Right: create */}
                 <CreateModal />
+            </div>
+
+            {/* Second toolbar row: date range filter for analytics columns */}
+            <div className='d-flex align-items-center mb-3 gap-2 flex-wrap'>
+                <small className='text-muted'>
+                    <FontAwesomeIcon icon={['fas', 'calendar-days']} className='me-1' />
+                    Filter analytics by date:
+                </small>
+                <InputGroup size='sm' style={{ maxWidth: '200px' }}>
+                    <InputGroup.Text>From</InputGroup.Text>
+                    <Form.Control
+                        type='date'
+                        value={draftFrom}
+                        onChange={(e) => setDraftFrom(e.target.value)}
+                    />
+                </InputGroup>
+                <InputGroup size='sm' style={{ maxWidth: '200px' }}>
+                    <InputGroup.Text>To</InputGroup.Text>
+                    <Form.Control
+                        type='date'
+                        value={draftTo}
+                        onChange={(e) => setDraftTo(e.target.value)}
+                    />
+                </InputGroup>
+                <Button
+                    size='sm'
+                    variant='primary'
+                    onClick={handleApplyDates}
+                    disabled={!draftFrom && !draftTo}
+                >
+                    <FontAwesomeIcon icon={['fas', 'check']} className='me-1' /> Apply
+                </Button>
+                {(dateFrom || dateTo) && (
+                    <Button size='sm' variant='outline-secondary' onClick={handleClearDates}>
+                        <FontAwesomeIcon icon={['fas', 'xmark']} className='me-1' /> Clear
+                    </Button>
+                )}
+                {(dateFrom || dateTo) && (
+                    <small className='text-muted ms-2'>
+                        Counts limited to {dateFrom || '…'} → {dateTo || '…'}
+                    </small>
+                )}
             </div>
 
             {/* Result count */}

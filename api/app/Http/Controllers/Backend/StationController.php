@@ -14,15 +14,24 @@ class StationController extends Controller
 {
     public function index(Request $request)
     {
+        $from = $request->filled('start_date')
+            ? \Carbon\Carbon::parse($request->input('start_date'))->startOfDay()
+            : null;
+        $to = $request->filled('end_date')
+            ? \Carbon\Carbon::parse($request->input('end_date'))->endOfDay()
+            : null;
+
+        $dateClause   = '';
+        $dateBindings = [];
+        if ($from) { $dateClause .= ' AND analytics_events.created_at >= ?'; $dateBindings[] = $from; }
+        if ($to)   { $dateClause .= ' AND analytics_events.created_at <= ?'; $dateBindings[] = $to; }
+
         $query = Station::query()
             ->leftJoin('station_categories', 'stations.station_category_id', '=', 'station_categories.id')
-            ->select(
-                'stations.*',
-                'station_categories.slug as category',
-                DB::raw('(SELECT COUNT(*) FROM analytics_events WHERE analytics_events.reference_id = stations.id AND analytics_events.event_type = "pageview" AND analytics_events.page_type = "station") as pageview_hits'),
-                DB::raw('(SELECT COUNT(DISTINCT session_id) FROM analytics_events WHERE analytics_events.reference_id = stations.id AND analytics_events.event_type = "pageview" AND analytics_events.page_type = "station") as unique_visitors'),
-                DB::raw('(SELECT COUNT(*) FROM analytics_events WHERE analytics_events.reference_id = stations.id AND analytics_events.event_type IN ("player_play", "livestream_play") AND analytics_events.page_type = "station") as playback_plays')
-            );
+            ->select('stations.*', 'station_categories.slug as category')
+            ->selectRaw("(SELECT COUNT(*) FROM analytics_events WHERE analytics_events.reference_id = stations.id AND analytics_events.event_type = 'pageview' AND analytics_events.page_type = 'station'{$dateClause}) as pageview_hits", $dateBindings)
+            ->selectRaw("(SELECT COUNT(DISTINCT session_id) FROM analytics_events WHERE analytics_events.reference_id = stations.id AND analytics_events.event_type = 'pageview' AND analytics_events.page_type = 'station'{$dateClause}) as unique_visitors", $dateBindings)
+            ->selectRaw("(SELECT COUNT(*) FROM analytics_events WHERE analytics_events.reference_id = stations.id AND analytics_events.event_type IN ('player_play', 'livestream_play') AND analytics_events.page_type = 'station'{$dateClause}) as playback_plays", $dateBindings);
 
         if ($request->filled('search')) {
             $search = $request->input('search');

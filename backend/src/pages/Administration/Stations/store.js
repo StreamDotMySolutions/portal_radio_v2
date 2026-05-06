@@ -12,6 +12,12 @@ const useStationsStore = create((set) => ({
 
     categoryFilter: '',
     setCategoryFilter: (categoryFilter) => set({ categoryFilter, paginatorUrl: null }),
+
+    dateFrom: '',
+    setDateFrom: (dateFrom) => set({ dateFrom, paginatorUrl: null }),
+
+    dateTo: '',
+    setDateTo: (dateTo) => set({ dateTo, paginatorUrl: null }),
 }))
 
 export default useStationsStore
