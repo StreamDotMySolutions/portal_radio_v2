@@ -1,6 +1,5 @@
 import Axios from 'axios'
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'
+import useLoadingStore from './loadingStore'
 
 const axios = Axios.create({
     baseURL:  (process.env.REACT_APP_BACKEND_URL),
@@ -8,12 +7,12 @@ const axios = Axios.create({
         'X-Requested-With': 'XMLHttpRequest',
     },
     //withCredentials: true,
-    
 })
 
 // intercept every request
 axios.interceptors.request.use(
     (config) => {
+        useLoadingStore.getState().start()
         const token = localStorage.getItem('token'); // get the token set by signin
 
         // custom headers
@@ -23,15 +22,20 @@ axios.interceptors.request.use(
         return config; // return back config()
     },
     (error) => {
+      useLoadingStore.getState().done()
       return Promise.reject(error);
     }
 );
 
 // detect 401 or 403
 axios.interceptors.response.use(
-  (response) => response, // Return the response if it's not a 401 error
+  (response) => {
+    useLoadingStore.getState().done()
+    return response // Return the response if it's not a 401 error
+  },
   (error) => {
-    if (error.response.status === 401 || error.response.status === 403 || error.response.status === 419 ) {
+    useLoadingStore.getState().done()
+    if (error.response?.status === 401 || error.response?.status === 403 || error.response?.status === 419 ) {
       // Redirect to your login page or another route
       //console.log('401 ,419 or 403')
       window.location.href = '/backend/sign-in';

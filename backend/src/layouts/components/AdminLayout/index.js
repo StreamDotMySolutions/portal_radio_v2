@@ -1,6 +1,9 @@
+import { useEffect, useState } from 'react'
 import { Outlet} from "react-router-dom"
 import './style.css'
 import TopNavBar from "./TopNavBar";
+import TopProgressBar from "../TopProgressBar";
+import useLoadingStore from "../../../libs/loadingStore";
 import Container from 'react-bootstrap/Container';
 import Footer from "./Footer";
 import Col from 'react-bootstrap/Col';
@@ -11,16 +14,25 @@ import { faExclamationTriangle, faCheckCircle } from '@fortawesome/free-solid-sv
 const AdminLayout = () => {
 
   const mode =  (process.env.REACT_APP_MODE)
+  const isLoading = useLoadingStore((s) => s.count > 0)
+  const [showDim, setShowDim] = useState(false)
+
+  useEffect(() => {
+    if (!isLoading) { setShowDim(false); return }
+    const t = setTimeout(() => setShowDim(true), 250)
+    return () => clearTimeout(t)
+  }, [isLoading])
 
   return (
     <>
+    <TopProgressBar />
     { mode == 'production' ?
         <>
           <TopNavBar/>
             <Container fluid className="p-1 mt-5">
               <hr />
               <Col lg={12}>
-                <Container className="mt-3 mb-3">
+                <Container className={`mt-3 mb-3 app-content ${showDim ? 'app-content--loading' : ''}`}>
                   <Outlet />
                 </Container>
               </Col>

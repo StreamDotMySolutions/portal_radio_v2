@@ -149,14 +149,31 @@ a {
 .rotated-div {
   width: 500px;
   height: 500px;
-  background-color: #E5E4E2; 
-  opacity: 0.5; 
-  transform: rotate(-45deg); 
-  transform-origin: top left; 
+  background-color: #E5E4E2;
+  opacity: 0.5;
+  transform: rotate(-45deg);
+  transform-origin: top left;
   position: fixed;
-  top: 50%; 
-  left: 50%; 
-  margin-top: 50px; 
+  top: 50%;
+  left: 50%;
+  margin-top: 50px;
   margin-left: -320px;
-  pointer-events: none; 
+  pointer-events: none;
+}
+
+/* ── YouTube-style top loading bar (recolour nprogress to admin theme) ── */
+#nprogress .bar {
+  background: var(--bs-primary, #0d6efd) !important;
+  height: 3px !important;
+}
+#nprogress .peg {
+  box-shadow: 0 0 10px var(--bs-primary, #0d6efd), 0 0 5px var(--bs-primary, #0d6efd) !important;
+}
+
+/* ── Subtle content dim while requests are in flight (>250ms) ── */
+.app-content {
+  transition: opacity 0.25s ease-out;
+}
+.app-content--loading {
+  opacity: 0.55;
 }
