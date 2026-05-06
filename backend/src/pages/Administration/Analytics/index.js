@@ -244,16 +244,23 @@ const Analytics = () => {
     if (!data) return <div className='p-3 text-danger'>Failed to load analytics.</div>
 
     const {
-        summary, top_articles, top_searches, top_downloads, daily_views, device_split,
-        livestream_summary, livestream_daily,
-        playback_summary, top_stations_by_plays = [], playback_daily = [],
-        visitors_breakdown, visitors_daily = [], visitors_by_device = [], pages_per_visitor,
+        top_articles, top_searches, top_downloads, daily_views, device_split,
+        livestream_daily,
+        top_stations_by_plays = [], playback_daily = [],
+        visitors_daily = [], visitors_by_device = [],
+        unique_visitors = 0,
     } = data
 
     const totalDevices = device_split.reduce((s, d) => s + d.count, 0) || 1
     const totalUniqueDevices = visitors_by_device.reduce((s, d) => s + Number(d.count), 0) || 1
     const playerDaily = playback_daily.map((r) => ({ date: r.date, views: Number(r.player_plays) }))
     const livestreamDailyFromPlayback = playback_daily.map((r) => ({ date: r.date, views: Number(r.livestream_plays) }))
+
+    // Range-scoped totals (computed from existing daily arrays — no extra requests)
+    const totalPageviews   = daily_views.reduce((s, r) => s + Number(r.views ?? 0), 0)
+    const totalPlayerPlays = playback_daily.reduce((s, r) => s + Number(r.player_plays ?? 0), 0)
+    const totalLivestream  = playback_daily.reduce((s, r) => s + Number(r.livestream_plays ?? 0), 0)
+    const pagesPerVisitor  = unique_visitors > 0 ? (totalPageviews / unique_visitors).toFixed(2) : '—'
 
     return (
         <>
@@ -262,65 +269,22 @@ const Analytics = () => {
 
             <div className='d-flex flex-column gap-3'>
 
-                {/* ── Pageview summary cards ── */}
+                {/* ── Range-scoped summary cards (always reflect the active filter) ── */}
                 <Row className='g-3'>
-                    <Col md={3}>
-                        <StatCard title='Pageviews Today'      value={summary.today} icon='eye'           color='primary' />
+                    <Col md={6} lg>
+                        <StatCard title='Pageviews'        value={totalPageviews.toLocaleString()}          icon='eye'         color='primary' />
                     </Col>
-                    <Col md={3}>
-                        <StatCard title='Pageviews This Week'  value={summary.week}  icon='calendar-week' color='success' />
+                    <Col md={6} lg>
+                        <StatCard title='Unique Visitors'  value={Number(unique_visitors).toLocaleString()} icon='users'       color='success' />
                     </Col>
-                    <Col md={3}>
-                        <StatCard title='Pageviews This Month' value={summary.month} icon='calendar'      color='info' />
+                    <Col md={6} lg>
+                        <StatCard title='Player Plays'     value={totalPlayerPlays.toLocaleString()}        icon='play'        color='info' />
                     </Col>
-                    <Col md={3}>
-                        <StatCard title='Pages / Visitor (30d)' value={pages_per_visitor ?? '—'} icon='layer-group' color='secondary' />
+                    <Col md={6} lg>
+                        <StatCard title='Livestream Plays' value={totalLivestream.toLocaleString()}         icon='headphones'  color='danger' />
                     </Col>
-                </Row>
-
-                {/* ── Unique visitors cards ── */}
-                <Row className='g-3'>
-                    <Col md={3}>
-                        <StatCard title='Visitors Today'      value={visitors_breakdown?.today}  icon='user'  color='primary' />
-                    </Col>
-                    <Col md={3}>
-                        <StatCard title='Visitors This Week'  value={visitors_breakdown?.week}   icon='users' color='success' />
-                    </Col>
-                    <Col md={3}>
-                        <StatCard title='Visitors This Month' value={visitors_breakdown?.month}  icon='users' color='info' />
-                    </Col>
-                    <Col md={3}>
-                        <StatCard title='Visitors (30d)'      value={visitors_breakdown?.last30} icon='users' color='warning' />
-                    </Col>
-                </Row>
-
-                {/* ── Playback summary cards ── */}
-                <Row className='g-3'>
-                    <Col md={3}>
-                        <StatCard title='Player Today'        value={playback_summary?.player_today}     icon='play'         color='primary' />
-                    </Col>
-                    <Col md={3}>
-                        <StatCard title='Player This Week'    value={playback_summary?.player_week}      icon='play'         color='primary' />
-                    </Col>
-                    <Col md={3}>
-                        <StatCard title='Player This Month'   value={playback_summary?.player_month}     icon='play'         color='primary' />
-                    </Col>
-                    <Col md={3}>
-                        <StatCard title='Player Total'        value={playback_summary?.player_total}     icon='circle-play'  color='primary' />
-                    </Col>
-                </Row>
-                <Row className='g-3'>
-                    <Col md={3}>
-                        <StatCard title='Livestream Today'    value={playback_summary?.livestream_today} icon='play'         color='danger' />
-                    </Col>
-                    <Col md={3}>
-                        <StatCard title='Livestream This Week' value={playback_summary?.livestream_week} icon='headphones'   color='danger' />
-                    </Col>
-                    <Col md={3}>
-                        <StatCard title='Livestream This Month' value={playback_summary?.livestream_month} icon='calendar'   color='danger' />
-                    </Col>
-                    <Col md={3}>
-                        <StatCard title='Livestream Total'    value={playback_summary?.livestream_total} icon='circle-play'  color='danger' />
+                    <Col md={6} lg>
+                        <StatCard title='Pages / Visitor'  value={pagesPerVisitor}                          icon='layer-group' color='secondary' />
                     </Col>
                 </Row>
 

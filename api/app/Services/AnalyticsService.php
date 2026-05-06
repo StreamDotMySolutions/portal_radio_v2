@@ -327,6 +327,13 @@ class AnalyticsService
             ->get();
     }
 
+    public static function uniqueVisitorsInRange($from = null, $to = null): int
+    {
+        $query = AnalyticsEvent::where('event_type', 'pageview');
+        self::applyDateRange($query, $from, $to);
+        return $query->distinct('session_id')->count('session_id');
+    }
+
     public static function pagesPerVisitor(int $days = 30): float
     {
         $since = now()->subDays($days);

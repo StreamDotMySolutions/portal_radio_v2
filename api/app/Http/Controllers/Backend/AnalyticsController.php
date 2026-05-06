@@ -23,7 +23,11 @@ class AnalyticsController extends Controller
                 'from' => $from->toDateString(),
                 'to'   => $to->toDateString(),
             ],
-            'summary'                => AnalyticsService::summary(),
+
+            // Range-scoped totals (drives the 5 stat cards at the top)
+            'unique_visitors'        => AnalyticsService::uniqueVisitorsInRange($from, $to),
+
+            // Range-scoped charts + top-N
             'top_articles'           => AnalyticsService::topArticles(10, $from, $to),
             'top_stations'           => AnalyticsService::topStations(10, $from, $to),
             'top_searches'           => AnalyticsService::topSearches(10, $from, $to),
@@ -31,28 +35,11 @@ class AnalyticsController extends Controller
             'top_downloads'          => AnalyticsService::topDownloads(10, $from, $to),
             'daily_views'            => AnalyticsService::dailyViews($from, $to),
             'device_split'           => AnalyticsService::deviceSplit($from, $to),
-            'livestream_summary'     => [
-                'total'     => AnalyticsService::livestreamTotalPlays(),
-                'today'     => AnalyticsService::livestreamPlaysToday(),
-                'this_week' => AnalyticsService::livestreamPlaysThisWeek(),
-            ],
             'livestream_daily'       => AnalyticsService::livestreamDailyPlays($from, $to),
-            'playback_summary'       => [
-                'player_today'      => AnalyticsService::playerPlaysToday(),
-                'player_week'       => AnalyticsService::playerPlaysThisWeek(),
-                'player_month'      => AnalyticsService::playerPlaysThisMonth(),
-                'player_total'      => AnalyticsService::playerPlaysTotal(),
-                'livestream_today'  => AnalyticsService::livestreamPlaysToday(),
-                'livestream_week'   => AnalyticsService::livestreamPlaysThisWeek(),
-                'livestream_month'  => AnalyticsService::livestreamPlaysThisMonth(),
-                'livestream_total'  => AnalyticsService::livestreamTotalPlays(),
-            ],
             'top_stations_by_plays'  => AnalyticsService::topStationsByPlayback(10, $from, $to),
             'playback_daily'         => AnalyticsService::playbackDaily($from, $to),
-            'visitors_breakdown'     => AnalyticsService::uniqueVisitorsBreakdown(),
             'visitors_daily'         => AnalyticsService::dailyUniqueVisitors($from, $to),
             'visitors_by_device'     => AnalyticsService::uniqueVisitorsByDevice($from, $to),
-            'pages_per_visitor'      => AnalyticsService::pagesPerVisitor(30),
         ]);
     }
 }
