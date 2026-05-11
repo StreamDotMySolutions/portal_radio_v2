@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Models\AnalyticsEvent;
 use App\Services\AnalyticsService;
+use App\Services\StationListenerService;
 use Illuminate\Http\Request;
 
 class AnalyticsController extends Controller
@@ -33,5 +34,27 @@ class AnalyticsController extends Controller
         AnalyticsEvent::create($data);
 
         return response()->json(['message' => 'ok']);
+    }
+
+    public function heartbeat(Request $request)
+    {
+        $data = $request->validate([
+            'session_id' => 'required|string|max:64',
+            'station_id' => 'required|integer|exists:stations,id',
+        ]);
+
+        StationListenerService::heartbeat($data['session_id'], (int) $data['station_id']);
+
+        return response()->json(['message' => 'ok']);
+    }
+
+    public function listenerCounts()
+    {
+        $counts = StationListenerService::concurrentBySlug();
+
+        return response()->json([
+            'counts' => $counts,
+            'total'  => array_sum($counts),
+        ]);
     }
 }

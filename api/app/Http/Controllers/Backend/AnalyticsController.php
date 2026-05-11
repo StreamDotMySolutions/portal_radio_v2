@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Services\AnalyticsService;
+use App\Services\StationListenerService;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -37,6 +38,11 @@ class AnalyticsController extends Controller
             'device_split'           => AnalyticsService::deviceSplit($from, $to),
             'livestream_daily'       => AnalyticsService::livestreamDailyPlays($from, $to),
             'top_stations_by_plays'  => AnalyticsService::topStationsByPlayback(10, $from, $to),
+
+            // Live concurrent listeners (NOT range-scoped — always "right now")
+            'listening_now'              => array_sum(StationListenerService::concurrentAllStations()),
+            'top_stations_listening_now' => StationListenerService::topListeningNow(10, 5),
+
             'playback_daily'         => AnalyticsService::playbackDaily($from, $to),
             'visitors_daily'         => AnalyticsService::dailyUniqueVisitors($from, $to),
             'visitors_by_device'     => AnalyticsService::uniqueVisitorsByDevice($from, $to),

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState, useRef, useEffect } from 'react';
 import { fetchStations, fetchStationHits, fetchStationCategories } from '@/utils/stationsApi';
+import { fetchListenerCounts } from '@/utils/analytics';
 
 function getOrCreateSessionId() {
   let id = sessionStorage.getItem('rtm_sid');
@@ -20,6 +21,7 @@ export default function RadioStationsMobile() {
   const [categories, setCategories] = useState([]);
   const [stationsByCategory, setStationsByCategory] = useState({});
   const [stationHits, setStationHits] = useState({});
+  const [listenerCounts, setListenerCounts] = useState({});
   const [categoryFilter, setCategoryFilter] = useState('all');
 
   useEffect(() => {
@@ -43,6 +45,14 @@ export default function RadioStationsMobile() {
       });
 
     fetchStationHits().then(setStationHits);
+  }, []);
+
+  // Poll live concurrent listeners every 30s
+  useEffect(() => {
+    const load = () => fetchListenerCounts().then(res => setListenerCounts(res.counts || {}));
+    load();
+    const id = setInterval(load, 30_000);
+    return () => clearInterval(id);
   }, []);
 
   useEffect(() => {
@@ -197,6 +207,7 @@ export default function RadioStationsMobile() {
                 const isPlaying = playingSlug === station.slug;
                 const isDisabled = !station.streamUrl || station.streamUrl === '#';
                 const listenerCount = stationHits[station.slug] || 0;
+                const liveListeners = listenerCounts[station.slug] || 0;
                 return (
                   <div style={{
                     borderTop: `1px solid rgba(255,255,255,0.08)`,
@@ -238,6 +249,21 @@ export default function RadioStationsMobile() {
                       </div>
                     )}
                     <div style={{ flex: 1 }} />
+                    {liveListeners > 0 && (
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '3px',
+                        fontSize: '0.7rem',
+                        color: '#22c55e',
+                        fontWeight: 600,
+                      }}
+                        title="Pendengar aktif (5 minit)"
+                      >
+                        <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 3px #22c55e' }} />
+                        <span>{liveListeners.toLocaleString()}</span>
+                      </div>
+                    )}
                     <div style={{
                       display: 'flex',
                       alignItems: 'center',

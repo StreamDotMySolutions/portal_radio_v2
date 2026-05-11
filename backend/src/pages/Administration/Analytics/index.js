@@ -228,6 +228,18 @@ const Analytics = () => {
             .finally(() => setIsLoading(false))
     }, [from, to])
 
+    // Poll the same endpoint every 30s so the "Listening Now" KPI / table
+    // stay live (the rest of the dashboard refresh is harmless).
+    useEffect(() => {
+        const qs = new URLSearchParams({ from, to }).toString()
+        const id = setInterval(() => {
+            axios({ method: 'get', url: `${url}?${qs}` })
+                .then((res) => setData(res.data))
+                .catch((err) => console.warn(err))
+        }, 30_000)
+        return () => clearInterval(id)
+    }, [from, to])
+
     const handleFilterChange = ({ preset: nextPreset, from: nextFrom, to: nextTo }) => {
         setPreset(nextPreset)
         setFrom(nextFrom)
@@ -249,6 +261,7 @@ const Analytics = () => {
         top_stations_by_plays = [], playback_daily = [],
         visitors_daily = [], visitors_by_device = [],
         unique_visitors = 0,
+        listening_now = 0, top_stations_listening_now = [],
     } = data
 
     const totalDevices = device_split.reduce((s, d) => s + d.count, 0) || 1
@@ -285,6 +298,9 @@ const Analytics = () => {
                     </Col>
                     <Col md={6} lg>
                         <StatCard title='Pages / Visitor'  value={pagesPerVisitor}                          icon='layer-group' color='secondary' />
+                    </Col>
+                    <Col md={6} lg>
+                        <StatCard title='Listening Now (live)' value={Number(listening_now).toLocaleString()} icon='tower-broadcast' color='success' />
                     </Col>
                 </Row>
 
@@ -340,6 +356,53 @@ const Analytics = () => {
                         <DailyChart data={visitors_daily} from={data.range.from} to={data.range.to} />
                     </Card.Body>
                 </Card>
+
+                {/* ── Top Stations — Listening Now (live, last 5 min) ── */}
+                <Row className='g-3'>
+                    <Col md={12}>
+                        <Card>
+                            <Card.Header className='fw-semibold d-flex align-items-center'>
+                                <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 6px #22c55e', marginRight: 8 }} />
+                                Top Stations — Listening Now (last 5 min)
+                            </Card.Header>
+                            <Card.Body className='p-0'>
+                                <Table hover responsive className='mb-0'>
+                                    <thead className='table-light'>
+                                        <tr>
+                                            <th style={{ '--bs-table-cell-padding-y': '0.85rem' }}>#</th>
+                                            <th style={{ '--bs-table-cell-padding-y': '0.85rem' }}>Station</th>
+                                            <th style={{ '--bs-table-cell-padding-y': '0.85rem' }} className='text-end'>Listeners</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {top_stations_listening_now.length === 0 && (
+                                            <tr><td colSpan={3} className='text-center text-muted py-3'>No active listeners</td></tr>
+                                        )}
+                                        {top_stations_listening_now.map((item, i) => {
+                                            const stationUrl = item.slug ? `${PUBLIC_URL}/station/${item.slug}` : null
+                                            return (
+                                                <tr key={i}>
+                                                    <td className='text-muted'>{i + 1}</td>
+                                                    <td>
+                                                        <FontAwesomeIcon icon={['fas', 'radio']} className='me-2 text-muted' />
+                                                        {stationUrl ? (
+                                                            <a href={stationUrl} target='_blank' rel='noreferrer'>
+                                                                {item.station_name || `ID ${item.station_id}`}
+                                                            </a>
+                                                        ) : (
+                                                            item.station_name || <span className='text-muted'>ID {item.station_id}</span>
+                                                        )}
+                                                    </td>
+                                                    <td className='text-end fw-semibold text-success'>{item.listeners}</td>
+                                                </tr>
+                                            )
+                                        })}
+                                    </tbody>
+                                </Table>
+                            </Card.Body>
+                        </Card>
+                    </Col>
+                </Row>
 
                 {/* ── Top Stations by Plays + Visitors by Device ── */}
                 <Row className='g-3'>

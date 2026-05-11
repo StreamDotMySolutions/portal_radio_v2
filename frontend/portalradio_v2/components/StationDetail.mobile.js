@@ -4,17 +4,26 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import FullPlayerCardMobile from './FullPlayerCard.mobile';
 import IframePlayerCardMobile from './IframePlayerCard.mobile';
-import { trackPageview } from '@/utils/analytics';
+import { trackPageview, fetchListenerCounts } from '@/utils/analytics';
 import { fetchStationHits } from '@/utils/stationsApi';
 
 export default function StationDetailMobile({ station }) {
   const [stationHits, setStationHits] = useState({});
+  const [listenerCounts, setListenerCounts] = useState({});
 
   // Track pageview and fetch hits on component mount
   useEffect(() => {
     trackPageview('station', station.id, station.name);
     fetchStationHits().then(setStationHits);
   }, [station.id, station.name]);
+
+  // Poll live listener counts every 30s
+  useEffect(() => {
+    const load = () => fetchListenerCounts().then(res => setListenerCounts(res.counts || {}));
+    load();
+    const id = setInterval(load, 30_000);
+    return () => clearInterval(id);
+  }, []);
 
   return (
     <div style={{ backgroundColor: 'var(--color-bg)', paddingTop: '60px' }}>
@@ -56,11 +65,12 @@ export default function StationDetailMobile({ station }) {
         {/* Full Player Card Mobile */}
         <div className="mb-2">
           {station.playerType === 'iframe' ? (
-            <IframePlayerCardMobile station={station} pageviews={stationHits[station.slug] || 0} />
+            <IframePlayerCardMobile station={station} pageviews={stationHits[station.slug] || 0} listeners={listenerCounts[station.slug] || 0} />
           ) : (
             <FullPlayerCardMobile
               station={station}
               pageviews={stationHits[station.slug] || 0}
+              listeners={listenerCounts[station.slug] || 0}
               onFirstPlay={() =>
                 setStationHits(prev => ({
                   ...prev,

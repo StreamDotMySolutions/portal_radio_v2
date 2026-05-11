@@ -1,7 +1,17 @@
 'use client';
 
-export default function IframePlayerCardMobile({ station, pageviews = 0 }) {
+import { useEffect } from 'react';
+import { sendListenerHeartbeat } from '@/utils/analytics';
+
+export default function IframePlayerCardMobile({ station, pageviews = 0, listeners = 0 }) {
   const noEmbed = !station.embedPlayerUrl;
+
+  useEffect(() => {
+    if (noEmbed || !station.id) return;
+    sendListenerHeartbeat(station.id);
+    const id = setInterval(() => sendListenerHeartbeat(station.id), 60_000);
+    return () => clearInterval(id);
+  }, [noEmbed, station.id]);
 
   return (
     <div
@@ -114,6 +124,31 @@ export default function IframePlayerCardMobile({ station, pageviews = 0 }) {
         <i className="bi bi-eye" style={{ fontSize: '0.75rem' }}></i>
         {pageviews.toLocaleString()}
       </div>
+
+      {/* Live Listeners Badge */}
+      {listeners > 0 && (
+        <div
+          style={{
+            position: 'absolute',
+            top: '42px',
+            right: '8px',
+            backgroundColor: 'rgba(34, 197, 94, 0.9)',
+            color: '#fff',
+            padding: '4px 10px',
+            borderRadius: '20px',
+            fontSize: '0.7rem',
+            fontWeight: '600',
+            zIndex: 3,
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+          }}
+          title="Pendengar aktif (5 minit)"
+        >
+          <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#fff', boxShadow: '0 0 4px #fff' }} />
+          {listeners.toLocaleString()}
+        </div>
+      )}
     </div>
   );
 }

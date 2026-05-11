@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { trackPlayerPlay } from '@/utils/analytics';
+import { trackPlayerPlay, sendListenerHeartbeat } from '@/utils/analytics';
 
-export default function FullPlayerCard({ station, pageviews = 0, onFirstPlay }) {
+export default function FullPlayerCard({ station, pageviews = 0, listeners = 0, onFirstPlay }) {
   const [playing, setPlaying] = useState(false);
   const [error, setError] = useState(false);
   const [duration, setDuration] = useState(0);
@@ -51,6 +51,14 @@ export default function FullPlayerCard({ station, pageviews = 0, onFirstPlay }) 
 
     return () => { if (hlsRef.current) { hlsRef.current.destroy(); hlsRef.current = null; } };
   }, [station.streamUrl, disabled]);
+
+  // Listener heartbeat while audio is playing
+  useEffect(() => {
+    if (!playing || !station.id) return;
+    sendListenerHeartbeat(station.id);
+    const id = setInterval(() => sendListenerHeartbeat(station.id), 60_000);
+    return () => clearInterval(id);
+  }, [playing, station.id]);
 
   // Update time display
   useEffect(() => {
@@ -283,6 +291,31 @@ export default function FullPlayerCard({ station, pageviews = 0, onFirstPlay }) 
           <i className="bi bi-eye" style={{ fontSize: '0.8rem' }}></i>
           {pageviews.toLocaleString()}
         </div>
+
+        {/* Live Listeners Badge */}
+        {listeners > 0 && (
+          <div
+            style={{
+              position: 'absolute',
+              top: '50px',
+              right: '12px',
+              backgroundColor: 'rgba(34, 197, 94, 0.9)',
+              color: '#fff',
+              padding: '6px 12px',
+              borderRadius: '20px',
+              fontSize: '0.75rem',
+              fontWeight: '600',
+              zIndex: 3,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+            }}
+            title="Pendengar aktif (5 minit)"
+          >
+            <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#fff', boxShadow: '0 0 6px #fff' }} />
+            {listeners.toLocaleString()} dengar
+          </div>
+        )}
       </div>
     </div>
   );

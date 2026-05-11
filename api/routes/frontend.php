@@ -53,6 +53,8 @@ Route::get('/download/article-pdf/{filename}', [DownloadController::class, 'arti
 Route::post('/track', [AnalyticsController::class, 'store']);
 Route::get('/station-hits', [AnalyticsController::class, 'stationHits']);
 Route::get('/livestream-hits', [AnalyticsController::class, 'livestreamHits']);
+Route::post('/listener-heartbeat', [AnalyticsController::class, 'heartbeat']);
+Route::get('/listener-counts', [AnalyticsController::class, 'listenerCounts']);
 
 // Complaints submission (public, protected by reCAPTCHA)
 Route::post('/complaints', [ComplaintController::class, 'store']);

@@ -123,6 +123,44 @@ export async function trackDownload(pageType, filename) {
 }
 
 /**
+ * Send a listener heartbeat for a station (concurrent listener tracking).
+ * Fire-and-forget. Call every ~60s while audio is actively playing.
+ * @param {number} stationId
+ */
+export function sendListenerHeartbeat(stationId) {
+  try {
+    if (!stationId) return;
+    const payload = {
+      session_id: getSessionId(),
+      station_id: stationId,
+    };
+    fetch(`${API_BASE}/listener-heartbeat`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload),
+    }).catch(() => {});
+  } catch (error) {
+    console.warn('Listener heartbeat error:', error);
+  }
+}
+
+/**
+ * Fetch live concurrent listener counts per station.
+ * Returns { counts: { [slug]: number }, total: number }.
+ */
+export async function fetchListenerCounts() {
+  try {
+    const res = await fetch(`${API_BASE}/listener-counts`, {
+      headers: { 'Accept': 'application/json' },
+    });
+    if (!res.ok) return { counts: {}, total: 0 };
+    return await res.json();
+  } catch {
+    return { counts: {}, total: 0 };
+  }
+}
+
+/**
  * Track a player play event (M3U8 or other stream players)
  * @param {number} stationId - Station ID being played
  * @param {string} stationName - Station name being played
