@@ -58,11 +58,11 @@ class StationListenerService
             ->join('stations', 'stations.id', '=', 'station_listeners.station_id')
             ->select(
                 'stations.id as station_id',
-                'stations.name as station_name',
+                'stations.title as station_name',
                 'stations.slug as slug',
                 DB::raw('COUNT(DISTINCT station_listeners.session_id) as listeners')
             )
-            ->groupBy('stations.id', 'stations.name', 'stations.slug')
+            ->groupBy('stations.id', 'stations.title', 'stations.slug')
             ->orderByDesc('listeners')
             ->limit($limit)
             ->get();
