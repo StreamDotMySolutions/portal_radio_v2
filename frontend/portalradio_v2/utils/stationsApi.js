@@ -34,6 +34,11 @@ export function mapStation(s) {
       tiktok: s.tiktok_url || null,
       threads: s.threads_url || null,
     },
+    contact: {
+      phone: s.contact_phone || null,
+      email: s.contact_email || null,
+      address: s.contact_address || null,
+    },
   };
 }
 

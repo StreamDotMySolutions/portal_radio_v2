@@ -21,6 +21,9 @@ const emptyForm = {
     youtubeUrl: '',
     tiktokUrl: '',
     threadsUrl: '',
+    contactPhone: '',
+    contactEmail: '',
+    contactAddress: '',
     accentColor: '',
     active: '',
 }
@@ -67,6 +70,9 @@ export default function EditModal({ id }) {
                     youtubeUrl: station.youtube_url || '',
                     tiktokUrl: station.tiktok_url || '',
                     threadsUrl: station.threads_url || '',
+                    contactPhone: station.contact_phone || '',
+                    contactEmail: station.contact_email || '',
+                    contactAddress: station.contact_address || '',
                     accentColor: station.accent_color || '',
                     active: station.active,
                 })
@@ -109,6 +115,9 @@ export default function EditModal({ id }) {
         if (form.youtubeUrl) formData.append('youtube_url', form.youtubeUrl)
         if (form.tiktokUrl) formData.append('tiktok_url', form.tiktokUrl)
         if (form.threadsUrl) formData.append('threads_url', form.threadsUrl)
+        formData.append('contact_phone', form.contactPhone || '')
+        formData.append('contact_email', form.contactEmail || '')
+        formData.append('contact_address', form.contactAddress || '')
         if (form.accentColor) formData.append('accent_color', form.accentColor)
         if (form.active !== '') formData.append('active', form.active)
         if (thumbnailFile) formData.append('thumbnail', thumbnailFile)
