@@ -331,6 +331,57 @@ const HtmlForm = ({
 
             <Card>
                 <Card.Header className='fw-semibold'>
+                    <FontAwesomeIcon icon={['fas', 'phone']} className='me-2 text-secondary' />
+                    Hubungi Kami
+                    <small className='text-muted fw-normal ms-2'>(kosongkan untuk guna maklumat lalai RTM)</small>
+                </Card.Header>
+                <Card.Body className='d-flex flex-column gap-2'>
+                    <InputGroup>
+                        <InputGroup.Text style={{ width: '110px' }}>Telefon</InputGroup.Text>
+                        <Form.Control
+                            placeholder='cth. +603 2282 5333'
+                            value={form.contactPhone || ''}
+                            readOnly={isLoading}
+                            isInvalid={!!errors?.contact_phone}
+                            onChange={(e) => onChange('contactPhone')(e.target.value)}
+                        />
+                        {errors?.contact_phone && (
+                            <Form.Control.Feedback type='invalid'>{errors.contact_phone[0]}</Form.Control.Feedback>
+                        )}
+                    </InputGroup>
+                    <InputGroup>
+                        <InputGroup.Text style={{ width: '110px' }}>E-mel</InputGroup.Text>
+                        <Form.Control
+                            placeholder='cth. info@rtm.gov.my'
+                            value={form.contactEmail || ''}
+                            readOnly={isLoading}
+                            isInvalid={!!errors?.contact_email}
+                            onChange={(e) => onChange('contactEmail')(e.target.value)}
+                        />
+                        {errors?.contact_email && (
+                            <Form.Control.Feedback type='invalid'>{errors.contact_email[0]}</Form.Control.Feedback>
+                        )}
+                    </InputGroup>
+                    <InputGroup>
+                        <InputGroup.Text style={{ width: '110px' }}>Alamat</InputGroup.Text>
+                        <Form.Control
+                            as='textarea'
+                            placeholder={'cth. Radio Televisyen Malaysia,\nAngkasapuri Kota Media,\n50614 Kuala Lumpur'}
+                            value={form.contactAddress || ''}
+                            readOnly={isLoading}
+                            isInvalid={!!errors?.contact_address}
+                            onChange={(e) => onChange('contactAddress')(e.target.value)}
+                            style={{ minHeight: '80px' }}
+                        />
+                        {errors?.contact_address && (
+                            <Form.Control.Feedback type='invalid'>{errors.contact_address[0]}</Form.Control.Feedback>
+                        )}
+                    </InputGroup>
+                </Card.Body>
+            </Card>
+
+            <Card>
+                <Card.Header className='fw-semibold'>
                     <FontAwesomeIcon icon={['fas', 'image']} className='me-2 text-secondary' />
                     Images
                 </Card.Header>

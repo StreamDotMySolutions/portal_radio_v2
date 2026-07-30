@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useStationContact } from '@/context/StationContactContext';
 
 // Hardcoded defaults for fallback
 const defaultFooter = {
@@ -30,8 +31,13 @@ export default function Footer() {
   const pathname = usePathname();
   const isActive = (href) => pathname === href;
 
+  const { stationContact } = useStationContact();
   const [footer, setFooter] = useState(defaultFooter);
   const [isLoading, setIsLoading] = useState(true);
+
+  const contactPhone = stationContact?.phone || footer.phone;
+  const contactEmail = stationContact?.email || footer.email;
+  const contactAddress = stationContact?.address || footer.address;
 
   useEffect(() => {
     const fetchFooter = async () => {
@@ -108,15 +114,15 @@ export default function Footer() {
             <h6 className="mb-2">{footer.section_contact}</h6>
             <div className="d-flex align-items-start mb-1">
               <i className="bi bi-telephone text-muted small me-2 mt-1"></i>
-              <span className="text-muted small">{footer.phone}</span>
+              <span className="text-muted small">{contactPhone}</span>
             </div>
             <div className="d-flex align-items-start mb-1">
               <i className="bi bi-envelope text-muted small me-2 mt-1"></i>
-              <span className="text-muted small">{footer.email}</span>
+              <span className="text-muted small">{contactEmail}</span>
             </div>
             <div className="d-flex align-items-start">
               <i className="bi bi-geo-alt text-muted small me-2 mt-1"></i>
-              <span className="text-muted small" style={{ whiteSpace: 'pre-line' }}>{footer.address}</span>
+              <span className="text-muted small" style={{ whiteSpace: 'pre-line' }}>{contactAddress}</span>
             </div>
           </div>
         </div>
