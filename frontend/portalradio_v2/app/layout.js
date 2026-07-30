@@ -10,7 +10,8 @@ import Footer from '@/components/Footer';
 import BootstrapClient from '@/components/BootstrapClient';
 import AccessibilityToggle from '@/components/AccessibilityToggle';
 import PageTracker from '@/components/PageTracker';
-import { AccessibilityProvider } from '@/context/AccessibilityContext';
+import { AccessibilityProvider } from '@/context/AccessibilityContext'
+import { StationContactProvider } from '@/context/StationContactContext';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://radio.rtm.gov.my';
 
@@ -51,15 +52,17 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <AccessibilityProvider>
-          <PageTracker />
-          <header className="header-overlay">
-            <GovBanner />
-            <Responsive mobile={NavbarMobile} desktop={Navbar} />
-          </header>
-          <BootstrapClient />
-          {children}
-          <Footer />
-          <AccessibilityToggle />
+          <StationContactProvider>
+            <PageTracker />
+            <header className="header-overlay">
+              <GovBanner />
+              <Responsive mobile={NavbarMobile} desktop={Navbar} />
+            </header>
+            <BootstrapClient />
+            {children}
+            <Footer />
+            <AccessibilityToggle />
+          </StationContactProvider>
         </AccessibilityProvider>
       </body>
     </html>

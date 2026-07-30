@@ -29,6 +29,11 @@ export function mapStation(s) {
       youtube: s.youtube_url || null,
       tiktok: s.tiktok_url || null,
     },
+    contact: {
+      phone: s.contact_phone || null,
+      email: s.contact_email || null,
+      address: s.contact_address || null,
+    },
   };
 }
 

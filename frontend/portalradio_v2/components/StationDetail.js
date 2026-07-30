@@ -6,15 +6,22 @@ import FullPlayerCard from './FullPlayerCard';
 import IframePlayerCard from './IframePlayerCard';
 import { trackPageview } from '@/utils/analytics';
 import { fetchStationHits } from '@/utils/stationsApi';
+import { useStationContact } from '@/context/StationContactContext';
 
 export default function StationDetail({ station }) {
   const [stationHits, setStationHits] = useState({});
+  const { setStationContact } = useStationContact();
 
-  // Track pageview and fetch hits on component mount
   useEffect(() => {
     trackPageview('station', station.id, station.name);
     fetchStationHits().then(setStationHits);
   }, [station.id, station.name]);
+
+  useEffect(() => {
+    const { phone, email, address } = station.contact || {};
+    if (phone || email || address) setStationContact({ phone, email, address });
+    return () => setStationContact(null);
+  }, [station.id]);
 
   return (
     <div style={{ backgroundColor: 'var(--color-bg)', paddingTop: '120px' }}>

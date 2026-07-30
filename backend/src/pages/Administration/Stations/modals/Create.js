@@ -20,6 +20,9 @@ const emptyForm = {
     instagramUrl: '',
     youtubeUrl: '',
     tiktokUrl: '',
+    contactPhone: '',
+    contactEmail: '',
+    contactAddress: '',
     accentColor: '',
     active: 1,
 }
@@ -81,6 +84,9 @@ export default function CreateModal() {
         if (form.instagramUrl) formData.append('instagram_url', form.instagramUrl)
         if (form.youtubeUrl) formData.append('youtube_url', form.youtubeUrl)
         if (form.tiktokUrl) formData.append('tiktok_url', form.tiktokUrl)
+        if (form.contactPhone) formData.append('contact_phone', form.contactPhone)
+        if (form.contactEmail) formData.append('contact_email', form.contactEmail)
+        if (form.contactAddress) formData.append('contact_address', form.contactAddress)
         if (form.accentColor) formData.append('accent_color', form.accentColor)
         if (form.active !== '') formData.append('active', form.active)
         if (thumbnailFile) formData.append('thumbnail', thumbnailFile)

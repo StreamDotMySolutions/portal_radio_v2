@@ -87,6 +87,9 @@ class StationController extends Controller
             'instagram_url' => 'sometimes|string',
             'youtube_url' => 'sometimes|string',
             'tiktok_url' => 'sometimes|string',
+            'contact_phone' => 'sometimes|nullable|string',
+            'contact_email' => 'sometimes|nullable|string|email',
+            'contact_address' => 'sometimes|nullable|string',
             'thumbnail' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:102400',
             'banner' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:102400',
             'accent_color' => 'sometimes|string|max:20',
@@ -110,6 +113,9 @@ class StationController extends Controller
             'instagram_url' => $request->input('instagram_url'),
             'youtube_url' => $request->input('youtube_url'),
             'tiktok_url' => $request->input('tiktok_url'),
+            'contact_phone' => $request->input('contact_phone'),
+            'contact_email' => $request->input('contact_email'),
+            'contact_address' => $request->input('contact_address'),
             'thumbnail_filename' => $request->hasFile('thumbnail')
                 ? CommonService::handleStoreFile($request->file('thumbnail'), 'stations') : null,
             'banner_filename' => $request->hasFile('banner')
@@ -141,6 +147,9 @@ class StationController extends Controller
             'instagram_url' => 'sometimes|string',
             'youtube_url' => 'sometimes|string',
             'tiktok_url' => 'sometimes|string',
+            'contact_phone' => 'sometimes|nullable|string',
+            'contact_email' => 'sometimes|nullable|string|email',
+            'contact_address' => 'sometimes|nullable|string',
             'thumbnail' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:102400',
             'banner' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:102400',
             'accent_color' => 'sometimes|string|max:20',
@@ -150,7 +159,8 @@ class StationController extends Controller
         $data = $request->only([
             'title', 'slug', 'description', 'frequency', 'station_category_id',
             'rtmklik_player_url', 'player_type', 'stream_url', 'facebook_url', 'x_url',
-            'instagram_url', 'youtube_url', 'tiktok_url', 'accent_color', 'active'
+            'instagram_url', 'youtube_url', 'tiktok_url', 'accent_color', 'active',
+            'contact_phone', 'contact_email', 'contact_address',
         ]);
 
         if (isset($data['slug'])) {
