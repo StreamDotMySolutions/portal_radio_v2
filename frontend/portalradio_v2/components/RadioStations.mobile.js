@@ -249,21 +249,6 @@ export default function RadioStationsMobile() {
                       </div>
                     )}
                     <div style={{ flex: 1 }} />
-                    {liveListeners > 0 && (
-                      <div style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '3px',
-                        fontSize: '0.7rem',
-                        color: '#22c55e',
-                        fontWeight: 600,
-                      }}
-                        title="Pendengar aktif (5 minit)"
-                      >
-                        <span style={{ width: 5, height: 5, borderRadius: '50%', background: '#22c55e', boxShadow: '0 0 3px #22c55e' }} />
-                        <span>{liveListeners.toLocaleString()}</span>
-                      </div>
-                    )}
                     <div style={{
                       display: 'flex',
                       alignItems: 'center',

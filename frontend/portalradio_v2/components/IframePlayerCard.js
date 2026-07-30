@@ -127,30 +127,6 @@ export default function IframePlayerCard({ station, pageviews = 0, listeners = 0
         {pageviews.toLocaleString()}
       </div>
 
-      {/* Live Listeners Badge */}
-      {listeners > 0 && (
-        <div
-          style={{
-            position: 'absolute',
-            top: '50px',
-            right: '12px',
-            backgroundColor: 'rgba(34, 197, 94, 0.9)',
-            color: '#fff',
-            padding: '6px 12px',
-            borderRadius: '20px',
-            fontSize: '0.75rem',
-            fontWeight: '600',
-            zIndex: 3,
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-          }}
-          title="Pendengar aktif (5 minit)"
-        >
-          <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#fff', boxShadow: '0 0 6px #fff' }} />
-          {listeners.toLocaleString()} dengar
-        </div>
-      )}
     </div>
   );
 }
