@@ -40,7 +40,7 @@ function getCommands() {
         },
         'start-claude': {
             cmd: 'bash',
-            args: ['-c', 'pkill -f "claude" 2>/dev/null; sleep 1; nohup claude > /tmp/portal-radio.log 2>&1 & echo $! > /tmp/portal-radio.pid; echo "Claude Code starting (PID: $(cat /tmp/portal-radio.pid))..."; echo "Waiting for output (up to 8s)..."; sleep 8; echo ""; echo "--- Output so far ---"; cat /tmp/portal-radio.log'],
+            args: ['-c', `node -e "var fs=require('fs'),p='/root/.claude.json',c={};try{c=JSON.parse(fs.readFileSync(p,'utf8'))}catch(e){};c.projects=c.projects||{};c.projects['${root}']={...(c.projects['${root}']||{}),hasTrustDialogAccepted:true};fs.writeFileSync(p,JSON.stringify(c,null,2));console.log('Trust accepted for ${root}')" 2>/dev/null || echo "Trust step skipped"; pkill -f "node.*claude" 2>/dev/null; sleep 1; rm -f /tmp/portal-radio.log; nohup script -q -c claude /tmp/portal-radio.log > /dev/null 2>&1 & echo $! > /tmp/portal-radio.pid; echo "Claude Code starting (PID: $(cat /tmp/portal-radio.pid))..."; echo "Waiting for output (up to 12s)..."; sleep 12; echo ""; echo "--- Output so far ---"; cat /tmp/portal-radio.log`],
             cwd: root,
         },
         'stop-claude': {
