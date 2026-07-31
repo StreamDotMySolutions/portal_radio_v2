@@ -10,6 +10,12 @@ const ACTIONS = [
     { id: 'migrate-db', label: 'Migrate DB', variant: 'info', icon: '🗃' },
 ];
 
+const CLAUDE_ACTIONS = [
+    { id: 'start-claude', label: 'Start Claude Code', color: '#16a34a', icon: '▶' },
+    { id: 'stop-claude',  label: 'Stop Claude Code',  color: '#dc3545', icon: '■' },
+    { id: 'claude-logs',  label: 'View Logs',         color: '#6c757d', icon: '📋' },
+];
+
 export default function DeployPage() {
     const [token, setToken] = useState(null);
     const [secret, setSecret] = useState('');
@@ -156,13 +162,41 @@ export default function DeployPage() {
                 </form>
             ) : (
                 <>
-                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '20px' }}>
+                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '12px' }}>
                         {ACTIONS.map((action) => (
                             <button
                                 key={action.id}
                                 onClick={() => handleRun(action.id)}
                                 disabled={running}
                                 style={btnStyle(action.variant)}
+                            >
+                                {action.icon} {action.label}
+                            </button>
+                        ))}
+                    </div>
+
+                    <div style={{ borderTop: '1px solid #333', margin: '16px 0 12px' }} />
+
+                    <div style={{ marginBottom: '6px', fontSize: '11px', color: '#888', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+                        Claude Code
+                    </div>
+                    <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '20px' }}>
+                        {CLAUDE_ACTIONS.map((action) => (
+                            <button
+                                key={action.id}
+                                onClick={() => handleRun(action.id)}
+                                disabled={running}
+                                style={{
+                                    backgroundColor: running ? '#6c757d' : action.color,
+                                    color: '#fff',
+                                    border: 'none',
+                                    padding: '10px 20px',
+                                    borderRadius: '6px',
+                                    cursor: running ? 'not-allowed' : 'pointer',
+                                    fontWeight: 600,
+                                    fontSize: '14px',
+                                    opacity: running ? 0.65 : 1,
+                                }}
                             >
                                 {action.icon} {action.label}
                             </button>

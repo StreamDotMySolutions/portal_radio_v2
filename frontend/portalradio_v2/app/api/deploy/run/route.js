@@ -38,6 +38,37 @@ function getCommands() {
             args: ['artisan', 'migrate', '--force'],
             cwd: path.join(root, 'api'),
         },
+        'start-claude': {
+            cmd: 'bash',
+            args: ['-c', [
+                'pkill -f "claude" 2>/dev/null; sleep 1',
+                'nohup claude > /tmp/claude-code.log 2>&1 &',
+                'echo $! > /tmp/claude-code.pid',
+                'echo "Claude Code starting (PID: $(cat /tmp/claude-code.pid))..."',
+                'echo "Waiting for output (up to 8s)..."',
+                'sleep 8',
+                'echo ""',
+                'echo "--- Output so far ---"',
+                'cat /tmp/claude-code.log',
+            ].join(' && ')],
+            cwd: root,
+        },
+        'stop-claude': {
+            cmd: 'bash',
+            args: ['-c', [
+                'PID=$(cat /tmp/claude-code.pid 2>/dev/null)',
+                'if [ -n "$PID" ] && kill -0 $PID 2>/dev/null',
+                'then kill $PID && rm -f /tmp/claude-code.pid && echo "Claude Code stopped (PID $PID)"',
+                'else pkill -f "claude" 2>/dev/null && echo "Claude Code processes killed" || echo "No Claude Code process found"; rm -f /tmp/claude-code.pid',
+                'fi',
+            ].join('; ')],
+            cwd: root,
+        },
+        'claude-logs': {
+            cmd: 'bash',
+            args: ['-c', 'tail -n 150 /tmp/claude-code.log 2>/dev/null || echo "No log file found at /tmp/claude-code.log"'],
+            cwd: root,
+        },
     };
 }
 
