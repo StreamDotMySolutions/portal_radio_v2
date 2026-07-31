@@ -40,17 +40,7 @@ function getCommands() {
         },
         'start-claude': {
             cmd: 'bash',
-            args: ['-c', [
-                'pkill -f "claude" 2>/dev/null; sleep 1',
-                'nohup claude > /tmp/portal-radio.log 2>&1 &',
-                'echo $! > /tmp/portal-radio.pid',
-                'echo "Claude Code starting (PID: $(cat /tmp/portal-radio.pid))..."',
-                'echo "Waiting for output (up to 8s)..."',
-                'sleep 8',
-                'echo ""',
-                'echo "--- Output so far ---"',
-                'cat /tmp/portal-radio.log',
-            ].join(' && ')],
+            args: ['-c', 'pkill -f "claude" 2>/dev/null; sleep 1; nohup claude > /tmp/portal-radio.log 2>&1 & echo $! > /tmp/portal-radio.pid; echo "Claude Code starting (PID: $(cat /tmp/portal-radio.pid))..."; echo "Waiting for output (up to 8s)..."; sleep 8; echo ""; echo "--- Output so far ---"; cat /tmp/portal-radio.log'],
             cwd: root,
         },
         'stop-claude': {
