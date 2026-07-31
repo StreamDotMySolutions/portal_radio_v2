@@ -11,9 +11,10 @@ const ACTIONS = [
 ];
 
 const CLAUDE_ACTIONS = [
-    { id: 'start-claude', label: 'Start Claude Code', color: '#16a34a', icon: '▶' },
-    { id: 'stop-claude',  label: 'Stop Claude Code',  color: '#dc3545', icon: '■' },
-    { id: 'claude-logs',  label: 'View Logs',         color: '#6c757d', icon: '📋' },
+    { id: 'install-claude', label: 'Install Claude Code', color: '#7c3aed', icon: '⬇' },
+    { id: 'start-claude',   label: 'Start',               color: '#16a34a', icon: '▶' },
+    { id: 'stop-claude',    label: 'Stop',                color: '#dc3545', icon: '■' },
+    { id: 'claude-logs',    label: 'View Logs',           color: '#6c757d', icon: '📋' },
 ];
 
 export default function DeployPage() {

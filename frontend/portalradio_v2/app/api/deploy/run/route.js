@@ -69,6 +69,11 @@ function getCommands() {
             args: ['-c', 'tail -n 150 /tmp/portal-radio.log 2>/dev/null || echo "No log file found at /tmp/portal-radio.log"'],
             cwd: root,
         },
+        'install-claude': {
+            cmd: 'npm',
+            args: ['install', '-g', '@anthropic-ai/claude-code'],
+            cwd: root,
+        },
     };
 }
 
