@@ -10,6 +10,7 @@ const ACTIONS = [
     { id: 'migrate-db', label: 'Migrate DB', variant: 'info', icon: '🗃' },
     { id: 'composer-install', label: 'Composer Install', variant: 'info', icon: '📦' },
     { id: 'restart-reverb', label: 'Restart Reverb', variant: 'danger', icon: '📡' },
+    { id: 'api-logs', label: 'Laravel Log', variant: 'secondary', icon: '📄' },
 ];
 
 const CLAUDE_ACTIONS = [
@@ -110,6 +111,7 @@ export default function DeployPage() {
             warning: '#ffc107',
             danger: '#dc3545',
             info: '#0dcaf0',
+            secondary: '#6c757d',
         };
         return {
             backgroundColor: running ? '#6c757d' : colors[variant],

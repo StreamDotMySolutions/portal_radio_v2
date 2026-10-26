@@ -62,7 +62,7 @@ All three paths run the same steps (§4).
    - A push to `main` calls `POST /api/github-webhook`, which runs `bash api/deploy.sh` in the background.
    - Output goes to `api/storage/logs/deploy.log` (webhook) and `deploy.log` in the project root (the script's own `tee`).
    - Only works if the webhook is configured on GitHub and `GITHUB_WEBHOOK_SECRET` is set in `api/.env`. It may not be.
-2. **Deploy dashboard.** `https://radio.rtm.gov.my/deploy` has one button per step: Git Pull, Build Frontend, Build Backend, Restart PM2, Migrate DB, Composer Install, Restart Reverb.
+2. **Deploy dashboard.** `https://radio.rtm.gov.my/deploy` has one button per step: Git Pull, Build Frontend, Build Backend, Restart PM2, Migrate DB, Composer Install, Restart Reverb. It also has a read-only **Laravel Log** button: the newest `api/storage/logs/laravel*.log`, its size, the ERROR/CRITICAL count in the last 2000 lines, and the last 200 lines.
 3. **SSH (what you will normally do).** `cd /var/www/portalradio_v2 && bash api/deploy.sh`.
 
 Before deploying, check that no other deploy is running: `pgrep -af deploy.sh`. If one is running, wait for it and read its log.
@@ -203,7 +203,7 @@ curl -s -i -N --max-time 3 -H "Connection: Upgrade" -H "Upgrade: websocket" \
   -H "Sec-WebSocket-Version: 13" -H "Sec-WebSocket-Key: SGVsbG8gUlRN" \
   "https://radio.rtm.gov.my/app/$KEY?protocol=7" | head -1
 
-# Errors since the deploy
+# Errors since the deploy (or use the dashboard's "Laravel Log" button)
 tail -n 50 api/storage/logs/laravel.log | grep -E "ERROR|CRITICAL" || echo "no new API errors"
 ```
 

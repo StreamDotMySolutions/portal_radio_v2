@@ -66,6 +66,16 @@ function getCommands() {
             ].join('; ')],
             cwd: root,
         },
+        // Newest Laravel log (single or daily channel): size, error count, last 200 lines
+        'api-logs': {
+            cmd: 'f=$(ls -t storage/logs/laravel*.log 2>/dev/null | head -1); '
+                + 'if [ -z "$f" ]; then echo "No Laravel log found in api/storage/logs"; else '
+                + 'echo "File: api/$f ($(du -h "$f" | cut -f1))"; '
+                + 'echo "ERROR/CRITICAL entries in last 2000 lines: $(tail -n 2000 "$f" | grep -c -E "\\.(ERROR|CRITICAL|ALERT|EMERGENCY):")"; '
+                + 'echo; tail -n 200 "$f"; fi',
+            args: [],
+            cwd: path.join(root, 'api'),
+        },
         'claude-logs': {
             cmd: 'bash',
             args: ['-c', 'tail -n 150 /tmp/portal-radio.log 2>/dev/null || echo "No log file found at /tmp/portal-radio.log"'],
