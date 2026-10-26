@@ -2,9 +2,11 @@
 
 namespace App\Services;
 
+use App\Events\ChatMessageSent;
 use App\Models\ChatUser;
 use App\Models\ChatMessage;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class ChatService
 {
@@ -44,37 +46,40 @@ class ChatService
         return $user;
     }
 
-    public function getMessages(?int $afterId = null, int $limit = 50): array
+    public function getMessages(?int $afterId = null, ?int $beforeId = null, int $limit = 50): array
     {
-        $limit = min($limit, 100);
+        $limit = max(1, min($limit, 100));
 
-        $query = ChatMessage::with('chatUser')
-            ->orderBy('id', 'asc');
+        $query = ChatMessage::with('chatUser');
 
         if ($afterId) {
-            $query->where('id', '>', $afterId);
+            // Polling: messages newer than the client's last id, oldest first
+            $messages = $query->where('id', '>', $afterId)
+                ->orderBy('id')
+                ->limit($limit)
+                ->get();
         } else {
-            $query->orderBy('id', 'desc')->limit($limit);
+            // Initial load (newest page) or history (page older than $beforeId)
+            if ($beforeId) {
+                $query->where('id', '<', $beforeId);
+            }
+
+            $messages = $query->orderByDesc('id')
+                ->limit($limit)
+                ->get()
+                ->reverse()
+                ->values();
         }
 
-        $messages = $afterId
-            ? $query->limit($limit)->get()
-            : $query->get()->reverse()->values();
-
-        return $messages->map(function (ChatMessage $msg) {
-            return [
-                'id' => $msg->id,
-                'chat_user_id' => $msg->chatUser->id,
-                'username' => $msg->chatUser->username,
-                'color' => $msg->chatUser->color,
-                'avatar_filename' => $msg->chatUser->avatar_filename,
-                'message' => $msg->message,
-                'created_at' => $msg->created_at->format('H:i'),
-            ];
-        })->toArray();
+        return $messages->map(fn (ChatMessage $msg) => $this->formatMessage($msg))->toArray();
     }
 
-    public function sendMessage(string $token, string $text): ?array
+    public function hasMessagesBefore(int $id): bool
+    {
+        return ChatMessage::where('id', '<', $id)->exists();
+    }
+
+    public function sendMessage(string $token, string $text, ?string $clientId = null): ?array
     {
         $user = ChatUser::where('token', $token)->first();
 
@@ -89,15 +94,45 @@ class ChatService
         $message = $user->messages()->create([
             'message' => strip_tags(mb_substr(trim($text), 0, 500)),
         ]);
+        $message->setRelation('chatUser', $user);
 
+        $payload = $this->formatMessage($message);
+
+        // client_id lets the sender's own widget replace its optimistic copy,
+        // whether the broadcast or the HTTP response arrives first
+        if ($clientId !== null) {
+            $payload['client_id'] = $clientId;
+        }
+
+        self::broadcast(new ChatMessageSent($payload));
+
+        return $payload;
+    }
+
+    /**
+     * Push a chat event to WebSocket clients. Failures are logged, never thrown:
+     * clients fall back to polling, so a Reverb outage must not break the request.
+     */
+    public static function broadcast(object $event): void
+    {
+        try {
+            broadcast($event);
+        } catch (\Throwable $e) {
+            Log::warning('Chat broadcast failed: ' . $e->getMessage());
+        }
+    }
+
+    public function formatMessage(ChatMessage $msg): array
+    {
         return [
-            'id' => $message->id,
-            'chat_user_id' => $user->id,
-            'username' => $user->username,
-            'color' => $user->color,
-            'avatar_filename' => $user->avatar_filename,
-            'message' => $message->message,
-            'created_at' => $message->created_at->format('H:i'),
+            'id' => $msg->id,
+            'chat_user_id' => $msg->chat_user_id,
+            'username' => $msg->chatUser?->username ?? '[dipadam]',
+            'color' => $msg->chatUser?->color ?? '#999999',
+            'avatar_filename' => $msg->chatUser?->avatar_filename,
+            'message' => $msg->message,
+            'created_at' => $msg->created_at->format('H:i'),
+            'created_at_iso' => $msg->created_at->toIso8601String(),
         ];
     }
 

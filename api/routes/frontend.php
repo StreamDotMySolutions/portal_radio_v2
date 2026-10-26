@@ -65,7 +65,9 @@ Route::prefix('chat')->group(function () {
     Route::post('/login', [ChatController::class, 'login']);
     Route::post('/forgot-password', [ChatController::class, 'forgotPassword']);
     Route::post('/reset-password', [ChatController::class, 'resetPassword']);
-    Route::get('/messages', [ChatController::class, 'index']);
+    Route::get('/messages', [ChatController::class, 'index'])
+        ->withoutMiddleware('throttle:api')
+        ->middleware('throttle:chat-read');
     Route::post('/messages', [ChatController::class, 'store'])->middleware('throttle:chat-send');
     Route::post('/send-activation', [ChatController::class, 'sendActivation'])->middleware('throttle:3,5');
     Route::get('/verify-email/{id}/{hash}', [ChatController::class, 'verifyEmail'])->name('chat.verify-email');

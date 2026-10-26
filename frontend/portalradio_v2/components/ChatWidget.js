@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react';
 import { getChatUser, setChatUser, chatRegister, chatLogin, chatForgotPassword, fetchMessages, sendMessage, getAvatarUrl } from '../utils/chatApi';
+import { subscribeChat } from '../utils/chatSocket';
 import ChatProfileModal from './ChatProfileModal';
 import ChatPublicProfile from './ChatPublicProfile';
 
@@ -296,8 +297,63 @@ export function ChatAuthForm({ view, onSuccess, onBack, onSwitchView }) {
   );
 }
 
+const POLL_ACTIVE_MS = 3000;
+const POLL_IDLE_MS = 10000;
+const POLL_SOCKET_MS = 30000;   // safety sweep while the WebSocket is connected
+const IDLE_AFTER_MS = 60000;
+
+// Merge server/optimistic messages: dedupe by id, drop optimistic entries once the
+// server copy (same client_id) arrives, keep confirmed messages sorted by id and
+// unconfirmed (pending/failed) ones at the end.
+function mergeMessages(prev, incoming) {
+  if (!incoming.length) return prev;
+  const confirmed = new Map();
+  const unconfirmed = new Map();
+  for (const m of prev) {
+    if (m.id != null) confirmed.set(m.id, m);
+    else unconfirmed.set(m.client_id, m);
+  }
+  for (const m of incoming) {
+    if (m.client_id) unconfirmed.delete(m.client_id);
+    confirmed.set(m.id, m);
+  }
+  return [...[...confirmed.values()].sort((a, b) => a.id - b.id), ...unconfirmed.values()];
+}
+
+function maxId(list) {
+  return list.reduce((max, m) => (m.id != null && m.id > max ? m.id : max), 0);
+}
+
+const pad2 = (n) => String(n).padStart(2, '0');
+
+function messageTime(msg) {
+  if (!msg.created_at_iso) return msg.created_at;
+  const d = new Date(msg.created_at_iso);
+  return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+}
+
+function dayKey(msg) {
+  if (!msg.created_at_iso) return null;
+  return new Date(msg.created_at_iso).toDateString();
+}
+
+function dayLabel(msg) {
+  const d = new Date(msg.created_at_iso);
+  const today = new Date();
+  const yesterday = new Date();
+  yesterday.setDate(today.getDate() - 1);
+  if (d.toDateString() === today.toDateString()) return 'Hari ini';
+  if (d.toDateString() === yesterday.toDateString()) return 'Semalam';
+  return `${pad2(d.getDate())}/${pad2(d.getMonth() + 1)}/${d.getFullYear()}`;
+}
+
+function newClientId() {
+  return `c${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
+}
+
 /**
- * ChatWidget — live chat with 3s polling.
+ * ChatWidget — live chat over WebSocket (Laravel Reverb) with HTTP polling as fallback
+ * (3s active, 10s idle, 30s safety sweep while the socket is connected, paused while the tab is hidden).
  * Props:
  *   fullHeight: boolean — fill parent height
  *   onAuthAction: (action: 'login'|'register') => void — if provided, delegate auth UI to parent
@@ -308,11 +364,11 @@ export function ChatAuthForm({ view, onSuccess, onBack, onSwitchView }) {
 export default function ChatWidget({ fullHeight = false, onAuthAction, user: controlledUser, onUserChange, onProfileView }) {
   const [internalUser, setInternalUser] = useState(null);
   const [messages, setMessages] = useState([]);
-  const [lastId, setLastId] = useState(null);
+  const [hasMore, setHasMore] = useState(false);
+  const [loadingOlder, setLoadingOlder] = useState(false);
   const [input, setInput] = useState('');
   const [view, setView] = useState('chat');
   const [error, setError] = useState('');
-  const [sending, setSending] = useState(false);
   const [loginUsername, setLoginUsername] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [regUsername, setRegUsername] = useState('');
@@ -331,8 +387,17 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
   const user = isControlled ? controlledUser : internalUser;
 
   const messagesRef = useRef(null);
-  const intervalRef = useRef(null);
   const isAtBottomRef = useRef(true);
+  const lastIdRef = useRef(0);              // highest confirmed id received from the server feed
+  const initialLoadedRef = useRef(false);
+  const lastActivityRef = useRef(Date.now());
+  const pollTimerRef = useRef(null);
+  const pollingRef = useRef(false);
+  const scrollIntentRef = useRef(null);     // { type: 'bottom' } | { type: 'preserve', height, top }
+  const socketConnectedRef = useRef(false);
+  const kickPollRef = useRef(() => {});     // poll immediately (set by the polling effect)
+  const userRef = useRef(user);
+  userRef.current = user;
 
   // Load user from localStorage on mount (uncontrolled mode only)
   useEffect(() => {
@@ -342,81 +407,214 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
     }
   }, [isControlled]);
 
-  const checkAtBottom = useCallback(() => {
+  // Apply the requested scroll adjustment right after the DOM reflects new messages
+  useLayoutEffect(() => {
+    const el = messagesRef.current;
+    const intent = scrollIntentRef.current;
+    if (!el || !intent) return;
+    if (intent.type === 'bottom') el.scrollTop = el.scrollHeight;
+    else el.scrollTop = el.scrollHeight - intent.height + intent.top;
+    scrollIntentRef.current = null;
+  }, [messages]);
+
+  const scrollToBottom = useCallback(() => {
+    const el = messagesRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+    isAtBottomRef.current = true;
+    setHasNewMessages(false);
+  }, []);
+
+  // advance=false for WebSocket pushes: an earlier message may have been missed while
+  // reconnecting, so only the polled feed moves lastIdRef forward
+  const applyIncoming = useCallback((incoming, advance = true) => {
+    if (!incoming.length) return;
+    if (advance) lastIdRef.current = Math.max(lastIdRef.current, maxId(incoming));
+    if (isAtBottomRef.current) scrollIntentRef.current = { type: 'bottom' };
+    else setHasNewMessages(true);
+    setMessages(prev => mergeMessages(prev, incoming));
+  }, []);
+
+  const loadInitial = useCallback(async () => {
+    const { messages: latest, hasMore: more } = await fetchMessages();
+    lastIdRef.current = Math.max(lastIdRef.current, maxId(latest));
+    initialLoadedRef.current = true;
+    scrollIntentRef.current = { type: 'bottom' };
+    setHasMore(more);
+    setMessages(prev => mergeMessages(prev, latest));
+  }, []);
+
+  const pollNew = useCallback(async () => {
+    if (!initialLoadedRef.current) {
+      await loadInitial();
+      return;
+    }
+    const { messages: fresh } = await fetchMessages({ after: lastIdRef.current || undefined });
+    if (fresh.length) {
+      lastActivityRef.current = Date.now();
+      applyIncoming(fresh);
+    }
+  }, [loadInitial, applyIncoming]);
+
+  // Adaptive polling loop: 3s while active, 10s after a quiet minute, 30s while the WebSocket
+  // is connected, paused while the tab is hidden
+  useEffect(() => {
+    let cancelled = false;
+
+    const schedule = () => {
+      clearTimeout(pollTimerRef.current);
+      if (cancelled || document.hidden) return;
+      const idle = Date.now() - lastActivityRef.current > IDLE_AFTER_MS;
+      const delay = socketConnectedRef.current ? POLL_SOCKET_MS : idle ? POLL_IDLE_MS : POLL_ACTIVE_MS;
+      pollTimerRef.current = setTimeout(tick, delay);
+    };
+
+    const tick = async () => {
+      if (pollingRef.current) return;
+      pollingRef.current = true;
+      try {
+        await pollNew();
+      } catch {}
+      pollingRef.current = false;
+      schedule();
+    };
+
+    const onVisibility = () => {
+      clearTimeout(pollTimerRef.current);
+      if (!document.hidden) {
+        lastActivityRef.current = Date.now();
+        tick();
+      }
+    };
+
+    kickPollRef.current = () => {
+      clearTimeout(pollTimerRef.current);
+      tick();
+    };
+
+    tick();
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      cancelled = true;
+      kickPollRef.current = () => {};
+      clearTimeout(pollTimerRef.current);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, [pollNew]);
+
+  // Real-time push. Polling keeps running (slowed to a sweep) so nothing is lost if the socket drops.
+  useEffect(() => {
+    return subscribeChat({
+      onMessage: (msg) => {
+        if (!msg || !initialLoadedRef.current) return;
+        lastActivityRef.current = Date.now();
+        applyIncoming([msg], false);
+      },
+      onRemoved: ({ ids, all }) => {
+        if (all) {
+          setMessages(prev => prev.filter(m => m.id == null));
+          setHasMore(false);
+          return;
+        }
+        const removed = new Set(ids);
+        setMessages(prev => prev.filter(m => !removed.has(m.id)));
+      },
+      onUserUpdated: ({ chat_user_id, is_banned }) => {
+        const current = userRef.current;
+        if (!current || current.id !== chat_user_id || !!current.is_banned === is_banned) return;
+        const updated = { ...current, is_banned };
+        setChatUser(updated);
+        if (isControlled) onUserChange?.(updated);
+        else setInternalUser(updated);
+      },
+      onStatus: (state) => {
+        const connected = state === 'connected';
+        const wasConnected = socketConnectedRef.current;
+        socketConnectedRef.current = connected;
+        // On (re)connect, fetch once to fill any gap; on drop, return to fast polling
+        if (connected !== wasConnected) kickPollRef.current();
+      },
+    });
+  }, [applyIncoming, isControlled, onUserChange]);
+
+  const loadOlder = useCallback(async () => {
+    const el = messagesRef.current;
+    const oldest = messages.find(m => m.id != null);
+    if (!el || !oldest || loadingOlder || !hasMore) return;
+
+    setLoadingOlder(true);
+    try {
+      const { messages: older, hasMore: more } = await fetchMessages({ before: oldest.id });
+      scrollIntentRef.current = { type: 'preserve', height: el.scrollHeight, top: el.scrollTop };
+      setHasMore(more);
+      setMessages(prev => mergeMessages(prev, older));
+    } catch {
+    } finally {
+      setLoadingOlder(false);
+    }
+  }, [messages, loadingOlder, hasMore]);
+
+  const handleMessagesScroll = useCallback(() => {
     const el = messagesRef.current;
     if (!el) return;
     isAtBottomRef.current = el.scrollHeight - el.scrollTop - el.clientHeight < 40;
     if (isAtBottomRef.current) setHasNewMessages(false);
-  }, []);
+    if (el.scrollTop < 60) loadOlder();
+  }, [loadOlder]);
 
-  const scrollToBottom = useCallback(() => {
-    const el = messagesRef.current;
-    if (el) {
-      el.scrollTop = el.scrollHeight;
-      setHasNewMessages(false);
-    }
-  }, []);
+  const patchUnconfirmed = (clientId, patch) => {
+    setMessages(prev => prev.map(m => (m.id == null && m.client_id === clientId ? { ...m, ...patch } : m)));
+  };
 
-  const loadMessages = useCallback(async (afterId) => {
-    try {
-      const newMsgs = await fetchMessages(afterId);
-      if (newMsgs.length > 0) {
-        if (afterId) {
-          setMessages(prev => [...prev, ...newMsgs]);
-          if (!isAtBottomRef.current) setHasNewMessages(true);
-          // Auto-scroll only for new messages
-          if (isAtBottomRef.current) setTimeout(scrollToBottom, 0);
-        } else {
-          setMessages(newMsgs);
-          setTimeout(scrollToBottom, 0);
-        }
-        setLastId(newMsgs[newMsgs.length - 1].id);
-      }
-    } catch {}
-  }, [scrollToBottom]);
-
-  useEffect(() => { loadMessages(null); }, [loadMessages]);
-
-  useEffect(() => {
-    // Scroll to bottom only when user sends a message (messages.length changes and we're at bottom)
-    if (isAtBottomRef.current && messages.length > 0) {
-      // Only scroll if the last message was just added (by checking sending state)
-      if (!sending) scrollToBottom();
-    }
-  }, [messages, scrollToBottom, sending]);
-
-  useEffect(() => {
-    intervalRef.current = setInterval(() => loadMessages(lastId), 3000);
-    return () => clearInterval(intervalRef.current);
-  }, [lastId, loadMessages]);
-
-  const handleSend = async (e) => {
-    e.preventDefault();
-    const text = input.trim();
-    if (!text || sending) return;
-
-    setSending(true);
+  const submitMessage = async (text, clientId) => {
     setError('');
     try {
-      const msg = await sendMessage(text);
-      setMessages(prev => [...prev, msg]);
-      setLastId(msg.id);
-      setInput('');
-      isAtBottomRef.current = true;
-      scrollToBottom();
+      const msg = await sendMessage(text, clientId);
+      lastActivityRef.current = Date.now();
+      // lastIdRef is not advanced here: messages from others with lower ids may not be polled yet
+      setMessages(prev => mergeMessages(prev, [{ ...msg, client_id: clientId }]));
     } catch (err) {
-      if (err?.status === 429) setError('Terlalu banyak mesej. Sila tunggu sebentar.');
-      else if (err?.status === 403) {
+      if (err?.status === 403) {
+        setMessages(prev => prev.filter(m => m.id != null || m.client_id !== clientId));
         // Update user as banned in localStorage and state
         const updated = { ...user, is_banned: true };
         setChatUser(updated);
         if (isControlled) onUserChange?.(updated);
         else setInternalUser(updated);
+        return;
       }
+      patchUnconfirmed(clientId, { pending: false, failed: true });
+      if (err?.status === 429) setError('Terlalu banyak mesej. Sila tunggu sebentar.');
       else setError('Gagal menghantar mesej.');
-    } finally {
-      setSending(false);
     }
+  };
+
+  const handleSend = (e) => {
+    e.preventDefault();
+    const text = input.trim();
+    if (!text || !user || user.is_banned) return;
+
+    const clientId = newClientId();
+    scrollIntentRef.current = { type: 'bottom' };
+    isAtBottomRef.current = true;
+    setHasNewMessages(false);
+    setMessages(prev => [...prev, {
+      id: null,
+      client_id: clientId,
+      chat_user_id: user.id,
+      username: user.username,
+      color: user.color,
+      avatar_filename: user.avatar_filename,
+      message: text,
+      created_at_iso: new Date().toISOString(),
+      pending: true,
+    }]);
+    setInput('');
+    submitMessage(text, clientId);
+  };
+
+  const handleRetry = (msg) => {
+    patchUnconfirmed(msg.client_id, { pending: true, failed: false });
+    submitMessage(msg.message, msg.client_id);
   };
 
   const handleLogout = () => {
@@ -689,43 +887,69 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
     <div style={{ display: 'flex', flexDirection: 'column', height: fullHeight ? '100%' : undefined, flex: fullHeight ? 1 : undefined, position: 'relative' }}>
       {renderHeader()}
 
-      <div ref={messagesRef} onScroll={checkAtBottom} className="chat-messages" style={{
+      <div ref={messagesRef} onScroll={handleMessagesScroll} className="chat-messages" style={{
         flexGrow: 1, minHeight: 0, padding: '12px 16px',
         display: 'flex', flexDirection: 'column', gap: '12px', overflowY: 'auto',
       }}>
+        {loadingOlder && (
+          <div style={{ color: 'var(--color-muted)', fontSize: '0.75rem', textAlign: 'center' }}>
+            Memuatkan mesej lama...
+          </div>
+        )}
         {messages.length === 0 && (
           <div style={{ color: 'var(--color-muted)', fontSize: '0.85rem', textAlign: 'center', marginTop: '2rem' }}>
             Belum ada mesej. Jadilah yang pertama!
           </div>
         )}
-        {messages.map((msg) => (
-          <div key={msg.id} style={{ display: 'flex', gap: '8px' }}>
-            <div style={{
-              width: '20px', height: '20px', borderRadius: '50%', overflow: 'hidden', flexShrink: 0, marginTop: '2px',
-              background: msg.avatar_filename ? 'none' : msg.color,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              {msg.avatar_filename ? (
-                <img src={getAvatarUrl(msg.avatar_filename)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              ) : (
-                <span style={{ fontSize: '0.55rem', fontWeight: 700, color: '#fff' }}>{msg.username.charAt(0).toUpperCase()}</span>
+        {messages.map((msg, i) => {
+          const key = dayKey(msg);
+          const showDay = key && key !== dayKey(messages[i - 1] || {});
+          return (
+            <div key={msg.id ?? msg.client_id} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {showDay && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-muted)', fontSize: '0.7rem' }}>
+                  <div style={{ flex: 1, height: '1px', background: 'rgba(63, 63, 143, 0.2)' }} />
+                  <span>{dayLabel(msg)}</span>
+                  <div style={{ flex: 1, height: '1px', background: 'rgba(63, 63, 143, 0.2)' }} />
+                </div>
               )}
-            </div>
-            <div style={{ minWidth: 0, flex: 1 }}>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                <button
-                  onClick={() => msg.chat_user_id && handleUsernameClick(msg.chat_user_id)}
-                  style={{
-                    background: 'none', border: 'none', padding: 0, cursor: 'pointer',
-                    color: msg.color, fontWeight: 600, fontSize: '0.85rem',
-                  }}
-                >{msg.username}</button>
-                <span style={{ color: 'var(--color-muted)', fontSize: '0.75rem' }}>{msg.created_at}</span>
+              <div style={{ display: 'flex', gap: '8px', opacity: msg.pending ? 0.6 : 1 }}>
+                <div style={{
+                  width: '20px', height: '20px', borderRadius: '50%', overflow: 'hidden', flexShrink: 0, marginTop: '2px',
+                  background: msg.avatar_filename ? 'none' : msg.color,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  {msg.avatar_filename ? (
+                    <img src={getAvatarUrl(msg.avatar_filename)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    <span style={{ fontSize: '0.55rem', fontWeight: 700, color: '#fff' }}>{msg.username.charAt(0).toUpperCase()}</span>
+                  )}
+                </div>
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+                    <button
+                      onClick={() => msg.chat_user_id && handleUsernameClick(msg.chat_user_id)}
+                      style={{
+                        background: 'none', border: 'none', padding: 0, cursor: 'pointer',
+                        color: msg.color, fontWeight: 600, fontSize: '0.85rem',
+                      }}
+                    >{msg.username}</button>
+                    <span style={{ color: 'var(--color-muted)', fontSize: '0.75rem' }}>
+                      {msg.pending ? 'Menghantar...' : messageTime(msg)}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: '0.9rem', marginTop: '2px', wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap' }}>{msg.message}</div>
+                  {msg.failed && (
+                    <button onClick={() => handleRetry(msg)} style={{
+                      background: 'none', border: 'none', padding: 0, marginTop: '2px', cursor: 'pointer',
+                      color: '#EF4444', fontSize: '0.75rem', textDecoration: 'underline',
+                    }}>Gagal dihantar. Cuba lagi</button>
+                  )}
+                </div>
               </div>
-              <div style={{ fontSize: '0.9rem', marginTop: '2px', wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap' }}>{msg.message}</div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {hasNewMessages && (
@@ -758,7 +982,7 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
           <input type="text" placeholder={user ? 'Taip mesej...' : 'Sila log masuk untuk sembang'}
             readOnly={!user} value={input} onChange={e => setInput(e.target.value)} maxLength={500}
             onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey && user && !sending) {
+              if (e.key === 'Enter' && !e.shiftKey && user) {
                 e.preventDefault();
                 handleSend(e);
               }
@@ -769,7 +993,7 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
               fontSize: '0.9rem', outline: 'none', opacity: user ? 1 : 0.5,
             }}
           />
-          <button type="submit" className="btn-accent" disabled={!user || sending} style={{
+          <button type="submit" className="btn-accent" disabled={!user} style={{
             border: 'none', borderRadius: '8px', padding: '8px 16px',
             cursor: user ? 'pointer' : 'not-allowed', opacity: user ? 1 : 0.5,
           }} title="Send message">

@@ -51,17 +51,26 @@ async function chatLogin(username, password) {
   return data.user;
 }
 
-async function fetchMessages(afterId) {
+async function fetchMessages({ after, before } = {}) {
   const params = new URLSearchParams();
-  if (afterId) params.set('after', afterId);
+  if (after) params.set('after', after);
+  if (before) params.set('before', before);
   params.set('limit', '50');
 
-  const res = await fetch(`${API_URL}/chat/messages?${params}`);
+  const res = await fetch(`${API_URL}/chat/messages?${params}`, {
+    headers: { 'Accept': 'application/json' },
+    cache: 'no-store',
+  });
+
+  if (!res.ok) {
+    throw { status: res.status };
+  }
+
   const data = await res.json();
-  return data.messages || [];
+  return { messages: data.messages || [], hasMore: !!data.has_more };
 }
 
-async function sendMessage(text) {
+async function sendMessage(text, clientId) {
   const user = getChatUser();
   if (!user?.token) throw new Error('Not authenticated');
 
@@ -72,7 +81,7 @@ async function sendMessage(text) {
       'Accept': 'application/json',
       'X-Chat-Token': user.token,
     },
-    body: JSON.stringify({ message: text }),
+    body: JSON.stringify({ message: text, client_id: clientId }),
   });
 
   const data = await res.json();

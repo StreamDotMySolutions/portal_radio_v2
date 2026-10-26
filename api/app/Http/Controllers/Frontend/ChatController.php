@@ -71,11 +71,20 @@ class ChatController extends Controller
     public function index(Request $request)
     {
         $afterId = $request->integer('after') ?: null;
+        $beforeId = $request->integer('before') ?: null;
         $limit = $request->integer('limit', 50);
 
-        $messages = $this->chatService->getMessages($afterId, $limit);
+        $messages = $this->chatService->getMessages($afterId, $beforeId, $limit);
 
-        return response()->json(['messages' => $messages]);
+        $response = ['messages' => $messages];
+
+        // has_more tells the client whether older history can be loaded
+        if (!$afterId) {
+            $response['has_more'] = count($messages) > 0
+                && $this->chatService->hasMessagesBefore($messages[0]['id']);
+        }
+
+        return response()->json($response);
     }
 
     public function forgotPassword(Request $request)
@@ -133,6 +142,7 @@ class ChatController extends Controller
     {
         $request->validate([
             'message' => ['required', 'string', 'min:1', 'max:500'],
+            'client_id' => ['nullable', 'string', 'max:64'],
         ]);
 
         $token = $request->header('X-Chat-Token');
@@ -141,7 +151,7 @@ class ChatController extends Controller
             return response()->json(['message' => 'Token diperlukan.'], 401);
         }
 
-        $result = $this->chatService->sendMessage($token, $request->message);
+        $result = $this->chatService->sendMessage($token, $request->message, $request->input('client_id'));
 
         if (!$result) {
             return response()->json(['message' => 'Token tidak sah.'], 401);

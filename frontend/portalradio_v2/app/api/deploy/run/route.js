@@ -38,6 +38,18 @@ function getCommands() {
             args: ['artisan', 'migrate', '--force'],
             cwd: path.join(root, 'api'),
         },
+        'composer-install': {
+            cmd: 'composer',
+            args: ['install', '--no-dev', '--optimize-autoloader', '--no-interaction'],
+            cwd: path.join(root, 'api'),
+        },
+        // Chat WebSocket server (Laravel Reverb); starts the PM2 process on first run.
+        // Single shell string: spawn() runs with shell: true and joins args unquoted
+        'restart-reverb': {
+            cmd: '(pm2 describe portalradio-reverb > /dev/null 2>&1 && pm2 restart portalradio-reverb || pm2 start artisan --name portalradio-reverb --interpreter php -- reverb:start --host=127.0.0.1 --port=8080) && pm2 save',
+            args: [],
+            cwd: path.join(root, 'api'),
+        },
         'start-claude': {
             cmd: 'bash',
             args: ['-c', `node -e "var fs=require('fs'),p='/root/.claude.json',c={};try{c=JSON.parse(fs.readFileSync(p,'utf8'))}catch(e){};c.projects=c.projects||{};c.projects['${root}']={...(c.projects['${root}']||{}),hasTrustDialogAccepted:true};fs.writeFileSync(p,JSON.stringify(c,null,2));console.log('Trust accepted for ${root}')" 2>/dev/null || echo "Trust step skipped"; pkill -f "node.*claude" 2>/dev/null; sleep 1; rm -f /tmp/portal-radio.log; nohup script -q -c claude /tmp/portal-radio.log > /dev/null 2>&1 & echo $! > /tmp/portal-radio.pid; echo "Claude Code starting (PID: $(cat /tmp/portal-radio.pid))..."; echo "Waiting for output (up to 12s)..."; sleep 12; echo ""; echo "--- Output so far ---"; cat /tmp/portal-radio.log`],

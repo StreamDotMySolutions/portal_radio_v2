@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Events\ChatMessagesRemoved;
 use App\Models\ChatMessage;
+use App\Services\ChatService;
 use Illuminate\Http\Request;
 
 class ChatMessageController extends Controller
@@ -37,7 +39,9 @@ class ChatMessageController extends Controller
 
     public function destroy(ChatMessage $chatMessage)
     {
+        $id = $chatMessage->id;
         $chatMessage->delete();
+        ChatService::broadcast(new ChatMessagesRemoved([$id]));
         return response()->json(['message' => 'Message deleted']);
     }
 
@@ -45,6 +49,7 @@ class ChatMessageController extends Controller
     {
         $count = ChatMessage::count();
         ChatMessage::truncate();
+        ChatService::broadcast(new ChatMessagesRemoved([], true));
         return response()->json(['message' => "{$count} messages cleared"]);
     }
 }

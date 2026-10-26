@@ -28,8 +28,14 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(200)->by($request->user()?->id ?: $request->ip());
         });
 
+        // Per chat account, so listeners sharing one IP (office/telco NAT) don't block each other
         RateLimiter::for('chat-send', function (Request $request) {
-            return Limit::perMinute(10)->by($request->ip());
+            return Limit::perMinute(10)->by($request->header('X-Chat-Token') ?: $request->ip());
+        });
+
+        // Message polling gets its own generous per-IP budget instead of the shared 'api' limit
+        RateLimiter::for('chat-read', function (Request $request) {
+            return Limit::perMinute(600)->by($request->ip());
         });
 
         $this->routes(function () {

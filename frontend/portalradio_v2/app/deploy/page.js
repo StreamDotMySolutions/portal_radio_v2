@@ -8,6 +8,8 @@ const ACTIONS = [
     { id: 'build-backend', label: 'Build Backend', variant: 'warning', icon: '⚡' },
     { id: 'restart-pm2', label: 'Restart PM2', variant: 'danger', icon: '🔄' },
     { id: 'migrate-db', label: 'Migrate DB', variant: 'info', icon: '🗃' },
+    { id: 'composer-install', label: 'Composer Install', variant: 'info', icon: '📦' },
+    { id: 'restart-reverb', label: 'Restart Reverb', variant: 'danger', icon: '📡' },
 ];
 
 const CLAUDE_ACTIONS = [

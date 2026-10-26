@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Events\ChatMessagesRemoved;
+use App\Events\ChatUserUpdated;
 use App\Models\ChatUser;
+use App\Services\ChatService;
 use App\Services\ChatUserService;
 use Illuminate\Http\Request;
 
@@ -44,7 +47,9 @@ class ChatUserController extends Controller
 
     public function delete(ChatUser $chatUser)
     {
+        $messageIds = $chatUser->messages()->pluck('id')->all();
         ChatUserService::delete($chatUser);
+        ChatService::broadcast(new ChatMessagesRemoved($messageIds));
         return response()->json(['message' => 'Chat user successfully deleted']);
     }
 
@@ -52,6 +57,7 @@ class ChatUserController extends Controller
     {
         $chatUser->is_banned = !$chatUser->is_banned;
         $chatUser->save();
+        ChatService::broadcast(new ChatUserUpdated($chatUser->id, $chatUser->is_banned));
 
         $status = $chatUser->is_banned ? 'banned' : 'unbanned';
         return response()->json(['message' => "Chat user successfully {$status}"]);
