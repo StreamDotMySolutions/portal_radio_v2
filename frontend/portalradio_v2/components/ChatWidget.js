@@ -360,8 +360,9 @@ function newClientId() {
  *   user: object|null — controlled user state (from parent)
  *   onUserChange: (user|null) => void — called on logout
  *   onProfileView: (userId) => void — called when username clicked to view profile
+ *   flushInput: boolean — no desktop bottom clearance under the input (container already clears the accessibility button)
  */
-export default function ChatWidget({ fullHeight = false, onAuthAction, user: controlledUser, onUserChange, onProfileView }) {
+export default function ChatWidget({ fullHeight = false, flushInput = false, onAuthAction, user: controlledUser, onUserChange, onProfileView }) {
   const [internalUser, setInternalUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [hasMore, setHasMore] = useState(false);
@@ -997,7 +998,7 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
           </div>
         </div>
       ) : (
-        <form onSubmit={handleSend} className="chat-input-bar" style={{
+        <form onSubmit={handleSend} className={flushInput ? 'chat-input-bar chat-input-bar--flush' : 'chat-input-bar'} style={{
           padding: '12px 16px', borderTop: '1px solid rgba(63, 63, 143, 0.3)', display: 'flex', gap: '8px',
           flexShrink: 0, backgroundColor: 'var(--color-surface)',
         }}>

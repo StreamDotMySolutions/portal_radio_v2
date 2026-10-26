@@ -51,11 +51,11 @@ async function chatLogin(username, password) {
   return data.user;
 }
 
-async function fetchMessages({ after, before } = {}) {
+async function fetchMessages({ after, before, limit = 50 } = {}) {
   const params = new URLSearchParams();
   if (after) params.set('after', after);
   if (before) params.set('before', before);
-  params.set('limit', '50');
+  params.set('limit', String(limit));
 
   const res = await fetch(`${API_URL}/chat/messages?${params}`, {
     headers: { 'Accept': 'application/json' },

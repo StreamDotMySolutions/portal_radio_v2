@@ -9,6 +9,7 @@ import NavbarMobile from '@/components/Navbar.mobile';
 import Footer from '@/components/Footer';
 import BootstrapClient from '@/components/BootstrapClient';
 import AccessibilityToggle from '@/components/AccessibilityToggle';
+import ChatLauncher from '@/components/ChatLauncher';
 import PageTracker from '@/components/PageTracker';
 import { AccessibilityProvider } from '@/context/AccessibilityContext'
 import { StationContactProvider } from '@/context/StationContactContext';
@@ -69,6 +70,7 @@ export default function RootLayout({ children }) {
             <BootstrapClient />
             {children}
             <Footer />
+            <ChatLauncher />
             <AccessibilityToggle />
           </StationContactProvider>
         </AccessibilityProvider>
