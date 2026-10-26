@@ -15,6 +15,14 @@ import { StationContactProvider } from '@/context/StationContactContext';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://radio.rtm.gov.my';
 
+// resizes-content: the on-screen keyboard shrinks the page instead of covering it,
+// so bottom-pinned inputs (mobile chat) stay visible while typing
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  interactiveWidget: 'resizes-content',
+};
+
 export const metadata = {
   metadataBase: new URL(SITE_URL),
   title: 'PORTAL RADIO RTM',

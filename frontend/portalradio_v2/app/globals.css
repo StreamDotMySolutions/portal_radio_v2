@@ -358,14 +358,25 @@ footer .social-icon:hover {
   scrollbar-color: var(--color-brand) transparent;
 }
 
+/* Chat input: clear of the floating accessibility button on desktop */
+.chat-input-bar {
+  margin-bottom: 70px;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
+  /* Mobile chat is a full-screen overlay: input pinned to the bottom edge, above the iPhone home bar */
+  .chat-input-bar {
+    margin-bottom: 0;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+  }
+
   .chat-panel {
     position: fixed;
     right: 0;
     top: 0;
     bottom: 0;
-    width: 100%;
+    width: 100% !important; /* ChatPage sets an inline 380px desktop width */
     z-index: 1050;
     margin-left: 0 !important;
     border-radius: 0 !important;

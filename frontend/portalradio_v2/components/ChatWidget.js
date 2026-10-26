@@ -417,6 +417,17 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
     scrollIntentRef.current = null;
   }, [messages]);
 
+  // Keep the newest message in view when the list resizes (mobile keyboard opening, overlay resize)
+  useEffect(() => {
+    const el = messagesRef.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(() => {
+      if (isAtBottomRef.current) el.scrollTop = el.scrollHeight;
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [view]);
+
   const scrollToBottom = useCallback(() => {
     const el = messagesRef.current;
     if (el) el.scrollTop = el.scrollHeight;
@@ -461,15 +472,23 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
     let cancelled = false;
 
     const schedule = () => {
+      if (cancelled) return; // a stale run must not clear the timer owned by the current run
       clearTimeout(pollTimerRef.current);
-      if (cancelled || document.hidden) return;
+      if (document.hidden) return;
       const idle = Date.now() - lastActivityRef.current > IDLE_AFTER_MS;
       const delay = socketConnectedRef.current ? POLL_SOCKET_MS : idle ? POLL_IDLE_MS : POLL_ACTIVE_MS;
       pollTimerRef.current = setTimeout(tick, delay);
     };
 
     const tick = async () => {
-      if (pollingRef.current) return;
+      // A fetch from a previous run of this effect is still in flight: retry shortly instead of
+      // returning, otherwise that run's (cancelled) schedule() is the only one left and polling stops
+      if (pollingRef.current) {
+        if (cancelled) return;
+        clearTimeout(pollTimerRef.current);
+        pollTimerRef.current = setTimeout(tick, 500);
+        return;
+      }
       pollingRef.current = true;
       try {
         await pollNew();
@@ -884,13 +903,16 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
 
   // Chat view (always shown when onAuthAction is provided, or when view === 'chat')
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: fullHeight ? '100%' : undefined, flex: fullHeight ? 1 : undefined, position: 'relative' }}>
+    // flex-basis 0 (not height: 100%) so header + messages + input fit inside a parent that also has its own header
+    <div style={{ display: 'flex', flexDirection: 'column', height: fullHeight ? '100%' : undefined, flex: fullHeight ? '1 1 0' : undefined, minHeight: 0, position: 'relative' }}>
       {renderHeader()}
 
       <div ref={messagesRef} onScroll={handleMessagesScroll} className="chat-messages" style={{
         flexGrow: 1, minHeight: 0, padding: '12px 16px',
         display: 'flex', flexDirection: 'column', gap: '12px', overflowY: 'auto',
       }}>
+        {/* Pushes messages to the bottom so the newest sits just above the input, like a messaging app */}
+        <div aria-hidden="true" style={{ marginTop: 'auto' }} />
         {loadingOlder && (
           <div style={{ color: 'var(--color-muted)', fontSize: '0.75rem', textAlign: 'center' }}>
             Memuatkan mesej lama...
@@ -975,9 +997,9 @@ export default function ChatWidget({ fullHeight = false, onAuthAction, user: con
           </div>
         </div>
       ) : (
-        <form onSubmit={handleSend} style={{
+        <form onSubmit={handleSend} className="chat-input-bar" style={{
           padding: '12px 16px', borderTop: '1px solid rgba(63, 63, 143, 0.3)', display: 'flex', gap: '8px',
-          flexShrink: 0, backgroundColor: 'var(--color-surface)', marginBottom: '70px',
+          flexShrink: 0, backgroundColor: 'var(--color-surface)',
         }}>
           <input type="text" placeholder={user ? 'Taip mesej...' : 'Sila log masuk untuk sembang'}
             readOnly={!user} value={input} onChange={e => setInput(e.target.value)} maxLength={500}
