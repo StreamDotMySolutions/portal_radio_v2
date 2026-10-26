@@ -48,7 +48,7 @@ echo ""
 
 # API migrations
 echo "--- API: php artisan migrate ---"
-php artisan migrate || { echo "ERROR: Database migration failed"; exit 1; }
+php artisan migrate --force || { echo "ERROR: Database migration failed"; exit 1; }
 echo "✓ Database migration completed"
 echo ""
 

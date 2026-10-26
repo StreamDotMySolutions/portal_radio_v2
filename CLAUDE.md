@@ -287,6 +287,12 @@ if ($sortBy === 'name') {
 
 ---
 
+## Production Deployment
+
+Follow **[DEPLOY.md](DEPLOY.md)** for any production deploy, rollback or server change. It covers the system map, the safety rules, `api/deploy.sh`, first-time Reverb setup, verification checks and troubleshooting.
+
+---
+
 ## Common Commands
 
 ### API (Laravel)
