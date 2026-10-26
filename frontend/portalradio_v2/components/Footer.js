@@ -130,9 +130,12 @@ export default function Footer() {
         <hr className="my-3" style={{ borderColor: 'rgba(63, 63, 143, 0.3)' }} />
 
         <div className="text-center py-2">
-          <p className="text-muted small mb-0">
+          <p className="text-muted small mb-1">
             {footer.copyright}
           </p>
+          <a href="/dasar-privasi" className="small" style={{ color: isActive('/dasar-privasi') ? '#17a2b8' : 'var(--color-muted)' }}>
+            Dasar Privasi
+          </a>
         </div>
       </div>
     </footer>

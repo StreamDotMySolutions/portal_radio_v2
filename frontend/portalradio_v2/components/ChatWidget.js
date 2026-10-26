@@ -5,6 +5,7 @@ import { getChatUser, setChatUser, chatRegister, chatLogin, chatForgotPassword, 
 import { subscribeChat } from '../utils/chatSocket';
 import ChatProfileModal from './ChatProfileModal';
 import ChatPublicProfile from './ChatPublicProfile';
+import GoogleSignIn from './GoogleSignIn';
 
 /**
  * ChatAuthForm — renders login or register form. Used by parents to show in the video area.
@@ -144,6 +145,7 @@ export function ChatAuthForm({ view, onSuccess, onBack, onSwitchView }) {
           <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem', textAlign: 'center' }}>
             Log Masuk ke Sembang
           </h3>
+          <GoogleSignIn onSuccess={onSuccess}>
           <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <input
               type="text"
@@ -210,6 +212,7 @@ export function ChatAuthForm({ view, onSuccess, onBack, onSwitchView }) {
               )}
             </div>
           </form>
+          </GoogleSignIn>
         </div>
       </div>
     );
@@ -225,6 +228,7 @@ export function ChatAuthForm({ view, onSuccess, onBack, onSwitchView }) {
         <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem', textAlign: 'center' }}>
           Daftar Akaun Sembang
         </h3>
+        <GoogleSignIn onSuccess={onSuccess}>
         <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
           <input
             type="text"
@@ -292,6 +296,7 @@ export function ChatAuthForm({ view, onSuccess, onBack, onSwitchView }) {
             )}
           </div>
         </form>
+        </GoogleSignIn>
       </div>
     </div>
   );
@@ -694,6 +699,12 @@ export default function ChatWidget({ fullHeight = false, flushInput = false, onA
     }
   };
 
+  const handleGoogleSuccess = (u) => {
+    setInternalUser(u);
+    setView('chat');
+    setError('');
+  };
+
   const handleAuthClick = (action) => {
     if (onAuthAction) {
       onAuthAction(action);
@@ -775,6 +786,7 @@ export default function ChatWidget({ fullHeight = false, flushInput = false, onA
         {renderHeader()}
         <div style={{ padding: '24px 16px', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '16px' }}>Log Masuk</h3>
+          <GoogleSignIn compact onSuccess={handleGoogleSuccess}>
           <form onSubmit={handleLogin} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <input type="text" placeholder="Username" value={loginUsername}
               onChange={e => setLoginUsername(e.target.value)} style={inlineInputStyle} autoFocus required />
@@ -811,6 +823,7 @@ export default function ChatWidget({ fullHeight = false, flushInput = false, onA
               }}>Kembali</button>
             </div>
           </form>
+          </GoogleSignIn>
         </div>
       </div>
     );
@@ -865,6 +878,7 @@ export default function ChatWidget({ fullHeight = false, flushInput = false, onA
         {renderHeader()}
         <div style={{ padding: '24px 16px', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '16px' }}>Daftar Akaun</h3>
+          <GoogleSignIn compact onSuccess={handleGoogleSuccess}>
           <form onSubmit={handleRegister} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             <input type="text" placeholder="Username (huruf, nombor, _ sahaja)" value={regUsername}
               onChange={e => setRegUsername(e.target.value)} style={inlineInputStyle} autoFocus required minLength={2} maxLength={30} />
@@ -897,6 +911,7 @@ export default function ChatWidget({ fullHeight = false, flushInput = false, onA
               }}>Kembali</button>
             </div>
           </form>
+          </GoogleSignIn>
         </div>
       </div>
     );

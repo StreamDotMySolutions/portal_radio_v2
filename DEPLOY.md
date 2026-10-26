@@ -171,6 +171,17 @@ All of §5 is ⚠ ASK FIRST, because it edits `.env` files and nginx.
 
 If Reverb is down while `BROADCAST_DRIVER=reverb`, chat still works through polling. Each send logs `Chat broadcast failed` in `api/storage/logs/laravel.log`.
 
+### 5b. First-time setup: Google sign-in for chat
+
+Until this is done, the "Continue with Google" button is simply hidden and `POST /api/frontend/chat/google` returns 503.
+
+1. **The human** creates the OAuth client: Google Cloud Console → APIs & Services → OAuth consent screen (External, app name "Portal Radio RTM", domain `radio.rtm.gov.my`), then Credentials → Create OAuth client ID → **Web application**, with Authorized JavaScript origin `https://radio.rtm.gov.my`. No redirect URI is needed.
+2. Put the same Client ID (not a secret, but don't commit it) in both env files:
+   - `api/.env`: `GOOGLE_CLIENT_ID=<id>.apps.googleusercontent.com`, then `php artisan config:clear` (or re-run `deploy.sh`).
+   - `frontend/portalradio_v2/.env`: `NEXT_PUBLIC_GOOGLE_CLIENT_ID=<same id>`, then **Build Frontend** + restart (it is baked in at build time).
+3. The `google_id` column comes from the normal `migrate --force` step.
+4. Verify: the button shows on /chat → LOG MASUK; signing in with a Google account either logs in (existing email is linked automatically) or asks for a username.
+
 ---
 
 ## 6. Verify the deployment (all safe)

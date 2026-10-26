@@ -6,7 +6,9 @@ use App\Events\ChatMessageSent;
 use App\Models\ChatUser;
 use App\Models\ChatMessage;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class ChatService
 {
@@ -44,6 +46,87 @@ class ChatService
         }
 
         return $user;
+    }
+
+    /**
+     * Verify a Google Identity Services ID token. Returns its claims, or null when the
+     * token is invalid, expired, issued for another client, or the email is unverified.
+     */
+    public function verifyGoogleToken(string $idToken): ?array
+    {
+        try {
+            $response = Http::timeout(5)->get('https://oauth2.googleapis.com/tokeninfo', ['id_token' => $idToken]);
+        } catch (\Throwable $e) {
+            Log::warning('Google token verification failed: ' . $e->getMessage());
+            return null;
+        }
+
+        if (!$response->ok()) {
+            return null;
+        }
+
+        $claims = $response->json();
+
+        $valid = ($claims['aud'] ?? null) === config('services.google.client_id')
+            && in_array($claims['iss'] ?? null, ['accounts.google.com', 'https://accounts.google.com'], true)
+            && filter_var($claims['email_verified'] ?? false, FILTER_VALIDATE_BOOLEAN)
+            && (int) ($claims['exp'] ?? 0) > time()
+            && !empty($claims['sub'])
+            && !empty($claims['email']);
+
+        return $valid ? $claims : null;
+    }
+
+    /**
+     * Find the chat user for verified Google claims: by Google id, then by email (linking the
+     * account, since Google has verified that address). Null when no account exists yet.
+     */
+    public function loginWithGoogle(array $claims): ?ChatUser
+    {
+        $user = ChatUser::where('google_id', $claims['sub'])->first();
+
+        if ($user) {
+            return $user;
+        }
+
+        $user = ChatUser::where('email', $claims['email'])->first();
+
+        if (!$user) {
+            return null;
+        }
+
+        $user->google_id = $claims['sub'];
+        $user->email_verified_at ??= now();
+        $user->save();
+
+        return $user;
+    }
+
+    public function registerWithGoogle(array $claims, string $username): ChatUser
+    {
+        $user = $this->register($username, $claims['email'], Str::random(40));
+        $user->google_id = $claims['sub'];
+        $user->email_verified_at = now();
+        $user->save();
+
+        return $user;
+    }
+
+    /** Username suggestion from an email address, using the same rules as registration */
+    public function suggestUsername(string $email): string
+    {
+        $base = substr(preg_replace('/[^a-zA-Z0-9_]/', '_', strstr($email, '@', true) ?: $email), 0, 26);
+        $base = trim($base, '_') ?: 'pengguna';
+        if (strlen($base) < 2) {
+            $base .= '_1';
+        }
+
+        $username = $base;
+        for ($i = 2; ChatUser::where('username', $username)->exists(); $i++) {
+            $username = $base . $i;
+        }
+
+        return $username;
     }
 
     public function getMessages(?int $afterId = null, ?int $beforeId = null, int $limit = 50): array

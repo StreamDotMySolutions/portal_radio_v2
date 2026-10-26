@@ -63,6 +63,8 @@ Route::post('/complaints', [ComplaintController::class, 'store']);
 Route::prefix('chat')->group(function () {
     Route::post('/register', [ChatController::class, 'register']);
     Route::post('/login', [ChatController::class, 'login']);
+    Route::post('/google', [ChatController::class, 'google'])->middleware('throttle:10,1');
+    Route::post('/google/complete', [ChatController::class, 'googleComplete'])->middleware('throttle:10,1');
     Route::post('/forgot-password', [ChatController::class, 'forgotPassword']);
     Route::post('/reset-password', [ChatController::class, 'resetPassword']);
     Route::get('/messages', [ChatController::class, 'index'])

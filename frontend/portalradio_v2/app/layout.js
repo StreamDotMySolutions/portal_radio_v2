@@ -16,6 +16,10 @@ import { StationContactProvider } from '@/context/StationContactContext';
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://radio.rtm.gov.my';
 
+// Google Search Console ownership tag (<meta name="google-site-verification">); needed for the
+// Google sign-in consent screen. Must stay in place after verification, Google re-checks it.
+const GOOGLE_SITE_VERIFICATION = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
+
 // resizes-content: the on-screen keyboard shrinks the page instead of covering it,
 // so bottom-pinned inputs (mobile chat) stay visible while typing
 export const viewport = {
@@ -29,6 +33,7 @@ export const metadata = {
   title: 'PORTAL RADIO RTM',
   description: 'JABATAN PENYIARAN MALAYSIA',
   lang: 'ms',
+  ...(GOOGLE_SITE_VERIFICATION && { verification: { google: GOOGLE_SITE_VERIFICATION } }),
   openGraph: {
     title: 'PORTAL RADIO RTM',
     description: 'JABATAN PENYIARAN MALAYSIA',

@@ -35,6 +35,10 @@ return [
         'secret' => env('RECAPTCHA_SECRET_KEY'),
     ],
 
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+    ],
+
     'github' => [
         'webhook_secret' => env('GITHUB_WEBHOOK_SECRET'),
         'webhook_branch' => env('GITHUB_WEBHOOK_BRANCH', 'main'),

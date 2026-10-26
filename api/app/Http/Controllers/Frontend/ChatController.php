@@ -3,13 +3,23 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Models\ChatUser;
 use App\Services\ChatService;
+use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 
 class ChatController extends Controller
 {
+    private const USERNAME_RULES = ['required', 'string', 'min:2', 'max:30', 'regex:/^[a-zA-Z0-9_]+$/', 'unique:chat_users,username'];
+
+    private const USERNAME_MESSAGES = [
+        'username.regex' => 'Username hanya boleh mengandungi huruf, nombor dan underscore.',
+        'username.unique' => 'Username sudah digunakan.',
+    ];
+
     public function __construct(private ChatService $chatService)
     {
     }
@@ -17,29 +27,17 @@ class ChatController extends Controller
     public function register(Request $request)
     {
         $validated = $request->validate([
-            'username' => ['required', 'string', 'min:2', 'max:30', 'regex:/^[a-zA-Z0-9_]+$/', 'unique:chat_users,username'],
+            'username' => self::USERNAME_RULES,
             'email' => ['required', 'email', 'unique:chat_users,email'],
             'password' => ['required', 'string', 'min:6'],
-        ], [
-            'username.regex' => 'Username hanya boleh mengandungi huruf, nombor dan underscore.',
-            'username.unique' => 'Username sudah digunakan.',
+        ], self::USERNAME_MESSAGES + [
             'email.unique' => 'Email sudah didaftarkan.',
             'password.min' => 'Kata laluan mestilah sekurang-kurangnya 6 aksara.',
         ]);
 
         $user = $this->chatService->register($validated['username'], $validated['email'], $validated['password']);
 
-        return response()->json([
-            'user' => [
-                'id' => $user->id,
-                'username' => $user->username,
-                'color' => $user->color,
-                'token' => $user->token,
-                'email_verified_at' => $user->email_verified_at,
-                'avatar_filename' => $user->avatar_filename,
-                'is_banned' => $user->is_banned,
-            ],
-        ], 201);
+        return response()->json(['user' => $this->userPayload($user)], 201);
     }
 
     public function login(Request $request)
@@ -55,17 +53,80 @@ class ChatController extends Controller
             return response()->json(['message' => 'Username atau kata laluan tidak sah.'], 401);
         }
 
+        return response()->json(['user' => $this->userPayload($user)]);
+    }
+
+    /**
+     * Google sign-in. Logs in an existing account (matched by Google id or email), or returns
+     * a short-lived signup token so a new user can pick a username first.
+     */
+    public function google(Request $request)
+    {
+        $request->validate(['credential' => ['required', 'string', 'max:4096']]);
+
+        if (!config('services.google.client_id')) {
+            return response()->json(['message' => 'Log masuk Google tidak tersedia.'], 503);
+        }
+
+        $claims = $this->chatService->verifyGoogleToken($request->credential);
+
+        if (!$claims) {
+            return response()->json(['message' => 'Log masuk Google gagal. Sila cuba lagi.'], 401);
+        }
+
+        $user = $this->chatService->loginWithGoogle($claims);
+
+        if ($user) {
+            return response()->json(['user' => $this->userPayload($user)]);
+        }
+
         return response()->json([
-            'user' => [
-                'id' => $user->id,
-                'username' => $user->username,
-                'color' => $user->color,
-                'token' => $user->token,
-                'email_verified_at' => $user->email_verified_at,
-                'avatar_filename' => $user->avatar_filename,
-                'is_banned' => $user->is_banned,
-            ],
+            'needs_username' => true,
+            'suggested_username' => $this->chatService->suggestUsername($claims['email']),
+            'signup_token' => Crypt::encryptString(json_encode([
+                'sub' => $claims['sub'],
+                'email' => $claims['email'],
+                'exp' => now()->addMinutes(15)->timestamp,
+            ])),
         ]);
+    }
+
+    /** Second step of Google sign-in for a new user: create the account with the chosen username */
+    public function googleComplete(Request $request)
+    {
+        $request->validate([
+            'signup_token' => ['required', 'string'],
+            'username' => self::USERNAME_RULES,
+        ], self::USERNAME_MESSAGES);
+
+        try {
+            $claims = json_decode(Crypt::decryptString($request->signup_token), true);
+        } catch (DecryptException $e) {
+            $claims = null;
+        }
+
+        if (!is_array($claims) || ($claims['exp'] ?? 0) < time()) {
+            return response()->json(['message' => 'Sesi Google telah tamat. Sila log masuk dengan Google semula.'], 422);
+        }
+
+        // The email or Google id may have been registered since the first step
+        $user = $this->chatService->loginWithGoogle($claims)
+            ?? $this->chatService->registerWithGoogle($claims, $request->username);
+
+        return response()->json(['user' => $this->userPayload($user)], 201);
+    }
+
+    private function userPayload(ChatUser $user): array
+    {
+        return [
+            'id' => $user->id,
+            'username' => $user->username,
+            'color' => $user->color,
+            'token' => $user->token,
+            'email_verified_at' => $user->email_verified_at,
+            'avatar_filename' => $user->avatar_filename,
+            'is_banned' => $user->is_banned,
+        ];
     }
 
     public function index(Request $request)

@@ -21,7 +21,7 @@ class ChatUser extends Model implements CanResetPasswordContract
         'updated_at' => 'datetime:d/m/Y H:i',
     ];
 
-    protected $hidden = ['token', 'email', 'password'];
+    protected $hidden = ['token', 'email', 'password', 'google_id'];
 
     public function messages()
     {

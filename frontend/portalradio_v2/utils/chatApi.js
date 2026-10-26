@@ -51,6 +51,43 @@ async function chatLogin(username, password) {
   return data.user;
 }
 
+// Google sign-in step 1: returns { user } for an existing account, or
+// { needs_username, suggested_username, signup_token } for a new one
+async function chatGoogleLogin(credential) {
+  const res = await fetch(`${API_URL}/chat/google`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({ credential }),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw { status: res.status, data };
+  }
+
+  if (data.user) setChatUser(data.user);
+  return data;
+}
+
+// Google sign-in step 2 for a new user: create the account with the chosen username
+async function chatGoogleComplete(signupToken, username) {
+  const res = await fetch(`${API_URL}/chat/google/complete`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({ signup_token: signupToken, username }),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    throw { status: res.status, data };
+  }
+
+  setChatUser(data.user);
+  return data.user;
+}
+
 async function fetchMessages({ after, before, limit = 50 } = {}) {
   const params = new URLSearchParams();
   if (after) params.set('after', after);
@@ -246,7 +283,7 @@ async function chatGetPublicProfile(userId) {
 }
 
 export {
-  getChatUser, setChatUser, chatRegister, chatLogin, chatForgotPassword, chatResetPassword,
+  getChatUser, setChatUser, chatRegister, chatLogin, chatGoogleLogin, chatGoogleComplete, chatForgotPassword, chatResetPassword,
   fetchMessages, sendMessage, getAvatarUrl,
   chatSendActivation, chatGetProfile, chatUpdateProfile, chatRemoveAvatar, chatGetPublicProfile,
 };
