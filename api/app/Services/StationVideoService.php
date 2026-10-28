@@ -8,6 +8,7 @@ use App\Models\StationVideo;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use RuntimeException;
 
 class StationVideoService
 {
@@ -128,7 +129,11 @@ class StationVideoService
         $ext = strtolower($file->getClientOriginalExtension() ?: 'mp4');
         $name = time() . '-' . Str::lower(Str::random(8)) . '.' . preg_replace('/[^a-z0-9]/', '', $ext);
 
-        Storage::disk('local')->putFileAs(StationVideo::INBOX, $file, $name);
+        // putFileAs returns false rather than throwing when the folder is not writable by PHP-FPM
+        if (! Storage::disk('local')->putFileAs(StationVideo::INBOX, $file, $name)) {
+            throw new RuntimeException('Fail video tidak dapat disimpan di server: folder storage/app/'
+                . StationVideo::INBOX . ' tidak boleh ditulis oleh PHP-FPM.');
+        }
 
         return $name;
     }

@@ -224,3 +224,23 @@ it('builds a ladder that never upscales', function (int $height, array $expected
     '576p source' => [576, [576, 480]],
     '464p source' => [464, [464]],
 ]);
+
+it('reports an upload the server could not save instead of queueing a missing file', function () {
+    Queue::fake();
+    actingAsVideoAdmin($this);
+    $station = videoStation();
+    $disk = Mockery::mock(Storage::disk('local'))->makePartial();
+    $disk->shouldReceive('putFileAs')->andReturn(false);
+    Storage::set('local', $disk);
+
+    $this->post('/api/station-videos', [
+        'station_id' => $station->id,
+        'title' => 'Promo',
+        'file' => UploadedFile::fake()->create('promo.mp4', 100, 'video/mp4'),
+    ], ['Accept' => 'application/json'])
+        ->assertStatus(500)
+        ->assertJsonPath('message', fn ($m) => str_contains($m, 'tidak boleh ditulis'));
+
+    expect(StationVideo::count())->toBe(0);
+    Queue::assertNothingPushed();
+});

@@ -49,7 +49,12 @@ class StationVideoController extends Controller
             'file'        => array_merge(['required'], $this->fileRules()),
         ], $this->messages());
 
-        $video = $this->service->store($data, $request->file('file'), auth('sanctum')->id());
+        try {
+            $video = $this->service->store($data, $request->file('file'), auth('sanctum')->id());
+        } catch (\RuntimeException $e) {
+            report($e);
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
 
         return response()->json(['message' => 'Video dimuat naik. Penukaran sedang berjalan.', 'video' => $video], 201);
     }
@@ -62,7 +67,12 @@ class StationVideoController extends Controller
             'file'        => array_merge(['nullable'], $this->fileRules()),
         ], $this->messages());
 
-        $video = $this->service->update($stationVideo, $data, $request->file('file'));
+        try {
+            $video = $this->service->update($stationVideo, $data, $request->file('file'));
+        } catch (\RuntimeException $e) {
+            report($e);
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
 
         return response()->json(['message' => 'Video dikemas kini.', 'video' => $video]);
     }
