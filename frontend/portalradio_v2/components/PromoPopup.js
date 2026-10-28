@@ -2,15 +2,18 @@
 
 import { useState, useEffect } from 'react';
 
+const SEEN_COOKIE = 'rtmklik-popup-seen';
+
 export default function PromoPopup() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    // Check if popup was already seen in this session
-    const popupSeen = sessionStorage.getItem('rtmklik-popup-seen');
+    // A session cookie (no expiry) is shared by every tab and cleared when the browser closes,
+    // unlike sessionStorage which is per tab, so the popup shows once per browser session
+    const popupSeen = document.cookie.split('; ').some((c) => c.startsWith(`${SEEN_COOKIE}=`));
     if (!popupSeen) {
       setShow(true);
-      sessionStorage.setItem('rtmklik-popup-seen', 'true');
+      document.cookie = `${SEEN_COOKIE}=1; path=/; SameSite=Lax`;
     }
   }, []);
 
