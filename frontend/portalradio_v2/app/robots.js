@@ -18,5 +18,6 @@ export default function robots() {
       ],
     },
     host: SITE_URL,
+    sitemap: `${SITE_URL.replace(/\/$/, '')}/sitemap.xml`,
   };
 }
