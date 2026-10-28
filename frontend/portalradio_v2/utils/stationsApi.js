@@ -59,6 +59,22 @@ export async function fetchStationBySlug(slug) {
   return data.station ? mapStation(data.station) : null;
 }
 
+// Active, transcoded videos of one station, in their admin ordering, with absolute HLS and poster URLs
+export async function fetchStationVideos(slug) {
+  try {
+    const res = await fetch(`${API_URL}/stations/${slug}/videos`);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return (data.videos || []).map((v) => ({
+      ...v,
+      hls: `${SERVER_URL}/storage/${v.hls}`,
+      poster: v.poster ? `${SERVER_URL}/storage/${v.poster}` : null,
+    }));
+  } catch {
+    return [];
+  }
+}
+
 export async function fetchStationHits() {
   try {
     const res = await fetch(`${API_URL}/station-hits`);

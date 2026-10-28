@@ -38,7 +38,8 @@ return [
             'driver' => 'database',
             'table' => 'jobs',
             'queue' => 'default',
-            'retry_after' => 90,
+            // Longer than the slowest job (TranscodeStationVideo, 3600 s), or a worker re-runs it mid-encode
+            'retry_after' => (int) env('QUEUE_RETRY_AFTER', 3700),
             'after_commit' => false,
         ],
 

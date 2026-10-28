@@ -34,6 +34,7 @@ import ArticleDataManagement from './pages/Administration/ArticlesData'
 import BannerManagement from './pages/Administration/Banners'
 import StationManagement from './pages/Administration/Stations'
 import StationCategoryManagement from './pages/Administration/StationCategories'
+import StationVideoManagement from './pages/Administration/StationVideos'
 import ProgrammeManagement from './pages/Administration/Programmes'
 import VideoManagement from './pages/Administration/Videos'
 import DirectoryManagement from './pages/Administration/Directories'
@@ -81,6 +82,7 @@ export default function App() {
                 <Route path="/administration/banners" element={<BannerManagement />} />
                 <Route path="/administration/stations" element={<StationManagement />} />
                 <Route path="/administration/station-categories" element={<StationCategoryManagement />} />
+                <Route path="/administration/station-videos" element={<StationVideoManagement />} />
                 <Route path="/administration/livestream" element={<LivestreamManagement />} />
                 <Route path="/administration/footer" element={<FooterManagement />} />
                 <Route path="/administration/programmes" element={<ProgrammeManagement />} />

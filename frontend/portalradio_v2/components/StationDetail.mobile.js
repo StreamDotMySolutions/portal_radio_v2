@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import FullPlayerCardMobile from './FullPlayerCard.mobile';
 import IframePlayerCardMobile from './IframePlayerCard.mobile';
+import StationVideos from './StationVideos';
 import { trackPageview, fetchListenerCounts } from '@/utils/analytics';
 import { fetchStationHits } from '@/utils/stationsApi';
 import { useStationContact } from '@/context/StationContactContext';
@@ -144,6 +145,8 @@ export default function StationDetailMobile({ station }) {
           <h5 style={{ color: 'var(--color-text)', fontWeight: '600', marginBottom: '0.75rem', fontSize: '1rem' }}>Tentang Stesen</h5>
           <p style={{ color: 'var(--color-muted)', lineHeight: '1.7', fontSize: '0.85rem', margin: 0 }}>{station.description}</p>
         </div>
+
+        <StationVideos slug={station.slug} accent={station.accent} compact />
       </div>
     </div>
   );

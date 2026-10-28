@@ -10,6 +10,7 @@ const ACTIONS = [
     { id: 'migrate-db', label: 'Migrate DB', variant: 'info', icon: '🗃' },
     { id: 'composer-install', label: 'Composer Install', variant: 'info', icon: '📦' },
     { id: 'restart-reverb', label: 'Restart Reverb', variant: 'danger', icon: '📡' },
+    { id: 'restart-queue', label: 'Restart Queue', variant: 'danger', icon: '🎞' },
     { id: 'api-logs', label: 'Laravel Log', variant: 'secondary', icon: '📄' },
 ];
 

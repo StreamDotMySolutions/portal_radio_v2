@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use Illuminate\Http\Request;
 use App\Models\Station;
 use App\Models\StationCategory;
+use App\Services\StationVideoService;
 
 class StationController extends Controller
 {
@@ -52,5 +53,12 @@ class StationController extends Controller
         $station->category_display = $cat ? $cat->display_name : '';
 
         return response()->json(['station' => $station]);
+    }
+
+    public function videos(Station $station, StationVideoService $videos)
+    {
+        if (!$station->active) abort(404);
+
+        return response()->json(['videos' => $videos->listForStation($station->id)]);
     }
 }

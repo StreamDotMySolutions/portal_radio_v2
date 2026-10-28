@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import FullPlayerCard from './FullPlayerCard';
 import IframePlayerCard from './IframePlayerCard';
+import StationVideos from './StationVideos';
 import { trackPageview, fetchListenerCounts } from '@/utils/analytics';
 import { fetchStationHits } from '@/utils/stationsApi';
 import { useStationContact } from '@/context/StationContactContext';
@@ -165,6 +166,8 @@ export default function StationDetail({ station }) {
             </div>
           </div>
         </div>
+
+        <StationVideos slug={station.slug} accent={station.accent} />
 
       </div>
     </div>

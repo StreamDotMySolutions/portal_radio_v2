@@ -69,5 +69,16 @@ pm2 save > /dev/null 2>&1 || true
 cd ..
 echo ""
 
+# Queue worker (station video and VOD transcodes); a running worker keeps the old code, so restart it
+echo "--- Restart PM2: portalradio-queue ---"
+cd api
+pm2 describe portalradio-queue > /dev/null 2>&1 \
+    && pm2 restart portalradio-queue \
+    || pm2 start artisan --name portalradio-queue --interpreter php -- queue:work --queue=video,default --timeout=3600 --tries=1 --sleep=3 \
+    || echo "WARNING: queue worker restart failed; uploaded station videos stay Pending until it runs"
+pm2 save > /dev/null 2>&1 || true
+cd ..
+echo ""
+
 echo "=== Deploy finished at $(date) ==="
 } 2>&1 | tee -a "$LOG_FILE"

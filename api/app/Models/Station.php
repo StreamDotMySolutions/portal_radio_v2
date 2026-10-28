@@ -31,6 +31,11 @@ class Station extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function videos()
+    {
+        return $this->hasMany(StationVideo::class)->defaultOrder();
+    }
+
     public function category()
     {
         return $this->belongsTo(StationCategory::class, 'station_category_id', 'id');

@@ -31,6 +31,7 @@ use App\Http\Controllers\Backend\{
     ComplaintController,
     StationController,
     StationCategoryController,
+    StationVideoController,
     LivestreamController,
     SettingController,
     FooterLinkController,
@@ -155,6 +156,16 @@ Route::group(['middleware' => ['auth:sanctum','role:admin']], function () {
     Route::delete('/stations/{station}', [StationController::class, 'delete']);
     Route::patch('/stations/{station}/toggle', [StationController::class, 'toggle']);
     Route::get('/stations/ordering/{station}', [StationController::class, 'ordering']);
+
+    // Station Videos (HLS, transcoded by the queue worker)
+    Route::get('/station-videos', [StationVideoController::class, 'index']);
+    Route::get('/station-videos/ordering/{stationVideo}', [StationVideoController::class, 'ordering']);
+    Route::get('/station-videos/{stationVideo}', [StationVideoController::class, 'show']);
+    Route::post('/station-videos', [StationVideoController::class, 'store']);
+    Route::post('/station-videos/{stationVideo}', [StationVideoController::class, 'update']);
+    Route::delete('/station-videos/{stationVideo}', [StationVideoController::class, 'delete']);
+    Route::patch('/station-videos/{stationVideo}/toggle', [StationVideoController::class, 'toggle']);
+    Route::post('/station-videos/{stationVideo}/retry', [StationVideoController::class, 'retry']);
 
     // Station Categories
     Route::get('/station-categories/all', [StationCategoryController::class, 'all']);

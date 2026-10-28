@@ -44,6 +44,7 @@ marked **⚠ ASK FIRST**, which means stop and get explicit approval from the hu
 | Admin panel | `backend/` | static files from `backend/build`, served at `/backend` | CRA app, `homepage: /backend` |
 | API | `api/` | PHP-FPM **8.2** behind nginx `/api` | Laravel 10.50, Sanctum, Spatie permission |
 | Chat WebSocket | `api/` (`php artisan reverb:start`) | PM2 process **`portalradio-reverb`**, bound to `127.0.0.1:8080` | Optional: chat falls back to HTTP polling if it is down |
+| Queue worker | `api/` (`php artisan queue:work`) | PM2 process **`portalradio-queue`** | Transcodes station videos and VODs with ffmpeg (§5c) |
 | Deploy dashboard | `frontend/portalradio_v2/app/deploy` | part of the Next.js app, `/deploy` | login = `WEBHOOK_SECRET` from the frontend `.env` |
 
 - **Project root on the server:** `/var/www/portalradio_v2` (the `DEPLOY_PROJECT_ROOT` used by the dashboard). Confirm with `pwd` / `git rev-parse --show-toplevel`.
@@ -62,7 +63,7 @@ All three paths run the same steps (§4).
    - A push to `main` calls `POST /api/github-webhook`, which runs `bash api/deploy.sh` in the background.
    - Output goes to `api/storage/logs/deploy.log` (webhook) and `deploy.log` in the project root (the script's own `tee`).
    - Only works if the webhook is configured on GitHub and `GITHUB_WEBHOOK_SECRET` is set in `api/.env`. It may not be.
-2. **Deploy dashboard.** `https://radio.rtm.gov.my/deploy` has one button per step: Git Pull, Build Frontend, Build Backend, Restart PM2, Migrate DB, Composer Install, Restart Reverb. It also has a read-only **Laravel Log** button: the newest `api/storage/logs/laravel*.log`, its size, the ERROR/CRITICAL count in the last 2000 lines, and the last 200 lines.
+2. **Deploy dashboard.** `https://radio.rtm.gov.my/deploy` has one button per step: Git Pull, Build Frontend, Build Backend, Restart PM2, Migrate DB, Composer Install, Restart Reverb, Restart Queue (starts or restarts the `portalradio-queue` worker and shows the queue sizes and failed jobs). It also has a read-only **Laravel Log** button: the newest `api/storage/logs/laravel*.log`, its size, the ERROR/CRITICAL count in the last 2000 lines, and the last 200 lines.
 3. **SSH (what you will normally do).** `cd /var/www/portalradio_v2 && bash api/deploy.sh`.
 
 Before deploying, check that no other deploy is running: `pgrep -af deploy.sh`. If one is running, wait for it and read its log.
@@ -116,6 +117,7 @@ git diff --name-only HEAD origin/main | grep -E 'database/migrations|composer\.l
 | 5 | Migrations | `php artisan migrate --force` (`api/`) | Report the exact error. Do not retry blindly. |
 | 6 | Restart site | `pm2 restart portalradio_v2` | See §8 "502". |
 | 7 | Restart Reverb | start or restart `portalradio-reverb`, then `pm2 save` | Non-fatal: chat falls back to polling. Report it. |
+| 8 | Restart queue worker | start or restart `portalradio-queue`, then `pm2 save` | Non-fatal: station videos stay Pending until it runs. Report it. |
 
 Notes:
 - **Dashboard streams can be cut by nginx after ~60s of silence.** The frontend build prints a `[build] … still running` heartbeat to avoid that. The admin panel build (`react-scripts build`) does not: if its stream ends without `--- Process exited with code N ---`, the build is still running. Wait until `https://radio.rtm.gov.my/backend/` serves its `static/js/main.*.js` again before continuing.
@@ -182,6 +184,41 @@ Until this is done, the "Continue with Google" button is simply hidden and `POST
 3. The `google_id` column comes from the normal `migrate --force` step.
 4. Verify: the button shows on /chat → LOG MASUK; signing in with a Google account either logs in (existing email is linked automatically) or asks for a username.
 
+### 5c. First-time setup: station videos (ffmpeg + queue worker)
+
+Admins upload videos per station (admin → Stations → **Station Videos**). The queue worker transcodes each video with ffmpeg into adaptive HLS (1080p, 720p and 480p, never upscaled) plus a poster frame. The video then plays on `/station/<slug>`.
+
+Files on disk:
+- Uploads wait in `api/storage/app/station-video-inbox/`, which is private, and are deleted once converted.
+- Output goes to `api/storage/app/public/station-videos/<id>/<version>/`, served by nginx under `/storage`.
+
+Until this setup is done, uploads stay **Pending**.
+
+1. **ffmpeg.** Run `which ffmpeg ffprobe`. If either is missing, ask the human, then run `apt install ffmpeg`. If the paths are not `/usr/bin/ffmpeg` and `/usr/bin/ffprobe`, set `FFMPEG_PATH` and `FFPROBE_PATH` in `api/.env`.
+2. **Queue (`api/.env`).** Set `QUEUE_CONNECTION=database`; the `jobs` table already exists.
+   - While it is `sync`, a transcode runs inside the upload request and is killed by the PHP and nginx timeouts.
+   - `QUEUE_RETRY_AFTER` defaults to 3700 s. It must stay longer than the 3600 s job timeout, or a worker re-runs a long transcode.
+3. **Worker process:** use the dashboard's **Restart Queue** button (it starts the process the first time), or run from `api/`:
+   ```bash
+   pm2 start artisan --name portalradio-queue --interpreter php -- queue:work --queue=video,default --timeout=3600 --tries=1 --sleep=3
+   pm2 save
+   ```
+   Every later deploy restarts it (`deploy.sh` and the button), because a running worker keeps the old code in memory.
+   - The worker writes the HLS files and also deletes them, through a queued job, so it does not matter that PM2 and PHP-FPM run as different users.
+   - It does write `laravel.log`. If the log channel is `daily` and PM2 runs as root, a new day's log file can end up root-owned. Check `ls -l api/storage/logs`.
+4. **Upload size.** The default limit is 1 GB (`STATION_VIDEO_MAX_MB` in `api/.env`). The server must allow it:
+   - nginx: `client_max_body_size 1100m;` for `/api`;
+   - PHP-FPM: `upload_max_filesize = 1100M`, `post_max_size = 1100M`, `max_execution_time` ≥ 300.
+
+   Check the current values before changing anything, and ask the human before editing nginx or PHP configs. Admins see "The file is larger than the server allows" when nginx rejects the upload (413).
+5. **Verify:**
+   - Upload a short clip to one station. The status goes Pending → Processing → Ready, and the table refreshes itself.
+   - The video plays on that station's page.
+   - **Laravel Log** shows no `transcode failed` lines.
+   - Disable or delete the test video afterwards.
+
+Changing `QUEUE_CONNECTION` also makes VOD uploads (admin → VOD) convert in the background through the same worker.
+
 ---
 
 ## 6. Verify the deployment (all safe)
@@ -193,7 +230,7 @@ Run every check and include the results in your report.
 git rev-parse --short HEAD; git rev-parse --short origin/main
 
 # Processes
-pm2 status            # portalradio_v2 online, restarts not climbing; portalradio-reverb online (if set up)
+pm2 status            # portalradio_v2 online, restarts not climbing; portalradio-reverb and portalradio-queue online (if set up)
 pm2 logs portalradio_v2 --lines 30 --nostream
 
 # Public site and admin panel
@@ -258,6 +295,8 @@ Afterwards the server's working tree differs from `main`. Tell the human; the ne
 | `/` shows old content after deploy | Not rebuilt or not restarted | Run §4 steps 3 and 6. Check `git rev-parse HEAD`. |
 | Chat works but is not instant | Reverb down, `/app` missing in nginx, or frontend built without `NEXT_PUBLIC_REVERB_*` | `pm2 status`, the §6 WebSocket check, `grep -c NEXT_PUBLIC_REVERB_KEY frontend/portalradio_v2/.env`, rebuild. |
 | `laravel.log` full of "Chat broadcast failed" | `BROADCAST_DRIVER=reverb` but Reverb unreachable | Start Reverb (§5 step 4), or set `BROADCAST_DRIVER=null` until fixed. |
+| Station videos stuck on Pending | Worker not running, or `QUEUE_CONNECTION=sync` | **Restart Queue** (shows `QUEUE_CONNECTION` and queue sizes); `pm2 logs portalradio-queue --lines 50`. |
+| Station video Failed | ffmpeg missing or the file is not a playable video | The admin Show modal and **Laravel Log** have the ffmpeg error. `which ffmpeg ffprobe`. Retry from the table once fixed. |
 | Admin panel at `/backend` is blank or 404 | `backend/build` missing or failed build | Rebuild (§4 step 2). nginx serves `/backend` from `backend/build`. |
 | Uploaded images 404 under `/storage` | Missing storage link/alias or permissions | `ls -la api/storage/app/public`. nginx aliases `/storage`. Do not run `storage:link` without asking. |
 | `npm install` killed / out of memory | Low RAM during build | Report. Build one app at a time and stop nothing else. |
@@ -274,7 +313,9 @@ Afterwards the server's working tree differs from `main`. Tell the human; the ne
   - Global `api` group: 200 requests/min per IP.
   - Chat polling: 600/min per IP.
   - Chat sending: 10/min per chat account.
-- **Queues are synchronous** (`QUEUE_CONNECTION=sync`), so there is no queue worker to restart. Broadcasts are sent inline (`ShouldBroadcastNow`).
+- **Queues.**
+  - Station video and VOD transcodes need `QUEUE_CONNECTION=database` and the `portalradio-queue` worker (§5c), which listens on queues `video` and `default`.
+  - Chat broadcasts never use the queue: they are sent inline (`ShouldBroadcastNow`).
 - **The deploy dashboard runs commands with `shell: true`.** New dashboard commands must be a single shell string when they need shell syntax (see `restart-reverb` in `app/api/deploy/run/route.js`).
 - **Local development needs PHP 8.3 or 8.2.** The lock file no longer installs on PHP 8.1.
 

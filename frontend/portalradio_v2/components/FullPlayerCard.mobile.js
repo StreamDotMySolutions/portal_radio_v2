@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { trackPlayerPlay, sendListenerHeartbeat } from '@/utils/analytics';
+import { VIDEO_PLAY_EVENT } from './StationVideos';
 
 export default function FullPlayerCardMobile({ station, pageviews = 0, listeners = 0, onFirstPlay }) {
   const [playing, setPlaying] = useState(false);
@@ -77,6 +78,13 @@ export default function FullPlayerCardMobile({ station, pageviews = 0, listeners
       audio.removeEventListener('loadedmetadata', updateDuration);
       audio.removeEventListener('ended', () => setPlaying(false));
     };
+  }, []);
+
+  // A station video starting stops the radio, so the two never play over each other
+  useEffect(() => {
+    const stop = () => { audioRef.current?.pause(); setPlaying(false); };
+    window.addEventListener(VIDEO_PLAY_EVENT, stop);
+    return () => window.removeEventListener(VIDEO_PLAY_EVENT, stop);
   }, []);
 
   const toggle = () => {

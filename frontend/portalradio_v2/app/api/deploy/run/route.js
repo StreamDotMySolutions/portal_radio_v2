@@ -50,6 +50,17 @@ function getCommands() {
             args: [],
             cwd: path.join(root, 'api'),
         },
+        // Queue worker (station video and VOD transcodes); starts the PM2 process on first run.
+        // A running worker keeps the old code in memory, so restart it after every deploy
+        'restart-queue': {
+            cmd: '(pm2 describe portalradio-queue > /dev/null 2>&1 && pm2 restart portalradio-queue || pm2 start artisan --name portalradio-queue --interpreter php -- queue:work --queue=video,default --timeout=3600 --tries=1 --sleep=3) && pm2 save'
+                + ' && echo && echo "QUEUE_CONNECTION=$(grep -E "^QUEUE_CONNECTION=" .env | cut -d= -f2)"'
+                + ' && echo "ffmpeg: $(command -v ffmpeg || echo NOT FOUND)  ffprobe: $(command -v ffprobe || echo NOT FOUND)"'
+                + ' && php artisan queue:monitor database:video,database:default'
+                + ' && php artisan queue:failed | tail -n 15',
+            args: [],
+            cwd: path.join(root, 'api'),
+        },
         'start-claude': {
             cmd: 'bash',
             args: ['-c', `node -e "var fs=require('fs'),p='/root/.claude.json',c={};try{c=JSON.parse(fs.readFileSync(p,'utf8'))}catch(e){};c.projects=c.projects||{};c.projects['${root}']={...(c.projects['${root}']||{}),hasTrustDialogAccepted:true};fs.writeFileSync(p,JSON.stringify(c,null,2));console.log('Trust accepted for ${root}')" 2>/dev/null || echo "Trust step skipped"; pkill -f "node.*claude" 2>/dev/null; sleep 1; rm -f /tmp/portal-radio.log; nohup script -q -c claude /tmp/portal-radio.log > /dev/null 2>&1 & echo $! > /tmp/portal-radio.pid; echo "Claude Code starting (PID: $(cat /tmp/portal-radio.pid))..."; echo "Waiting for output (up to 12s)..."; sleep 12; echo ""; echo "--- Output so far ---"; cat /tmp/portal-radio.log`],

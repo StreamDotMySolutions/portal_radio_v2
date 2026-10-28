@@ -40,6 +40,9 @@ function TopNavbar() {
               <NavDropdown.Item as={NavLink} to="/administration/station-categories">
                 <FontAwesomeIcon icon={['fas', 'tag']} />{' '}Station Categories
               </NavDropdown.Item>
+              <NavDropdown.Item as={NavLink} to="/administration/station-videos">
+                <FontAwesomeIcon icon={['fas', 'film']} />{' '}Station Videos
+              </NavDropdown.Item>
             </NavDropdown>
 
             <NavDropdown title={<span><FontAwesomeIcon icon={['fas', 'cog']} />{' '}System</span>} id="nav-system">
