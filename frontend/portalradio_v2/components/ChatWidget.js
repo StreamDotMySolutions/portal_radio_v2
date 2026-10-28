@@ -335,7 +335,9 @@ const pad2 = (n) => String(n).padStart(2, '0');
 function messageTime(msg) {
   if (!msg.created_at_iso) return msg.created_at;
   const d = new Date(msg.created_at_iso);
-  return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+  // 12-hour clock with the Malay PG (pagi) / PTG (petang) suffix, e.g. 12:05 PTG
+  const h = d.getHours();
+  return `${h % 12 || 12}:${pad2(d.getMinutes())} ${h < 12 ? 'PG' : 'PTG'}`;
 }
 
 function dayKey(msg) {

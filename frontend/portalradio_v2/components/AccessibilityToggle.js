@@ -75,7 +75,9 @@ export default function AccessibilityToggle() {
           fontSize: '1.2rem',
         }}
         onClick={() => setOpen(!open)}
-        title="Accessibility Settings"
+        title="Tetapan Kebolehcapaian"
+        aria-label="Tetapan Kebolehcapaian"
+        aria-expanded={open}
       >
         <i className="bi bi-universal-access"></i>
       </button>
@@ -101,10 +103,12 @@ export default function AccessibilityToggle() {
         <div style={panelStyle}>
           {/* Header */}
           <div className="d-flex justify-content-between align-items-center mb-3">
-            <h6 className="text-light mb-0">Accessibility</h6>
+            <h6 className="text-light mb-0">Kebolehcapaian</h6>
             <button
               className="btn btn-sm btn-link text-light p-0"
               onClick={() => setOpen(false)}
+              aria-label="Tutup"
+              title="Tutup"
             >
               <i className="bi bi-x-lg"></i>
             </button>
@@ -112,29 +116,37 @@ export default function AccessibilityToggle() {
 
           {/* Font Size */}
           <div className="mb-3">
-            <label className="text-light small fw-semibold d-block mb-2">Font Size</label>
+            <label className="text-light small fw-semibold d-block mb-2">Saiz Fon</label>
             <div className={`d-flex gap-1 ${isMobile ? 'flex-wrap' : ''}`}>
               <button
                 className={`btn btn-sm ${fontSize === 'small' ? 'btn-primary' : 'btn-outline-secondary'}`}
                 onClick={() => setFontSize('small')}
+                aria-label="Kecilkan saiz fon"
+                title="Kecilkan saiz fon"
               >
                 A−
               </button>
               <button
                 className={`btn btn-sm ${fontSize === 'normal' ? 'btn-primary' : 'btn-outline-secondary'}`}
                 onClick={() => setFontSize('normal')}
+                aria-label="Saiz fon biasa"
+                title="Saiz fon biasa"
               >
                 A
               </button>
               <button
                 className={`btn btn-sm ${fontSize === 'large' ? 'btn-primary' : 'btn-outline-secondary'}`}
                 onClick={() => setFontSize('large')}
+                aria-label="Besarkan saiz fon"
+                title="Besarkan saiz fon"
               >
                 A+
               </button>
               <button
                 className={`btn btn-sm ${fontSize === 'xlarge' ? 'btn-primary' : 'btn-outline-secondary'}`}
                 onClick={() => setFontSize('xlarge')}
+                aria-label="Saiz fon paling besar"
+                title="Saiz fon paling besar"
               >
                 A++
               </button>
@@ -151,7 +163,7 @@ export default function AccessibilityToggle() {
               onChange={toggleHighContrast}
             />
             <label className="form-check-label text-light small" htmlFor="highContrast">
-              High Contrast Mode
+              Mod Kontras Tinggi
             </label>
           </div>
 
@@ -165,7 +177,7 @@ export default function AccessibilityToggle() {
               onChange={toggleLinkTracking}
             />
             <label className="form-check-label text-light small" htmlFor="linkTracking">
-              Underline Links
+              Garis Bawah Pautan
             </label>
           </div>
 
@@ -179,7 +191,7 @@ export default function AccessibilityToggle() {
               onChange={toggleTitleTracking}
             />
             <label className="form-check-label text-light small" htmlFor="titleTracking">
-              Highlight Titles
+              Serlahkan Tajuk
             </label>
           </div>
 
@@ -193,7 +205,7 @@ export default function AccessibilityToggle() {
               onChange={toggleDyslexiaFont}
             />
             <label className="form-check-label text-light small" htmlFor="dyslexiaFont">
-              Dyslexia-Friendly Font
+              Fon Mesra Disleksia
             </label>
           </div>
 
@@ -207,7 +219,7 @@ export default function AccessibilityToggle() {
               onChange={toggleReducedMotion}
             />
             <label className="form-check-label text-light small" htmlFor="reducedMotion">
-              Reduce Motion
+              Kurangkan Animasi
             </label>
           </div>
 
@@ -216,7 +228,7 @@ export default function AccessibilityToggle() {
             className="btn btn-outline-secondary btn-sm w-100"
             onClick={resetAll}
           >
-            Reset All Settings
+            Set Semula Semua Tetapan
           </button>
         </div>
       )}
