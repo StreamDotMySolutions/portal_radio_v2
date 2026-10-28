@@ -382,6 +382,22 @@ class ChatController extends Controller
         return response()->json(['message' => 'Avatar berjaya dipadam.']);
     }
 
+    public function users(Request $request)
+    {
+        $request->validate([
+            'q' => ['required', 'string', 'max:30', 'regex:/^[a-zA-Z0-9_]+$/'],
+        ]);
+
+        // Signed-in chat users only, so the member list cannot be scraped anonymously
+        $token = $request->header('X-Chat-Token');
+
+        if (!$token || !$this->chatService->getProfile($token)) {
+            return response()->json(['message' => 'Token tidak sah.'], 401);
+        }
+
+        return response()->json(['users' => $this->chatService->searchUsers($request->q)]);
+    }
+
     public function publicProfile(int $userId)
     {
         $profile = $this->chatService->getPublicProfile($userId);

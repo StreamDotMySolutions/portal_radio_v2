@@ -300,6 +300,19 @@ class ChatService
         return $user;
     }
 
+    // @mention autocomplete: usernames starting with $prefix, never banned users, only public fields
+    public function searchUsers(string $prefix, int $limit = 6)
+    {
+        $prefix = addcslashes($prefix, '%_\\');
+
+        return ChatUser::query()
+            ->where('username', 'like', "{$prefix}%")
+            ->where('is_banned', false)
+            ->orderBy('username')
+            ->limit($limit)
+            ->get(['id', 'username', 'color', 'avatar_filename']);
+    }
+
     public function getPublicProfile(int $userId): ?array
     {
         $user = ChatUser::find($userId);

@@ -282,7 +282,22 @@ async function chatGetPublicProfile(userId) {
   return data.user;
 }
 
+// @mention autocomplete: up to 6 { id, username, color, avatar_filename } whose username starts with q
+async function searchChatUsers(q) {
+  const user = getChatUser();
+  if (!user?.token) return [];
+
+  const res = await fetch(`${API_URL}/chat/users?q=${encodeURIComponent(q)}`, {
+    headers: { 'Accept': 'application/json', 'X-Chat-Token': user.token },
+  });
+
+  if (!res.ok) return [];
+  const data = await res.json();
+  return data.users || [];
+}
+
 export {
+  searchChatUsers,
   getChatUser, setChatUser, chatRegister, chatLogin, chatGoogleLogin, chatGoogleComplete, chatForgotPassword, chatResetPassword,
   fetchMessages, sendMessage, getAvatarUrl,
   chatSendActivation, chatGetProfile, chatUpdateProfile, chatRemoveAvatar, chatGetPublicProfile,

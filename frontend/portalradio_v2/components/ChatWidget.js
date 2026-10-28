@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect, useLayoutEffect, useRef, useCallback } from 'react';
-import { getChatUser, setChatUser, chatRegister, chatLogin, chatForgotPassword, fetchMessages, sendMessage, getAvatarUrl } from '../utils/chatApi';
+import { useState, useEffect, useLayoutEffect, useRef, useCallback, useMemo } from 'react';
+import { getChatUser, setChatUser, chatRegister, chatLogin, chatForgotPassword, fetchMessages, sendMessage, getAvatarUrl, searchChatUsers } from '../utils/chatApi';
 import { subscribeChat } from '../utils/chatSocket';
 import ChatProfileModal from './ChatProfileModal';
 import ChatPublicProfile from './ChatPublicProfile';
 import GoogleSignIn from './GoogleSignIn';
+import { useMentionAutocomplete, MentionList, MessageText, mentionsUser } from './ChatMentions';
 
 /**
  * ChatAuthForm — renders login or register form. Used by parents to show in the video area.
@@ -404,6 +405,19 @@ export default function ChatWidget({ fullHeight = false, flushInput = false, onA
   const kickPollRef = useRef(() => {});     // poll immediately (set by the polling effect)
   const userRef = useRef(user);
   userRef.current = user;
+  const inputRef = useRef(null);
+
+  const mentions = useMentionAutocomplete({ messages, currentUser: user, value: input, setValue: setInput, inputRef });
+
+  // username (lowercase) -> author, for mentions in messages
+  const authorsByName = useMemo(() => {
+    const map = new Map();
+    for (const m of messages) {
+      if (m.chat_user_id) map.set(m.username.toLowerCase(), { id: m.chat_user_id, color: m.color });
+    }
+    return map;
+  }, [messages]);
+  const resolveAuthor = useCallback((name) => authorsByName.get(name.toLowerCase()), [authorsByName]);
 
   // Load user from localStorage on mount (uncontrolled mode only)
   useEffect(() => {
@@ -634,6 +648,7 @@ export default function ChatWidget({ fullHeight = false, flushInput = false, onA
       pending: true,
     }]);
     setInput('');
+    mentions.close();
     submitMessage(text, clientId);
   };
 
@@ -717,6 +732,18 @@ export default function ChatWidget({ fullHeight = false, flushInput = false, onA
   const handleUsernameClick = (chatUserId) => {
     // Show public profile as modal
     setViewingPublicProfileId(chatUserId);
+  };
+
+  // A mentioned name not among the loaded authors is looked up (signed-in users only)
+  const handleMentionClick = async (name) => {
+    const known = resolveAuthor(name);
+    if (known) {
+      setViewingPublicProfileId(known.id);
+      return;
+    }
+    const found = (await searchChatUsers(name).catch(() => []))
+      .find(u => u.username.toLowerCase() === name.toLowerCase());
+    if (found) setViewingPublicProfileId(found.id);
   };
 
   const inlineInputStyle = {
@@ -942,6 +969,7 @@ export default function ChatWidget({ fullHeight = false, flushInput = false, onA
         {messages.map((msg, i) => {
           const key = dayKey(msg);
           const showDay = key && key !== dayKey(messages[i - 1] || {});
+          const mentionsMe = user && msg.chat_user_id !== user.id && mentionsUser(msg.message, user.username);
           return (
             <div key={msg.id ?? msg.client_id} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {showDay && (
@@ -951,7 +979,13 @@ export default function ChatWidget({ fullHeight = false, flushInput = false, onA
                   <div style={{ flex: 1, height: '1px', background: 'rgba(63, 63, 143, 0.2)' }} />
                 </div>
               )}
-              <div style={{ display: 'flex', gap: '8px', opacity: msg.pending ? 0.6 : 1 }}>
+              <div className={mentionsMe ? 'chat-msg chat-msg--mentioned' : 'chat-msg'} style={{
+                display: 'flex', gap: '8px', opacity: msg.pending ? 0.6 : 1,
+                ...(mentionsMe && {
+                  background: 'rgba(245, 158, 11, 0.08)', borderLeft: '3px solid #F59E0B',
+                  margin: '0 -8px', padding: '4px 8px 4px 5px', borderRadius: '4px',
+                }),
+              }}>
                 <div style={{
                   width: '20px', height: '20px', borderRadius: '50%', overflow: 'hidden', flexShrink: 0, marginTop: '2px',
                   background: msg.avatar_filename ? 'none' : msg.color,
@@ -976,7 +1010,9 @@ export default function ChatWidget({ fullHeight = false, flushInput = false, onA
                       {msg.pending ? 'Menghantar...' : messageTime(msg)}
                     </span>
                   </div>
-                  <div style={{ fontSize: '0.9rem', marginTop: '2px', wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap' }}>{msg.message}</div>
+                  <div style={{ fontSize: '0.9rem', marginTop: '2px', wordBreak: 'break-word', overflowWrap: 'break-word', whiteSpace: 'pre-wrap' }}>
+                    <MessageText text={msg.message} currentUsername={user?.username} resolveUser={resolveAuthor} onMentionClick={handleMentionClick} />
+                  </div>
                   {msg.failed && (
                     <button onClick={() => handleRetry(msg)} style={{
                       background: 'none', border: 'none', padding: 0, marginTop: '2px', cursor: 'pointer',
@@ -1015,11 +1051,19 @@ export default function ChatWidget({ fullHeight = false, flushInput = false, onA
       ) : (
         <form onSubmit={handleSend} className={flushInput ? 'chat-input-bar chat-input-bar--flush' : 'chat-input-bar'} style={{
           padding: '12px 16px', borderTop: '1px solid rgba(63, 63, 143, 0.3)', display: 'flex', gap: '8px',
-          flexShrink: 0, backgroundColor: 'var(--color-surface)',
+          flexShrink: 0, backgroundColor: 'var(--color-surface)', position: 'relative',
         }}>
-          <input type="text" placeholder={user ? 'Taip mesej...' : 'Sila log masuk untuk sembang'}
-            readOnly={!user} value={input} onChange={e => setInput(e.target.value)} maxLength={500}
+          {mentions.open && (
+            <MentionList items={mentions.items} index={mentions.index} onHover={mentions.setIndex} onSelect={mentions.select} />
+          )}
+          <input type="text" placeholder={user ? 'Taip mesej... (@ untuk sebut nama)' : 'Sila log masuk untuk sembang'}
+            ref={inputRef} readOnly={!user} value={input} maxLength={500}
+            aria-autocomplete="list" aria-expanded={mentions.open}
+            onChange={e => { setInput(e.target.value); mentions.update(e.target.value, e.target.selectionStart); }}
+            onSelect={e => mentions.update(e.target.value, e.target.selectionStart)}
+            onBlur={mentions.close}
             onKeyDown={(e) => {
+              if (mentions.onKeyDown(e)) return;
               if (e.key === 'Enter' && !e.shiftKey && user) {
                 e.preventDefault();
                 handleSend(e);

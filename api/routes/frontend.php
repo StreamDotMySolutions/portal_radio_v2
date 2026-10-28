@@ -78,5 +78,6 @@ Route::prefix('chat')->group(function () {
     Route::post('/profile', [ChatController::class, 'updateProfile']);
     Route::delete('/profile/avatar', [ChatController::class, 'removeAvatar']);
     Route::get('/profile/{userId}', [ChatController::class, 'publicProfile']);
+    Route::get('/users', [ChatController::class, 'users'])->middleware('throttle:60,1');
 });
 
